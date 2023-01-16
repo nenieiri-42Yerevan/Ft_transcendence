@@ -1,3 +1,19 @@
 **.DS_Store
 *.sw[po]
 .env
+
+# BACKEND
+
+# compiled output
+backend/dist
+backend/node_modules
+
+# Logs
+backend/logs
+backend/*.log
+backend/npm-debug.log*
+backend/pnpm-debug.log*
+
+# Tests
+backend/coverage
+backend/.nyc_output
