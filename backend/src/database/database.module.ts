@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { User } from 'src/user/entities/user.entity';
 
 @Module({
   imports: [
@@ -14,7 +15,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
         username: env.get('DB_USER'),
         password: env.get('DB_PASSWORD'),
         database: env.get('DB_NAME'),
-        entities: [],
+        entities: [User],
         synchronize: true, // false for production
       }),
     }),
