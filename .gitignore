@@ -1,7 +1,5 @@
 **.DS_Store
 *.sw[po]
-.env
-.docker.env
 
 # BACKEND
 
