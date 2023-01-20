@@ -1,11 +1,13 @@
 version: "3.8"
 
 services:
-  db:
+  postgres:
     image: postgres:15
-    container_name: postgres
+    container_name: database
     ports:
       - 5434:5432
+    volumes:
+      - "./backend/data:/var/lib/postgresql"
     networks:
       - backend
     env_file:
@@ -13,3 +15,12 @@ services:
       
 networks:
   backend:
+
+volumes:
+  postgres:
+    driver: local
+    name: database
+    driver_opts:
+      type: none
+      o: bind
+      device: ./backend/data
