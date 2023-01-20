@@ -7,12 +7,15 @@
 backend/dist
 backend/node_modules
 
-# Logs
+# logs
 backend/logs
 backend/*.log
 backend/npm-debug.log*
 backend/pnpm-debug.log*
 
-# Tests
+# tests
 backend/coverage
 backend/.nyc_output
+
+# database files
+backend/data
