@@ -1,4 +1,5 @@
 import {
+  BaseEntity,
   Column,
   CreateDateColumn,
   Entity,
@@ -8,14 +9,14 @@ import {
 export type Gender = 'male' | 'female';
 
 @Entity()
-export class User {
+export class User extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column({ nullable: false })
   first_name: string;
 
-  @Column({ nullable: false })
+  @Column({ nullable: true })
   last_name: string;
 
   @Column({ nullable: false, unique: true, length: 45 })
@@ -30,7 +31,7 @@ export class User {
   @Column({ type: 'enum', nullable: false, enum: ['male', 'female'] })
   gender: Gender;
 
-  @Column({ type: 'date', nullable: false })
+  @Column({ type: 'date', nullable: true })
   date_of_birth: string;
 
   @CreateDateColumn({ default: () => 'NOW()' })
