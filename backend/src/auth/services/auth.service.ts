@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { SignUpDto, SignInDto } from '../dto';
 import { DataSource } from 'typeorm';
 import * as argon from 'argon2';
+import { User } from '../../user/entities/user.entity';
 
 @Injectable()
 export class AuthService
@@ -16,9 +17,21 @@ export class AuthService
 
 		await queryRunner.connect();
 		await queryRunner.startTransaction();
+//		console.log(await queryRunner.query("SELECT first_name FROM User"));
 		try
 		{
-			await queryRunner.manager.save(dto);
+			//Object.assign(u, dto);
+			const u = new User();
+
+			u.first_name = 'Volodyaa',
+			u.last_name = 'Ismailyana',
+			u.username = 'nenieiria',
+			u.email = 'aaaa@mail.ru',
+			u.password = '123a',
+			u.gender = 'male',
+			u.date_of_birth = '2001-08-31',
+
+			await queryRunner.manager.save(u);
 			await queryRunner.commitTransaction();
 		}
 		catch (err)
@@ -28,12 +41,11 @@ export class AuthService
 			});
 			await queryRunner.rollbackTransaction();
 		}
-//		finally
-//		{
-//			await queryRunner.release();
-//		}
+		finally
+		{
+			await queryRunner.release();
+		}
 
-		console.log(await queryRunner.query("SELECT * FROM User"));
 
 		return 'signUp';
 	}
