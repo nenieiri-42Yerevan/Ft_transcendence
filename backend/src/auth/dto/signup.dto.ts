@@ -1,9 +1,13 @@
 import { IsNotEmpty } from 'class-validator';
+import { Gender } from '../../user/entities/user.entity';
 
 export class SignUpDto
 {
 	@IsNotEmpty()
-	name: string;
+	first_name: string;
+
+	@IsNotEmpty()
+	last_name: string;
 
 	@IsNotEmpty()
 	username: string;
@@ -12,10 +16,10 @@ export class SignUpDto
 	email: string;
 
 	@IsNotEmpty()
-	gender: string;
+	gender: Gender;
 
 	@IsNotEmpty()
-	dateOfBirth: string;
+	date_of_birth: string;
 
 	@IsNotEmpty()
 	password: string;
