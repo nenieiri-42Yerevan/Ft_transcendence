@@ -17,6 +17,7 @@ import { User } from 'src/user/entities/user.entity';
         database: env.get('DB_NAME'),
         entities: [User],
         synchronize: true, // false for production
+        autoLoadEntities: true,
       }),
     }),
   ],
