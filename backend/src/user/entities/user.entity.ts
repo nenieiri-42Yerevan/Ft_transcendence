@@ -9,7 +9,7 @@ import {
 export type Gender = 'male' | 'female';
 
 @Entity()
-export class User extends BaseEntity {
+export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
