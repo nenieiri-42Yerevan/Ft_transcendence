@@ -32,7 +32,7 @@ export class User extends BaseEntity {
   gender: Gender;
 
   @Column({ type: 'date', nullable: true })
-  date_of_birth: string;
+  date_of_birth: Date;
 
   @CreateDateColumn({ default: () => 'NOW()' })
   created_at: Date;
