@@ -1,10 +1,16 @@
 import { Injectable } from '@nestjs/common';
-import { SignInDto } from '../dto';
 
 @Injectable()
 export class AuthService {
-  // creatinhg user sessions and jwt tokens
-  signin(dto: SignInDto) {}
+  // generating and returning JSON Web Token
+  generateJWT() {}
 
-  // Dealing with 42 login
+  // verifying JSON Web Token
+  verifyJWT() {}
+
+  // creatinhg user sessions and connection
+  login() {}
+
+  // perform the authorization
+  getUserFromSocket() {}
 }
