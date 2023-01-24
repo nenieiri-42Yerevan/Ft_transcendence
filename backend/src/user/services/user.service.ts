@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import * as argon from 'argon2';
 import { Repository } from 'typeorm';
 import { UserDto } from '../dto';
-import { User } from '../entities/user.entity';
+import { Status, User } from '../entities/user.entity';
 
 @Injectable()
 export class UserService {
@@ -89,6 +89,19 @@ export class UserService {
       await this.userRepo.update(winner.id, { rank: winner.rank + 1 });
       if (loser.rank > 0)
         await this.userRepo.update(loser.id, { rank: loser.rank - 1 });
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  async setStatus(id: number, status: Status) {
+    let user = await this.getUser(id);
+
+    if (user.status == status) return;
+
+    try {
+      await this.userRepo.update(user.id, { status });
+      // TODO: notify user
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
