@@ -13,13 +13,14 @@ export class UserService {
 
   createUser(dto: UserDto) {
     const user = new User();
+
     user.first_name = dto.first_name;
     user.last_name = dto.last_name;
-    console.log(dto.last_name);
     user.username = dto.username;
     user.email = dto.email;
     user.password = dto.password;
     user.gender = dto.gender;
+    user.date_of_birth = dto.date_of_birth;
 
     return this.userRepo.save(user);
   }
