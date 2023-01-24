@@ -7,6 +7,12 @@ import {
 
 export type Gender = 'male' | 'female';
 
+export enum Status {
+  OFFLIEN = 0,
+  ONLIEN,
+  GAME,
+}
+
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
@@ -33,9 +39,12 @@ export class User {
   @Column({ type: 'date', nullable: true })
   date_of_birth: Date;
 
+  @Column({ default: 0 })
+  rank: number;
+
+  @Column({ default: Status.OFFLIEN })
+  status: Status;
+
   @CreateDateColumn({ default: () => 'NOW()' })
   created_at: Date;
-
-  @Column({ default: 0 })
-  level: number;
 }
