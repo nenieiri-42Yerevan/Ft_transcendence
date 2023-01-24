@@ -1,6 +1,7 @@
 version: "3.8"
 
 services:
+
   postgres:
     image: postgres:15
     container_name: database
@@ -12,9 +13,16 @@ services:
       - backend
     env_file:
       - .env
-      
-networks:
-  backend:
+  
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    ports:
+      - 5050:80
+    networks:
+      - backend
+    env_file:
+      - .env
 
 volumes:
   postgres:
@@ -24,3 +32,6 @@ volumes:
       type: none
       o: bind
       device: ./backend/data
+
+networks:
+  backend:
