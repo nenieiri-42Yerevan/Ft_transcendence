@@ -12,7 +12,7 @@ export class UserService {
     private readonly userRepo: Repository<User>,
   ) {}
 
-  // CREATE
+  /* CREATE */
 
   async createUser(dto: UserDto) {
     const user = new User();
@@ -28,7 +28,7 @@ export class UserService {
     return this.userRepo.save(user);
   }
 
-  // READ
+  /* READ */
 
   getAllUsers(): Promise<User[]> {
     return this.userRepo.find();
@@ -44,7 +44,7 @@ export class UserService {
     return user;
   }
 
-  // UPDATE
+  /* UPDATE */
 
   async updateUser(id: number, user: User): Promise<User> {
     // check for user  with id:id and null body
@@ -107,7 +107,7 @@ export class UserService {
     }
   }
 
-  // DELETE
+  /* DELETE */
 
   async deleteUser(id: number): Promise<User> {
     let user = this.getUser(id);
