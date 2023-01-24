@@ -12,19 +12,7 @@ export class UserService {
     private readonly userRepo: Repository<User>,
   ) {}
 
-  getAllUsers(): Promise<User[]> {
-    return this.userRepo.find();
-  }
-
-  async getUser(id: number, relations = [] as string[]): Promise<User> {
-    let user = null;
-
-    if (id) user = await this.userRepo.findOne({ where: { id }, relations });
-
-    if (!user) throw new HttpException('User not found', HttpStatus.NOT_FOUND);
-
-    return user;
-  }
+  // CREATE
 
   async createUser(dto: UserDto) {
     const user = new User();
@@ -39,6 +27,24 @@ export class UserService {
 
     return this.userRepo.save(user);
   }
+
+  // READ
+
+  getAllUsers(): Promise<User[]> {
+    return this.userRepo.find();
+  }
+
+  async getUser(id: number, relations = [] as string[]): Promise<User> {
+    let user = null;
+
+    if (id) user = await this.userRepo.findOne({ where: { id }, relations });
+
+    if (!user) throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+
+    return user;
+  }
+
+  // UPDATE
 
   async updateUser(id: number, user: User): Promise<User> {
     // check for user  with id:id and null body
@@ -75,6 +81,25 @@ export class UserService {
     }
 
     delete user.id;
+    return user;
+  }
+
+  async updateRank(winner: User, loser: User): Promise<void> {
+    try {
+      await this.userRepo.update(winner.id, { rank: winner.rank + 1 });
+      if (loser.rank > 0)
+        await this.userRepo.update(loser.id, { rank: loser.rank - 1 });
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  // DELETE
+
+  async deleteUser(id: number): Promise<User> {
+    let user = this.getUser(id);
+
+    await this.userRepo.delete(id);
     return user;
   }
 }
