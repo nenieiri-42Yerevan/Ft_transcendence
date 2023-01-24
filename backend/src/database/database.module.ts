@@ -11,10 +11,10 @@ import { User } from 'src/user/entities/user.entity';
       useFactory: (env: ConfigService) => ({
         type: 'postgres',
         host: 'localhost',
-        port: 5434,
-        username: env.get('DB_USER'),
-        password: env.get('DB_PASSWORD'),
-        database: env.get('DB_NAME'),
+        port: env.get<number>('POSTGRES_PORT'),
+        username: env.get('POSTGRES_USER'),
+        password: env.get('POSTGRES_PASSWORD'),
+        database: env.get('POSTGRES_DB'),
         entities: [User],
         synchronize: true, // false for production
         autoLoadEntities: true,
