@@ -110,9 +110,9 @@ export class UserService {
   /* DELETE */
 
   async deleteUser(id: number): Promise<User> {
-    let user = this.getUser(id);
+    let user = await this.getUser(id);
 
-    await this.userRepo.delete(id);
+    await this.userRepo.remove(user);
     return user;
   }
 }
