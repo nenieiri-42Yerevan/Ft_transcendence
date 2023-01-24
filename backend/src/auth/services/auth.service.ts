@@ -8,7 +8,7 @@ export class AuthService {
   // verifying JSON Web Token
   verifyJWT() {}
 
-  // creatinhg user sessions and connection
+  // creatinhg user session and connection
   login() {}
 
   // perform the authorization
