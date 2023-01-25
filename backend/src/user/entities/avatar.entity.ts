@@ -8,7 +8,7 @@ import {
 import { User } from './user.entity';
 
 @Entity()
-export default class Avatar {
+export class Avatar {
   @PrimaryGeneratedColumn()
   id: number;
 
