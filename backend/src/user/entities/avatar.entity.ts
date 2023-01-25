@@ -8,12 +8,12 @@ import {
 import { User } from './user.entity';
 
 @Entity()
-export default class Avatar {
+export class Avatar {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column()
-  filename: string;
+  file: string;
 
   @Column({ type: 'bytea' })
   data: Buffer;
