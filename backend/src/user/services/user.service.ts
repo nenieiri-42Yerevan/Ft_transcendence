@@ -1,9 +1,10 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import * as argon from 'argon2';
 import { Repository } from 'typeorm';
+import * as argon from 'argon2';
+
+import { User, Avatar, Status } from '../entities/';
 import { UserDto } from '../dto';
-import { Status, User } from '../entities/user.entity';
 
 @Injectable()
 export class UserService {
@@ -42,6 +43,14 @@ export class UserService {
     if (!user) throw new HttpException('User not found', HttpStatus.NOT_FOUND);
 
     return user;
+  }
+
+  async getAvatar(id: number): Promise<Avatar> {
+    const user: User = await this.getUser(id, ['avatar']);
+    if (!user.avatar)
+      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+
+    return user.avatar;
   }
 
   /* UPDATE */
