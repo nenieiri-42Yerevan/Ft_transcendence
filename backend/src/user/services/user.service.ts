@@ -35,7 +35,7 @@ export class UserService {
     return this.userRepo.find();
   }
 
-  async getUser(id: number, relations = [] as string[]): Promise<User> {
+  async getUserById(id: number, relations = [] as string[]): Promise<User> {
     let user = null;
 
     if (id) user = await this.userRepo.findOne({ where: { id }, relations });
@@ -45,8 +45,22 @@ export class UserService {
     return user;
   }
 
+  async getUserByUsername(
+    username: string,
+    relations = [] as string[],
+  ): Promise<User> {
+    let user = null;
+
+    if (username)
+      user = await this.userRepo.findOne({ where: { username }, relations });
+
+    if (!user) throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+
+    return user;
+  }
+
   async getAvatar(id: number): Promise<Avatar> {
-    const user: User = await this.getUser(id, ['avatar']);
+    const user: User = await this.getUserById(id, ['avatar']);
     if (!user.avatar)
       throw new HttpException('User not found', HttpStatus.NOT_FOUND);
 
@@ -58,7 +72,7 @@ export class UserService {
   async updateUser(id: number, user: User): Promise<User> {
     // check for user  with id:id and null body
     if (!user) throw new HttpException('Body is null', HttpStatus.NOT_FOUND);
-    await this.getUser(id);
+    await this.getUserById(id);
 
     // check for modifiable updates
     const modifiable: Array<string> = ['first_name', 'last_name', 'username'];
@@ -104,7 +118,7 @@ export class UserService {
   }
 
   async setStatus(id: number, status: Status) {
-    let user = await this.getUser(id);
+    let user = await this.getUserById(id);
 
     if (user.status == status) return;
 
@@ -119,7 +133,7 @@ export class UserService {
   /* DELETE */
 
   async deleteUser(id: number): Promise<User> {
-    let user = await this.getUser(id);
+    let user = await this.getUserById(id);
 
     await this.userRepo.remove(user);
     return user;
