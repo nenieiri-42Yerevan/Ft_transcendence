@@ -13,7 +13,7 @@ export class Avatar {
   id: number;
 
   @Column()
-  filename: string;
+  file: string;
 
   @Column({ type: 'bytea' })
   data: Buffer;
