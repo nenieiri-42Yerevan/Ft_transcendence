@@ -1,0 +1,125 @@
+
+.header
+{
+    // padding: 5em;
+    // background: rgba(0 0 0 / 25%);
+    // box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    // backdrop-filter: blur(8.4px);
+    // -webkit-backdrop-filter: blur(8.4px);
+    backdrop-filter: blur(15px);
+    background-color: rgba(0 0 0 / 20%);
+    // border-radius: 3em;
+    // border: 2px solid rgba(255,255,255,.1);
+    background-clip: padding-box;
+    // box-shadow: 10px 10px 10px rgba(46, 54, 68, 0.03);
+    // border: 1px solid rgba(255, 255, 255, 0.3);
+    height: 100vh;
+    width: 100vw;
+    z-index: 668;
+    position: absolute;
+    display: flex;
+    .welcome-side
+    {
+        width: 40vw;
+        height: 75vh;
+        margin: 7em 2em 2em 7em;
+        
+        // min-width: 50%;
+        // color: white;
+        
+    }
+    .forms
+    {
+        border-radius: 3em;
+        backdrop-filter: blur(15px);
+        background-color: rgb(158 156 156 / 20%);
+        // // border-radius: 3em;
+        border: 2px solid rgba(255,255,255,.1);
+        background-clip: padding-box;
+        box-shadow: 10px 10px 10px rgba(46, 54, 68, 0.03);
+    }
+
+    .signup-form
+    {
+        margin: auto;
+        padding: 5em;
+        color: white;
+        
+        .fields
+        {
+            font-family: sans-serif;
+            margin-top: 2em;
+            input
+            {
+                border-radius: 0.75em;
+                background-color: rgba(255,255,255,.1);
+                display: block;
+                padding: 0.75em;
+                width: 100%;
+                margin-top: 0.5em;
+                outline: none;
+                color: white;
+                // min-width: 30vw;
+            }
+            label
+            {
+                font-weight: bold;
+            }
+        }
+        .field-date
+        {
+            display: flex;
+            select
+            {
+                margin-left: 1em;
+                padding: 0.5em;
+                border-radius: 0.75em;
+                background-color: rgba(255,255,255,.1);
+                color: white;
+                &:focus
+                {
+                    outline: none;
+                }
+            }
+        }
+        .field-gender-label
+        {
+            margin-top: 1em;
+        }
+        .field-gender
+        {
+            margin-top: 1em;
+            input
+            {
+                margin-left: 5em;
+            }
+        }
+        .signup-button
+        {
+            display: flex;
+            
+            // padding: 0 ;
+            button
+            {
+                font-family: sans-serif;
+                font-weight: bold;
+                color: white;
+                margin: auto;
+                padding: 0.75em;
+                border-radius: 0.75em;
+                background-color: rgb(228 233 255 / 10%);
+                &:hover
+                {
+                    background-color: rgb(125 125 125);
+                }
+            }
+        }
+       
+    }
+    .main-image
+    {
+        margin-top: 8em;
+        margin-left: 5em;
+    }
+    
+}

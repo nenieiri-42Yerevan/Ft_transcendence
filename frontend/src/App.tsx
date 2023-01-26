@@ -7,9 +7,9 @@ import { Canvas, useFrame } from "@react-three/fiber";
 // import angleToRadians from "./Angle";
 import "./Skybox.scss"
 import "./App.scss"
-import Welcome from "./Welcome";
+import SignUp from "./SignUp";
 import Scene from "./Scene"
-import { OrbitControls, PerspectiveCamera} from '@react-three/drei'
+import { OrbitControls, PerspectiveCamera } from '@react-three/drei'
 import SkyBox from "./Skybox";
 // import { Box, Plane } from "@react-three/drei";
 // import { DoubleSide, Mesh } from "three";
@@ -43,22 +43,22 @@ import SkyBox from "./Skybox";
 //   );
 // }
 
-export default function App(props:any) {
+export default function App(props: any) {
   // const orbitControlsRef = useRef(null);
   // const ballRef = useRef(null);
   // const boxRef = useRef();
-   return (
+  return (
     <>
-    <Welcome />
-        <Canvas
-      // colorManagement
-      shadows
-      // shadowMap
-      camera={{ position: [15, 15, 15], fov: 60 }}
-    >
-      <SkyBox />
-      {/* <ambientLight color="#ffffff" intensity={0.1} /> */}
-      {/* <spotLight
+      <SignUp />
+      <Canvas
+        // colorManagement
+        shadows
+        // shadowMap
+        camera={{ position: [15, 15, 15], fov: 60 }}
+      >
+        <SkyBox />
+        {/* <ambientLight color="#ffffff" intensity={0.1} /> */}
+        {/* <spotLight
         position={[60, 5  , 2]}
         color="#ffffff"
         intensity={2.5}
@@ -71,17 +71,17 @@ export default function App(props:any) {
         shadow-camera-bottom={-10}
         castShadow
       /> */}
-      <directionalLight
-      position={[60, 5, 2]}
-      castShadow
-      color={"#ffffff"}
-      intensity={1.0}
-    />
-      
+        <directionalLight
+          position={[60, 5, 2]}
+          castShadow
+          color={"#ffffff"}
+          intensity={1.0}
+        />
 
-      <Scene />
-      <OrbitControls enablePan={true} enableZoom={true} enableRotate={true} />
-    </Canvas>
+
+        <Scene />
+        <OrbitControls enablePan={true} enableZoom={true} enableRotate={true} />
+      </Canvas>
     </>
-   );
+  );
 }
