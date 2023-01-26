@@ -5,7 +5,7 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import Avatar from './avatar.entity';
+import { Avatar } from './avatar.entity';
 
 export type Gender = 'male' | 'female';
 
