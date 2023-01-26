@@ -6,7 +6,8 @@ import { Canvas, useFrame } from "@react-three/fiber";
 // import SkyBox from "./Skybox";
 // import angleToRadians from "./Angle";
 import "./Skybox.scss"
-import "./App.css"
+import "./App.scss"
+import Welcome from "./Welcome";
 import Scene from "./Scene"
 import { OrbitControls, PerspectiveCamera} from '@react-three/drei'
 import SkyBox from "./Skybox";
@@ -47,6 +48,8 @@ export default function App(props:any) {
   // const ballRef = useRef(null);
   // const boxRef = useRef();
    return (
+    <>
+    <Welcome />
         <Canvas
       // colorManagement
       shadows
@@ -79,5 +82,6 @@ export default function App(props:any) {
       <Scene />
       <OrbitControls enablePan={true} enableZoom={true} enableRotate={true} />
     </Canvas>
+    </>
    );
 }
