@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
-//import { JwtModule } from '@nestjs/jwt';
+import { JwtService } from '@nestjs/jwt';
 import { SignInDto } from '../dto';
 import { UserService } from '../../user/services/user.service';
 
 @Injectable()
 export class AuthService {
 	constructor(
-//		private jwtModule: JwtModule,
-		private userService: UserService
+		private userService: UserService,
+		private jwtService: JwtService,
 	) {}
 
 	// verifying JSON Web Token
