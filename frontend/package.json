@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@mierak/react-virtualized-grid": "^0.0.5-ALPHA",
     "@react-three/drei": "^9.54.2",
     "@react-three/fiber": "^8.10.1",
     "@testing-library/jest-dom": "^5.16.5",
@@ -12,6 +13,7 @@
     "@types/node": "^16.18.11",
     "@types/react": "^18.0.27",
     "@types/react-dom": "^18.0.10",
+    "@types/react-grid-layout": "^1.3.2",
     "@types/three": "^0.148.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
