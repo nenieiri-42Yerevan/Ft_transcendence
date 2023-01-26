@@ -23,10 +23,10 @@ export class AuthService {
 	getUserFromSocket() {}
 
 	// generating and returning JSON Web Token
-/*	async generateJWT(userId: number)
+	async generateJWT(userId: number)
 	{
 		const [at, rt] = await Promise.all([
-			this.jwtModule.signAsync(
+			this.jwtService.signAsync(
 			{
 				sub: userId,
 			},
@@ -34,7 +34,7 @@ export class AuthService {
 				secret: 'at-token',
 				expiresIn: 60 * 15,
 			}),
-			this.jwtModule.signAsync(
+			this.jwtService.signAsync(
 			{
 				sub: userId,
 			},
@@ -47,5 +47,5 @@ export class AuthService {
 			accessToken: at,
 			refreshToken: at,
 		});
-	}*/
+	}
 }
