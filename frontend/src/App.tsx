@@ -50,7 +50,7 @@ export default function App(props: any) {
   return (
     <>
       <SignUp />
-      <Canvas
+      <Canvas className="scene"
         // colorManagement
         shadows
         // shadowMap
@@ -82,6 +82,7 @@ export default function App(props: any) {
         <Scene />
         <OrbitControls enablePan={true} enableZoom={true} enableRotate={true} />
       </Canvas>
+      <div className="scene-bg"></div>
     </>
   );
 }

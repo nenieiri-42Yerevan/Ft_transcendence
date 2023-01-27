@@ -2,7 +2,8 @@ import React from "react";
 // import { setConfiguration } from '@types/react-grid-system';
 // import { VirtualizedGrid } from '@mierak/react-virtualized-grid';
 import "./SignUp.scss"
-import logo from "./logo.png"
+import logo from "./assets/images/logo.png"
+
 // // setConfiguration({ maxScreenClass: 'xl' });
 // // import SkyBox from "./Skybox";
 // // import angleToRadians from "./Angle";
@@ -28,63 +29,62 @@ const SignUp = () => {
         { value: "November" },
         { value: "December" }
     ];
-    const days: any[] = Array.from(Array(1, 31).keys()).map(x => x);
-    // const days:any = [...Array(31)].map((d) =>d)
-    // const month = new Array(...12)
+    const days: any[] = Array.from(Array(31).keys()).map(d => d + 1)
+    const years: any[] = Array.from(Array(76).keys()).map(d => d + 1940)
+
     return (
         <div className="header">
             {/* <nav></nav> */}
-            <div className="welcome-side">
-                <img className="main-image" src={logo} width={"500px"} height={"500px"} />
+            <div className="signup-side d-none">
+                <img className="main-image" src={logo} width={"500px"} alt="" height={"500px"} />
             </div>
-            <div className="welcome-side forms">
+            <div className="signup-side forms">
                 <form className="signup-form">
                     <div className="fields">
-                        <label >Name: </label>
-                        <input type="text" placeholder="Full Name" />
+                        <label htmlFor="signup-name">Name: </label>
+                        <input type="text" id="signup-name" placeholder="Full Name" />
                     </div>
                     <div className="fields">
-                        <label >Username: </label>
-                        <input type="text" placeholder="Username" />
+                        <label htmlFor="signup-username">Username: </label>
+                        <input type="text" id="signup-username" placeholder="Username" />
                     </div>
                     <div className="fields">
-                        <label >Email: </label>
-                        <input type="email" placeholder="Email" />
+                        <label htmlFor="signup-email">Email: </label>
+                        <input type="email" id="signup-email" placeholder="Email" />
                     </div>
                     <div className="field-gender">
-                        <div className="field-gender-label">
-                            <label>Gender: </label>
-                        </div>
-                        <div className="field-gender-label">
-                            <input type="radio" id="male" name="gender" value="male" />
-                            <label htmlFor="male">Male</label>
-                            <input type="radio" id="female" name="gender" value="female" />
-                            <label htmlFor="female">Female</label>
+                        <div className="field-gender-labels">
+                            <div className="field-gender-label">
+                                <label htmlFor="signup-male">Gender: </label>
+                            </div>
+                            <div className="field-gender-radio">
+                                <input type="radio" id="signup-male" name="gender" value="male" />
+                                <label htmlFor="signup-male">Male</label>
+                                <input type="radio" id="signup-female" name="gender" value="female" />
+                                <label htmlFor="signup-female">Female</label>
+                            </div>
                         </div>
                     </div>
                     <div className="fields">
-                        <label >Password: </label>
-                        <input type="password" placeholder="Password" />
+                        <label htmlFor="signup-password">Password: </label>
+                        <input type="password" id="signup-password" placeholder="Password" />
                     </div>
                     <div className="fields">
-                        <label >Repeat Password: </label>
-                        <input type="password" placeholder="Repeat Password" />
+                        <label htmlFor="signup-repeat-password">Repeat Password: </label>
+                        <input type="password" id="signup-repeat-password" placeholder="Repeat Password" />
                     </div>
                     <div className="fields field-date">
                         <select defaultValue={0}>
                             <option value="Month" key={0}>Month</option>
                             {months.map(({ value }, index) => <option key={index + 1} value={value} >{value}</option>)}
-                            {/* <option value=""></option> */}
                         </select>
                         <select defaultValue={0}>
                             <option value="Day" key={0}>Day</option>
-                            {days.map(({ value }, index) => <option key={index + 1} value={value} >{value}</option>)}
-                            {/* <option value=""></option> */}
+                            {days.map((day, index) => <option key={index + 1} value={day} >{day}</option>)}
                         </select>
                         <select defaultValue={0}>
-                            <option value="Month" key={0}>Month</option>
-                            {months.map(({ value }, index) => <option key={index + 1} value={value} >{value}</option>)}
-                            {/* <option value=""></option> */}
+                            <option value="Year" key={0}>Year</option>
+                            {years.map((year, index) => <option key={index + 1} value={year} >{year}</option>)}
                         </select>
                     </div>
                     <div className="fields signup-button">
@@ -92,9 +92,6 @@ const SignUp = () => {
                     </div>
                 </form>
             </div>
-            {/* <VirtualizedGrid itemCount={2} rowHeight={50} cellWidth={100} gridHeight={300}>
-			    {(index) => <div className="items">{index}</div>}
-		    </VirtualizedGrid> */}
         </div>
     )
 }
