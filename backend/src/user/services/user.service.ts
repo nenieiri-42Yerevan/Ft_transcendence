@@ -15,7 +15,7 @@ export class UserService {
 
   /* CREATE */
 
-  async createUser(dto: UserDto): Promise<User> {
+  async create(dto: UserDto): Promise<User> {
     const user = new User();
 
     user.first_name = dto.first_name;
@@ -31,11 +31,11 @@ export class UserService {
 
   /* READ */
 
-  getAllUsers(): Promise<User[]> {
+  findAll(): Promise<User[]> {
     return this.userRepo.find();
   }
 
-  async getUserById(id: number, relations = [] as string[]): Promise<User> {
+  async findById(id: number, relations = [] as string[]): Promise<User> {
     let user = null;
 
     if (id) user = await this.userRepo.findOne({ where: { id }, relations });
@@ -45,7 +45,7 @@ export class UserService {
     return user;
   }
 
-  async getUserByUsername(
+  async findByUsername(
     username: string,
     relations = [] as string[],
   ): Promise<User> {
@@ -60,7 +60,7 @@ export class UserService {
   }
 
   async getAvatar(id: number): Promise<Avatar> {
-    const user: User = await this.getUserById(id, ['avatar']);
+    const user: User = await this.findById(id, ['avatar']);
     if (!user.avatar)
       throw new HttpException('User not found', HttpStatus.NOT_FOUND);
 
@@ -72,7 +72,7 @@ export class UserService {
   async updateUser(id: number, user: User): Promise<User> {
     // check for user  with id:id and null body
     if (!user) throw new HttpException('Body is null', HttpStatus.NOT_FOUND);
-    await this.getUserById(id);
+    await this.findById(id);
 
     // check for modifiable updates
     const modifiable: Array<string> = ['first_name', 'last_name', 'username'];
@@ -118,7 +118,7 @@ export class UserService {
   }
 
   async setStatus(id: number, status: Status) {
-    let user = await this.getUserById(id);
+    let user = await this.findById(id);
 
     if (user.status == status) return;
 
@@ -133,7 +133,7 @@ export class UserService {
   /* DELETE */
 
   async deleteUser(id: number): Promise<User> {
-    let user = await this.getUserById(id);
+    let user = await this.findById(id);
 
     await this.userRepo.remove(user);
     return user;

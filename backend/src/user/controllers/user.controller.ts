@@ -23,22 +23,22 @@ export class UserController {
   ) {}
 
   @Get('/')
-  getAllUsers(): Promise<User[]> {
-    return this.userService.getAllUsers();
+  findAll(): Promise<User[]> {
+    return this.userService.findAll();
   }
 
   @Get('/:id')
-  getUserById(@Param('id', ParseIntPipe) id: number): Promise<User> {
-    return this.userService.getUserById(id);
+  findById(@Param('id', ParseIntPipe) id: number): Promise<User> {
+    return this.userService.findById(id);
   }
 
   @Get('/:username')
-  getUserByUsername(@Param('username') username: string): Promise<User> {
-    return this.userService.getUserByUsername(username);
+  findByUsername(@Param('username') username: string): Promise<User> {
+    return this.userService.findByUsername(username);
   }
 
   @Get('/:id/avatar')
-  async getAvatar(
+  async findAvatar(
     @Param('id', ParseIntPipe) id: number,
     @Res({ passthrough: true }) res: Response,
   ): Promise<StreamableFile> {
@@ -54,17 +54,17 @@ export class UserController {
   }
 
   @Put('/:id/update')
-  async updateUser(
+  async update(
     @Param('id', ParseIntPipe) id: number,
     @Body() user: User,
   ): Promise<User> {
-    const current = await this.getUserById(id);
+    const current = await this.userService.findById(id);
 
     return this.userService.updateUser(current.id, user);
   }
 
   @Post('signup')
-  async createUser(@Body() dto: UserDto): Promise<User> {
-    return await this.userService.createUser(dto);
+  async create(@Body() dto: UserDto): Promise<User> {
+    return await this.userService.create(dto);
   }
 }
