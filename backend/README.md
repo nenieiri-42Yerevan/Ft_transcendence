@@ -39,9 +39,14 @@ To be witten...
 
 ### API Endpoints 🔗
 
-| HTTP Verbs | Endpoints                  | Action                            |
-| ---------- | -------------------------- | --------------------------------- |
-| GET        | /transcendence/            | The welcome page                  |
-| POST       | /transcendence/user/signup | To sign up a new user account     |
-| POST       | /transcendence/auth/login  | To login an existing user account |
-| GET        | /transcendence/home        | The dashboard of the user         |
+| HTTP Verbs | Endpoints                     | Action                               |
+| ---------- | ----------------------------- | ------------------------------------ |
+| GET        | /transcendence/               | To get welcome page                  |
+| GET        | /transcendence/user           | To get all the users                 |
+| GET        | /transcendence/user:id        | To get a user by id                  |
+| GET        | /transcendence/user:username  | To get a user by username            |
+| GET        | /transcendence/user:id/avatar | To get a user avatar by user id      |
+| PUT        | /transcendence/user:id/update | To update a user by id               |
+| POST       | /transcendence/user/signup    | To sign up a new user account        |
+| POST       | /transcendence/auth/login     | To login an existing user account    |
+| GET        | /transcendence/home:id        | To get the dashboard of a user by id |
