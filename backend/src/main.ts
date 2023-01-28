@@ -7,6 +7,8 @@ async function bootstrap() {
 
   app.setGlobalPrefix('transcendence');
 
+  app.enableCors();
+
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
 
   await app.listen(7000);
