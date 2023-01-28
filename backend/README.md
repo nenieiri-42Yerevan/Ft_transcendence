@@ -41,7 +41,7 @@ To be witten...
 
 | HTTP Verbs | Endpoints                     | Action                               |
 | ---------- | ----------------------------- | ------------------------------------ |
-| GET        | /transcendence/               | To get welcome page                  |
+| GET        | /transcendence                | To get welcome page                  |
 | GET        | /transcendence/user           | To get all the users                 |
 | GET        | /transcendence/user:id        | To get a user by id                  |
 | GET        | /transcendence/user:username  | To get a user by username            |
