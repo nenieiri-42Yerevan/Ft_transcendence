@@ -20,8 +20,13 @@ export class UserController {
   }
 
   @Get('/:id')
-  getUser(@Param('id', ParseIntPipe) id: number): Promise<User> {
+  getUserById(@Param('id', ParseIntPipe) id: number): Promise<User> {
     return this.userService.getUserById(id);
+  }
+
+  @Get('/:username')
+  getUserByUsername(@Param('username') username: string): Promise<User> {
+    return this.userService.getUserByUsername(username);
   }
 
   @Post('signup')
