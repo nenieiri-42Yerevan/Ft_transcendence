@@ -15,7 +15,7 @@ export class UserService {
 
   /* CREATE */
 
-  async createUser(dto: UserDto) {
+  async createUser(dto: UserDto): Promise<User> {
     const user = new User();
 
     user.first_name = dto.first_name;
