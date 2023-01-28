@@ -5,6 +5,8 @@ import {
   Param,
   ParseIntPipe,
   Post,
+  Put,
+  Req,
   Res,
   StreamableFile,
 } from '@nestjs/common';
@@ -49,6 +51,16 @@ export class UserController {
     res.headers.append('Content-Type', 'image/*');
 
     return this.avatarService.toStreamableFile(avatar.data);
+  }
+
+  @Put('/:id/update')
+  async updateUser(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() user: User,
+  ): Promise<User> {
+    const current = await this.getUserById(id);
+
+    return this.userService.updateUser(current.id, user);
   }
 
   @Post('signup')
