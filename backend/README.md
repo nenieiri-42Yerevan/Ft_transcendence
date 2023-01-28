@@ -45,6 +45,8 @@ To be witten...
 | ---------- | -------------- | ------------------- |
 | GET        | /transcendence | To get welcome page |
 
+<br>
+
 - User routes
 
 | HTTP Verbs | Endpoints                     | Action                          |
@@ -56,6 +58,8 @@ To be witten...
 | GET        | /transcendence/user:id/avatar | To get a user avatar by user id |
 | PUT        | /transcendence/user:id/update | To update a user by id          |
 | POST       | /transcendence/user/signup    | To sign up a new user account   |
+
+<br>
 
 - Auth routes
 
