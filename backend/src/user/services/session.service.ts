@@ -33,6 +33,18 @@ export class SessionService {
     return session;
   }
 
+  /* READ */
+
+  async read(id: number): Promise<Session> {
+    let session = null;
+
+    if (id) session = await this.sessionRepo.findOne({ where: { id }});
+
+    if (!session) throw new HttpException('Session not found', HttpStatus.NOT_FOUND);
+
+    return session;
+  }
+
   /* UPDATE */
 
   async update(id: number, session: Session): Promise<Session> {
