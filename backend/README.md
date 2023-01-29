@@ -63,6 +63,6 @@ To be witten...
 
 - Auth routes
 
-| HTTP Verbs | Endpoints                 | Action                            |
-| ---------- | ------------------------- | --------------------------------- |
-| POST       | /transcendence/auth/login | To login an existing user account |
+| HTTP Verbs | Endpoints                        | Action                            |
+| ---------- | -------------------------------- | --------------------------------- |
+| POST       | /transcendence/auth/signin/local | To login an existing user account |
