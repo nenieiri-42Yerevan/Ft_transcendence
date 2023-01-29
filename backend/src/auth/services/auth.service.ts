@@ -2,17 +2,16 @@ import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { SignInDto } from '../dto';
 import { UserService } from '../../user/services/user.service';
+import { SessionService } from '../../user/services/session.service';
 import * as argon from 'argon2';
 
 @Injectable()
 export class AuthService {
 	constructor(
 		private userService: UserService,
+		private sessionService: SessionService,
 		private jwtService: JwtService,
 	) {}
-
-	// verifying JSON Web Token
-	verifyJWT() {}
 
 	// creatinhg user session and connection
 	async signinLocal(dto: SignInDto)
@@ -20,22 +19,25 @@ export class AuthService {
 		const user = await this.userService.findByUsername(dto.username);
 
 		if (user && await argon.verify(user.password, dto.password))
+		{
+			const tokens = await this.generateJWT(user.id, user.username);
+			const new_session = await this.sessionService.create(null, tokens.refreshToken, user);
+			await this.sessionService.update(user.id, new_session);
 			return (user);
+		}
 		else
 			throw new HttpException('Wrong password', HttpStatus.NOT_FOUND);
 	}
 
-	// perform the authorization
-	getUserFromSocket() {}
-
 	// generating and returning JSON Web Token
-	async generateJWT(userId: number)
+	async generateJWT(userId: number, username: string)
 	{
 		const [at, rt] = await Promise.all([
 			this.jwtService.signAsync
 			(
 				{
 					sub: userId,
+					username: username,
 				},
 				{
 					secret: 'at-token',
@@ -46,6 +48,7 @@ export class AuthService {
 			(
 				{
 					sub: userId,
+					username: username,
 				},
 				{
 					secret: 'rt-token',
@@ -55,7 +58,7 @@ export class AuthService {
 		]);
 		return ({
 			accessToken: at,
-			refreshToken: at,
+			refreshToken: rt,
 		});
 	}
 }
