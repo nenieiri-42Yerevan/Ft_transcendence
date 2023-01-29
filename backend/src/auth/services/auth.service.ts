@@ -16,7 +16,7 @@ export class AuthService {
 	// creatinhg user session and connection
 	signinLocal(dto: SignInDto)
 	{
-//		console.log(this.userService.getAllUsers());
+		return (this.userService.findAll());
 	}
 
 	// perform the authorization
@@ -26,22 +26,26 @@ export class AuthService {
 	async generateJWT(userId: number)
 	{
 		const [at, rt] = await Promise.all([
-			this.jwtService.signAsync(
-			{
-				sub: userId,
-			},
-			{
-				secret: 'at-token',
-				expiresIn: 60 * 15,
-			}),
-			this.jwtService.signAsync(
-			{
-				sub: userId,
-			},
-			{
-				secret: 'rt-token',
-				expiresIn: 60 * 60 * 24 * 7,
-			}),
+			this.jwtService.signAsync
+			(
+				{
+					sub: userId,
+				},
+				{
+					secret: 'at-token',
+					expiresIn: 60 * 15,
+				}
+			),
+			this.jwtService.signAsync
+			(
+				{
+					sub: userId,
+				},
+				{
+					secret: 'rt-token',
+					expiresIn: 60 * 60 * 24 * 7,
+				}
+			),
 		]);
 		return ({
 			accessToken: at,
