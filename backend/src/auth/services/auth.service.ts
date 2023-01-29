@@ -29,6 +29,11 @@ export class AuthService {
 			throw new HttpException('Wrong password', HttpStatus.NOT_FOUND);
 	}
 
+	// logout
+	logout()
+	{
+	}
+
 	// generating and returning JSON Web Token
 	async generateJWT(userId: number, username: string)
 	{

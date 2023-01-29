@@ -1,4 +1,4 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import { Controller, Post, Body, HttpCode, HttpStatus } from '@nestjs/common';
 import { AuthService } from '../services/auth.service';
 import { SignInDto, TokenDto } from '../dto';
 
@@ -6,8 +6,15 @@ import { SignInDto, TokenDto } from '../dto';
 export class AuthController {
   constructor(private authService: AuthService) {}
 
-  @Post('/signin/local')
+  @Post('signin/local')
+  @HttpCode(HttpStatus.OK)
   signinLocal(@Body() dto: SignInDto): Promise<TokenDto> {
     return this.authService.signinLocal(dto);
+  }
+
+  @Post('logout')
+  @HttpCode(HttpStatus.OK)
+  logout() {
+	  this.authService.logout();
   }
 }
