@@ -1,7 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { SignInDto } from '../dto';
 import { UserService } from '../../user/services/user.service';
+import * as argon from 'argon2';
 
 @Injectable()
 export class AuthService {
@@ -14,9 +15,20 @@ export class AuthService {
 	verifyJWT() {}
 
 	// creatinhg user session and connection
-	signinLocal(dto: SignInDto)
+	async signinLocal(dto: SignInDto)
 	{
-		return (this.userService.findAll());
+		const user = await this.userService.findByUsername(dto.username);
+
+		const hash = await argon.hash(dto.password);
+		console.log(user);
+		console.log('AAAAAAAAAAAAAAAAAAAAAAAAAAA');
+		console.log(hash);
+		if (user && user.password === hash)
+		{
+			return (user);
+		}
+		else
+			throw new HttpException('Wrong password', HttpStatus.NOT_FOUND);
 	}
 
 	// perform the authorization
