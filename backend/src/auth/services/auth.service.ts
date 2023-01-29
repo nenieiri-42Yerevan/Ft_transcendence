@@ -16,7 +16,7 @@ export class AuthService {
 	// creatinhg user session and connection
 	signinLocal(dto: SignInDto)
 	{
-		console.log(this.userService.getAllUsers());
+//		console.log(this.userService.getAllUsers());
 	}
 
 	// perform the authorization

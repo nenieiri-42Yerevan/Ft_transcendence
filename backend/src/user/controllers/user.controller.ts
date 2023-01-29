@@ -14,6 +14,7 @@ import { UserDto } from '../dto';
 import { User } from '../entities';
 import { AvatarService } from '../services/avatar.service';
 import { UserService } from '../services/user.service';
+import { Response } from 'express'
 
 @Controller('user')
 export class UserController {
@@ -44,11 +45,12 @@ export class UserController {
   ): Promise<StreamableFile> {
     const avatar = await this.userService.getAvatar(id);
 
-    res.headers.append(
-      'Content-Disposition',
-      `inline; filename="${avatar.file}"`,
-    );
-    res.headers.append('Content-Type', 'image/*');
+    res.set(
+		{
+			'Content-Disposition': `inline; filename="${avatar.file}"`,
+			'Content-Type': 'image/*',
+		}
+	);
 
     return this.avatarService.toStreamableFile(avatar.data);
   }
