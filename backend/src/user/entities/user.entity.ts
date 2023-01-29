@@ -32,7 +32,7 @@ export class User {
   @Column({ nullable: false, unique: true, length: 45 })
   email: string;
 
-  @Column({ nullable: false, select: false })
+  @Column({ nullable: false, select: true })
   password: string;
 
   @Column({ type: 'enum', nullable: false, enum: ['male', 'female'] })

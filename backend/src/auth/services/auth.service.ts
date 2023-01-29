@@ -19,14 +19,8 @@ export class AuthService {
 	{
 		const user = await this.userService.findByUsername(dto.username);
 
-		const hash = await argon.hash(dto.password);
-		console.log(user);
-		console.log('AAAAAAAAAAAAAAAAAAAAAAAAAAA');
-		console.log(hash);
-		if (user && user.password === hash)
-		{
+		if (user && await argon.verify(user.password, dto.password))
 			return (user);
-		}
 		else
 			throw new HttpException('Wrong password', HttpStatus.NOT_FOUND);
 	}
