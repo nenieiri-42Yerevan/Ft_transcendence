@@ -38,9 +38,6 @@ export class AvatarService {
   /* DELETE */
 
   async delete(id: number): Promise<void> {
-    if (!user) throw new HttpException('Body is null', HttpStatus.NOT_FOUND);
-    await this.findById(id);
-
     try {
       await this.avatarRepo.delete(id);
     } catch (error) {
