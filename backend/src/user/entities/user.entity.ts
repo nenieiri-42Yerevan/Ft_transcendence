@@ -5,7 +5,7 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Avatar } from './avatar.entity';
+import { Avatar, Session } from './index';
 
 export type Gender = 'male' | 'female';
 
@@ -47,9 +47,12 @@ export class User {
   @Column({ default: Status.OFFLIEN })
   status: Status;
 
+  @CreateDateColumn({ default: () => 'NOW()' })
+  created_at: Date;
+
   @OneToOne(() => Avatar, (avatar) => avatar.user)
   avatar: Avatar;
 
-  @CreateDateColumn({ default: () => 'NOW()' })
-  created_at: Date;
+  @OneToOne(() => Session, (session) => session.owner)
+  session: Session;
 }
