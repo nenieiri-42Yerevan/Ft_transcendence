@@ -3,14 +3,17 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import * as argon from 'argon2';
 
+import multer from 'multer';
 import { User, Avatar, Status } from '../entities/';
 import { UserDto } from '../dto';
+import { AvatarService } from './avatar.service';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(User)
     private readonly userRepo: Repository<User>,
+    private readonly avatarService: AvatarService,
   ) {}
 
   /* CREATE */
@@ -124,6 +127,19 @@ export class UserService {
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
+  }
+
+  async setAvatar(userId: number, file: Express.Multer.File): Promise<void> {
+    if (!file)
+      throw new HttpException('File required', HttpStatus.NOT_ACCEPTABLE);
+
+    const filename = file.originalname;
+    const data = file.buffer;
+
+    const user: User = await this.findOne(userId, ['avatar']);
+
+    await this.avatarService.create(filename, user, data);
+    if (user.avatar) await this.avatarService.delete(user.avatar.id);
   }
 
   /* DELETE */
