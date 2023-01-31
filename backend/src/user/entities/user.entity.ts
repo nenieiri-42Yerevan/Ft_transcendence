@@ -2,6 +2,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -53,6 +54,6 @@ export class User {
   @OneToOne(() => Avatar, (avatar) => avatar.user)
   avatar: Avatar;
 
-  @OneToOne(() => Session, (session) => session.owner)
-  session: Session;
+  @OneToMany(() => Session, (session) => session.owner)
+  sessions: Session[];
 }
