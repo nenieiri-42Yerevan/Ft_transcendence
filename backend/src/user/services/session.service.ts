@@ -2,7 +2,6 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Session, User } from '../entities';
-import { UserService } from './user.service';
 
 @Injectable()
 export class SessionService {
@@ -38,9 +37,10 @@ export class SessionService {
   async read(id: number): Promise<Session> {
     let session = null;
 
-    if (id) session = await this.sessionRepo.findOne({ where: { id }});
+    if (id) session = await this.sessionRepo.findOne({ where: { id } });
 
-    if (!session) throw new HttpException('Session not found', HttpStatus.NOT_FOUND);
+    if (!session)
+      throw new HttpException('Session not found', HttpStatus.NOT_FOUND);
 
     return session;
   }
