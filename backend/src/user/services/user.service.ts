@@ -2,18 +2,19 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import * as argon from 'argon2';
-
-import multer from 'multer';
-import { User, Avatar, Status } from '../entities/';
+import { User, Avatar, Status, Match } from '../entities/';
 import { UserDto } from '../dto';
 import { AvatarService } from './avatar.service';
 
 @Injectable()
 export class UserService {
   constructor(
+    private readonly avatarService: AvatarService,
+
     @InjectRepository(User)
     private readonly userRepo: Repository<User>,
-    private readonly avatarService: AvatarService,
+    @InjectRepository(Match)
+    private readonly matchRepo: Repository<Match>,
   ) {}
 
   /* CREATE */
@@ -30,6 +31,21 @@ export class UserService {
     user.date_of_birth = dto.date_of_birth;
 
     return this.userRepo.save(user);
+  }
+
+  async createMatch(obj: Match): Promise<Match> {
+    let match: Match = this.matchRepo.create({
+      date: new Date(),
+      ...obj,
+    } as Match);
+
+    try {
+      this.matchRepo.save(match);
+    } catch (error) {
+      throw new HttpException(error.messgae, HttpStatus.BAD_REQUEST);
+    }
+
+    return match;
   }
 
   /* READ */
