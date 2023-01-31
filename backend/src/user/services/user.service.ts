@@ -144,7 +144,7 @@ export class UserService {
 
   /* DELETE */
 
-  async deleteUser(id: number): Promise<User> {
+  async delete(id: number): Promise<User> {
     let user = await this.findOne(id);
 
     await this.userRepo.remove(user);
