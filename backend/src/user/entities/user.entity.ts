@@ -6,7 +6,7 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Avatar, Session } from './index';
+import { Avatar, Session, Match } from './index';
 
 export type Gender = 'male' | 'female';
 
@@ -39,7 +39,7 @@ export class User {
   @Column({ type: 'enum', nullable: false, enum: ['male', 'female'] })
   gender: Gender;
 
-  @Column({ type: 'date', nullable: true })
+  @Column({ type: 'timestamptz', nullable: true })
   date_of_birth: Date;
 
   @Column({ default: 0 })
@@ -56,4 +56,10 @@ export class User {
 
   @OneToMany(() => Session, (session) => session.owner)
   sessions: Session[];
+
+  @OneToMany(() => Match, (match) => match.winner)
+  won: Match[];
+
+  @OneToMany(() => Match, (match) => match.loser)
+  lost: Match[];
 }
