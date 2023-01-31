@@ -32,6 +32,9 @@ export class AuthService {
   // logout
   logout() {}
 
+  // logout
+  refreshTokens() {}
+
   // generating and returning JSON Web Token
   async generateJWT(userId: number, username: string) {
     const [at, rt] = await Promise.all([

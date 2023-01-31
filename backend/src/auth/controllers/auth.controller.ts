@@ -17,4 +17,10 @@ export class AuthController {
   logout() {
 	  this.authService.logout();
   }
+
+  @Post('refresh')
+  @HttpCode(HttpStatus.OK)
+  refreshTokens() {
+	  this.authService.refreshTokens();
+  }
 }
