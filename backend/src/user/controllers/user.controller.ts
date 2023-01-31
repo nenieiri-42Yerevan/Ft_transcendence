@@ -14,7 +14,7 @@ import { UserDto } from '../dto';
 import { User } from '../entities';
 import { AvatarService } from '../services/avatar.service';
 import { UserService } from '../services/user.service';
-import { Response } from 'express'
+import { Response } from 'express';
 
 @Controller('user')
 export class UserController {
@@ -30,12 +30,12 @@ export class UserController {
 
   @Get('/:id')
   findById(@Param('id', ParseIntPipe) id: number): Promise<User> {
-    return this.userService.findById(id);
+    return this.userService.findOne(id);
   }
 
   @Get('/:username')
   findByUsername(@Param('username') username: string): Promise<User> {
-    return this.userService.findByUsername(username);
+    return this.userService.findOne(username);
   }
 
   @Get('/:id/avatar')
@@ -45,12 +45,10 @@ export class UserController {
   ): Promise<StreamableFile> {
     const avatar = await this.userService.getAvatar(id);
 
-    res.set(
-		{
-			'Content-Disposition': `inline; filename="${avatar.file}"`,
-			'Content-Type': 'image/*',
-		}
-	);
+    res.set({
+      'Content-Disposition': `inline; filename="${avatar.file}"`,
+      'Content-Type': 'image/*',
+    });
 
     return this.avatarService.toStreamableFile(avatar.data);
   }
@@ -60,7 +58,7 @@ export class UserController {
     @Param('id', ParseIntPipe) id: number,
     @Body() user: User,
   ): Promise<User> {
-    const current = await this.userService.findById(id);
+    const current = await this.userService.findOne(id);
 
     return this.userService.updateUser(current.id, user);
   }

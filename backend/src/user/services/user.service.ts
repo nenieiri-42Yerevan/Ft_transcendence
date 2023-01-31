@@ -35,24 +35,20 @@ export class UserService {
     return this.userRepo.find();
   }
 
-  async findById(id: number, relations = [] as string[]): Promise<User> {
+  async findOne(property, relations = [] as string[]): Promise<User> {
     let user = null;
 
-    if (id) user = await this.userRepo.findOne({ where: { id }, relations });
-
-    if (!user) throw new HttpException('User not found', HttpStatus.NOT_FOUND);
-
-    return user;
-  }
-
-  async findByUsername(
-    username: string,
-    relations = [] as string[],
-  ): Promise<User> {
-    let user = null;
-
-    if (username)
-      user = await this.userRepo.findOne({ where: { username }, relations });
+    if (property && typeof property == 'number') {
+      user = await this.userRepo.findOne({
+        where: { id: property },
+        relations,
+      });
+    } else {
+      user = await this.userRepo.findOne({
+        where: { username: property },
+        relations,
+      });
+    }
 
     if (!user) throw new HttpException('User not found', HttpStatus.NOT_FOUND);
 
@@ -60,7 +56,7 @@ export class UserService {
   }
 
   async getAvatar(id: number): Promise<Avatar> {
-    const user: User = await this.findById(id, ['avatar']);
+    const user: User = await this.findOne(id, ['avatar']);
     if (!user.avatar)
       throw new HttpException('User not found', HttpStatus.NOT_FOUND);
 
@@ -72,7 +68,7 @@ export class UserService {
   async updateUser(id: number, user: User): Promise<User> {
     // check for user  with id:id and null body
     if (!user) throw new HttpException('Body is null', HttpStatus.NOT_FOUND);
-    await this.findById(id);
+    await this.findOne(id);
 
     // check for modifiable updates
     const modifiable: Array<string> = ['first_name', 'last_name', 'username'];
@@ -118,7 +114,7 @@ export class UserService {
   }
 
   async setStatus(id: number, status: Status) {
-    let user = await this.findById(id);
+    let user = await this.findOne(id);
 
     if (user.status == status) return;
 
@@ -133,7 +129,7 @@ export class UserService {
   /* DELETE */
 
   async deleteUser(id: number): Promise<User> {
-    let user = await this.findById(id);
+    let user = await this.findOne(id);
 
     await this.userRepo.remove(user);
     return user;
