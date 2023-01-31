@@ -6,7 +6,6 @@ import {
   ParseIntPipe,
   Post,
   Put,
-  Req,
   Res,
   StreamableFile,
 } from '@nestjs/common';
