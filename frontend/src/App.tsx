@@ -8,6 +8,7 @@ import { Canvas, useFrame } from "@react-three/fiber";
 import "./Skybox.scss"
 import "./App.scss"
 import SignUp from "./SignUp";
+import SignIn from "./SignIn";
 import Scene from "./Scene"
 import { OrbitControls, PerspectiveCamera } from '@react-three/drei'
 import SkyBox from "./Skybox";
@@ -49,7 +50,8 @@ export default function App(props: any) {
   // const boxRef = useRef();
   return (
     <>
-      <SignUp />
+      {/* <SignUp /> */}
+      <SignIn />
       <Canvas className="scene"
         // colorManagement
         shadows
