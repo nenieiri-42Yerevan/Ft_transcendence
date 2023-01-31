@@ -42,7 +42,7 @@ export class UserController {
     @Param('id', ParseIntPipe) id: number,
     @Res({ passthrough: true }) res: Response,
   ): Promise<StreamableFile> {
-    const avatar = await this.userService.getAvatar(id);
+    const avatar = await this.userService.findAvatar(id);
 
     res.set({
       'Content-Disposition': `inline; filename="${avatar.file}"`,

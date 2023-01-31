@@ -58,7 +58,7 @@ export class UserService {
     return user;
   }
 
-  async getAvatar(id: number): Promise<Avatar> {
+  async findAvatar(id: number): Promise<Avatar> {
     const user: User = await this.findOne(id, ['avatar']);
     if (!user.avatar)
       throw new HttpException('User not found', HttpStatus.NOT_FOUND);
