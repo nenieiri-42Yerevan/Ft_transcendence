@@ -17,7 +17,7 @@ export class AvatarService {
 
   /* CREATE */
 
-  async createAvatar(file: string, user: User, data: Buffer): Promise<Avatar> {
+  async create(file: string, user: User, data: Buffer): Promise<Avatar> {
     let avatar = this.avatarRepo.create({ file, user, data });
 
     try {
