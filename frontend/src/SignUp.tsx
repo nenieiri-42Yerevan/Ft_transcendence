@@ -1,18 +1,4 @@
 import React from "react";
-// import { setConfiguration } from '@types/react-grid-system';
-// import { VirtualizedGrid } from '@mierak/react-virtualized-grid';
-// import "./SignUp.scss"
-import logo from "./assets/images/logo.png"
-
-// // setConfiguration({ maxScreenClass: 'xl' });
-// // import SkyBox from "./Skybox";
-// // import angleToRadians from "./Angle";
-
-// const layout = ()
-// {
-
-// }
-
 
 const SignUp = () => {
     const months: any[] = [
