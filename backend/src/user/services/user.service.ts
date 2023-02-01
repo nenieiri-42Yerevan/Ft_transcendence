@@ -155,14 +155,14 @@ export class UserService {
     }
   }
 
-  async setAvatar(userId: number, file: Express.Multer.File): Promise<void> {
+  async setAvatar(id: number, file: Express.Multer.File): Promise<void> {
     if (!file)
       throw new HttpException('File required', HttpStatus.NOT_ACCEPTABLE);
 
     const filename = file.originalname;
     const data = file.buffer;
 
-    const user: User = await this.findOne(userId, ['avatar']);
+    const user: User = await this.findOne(id, ['avatar']);
 
     await this.avatarService.create(filename, user, data);
     if (user.avatar) await this.avatarService.delete(user.avatar.id);
