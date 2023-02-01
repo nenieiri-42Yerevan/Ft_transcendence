@@ -23,13 +23,13 @@ interface Data {
     year: string
 }
 
-const Check = (props: any) => {
-    // console.log(err);
-    return (
-        <h1>{props.err}</h1>
-    );
+// const Check = (props: any) => {
+//     // console.log(err);
+//     return (
+//         <h1>{props.err}</h1>
+//     );
 
-}
+// }
 
 // const Error = (err:any) => {
 //     return(
@@ -64,7 +64,8 @@ const SignUp = () => {
             password: data.password,
             date: data.day + "/" + data.month + "/" + data.year
         };
-        axios.post('/transcendence/user/signup', sendData)
+        console.log(sendData);
+        axios.post('http://127.0.0.1:7000/transcendence/user/signup', sendData)
             .then(function (response) {
                 console.log(response);
             })
