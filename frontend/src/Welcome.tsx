@@ -3,77 +3,28 @@ import React from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import SkyBox from "./Skybox";
 import Scene from "./Scene"
+import Background from "./background";
 import { OrbitControls, PerspectiveCamera } from '@react-three/drei'
-
-
-// import { Box, Plane } from "@react-three/drei";
-// import { DoubleSide, Mesh } from "three";
-// import { Sky } from "@react-three/drei";
-
-// function Box(props:any) {
-//   const mesh = useRef<Mesh>(null!);
-
-//   // mesh.current.rotation.x += Math.PI / 2;
-//   // useFrame((state, delta) => (mesh.current.rotation.z += delta))
-
-//   return (
-//      <mesh castShadow receiveShadow {...props} ref={mesh} position={[0,0.5,0]}>
-//         <boxGeometry args={[0.5, 0.8, 0.8]} />
-//         <meshBasicMaterial attach="material" color={"red"} />
-//      </mesh>
-//   );
-// }
-
-// function Plane(props:any) {
-//   const mesh = useRef<Mesh>(null!);
-
-//   // mesh.current.rotation.x += Math.PI / 2;
-//   // useFrame((state, delta) => (mesh.current.rotation.z += delta))
-
-//   return (
-//     <mesh castShadow receiveShadow {...props} ref={mesh} rotation={[-Math.PI/2, 0, 0]}>
-//       <planeGeometry args={[7, 7]}/>
-//       <meshBasicMaterial color="grey" side={DoubleSide} />
-//     </mesh>
-//   );
-// }
+import welphoto from "./assets/images/welcomepagephoto.png"
 
 const Welcome = () => {
     return (
         <>
-
-            <Canvas className="scene"
-                // colorManagement
-                shadows
-                // shadowMap
-                camera={{ position: [15, 15, 15], fov: 60 }}
-            >
-                <SkyBox />
-                {/* <ambientLight color="#ffffff" intensity={0.1} /> */}
-                {/* <spotLight
-          position={[60, 5  , 2]}
-          color="#ffffff"
-          intensity={2.5}
-          shadow-mapSize-height={1024}
-          shadow-mapSize-width={1024}
-          shadow-camera-far={50}
-          shadow-camera-left={-10}
-          shadow-camera-right={10}
-          shadow-camera-top={10}
-          shadow-camera-bottom={-10}
-          castShadow
-        /> */}
-                <directionalLight
-                    position={[60, 5, 2]}
-                    castShadow
-                    color={"#ffffff"}
-                    intensity={1.0}
-                />
-
-
-                <Scene />
-                <OrbitControls enablePan={true} enableZoom={true} enableRotate={true} />
-            </Canvas>
+            <div className="items-center justify-center h-screen flex absolute backdrop-blur-md z-[668] min-w-full min-h-full">
+                <img className="mr-60" src={welphoto} alt="Your Image"/>
+                <div className="flex lg:min-w-fit lg:min-h-fit box-border rounded-none lg:rounded-3xl xl:rounded-3xl m-0 lg:ml-10 xl:ml-10  p-12 px-12  flex-col justify-between bg-[#9e9c9c33] outline-none border-[#ffffff1a] bg-clip-padding shadow-md shadow-[#2e364408] h-[30em]">
+                    <button className="bg-[#e4e9ff1a] hover:bg-[#7d7d7d] text-white font-bold py-2 rounded w-[15em] pt-[1em] pb-[1em]">
+                    Sign Up
+                    </button>
+                    <button className="bg-[#e4e9ff1a] hover:bg-[#7d7d7d] text-white font-bold py-2 rounded w-[15em] mt-20 pt-[1em] pb-[1em]">
+                    Sign in with 42
+                    </button>
+                    <button className="bg-[#e4e9ff1a] hover:bg-[#7d7d7d] text-white font-bold py-2 rounded w-[15em] mt-20 pt-[1em] pb-[1em]">
+                    Sign in
+                    </button>
+                </div>
+            </div>
+            <Background/>
         </>
     );
 }
