@@ -62,4 +62,7 @@ export class User {
 
   @OneToMany(() => Match, (match) => match.loser)
   lost: Match[];
+
+  @Column({ type: 'int', array: true, default: [] })
+  friends: number[];
 }
