@@ -82,6 +82,16 @@ export class UserService {
     return user.avatar;
   }
 
+  async findMatches(id: number): Promise<Match[]> {
+    const user = await this.findOne(id, ['won', 'lost']);
+
+    let matches = [];
+    if (user.won) matches = matches.concat(user.won);
+    if (user.lost) matches = matches.concat(user.lost);
+
+    return matches;
+  }
+
   /* UPDATE */
 
   async updateUser(id: number, user: User): Promise<User> {
