@@ -36,6 +36,39 @@ interface Data {
 //         err &&
 //     );
 // }
+const sleep = (ms:number) => new Promise(resolve => setTimeout(resolve, ms))
+const required = async (values: Data) => {
+    await sleep(300)
+    if (!values.name)
+        return {name: 'requires'}
+    if (!values.username)
+        return {username: 'requires'}
+    if (!values.email)
+        return {email: 'requires'}
+    if (!values.password)
+        return {password: 'requires'}
+    if (!values.repeat_password)
+        return {repeat_password: 'requires'}
+    if (!values.gender)
+        return {gender: 'requires'}
+    if (!values.month)
+        return {month: 'requires'}
+    if (!values.day)
+        return {day: 'requires'}
+    if (!values.year)
+        return {year: 'requires'}
+}
+
+const validateText = async (values:Data) => {
+    await sleep(300)
+    const is_number = /^(?=.*\d).+$/;
+    // const 
+    console.log(is_number.test(values.name));
+    
+    // if (regex.test(values.name))
+    //     return {name}
+
+}
 
 const SignUp = () => {
     const months: any[] = [
@@ -84,13 +117,14 @@ const SignUp = () => {
                 <div className="flex justify-center md:text-lg items-center forms min-w-full min-h-screen md:min-w-fit md:min-h-fit">
                     <Form
                         onSubmit={onSubmit}
-                        initialValues={{
-                            username: "",
-                            email: "",
-                            gender: "",
-                            password: "",
-                            repeat_password: ""
-                        }}
+                        validate={validateText}
+                        // initialValues={{
+                        //     username: "",
+                        //     email: "",
+                        //     gender: "",
+                        //     password: "",
+                        //     repeat_password: ""
+                        // }}
                     >
 
                         {({ handleSubmit, form, submitting, pristine, values, errors }) => (
@@ -98,71 +132,84 @@ const SignUp = () => {
                                 <div className="text-lg md:text-2xl flex justify-center block">
                                     <p>Join the <b className="text-red-900">Game</b></p>
                                 </div>
-                                <div className="mt-1 lg:mt-4 xl:mt-6">
-                                    <label htmlFor="signup-name" className="font-bold">Name: </label>
                                     <Field<string>
                                         name="name"
-                                        className=" rounded-md bg-[#2d2727] outline-[#2d2727] mt-2 outline-none min-w-full block p-1 md:p-2 lg:p-3"
                                         placeholder="Full Name"
                                         id="signup-name"
-                                        component={TextInput}
                                         // validate={required}
                                         key={"name"}
                                     >
-                                        {/* {({ input, meta }) => (
-                                            <div>
-                                                <label>Select Input:</label>
-                                                <TextInput {...input}>
-                                                </TextInput>
-                                                {meta.error && meta.touched && <span>{meta.error}</span>}
+                                        {({ input, meta, ...rest }) => (
+                                            <div className="mt-1 lg:mt-4 xl:mt-6">
+                                                <label htmlFor="signup-name" className="font-bold">Name: </label>
+                                                {
+                                                    // (meta.error && meta.touched) ?
+                                                    // <TextInput input={input} className=" rounded-md bg-[#2d2727] outline-red-900 mt-2 outline-none min-w-full block p-1 md:p-2 lg:p-3" meta={meta} {...rest} />
+                                                    // :
+                                                    <TextInput input={input} className=" rounded-md bg-[#2d2727] outline-[#2d2727] mt-2 outline-none min-w-full block p-1 md:p-2 lg:p-3" meta={meta} {...rest} />
+                                                }
                                             </div>
-                                        )} */}
+                                        )}
                                     </Field>
-                                    {/* <SelectInput ></SelectInput> */}
-                                    {/* <Check err={errors} /> */}
-                                    {/* <h1>{check(errors)} */}
-                                    {/* </h1> */}
-
-                                </div>
-                                <div className="mt-1 md:mt-4 xl:mt-6">
-                                    <label htmlFor="signup-username" className="font-bold">Username: </label>
                                     <Field<string>
                                         name="username"
-                                        className=" rounded-md bg-[#2d2727] outline-[#2d2727] mt-2 outline-none block min-w-full p-1 md:p-2 lg:p-3"
                                         id="signup-username"
                                         placeholder="Username"
-                                        component={TextInput}
+                                        // validate={required}
                                         key={"username"}
-                                    />
-                                </div>
-                                <div className="mt-1 md:mt-4 xl:mt-6">
-                                    <label htmlFor="signup-email" className="font-bold">Email: </label>
+                                    >
+                                        {({ input, meta, ...rest }) => (
+                                            <div className="mt-1 md:mt-4 xl:mt-6">
+                                                    <label htmlFor="signup-username" className="font-bold">Username: </label>
+                                                    {/* {(errors) ? <h1>{errors.username}</h1> :<></>} */}
+                                                    {
+                                                        // (meta.error && meta.touched) ?
+                                                        // <TextInput input={input} meta={meta} {...rest} className=" rounded-md bg-[#2d2727] outline-red-900 mt-2 outline-none block min-w-full p-1 md:p-2 lg:p-3" />
+                                                        // :
+                                                        <TextInput input={input} meta={meta} {...rest} className=" rounded-md bg-[#2d2727] outline-[#2d2727] mt-2 outline-none block min-w-full p-1 md:p-2 lg:p-3" />
+                                                    }
+                                            </div>
+                                        )}
+                                    </Field>
                                     <Field<string>
                                         name="email"
-                                        className=" rounded-md bg-[#2d2727] outline-[#2d2727] mt-2 outline-none block min-w-full p-1 md:p-2 lg:p-3"
                                         placeholder="Email Address"
                                         id="signup-email"
-                                        component={TextInput}
                                         key={"email"}
-                                    />
-                                </div>
+                                        // validate={required}
+                                    >
+                                        {({ input, meta, ...rest }) => (
+                                            <div className="mt-1 md:mt-4 xl:mt-6">
+                                                    <label htmlFor="signup-email" className="font-bold">Email: </label>
+                                                    {
+                                                        // (meta.error && meta.touched) ?
+                                                        // <TextInput input={input} meta={meta} {...rest}  className=" rounded-md bg-[#2d2727] outline-red-900 mt-2 outline-none block min-w-full p-1 md:p-2 lg:p-3"/>
+                                                        // :
+                                                        <TextInput input={input} meta={meta} {...rest}  className=" rounded-md bg-[#2d2727] outline-[#2d2727] mt-2 outline-none block min-w-full p-1 md:p-2 lg:p-3"/>
+                                                    }
+                                            </div>
+                                        )}
+                                    </Field>
                                 <div className="block xs:flex mt-1 md:mt-4 xl:mt-6 justify-between">
                                     <div className="justify-self-start">
                                         <label htmlFor="signup-male" className="font-bold">Gender: </label>
                                     </div>
                                     <div className="justify-self-end flex flex-between space-x-12 px-3 md:px-4">
-                                        <div className="justify-self-start">
-                                            <Field<Gender>
-                                                name="gender"
-                                                className="accent-[#2d2727]"
-                                                type="radio"
-                                                value="male"
-                                                id="signup-male"
-                                                component={RadioInput}
-                                                key={"gender"}
-                                            />{" "}
-                                            <label htmlFor="signup-male" className="ml-2" >Male</label>
-                                        </div>
+                                        <Field<Gender>
+                                            name="gender"
+                                            className="accent-[#2d2727]"
+                                            type="radio"
+                                            value="male"
+                                            id="signup-male"
+                                            key={"gender"}
+                                        >
+                                            {({ input, meta, ...rest }) => (
+                                                <div className="justify-self-start">
+                                                    <RadioInput input={input} meta={meta} {...rest} />
+                                                    <label htmlFor="signup-male" className="ml-2" >Male</label>
+                                                </div>
+                                            )}
+                                        </Field>
                                         <div className="justify-self-end">
                                             <Field<Gender>
                                                 name="gender"
@@ -170,36 +217,59 @@ const SignUp = () => {
                                                 value="female"
                                                 id="signup-female"
                                                 className="ml-4 accent-[#2d2727]"
-                                                component={RadioInput}
                                                 key={"gender"}
-                                            />{" "}
-                                            <label htmlFor="signup-female" className="ml-2">Female</label>
+                                                // validate={required}
+                                            >
+                                                {({ input, meta, ...rest }) => (
+                                                    <div className="justify-self-start">
+                                                        <RadioInput input={input} meta={meta} {...rest} />
+                                                        <label htmlFor="signup-female" className="ml-2">Female</label>
+                                                    </div>
+                                                )}
+                                            </Field>
                                         </div>
                                     </div>
                                 </div>
                                 <hr className="border-1 border-gray-300 mt-2 md:mt-4 xl:mt-6"></hr>
-                                <div className="mt-1 md:mt-2 xl:mt-3">
-                                    <label htmlFor="signup-password" className="font-bold">Password: </label>
-                                    <Field<string>
+                                <Field<string>
                                         name="password"
-                                        className=" rounded-md bg-[#2d2727] outline-[#2d2727] min-w-full mt-2 outline-none block p-1 md:p-2 lg:p-3"
                                         id="signup-password"
                                         placeholder="Password"
-                                        component={PasswordInput}
                                         key={"password"}
-                                    />
-                                </div>
-                                <div className="mt-1 md:mt-4 xl:mt-6">
-                                    <label htmlFor="signup-repeat-password" className="font-bold">Repeat Password: </label>
-                                    <Field<string>
+                                        // validate={required}
+                                    >
+                                        {({ input, meta, ...rest }) => (
+                                            <div className="mt-1 md:mt-2 xl:mt-3">
+                                            <label htmlFor="signup-password" className="font-bold">Password: </label>
+                                            {
+                                                // (meta.error && meta.touched) ?
+                                                // <PasswordInput input={input} meta={meta} {...rest}  className=" rounded-md bg-[#2d2727] outline-red-900 min-w-full mt-2 outline-none block p-1 md:p-2 lg:p-3"/>
+                                                // :
+                                                <PasswordInput input={input} meta={meta} {...rest}  className=" rounded-md bg-[#2d2727] outline-[#2d2727] min-w-full mt-2 outline-none block p-1 md:p-2 lg:p-3"/>
+                                            }
+                                        </div>
+                                        )}
+                                </Field>
+                                <Field<string>
                                         name="repeat-password"
-                                        className="rounded-md bg-[#2d2727] outline-[#2d2727] min-w-full mt-2 block p-1 md:p-2 lg:p-3 outline-none "
                                         id="signup-repeat-password"
                                         placeholder="Repeat Password"
-                                        component={PasswordInput}
                                         key={"repeat-password"}
-                                    />
-                                </div>
+                                        // validate={required}
+                                    >
+                                          {({ input, meta, ...rest }) => (
+                                            <div className="mt-1 md:mt-4 xl:mt-6">
+                                                <label htmlFor="signup-repeat-password" className="font-bold">Repeat Password: </label>
+                                                {
+                                                    // (meta.error && meta.touched) ?
+                                                    // <PasswordInput input={input} meta={meta} {...rest} className="rounded-md bg-[#2d2727] outline-red-900 min-w-full mt-2 block p-1 md:p-2 lg:p-3 outline-none "/>
+                                                    // :
+                                                    <PasswordInput input={input} meta={meta} {...rest} className="rounded-md bg-[#2d2727] outline-[#2d2727] min-w-full mt-2 block p-1 md:p-2 lg:p-3 outline-none "/>
+                                                }
+                                            </div>
+                                        )}
+
+                                </Field>
                                 <hr className="border-1 border-gray-300 mt-2 md:mt-4 xl:mt-6"></hr>
                                 <div className="block xs:flex justify-between space-x-3 md:space-x-14 mt-1 md:mt-4 xl:mt-6">
                                     <Field<string>
