@@ -6,7 +6,7 @@ import RadioInput from "./inputs/RadioInput";
 import TextInput from "./inputs/TextInput";
 import PasswordInput from "./inputs/PasswordInput"
 import SelectInput from "./inputs/SelectInput";
-import Welcome from "Welcome";
+import Background from "./background";
 import axios from "axios";
 
 type Gender = "male" | "female";
@@ -241,7 +241,7 @@ const SignUp = () => {
                     </Form>
                 </div>
             </div>
-            <Welcome />
+            <Background />
         </>
     )
 }
