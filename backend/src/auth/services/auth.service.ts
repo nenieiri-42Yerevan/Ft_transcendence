@@ -30,7 +30,9 @@ export class AuthService {
   }
 
   // logout
-  logout() {}
+  async logout(userId: number) {
+	this.sessionService.delete(userId);
+	}
 
   // logout
   refreshTokens() {}

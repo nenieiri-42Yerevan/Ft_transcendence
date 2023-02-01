@@ -15,7 +15,7 @@ export class AuthController {
   @Post('logout')
   @HttpCode(HttpStatus.OK)
   logout() {
-	  this.authService.logout();
+//	  this.authService.logout();
   }
 
   @Post('refresh')
