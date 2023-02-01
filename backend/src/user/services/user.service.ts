@@ -2,8 +2,6 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import * as argon from 'argon2';
-
-import multer from 'multer';
 import { User, Avatar, Status, Match } from '../entities/';
 import { UserDto } from '../dto';
 import { AvatarService } from './avatar.service';
