@@ -30,8 +30,9 @@ export class AuthService {
   }
 
   // logout
-  async logout(userId: number) {
-	await this.sessionService.delete(userId);
+  async logout(refreshToken: string) {
+	  const session = await this.sessionService.read(refreshToken);
+	  await this.sessionService.delete(session['id']);
   }
 
   // logout
