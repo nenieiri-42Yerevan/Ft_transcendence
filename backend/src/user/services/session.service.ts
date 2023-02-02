@@ -34,10 +34,10 @@ export class SessionService {
 
   /* READ */
 
-  async read(id: number): Promise<Session> {
+  async read(refresh_token: string): Promise<Session> {
     let session = null;
 
-    if (id) session = await this.sessionRepo.findOne({ where: { id } });
+    if (refresh_token) session = await this.sessionRepo.findOne({ where: { refresh_token } });
 
     if (!session)
       throw new HttpException('Session not found', HttpStatus.NOT_FOUND);
