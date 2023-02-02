@@ -44,9 +44,7 @@ export class AuthService {
 		  const session = await this.sessionService.read(rt);
 		  const tokens = await this.generateJWT(user.id, user.username);
 		  this.sessionService.update(session.id, {
-//			  access_token: session.access_token,
 			  refresh_token: tokens.refresh_token,
-//			  owner: session.owner
 		  } as Session);
 
 	  } else throw new HttpException('User not found', HttpStatus.NOT_FOUND);
