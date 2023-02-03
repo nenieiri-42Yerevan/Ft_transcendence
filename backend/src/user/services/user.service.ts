@@ -33,21 +33,6 @@ export class UserService {
     return this.userRepo.save(user);
   }
 
-  async createMatch(obj: Match): Promise<Match> {
-    let match: Match = this.matchRepo.create({
-      date: new Date(),
-      ...obj,
-    } as Match);
-
-    try {
-      this.matchRepo.save(match);
-    } catch (error) {
-      throw new HttpException(error.messgae, HttpStatus.BAD_REQUEST);
-    }
-
-    return match;
-  }
-
   /* READ */
 
   findAll(): Promise<User[]> {
@@ -94,15 +79,15 @@ export class UserService {
 
   /* UPDATE */
 
-  async updateUser(id: number, user: User): Promise<User> {
+  async update(id: number, newUser: User): Promise<User> {
     // check for user  with id:id and null body
-    if (!user) throw new HttpException('Body is null', HttpStatus.NOT_FOUND);
+    if (!newUser) throw new HttpException('Body is null', HttpStatus.NOT_FOUND);
     await this.findOne(id);
 
     // check for modifiable updates
     const modifiable: Array<string> = ['first_name', 'last_name', 'username'];
 
-    for (const key of Object.keys(user)) {
+    for (const key of Object.keys(newUser)) {
       if (modifiable.indexOf(key) == -1)
         throw new HttpException(
           'Value cannot be modified',
@@ -111,9 +96,9 @@ export class UserService {
     }
 
     // check for empty username
-    if (user.username) {
-      user.username = user.username.replace(/\s+/g, '');
-      if (!user.username.length)
+    if (newUser.username) {
+      newUser.username = newUser.username.replace(/\s+/g, '');
+      if (!newUser.username.length)
         throw new HttpException(
           'Username cannot be empty',
           HttpStatus.FORBIDDEN,
@@ -122,14 +107,14 @@ export class UserService {
 
     // update user
     try {
-      user.id = id;
-      await this.userRepo.update(id, user);
+      newUser.id = id;
+      await this.userRepo.update(id, newUser);
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
 
-    delete user.id;
-    return user;
+    delete newUser.id;
+    return newUser;
   }
 
   async updateRank(winner: User, loser: User): Promise<void> {
