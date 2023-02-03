@@ -31,6 +31,22 @@ export class AvatarService {
 
   /* UPDATE */
 
+  async update(id: number, newAvatar: Avatar) {
+    if (!newAvatar)
+      throw new HttpException('Body is null', HttpStatus.NOT_FOUND);
+    await this.avatarRepo.findOne({ where: { id } });
+
+    try {
+      newAvatar.id = id;
+      await this.avatarRepo.update(id, newAvatar);
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
+
+    delete newAvatar.id;
+    return newAvatar;
+  }
+
   toStreamableFile(data: Buffer): StreamableFile {
     return new StreamableFile(Readable.from(data));
   }
