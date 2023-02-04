@@ -117,7 +117,7 @@ export class UserService {
     return newUser;
   }
 
-  async updateRank(winner: User, loser: User): Promise<void> {
+  async updateLevel(winner: User, loser: User): Promise<void> {
     try {
       await this.userRepo.update(winner.id, { rank: winner.rank + 1 });
       if (loser.rank > 0)
