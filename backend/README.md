@@ -40,20 +40,21 @@ To be witten...
 ### API Endpoints 🔗
 
 - Main route
-
-\+ ---------- + -------------- + ------------------- +<br>
-| HTTP Verbs | Endpoints      | Action              |<br>
-\+ ---------- + -------------- + ------------------- +<br>
-| GET        | /transcendence | To get welcome page |<br>
-\+ ---------- + -------------- + ------------------- +<br>
+<pre>
++ ---------- + -------------- + ------------------- +
+| HTTP Verbs | Endpoints      | Action              |
++ ---------- + -------------- + ------------------- +
+| GET        | /transcendence | To get welcome page |
++ ---------- + -------------- + ------------------- +
+</pre>
 
 <br>
 
 - User routes<br>
 <pre>
-\+ ---------- + --------------------------------- + ------------------------------- +
++ ---------- + --------------------------------- + ------------------------------- +
 | HTTP Verbs | Endpoints                         | Action                          |
-\+ ---------- + --------------------------------- + ------------------------------- +
++ ---------- + --------------------------------- + ------------------------------- +
 | GET        | /transcendence                    | To get welcome page             |
 | GET        | /transcendence/user               | To get all the users            |
 | GET        | /transcendence/user:id            | To get a user by id             |
@@ -62,16 +63,18 @@ To be witten...
 | PUT        | /transcendence/user/update-user   | To update a user                |
 | PUT        | /transcendence/user/update-avatar | To update a user's avatar       |
 | POST       | /transcendence/user/signup        | To sign up a new user account   |
-\+ ---------- + --------------------------------- + ------------------------------- +
++ ---------- + --------------------------------- + ------------------------------- +
 </pre>
 
 <br>
 
 - Auth routes<br>
-\+ ---------- + --------------------------------- + ----------------------------------------------- +<br>
-| HTTP Verbs | Endpoints                         | Action                                          |<br>
-\+ ---------- + --------------------------------- + ----------------------------------------------- +<br>
-| POST       | /transcendence/auth/signin/local  | To login an existing user account               |<br>
-| POST       | /transcendence/auth/logout        | To logout (through refresh token)               |<br>
-| POST       | /transcendence/auth/refresh       | To update refresh token (through refresh token) |<br>
-\+ ---------- + --------------------------------- + ----------------------------------------------- +<br>
+<pre>
++ ---------- + --------------------------------- + ----------------------------------------------- +
+| HTTP Verbs | Endpoints                         | Action                                          |
++ ---------- + --------------------------------- + ----------------------------------------------- +
+| POST       | /transcendence/auth/signin/local  | To login an existing user account               |
+| POST       | /transcendence/auth/logout        | To logout (through refresh token)               |
+| POST       | /transcendence/auth/refresh       | To update refresh token (through refresh token) |
++ ---------- + --------------------------------- + ----------------------------------------------- +
+</pre>
