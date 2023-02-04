@@ -4,6 +4,8 @@ import { AppController } from './app.controller';
 import { DatabaseModule } from './database/database.module';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
+import { APP_GUARD } from '@nestjs/core';
+import { AtGuard} from './common/guards';
 
 @Module({
   imports: [
@@ -13,6 +15,11 @@ import { AuthModule } from './auth/auth.module';
     AuthModule,
   ],
   controllers: [AppController],
-  providers: [],
+  providers: [
+    {
+		provide: APP_GUARD,
+		useClass: AtGuard,
+    },
+  ],
 })
 export class AppModule {}
