@@ -16,8 +16,8 @@ export class FriendRequest {
   @ManyToOne(() => User, (user) => user.createdRequests)
   creator: User;
 
-  @ManyToOne(() => User, (user) => user.recievedRequests)
-  reciever: User;
+  @ManyToOne(() => User, (user) => user.receivedRequests)
+  receiver: User;
 
   @Column({ type: 'enum', nullable: true })
   status: RequestStatus;

@@ -6,8 +6,7 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { FriendRequest } from './friendRequest.entity';
-import { Avatar, Session, Match } from './index';
+import { Avatar, Session, Match, FriendRequest } from './index';
 
 export type Gender = 'male' | 'female';
 
@@ -67,6 +66,6 @@ export class User {
   @OneToMany(() => FriendRequest, (friendRequest) => friendRequest.creator)
   createdRequests: FriendRequest[];
 
-  @OneToMany(() => FriendRequest, (friendRequest) => friendRequest.reciever)
-  recievedRequests: FriendRequest[];
+  @OneToMany(() => FriendRequest, (friendRequest) => friendRequest.receiver)
+  receivedRequests: FriendRequest[];
 }
