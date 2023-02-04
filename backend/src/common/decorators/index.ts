@@ -1,2 +1,2 @@
-export * from './GetCurrentUser';
-export * from './GetCurrentUserId';
+export * from './GetUser';
+export * from './GetUserId';
