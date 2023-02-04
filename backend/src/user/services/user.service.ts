@@ -154,7 +154,7 @@ export class UserService {
   }
 
   async toggleFollow(uid: number, tid: number): Promise<number[]> {
-    if (uid === tid) return [];
+    if (uid === tid) return;
 
     const user = await this.findOne(uid);
     const target = await this.findOne(tid);
@@ -172,6 +172,27 @@ export class UserService {
     }
 
     return follows;
+  }
+
+  async toggleBlock(uid: number, tid: number): Promise<number[]> {
+    if (uid === tid) return;
+
+    const user = await this.findOne(uid);
+    const target = await this.findOne(tid);
+    const index = user.blocked.indexOf(target.id);
+
+    if (index === -1) user.blocked.push(target.id);
+    else user.blocked.splice(index, 1);
+
+    try {
+      await this.userRepo.update(user.id, {
+        blocked: user.blocked,
+      });
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
+
+    return user.blocked;
   }
 
   /* ------------------------- DELETE ------------------------- */
