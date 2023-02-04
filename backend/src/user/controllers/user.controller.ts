@@ -42,12 +42,12 @@ export class UserController {
     return this.userService.findOne(username);
   }
 
-  @Get('avatar')
+  @Get('/:id/avatar')
   async findAvatar(
-    @GetUserId() userId: number,
+    @Param('id', ParseIntPipe) id: number,
     @Res({ passthrough: true }) res: Response,
   ): Promise<StreamableFile> {
-    const avatar = await this.userService.findAvatar(userId);
+    const avatar = await this.userService.findAvatar(id);
 
     res.set({
       'Content-Disposition': `inline; filename="${avatar.file}"`,
