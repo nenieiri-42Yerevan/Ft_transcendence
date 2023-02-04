@@ -1,9 +1,13 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { HttpErrorByCode } from '@nestjs/common/utils/http-error-by-code.util';
 import { InjectRepository } from '@nestjs/typeorm';
 import { from, Observable, of, switchMap } from 'rxjs';
-import { Repository } from 'typeorm';
-import { User, FriendRequest } from '../entities';
+import { Not, Repository } from 'typeorm';
+import {
+  User,
+  FriendRequest,
+  RequestStatus,
+  FriendRequestStatus,
+} from '../entities';
 
 @Injectable()
 export class FriendRequestService {
@@ -87,5 +91,50 @@ export class FriendRequestService {
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
+  }
+
+  /* READ */
+
+  getFriendRequestStatus(
+    receiverId: number,
+    currentUser: User,
+  ): Observable<FriendRequestStatus> {
+    const receiver = from(this.userRepo.findOne({ where: { id: receiverId } }));
+
+    return receiver.pipe(
+      switchMap((receiver: User) => {
+        return from(
+          this.requestRepo.findOne({
+            where: [
+              {
+                creator: { id: currentUser.id },
+                receiver: { id: receiver.id },
+                status: Not('blocked'),
+              },
+              {
+                creator: { id: receiver.id },
+                receiver: { id: currentUser.id },
+              },
+            ],
+            relations: ['creator', 'receiver'],
+          }),
+        );
+      }),
+      switchMap((friendRequest: FriendRequest) => {
+        if (
+          friendRequest?.receiver.id === currentUser.id &&
+          friendRequest.status == 'pending'
+        ) {
+          return of({
+            id: friendRequest?.id,
+            status: 'waiting-for-current-user-response' as RequestStatus,
+          });
+        }
+        return of({
+          id: friendRequest?.id,
+          status: friendRequest?.status || 'not-sent',
+        });
+      }),
+    );
   }
 }
