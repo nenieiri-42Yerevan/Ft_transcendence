@@ -59,7 +59,7 @@ export class UserController {
   ): Promise<User> {
     const current = await this.userService.findOne(id);
 
-    return this.userService.updateUser(current.id, user);
+    return this.userService.update(current.id, user);
   }
 
   @Post('signup')
