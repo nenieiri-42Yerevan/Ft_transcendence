@@ -33,7 +33,7 @@ export class FriendRequestService {
     );
   }
 
-  userIsBlocked(creator: User, receiver: User): Observable<boolean> {
+  isUserBlocked(creator: User, receiver: User): Observable<boolean> {
     const friendRequest = this.requestRepo.findOne({
       where: [
         {
