@@ -50,18 +50,20 @@ To be witten...
 <br>
 
 - User routes<br>
-\+------------+-----------------------------------+---------------------------------+<br>
-| HTTP Verbs | Endpoints                         | Action                          |<br>
-\+ ---------- + --------------------------------- + ------------------------------- +<br>
-| GET        | /transcendence                    | To get welcome page             |<br>
-| GET        | /transcendence/user               | To get all the users            |<br>
-| GET        | /transcendence/user:id            | To get a user by id             |<br>
-| GET        | /transcendence/user:username      | To get a user by username       |<br>
-| GET        | /transcendence/user:id/avatar     | To get a user avatar by user id |<br>
-| PUT        | /transcendence/user/update-user   | To update a user                |<br>
-| PUT        | /transcendence/user/update-avatar | To update a user's avatar       |<br>
-| POST       | /transcendence/user/signup        | To sign up a new user account   |<br>
-\+------------+-----------------------------------+---------------------------------+<br>
+<pre>
+\+ ---------- + --------------------------------- + ------------------------------- +
+| HTTP Verbs | Endpoints                         | Action                          |
+\+ ---------- + --------------------------------- + ------------------------------- +
+| GET        | /transcendence                    | To get welcome page             |
+| GET        | /transcendence/user               | To get all the users            |
+| GET        | /transcendence/user:id            | To get a user by id             |
+| GET        | /transcendence/user:username      | To get a user by username       |
+| GET        | /transcendence/user:id/avatar     | To get a user avatar by user id |
+| PUT        | /transcendence/user/update-user   | To update a user                |
+| PUT        | /transcendence/user/update-avatar | To update a user's avatar       |
+| POST       | /transcendence/user/signup        | To sign up a new user account   |
+\+ ---------- + --------------------------------- + ------------------------------- +
+</pre>
 
 <br>
 
