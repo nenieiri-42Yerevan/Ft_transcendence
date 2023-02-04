@@ -6,8 +6,11 @@ import {
   ParseIntPipe,
   Post,
   Put,
+  Req,
   Res,
   StreamableFile,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
 import { UserDto } from '../dto';
 import { User } from '../entities';
@@ -15,6 +18,7 @@ import { AvatarService } from '../services/avatar.service';
 import { UserService } from '../services/user.service';
 import { Response } from 'express';
 import { GetUserId, Public } from '../../common/decorators';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('user')
 export class UserController {
@@ -53,11 +57,20 @@ export class UserController {
     return this.avatarService.toStreamableFile(avatar.data);
   }
 
-  @Put('update')
-  async update(@GetUserId() userId: number, @Body() user: User): Promise<User> {
-    const current = await this.userService.findOne(userId);
+  @Put('update-user')
+  async updateUser(@GetUserId() id: number, @Body() user: User): Promise<User> {
+    const current = await this.userService.findOne(id);
 
     return this.userService.update(current.id, user);
+  }
+
+  @Put('update-avatar')
+  @UseInterceptors(FileInterceptor('file'))
+  updateAvatar(
+    @GetUserId() id: number,
+    @UploadedFile() file: Express.Multer.File,
+  ): Promise<void> {
+    return this.userService.setAvatar(id, file);
   }
 
   @Public()
