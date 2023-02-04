@@ -137,4 +137,28 @@ export class FriendRequestService {
       }),
     );
   }
+
+  /* RESPOND */
+
+  respondToFriendRequest(
+    status: RequestStatus,
+    requestId: number,
+  ): Observable<FriendRequestStatus> {
+    const friendRequest = from(
+      this.requestRepo.findOne({
+        where: { id: requestId },
+      }),
+    );
+
+    return friendRequest.pipe(
+      switchMap((friendRequest: FriendRequest) => {
+        return from(
+          this.requestRepo.save({
+            ...friendRequest,
+            status: status,
+          }),
+        );
+      }),
+    );
+  }
 }
