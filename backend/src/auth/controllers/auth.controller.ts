@@ -11,6 +11,7 @@ import { AtGuard, RtGuard } from '../../common/guards';
 import { AuthService } from '../services/auth.service';
 import { SignInDto, TokenDto } from '../dto';
 import { Request } from 'express';
+import { GetUser, GetUserId } from '../../common/decorators';
 
 @Controller('auth')
 export class AuthController {
@@ -25,16 +26,17 @@ export class AuthController {
   @UseGuards(RtGuard)
   @Post('logout')
   @HttpCode(HttpStatus.OK)
-  logout(@Req() req: Request) {
-	  const user = req.user;
-	  this.authService.logout(user['refreshToken']);
+  logout(@GetUser('refreshToken') refreshToken: string) {
+	  this.authService.logout(refreshToken);
   }
 
   @UseGuards(RtGuard)
   @Post('refresh')
   @HttpCode(HttpStatus.OK)
-  refreshTokens(@Req() req: Request) {
-	  const user = req.user;
-	  this.authService.refreshTokens(user['sub'], user['refreshToken']);
+  refreshTokens(
+  		@GetUserId() userId: number,
+  		@GetUser('refreshToken') refreshToken: string
+	) {
+	  this.authService.refreshTokens(userId, refreshToken);
   }
 }
