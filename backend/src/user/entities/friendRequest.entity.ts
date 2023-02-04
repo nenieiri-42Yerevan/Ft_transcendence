@@ -6,7 +6,12 @@ export type RequestStatus =
   | 'pending'
   | 'accepted'
   | 'declined'
+  | 'waiting-for-current-user-response'
   | 'blocked';
+
+export interface FriendRequestStatus {
+  status?: RequestStatus;
+}
 
 @Entity()
 export class FriendRequest {
