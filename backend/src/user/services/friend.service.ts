@@ -33,6 +33,24 @@ export class FriendRequestService {
     );
   }
 
+  userIsBlocked(creator: User, receiver: User): Observable<boolean> {
+    const friendRequest = this.requestRepo.findOne({
+      where: [
+        {
+          creator: { id: creator.id },
+          receiver: { id: receiver.id },
+          status: 'blocked',
+        },
+      ],
+    });
+
+    return from(friendRequest).pipe(
+      switchMap((friendRequest: FriendRequest) => {
+        return friendRequest ? of(true) : of(false);
+      }),
+    );
+  }
+
   /* CREATE */
 
   async sendFriendRequest(
