@@ -65,4 +65,7 @@ export class User {
 
   @Column('int', { array: true, default: [] })
   follows: number[];
+
+  @Column('int', { array: true, default: [] })
+  blocked: number[];
 }
