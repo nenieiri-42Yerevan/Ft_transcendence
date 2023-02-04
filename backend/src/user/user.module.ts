@@ -3,7 +3,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserController } from './controllers/user.controller';
 import { User, Avatar, Session, Match, FriendRequest } from './entities';
 import { AvatarService } from './services/avatar.service';
-import MatchService from './services/match.service';
+import { FriendRequestService } from './services/friend.service';
+import { MatchService } from './services/match.service';
 import { SessionService } from './services/session.service';
 import { UserService } from './services/user.service';
 
@@ -12,7 +13,13 @@ import { UserService } from './services/user.service';
     TypeOrmModule.forFeature([User, Avatar, Session, Match, FriendRequest]),
   ],
   controllers: [UserController],
-  providers: [UserService, AvatarService, SessionService, MatchService],
+  providers: [
+    UserService,
+    AvatarService,
+    SessionService,
+    MatchService,
+    FriendRequestService,
+  ],
   exports: [UserService, SessionService],
 })
 export class UserModule {}
