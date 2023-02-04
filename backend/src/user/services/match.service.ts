@@ -4,7 +4,7 @@ import { Repository } from 'typeorm';
 import { Match } from '../entities';
 
 @Injectable()
-export default class MatchService {
+export class MatchService {
   constructor(
     @InjectRepository(Match) private readonly matchRepo: Repository<Match>,
   ) {}
