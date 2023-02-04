@@ -1,5 +1,5 @@
-import { User, Avatar, Session, Match, FriendRequest } from 'src/user/entities';
+import { User, Avatar, Session, Match } from 'src/user/entities';
 
-let entities = [User, Avatar, Session, Match, FriendRequest];
+let entities = [User, Avatar, Session, Match];
 
 export { entities };
