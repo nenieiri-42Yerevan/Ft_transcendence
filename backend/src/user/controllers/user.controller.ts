@@ -14,6 +14,7 @@ import { User } from '../entities';
 import { AvatarService } from '../services/avatar.service';
 import { UserService } from '../services/user.service';
 import { Response } from 'express';
+import { GetUserId, Public } from '../../common/decorators';
 
 @Controller('user')
 export class UserController {
@@ -62,6 +63,7 @@ export class UserController {
     return this.userService.update(current.id, user);
   }
 
+  @Public()
   @Post('signup')
   async create(@Body() dto: UserDto): Promise<User> {
     return await this.userService.create(dto);
