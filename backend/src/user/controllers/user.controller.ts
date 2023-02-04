@@ -38,7 +38,7 @@ export class UserController {
     return this.userService.findOne(username);
   }
 
-  @Get('/avatar')
+  @Get('avatar')
   async findAvatar(
     @GetUserId() userId: number,
     @Res({ passthrough: true }) res: Response,
@@ -53,14 +53,14 @@ export class UserController {
     return this.avatarService.toStreamableFile(avatar.data);
   }
 
-  @Put('/:id/update')
+  @Put('update')
   async update(
-    @Param('id', ParseIntPipe) id: number,
+    @GetUserId() userId: number,
     @Body() user: User,
   ): Promise<User> {
     const current = await this.userService.findOne(id);
 
-    return this.userService.update(current.id, user);
+    return this.userService.update(current.userId, user);
   }
 
   @Public()

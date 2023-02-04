@@ -56,7 +56,7 @@ To be witten...
 | GET        | /transcendence/user:id        | To get a user by id             |
 | GET        | /transcendence/user:username  | To get a user by username       |
 | GET        | /transcendence/user/avatar    | To get a user avatar.           |
-| PUT        | /transcendence/user:id/update | To update a user by id          |
+| PUT        | /transcendence/user/update    | To update a user                |
 | POST       | /transcendence/user/signup    | To sign up a new user account   |
 
 <br>
