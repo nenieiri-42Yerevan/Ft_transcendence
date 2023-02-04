@@ -54,13 +54,10 @@ export class UserController {
   }
 
   @Put('update')
-  async update(
-    @GetUserId() userId: number,
-    @Body() user: User,
-  ): Promise<User> {
-    const current = await this.userService.findOne(id);
+  async update(@GetUserId() userId: number, @Body() user: User): Promise<User> {
+    const current = await this.userService.findOne(userId);
 
-    return this.userService.update(current.userId, user);
+    return this.userService.update(current.id, user);
   }
 
   @Public()
