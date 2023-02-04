@@ -19,17 +19,16 @@ export class FriendRequestService {
     creator: User,
     receiver: User,
   ): Observable<boolean> {
-    return from(
-      this.requestRepo.findOne({
-        where: [
-          { creator: { id: creator.id }, receiver: { id: receiver.id } },
-          { creator: { id: receiver.id }, receiver: { id: creator.id } },
-        ],
-      }),
-    ).pipe(
+    const friendRequest = this.requestRepo.findOne({
+      where: [
+        { creator: { id: creator.id }, receiver: { id: receiver.id } },
+        { creator: { id: receiver.id }, receiver: { id: creator.id } },
+      ],
+    });
+
+    return from(friendRequest).pipe(
       switchMap((friendRequest: FriendRequest) => {
-        if (!friendRequest) return of(false);
-        return of(true);
+        return friendRequest ? of(true) : of(false);
       }),
     );
   }
