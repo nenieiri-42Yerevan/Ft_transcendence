@@ -6,7 +6,7 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Avatar, Session, Match, FriendRequest } from './index';
+import { Avatar, Session, Match } from './index';
 
 export type Gender = 'male' | 'female';
 
@@ -63,9 +63,6 @@ export class User {
   @OneToMany(() => Match, (match) => match.loser)
   lost: Match[];
 
-  @OneToMany(() => FriendRequest, (friendRequest) => friendRequest.creator)
-  createdRequests: FriendRequest[];
-
-  @OneToMany(() => FriendRequest, (friendRequest) => friendRequest.receiver)
-  receivedRequests: FriendRequest[];
+  @Column('int', { array: true, default: [] })
+  follows: number[];
 }
