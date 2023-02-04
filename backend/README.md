@@ -42,34 +42,34 @@ To be witten...
 - Main route
 
 \+ ---------- + -------------- + ------------------- +<br>
-| HTTP Verbs | Endpoints      | Action              |
+| HTTP Verbs | Endpoints      | Action              |<br>
 \+ ---------- + -------------- + ------------------- +<br>
-| GET        | /transcendence | To get welcome page |
+| GET        | /transcendence | To get welcome page |<br>
 \+ ---------- + -------------- + ------------------- +<br>
 
 <br>
 
-- User routes
+- User routes<br>
 \+------------+-----------------------------------+---------------------------------+<br>
-| HTTP Verbs | Endpoints                         | Action                          |
+| HTTP Verbs | Endpoints                         | Action                          |<br>
 \+ ---------- + --------------------------------- + ------------------------------- +<br>
-| GET        | /transcendence                    | To get welcome page             |
-| GET        | /transcendence/user               | To get all the users            |
-| GET        | /transcendence/user:id            | To get a user by id             |
-| GET        | /transcendence/user:username      | To get a user by username       |
-| GET        | /transcendence/user:id/avatar     | To get a user avatar by user id |
-| PUT        | /transcendence/user/update-user   | To update a user                |
-| PUT        | /transcendence/user/update-avatar | To update a user's avatar       |
-| POST       | /transcendence/user/signup        | To sign up a new user account   |
+| GET        | /transcendence                    | To get welcome page             |<br>
+| GET        | /transcendence/user               | To get all the users            |<br>
+| GET        | /transcendence/user:id            | To get a user by id             |<br>
+| GET        | /transcendence/user:username      | To get a user by username       |<br>
+| GET        | /transcendence/user:id/avatar     | To get a user avatar by user id |<br>
+| PUT        | /transcendence/user/update-user   | To update a user                |<br>
+| PUT        | /transcendence/user/update-avatar | To update a user's avatar       |<br>
+| POST       | /transcendence/user/signup        | To sign up a new user account   |<br>
 \+------------+-----------------------------------+---------------------------------+<br>
 
 <br>
 
-- Auth routes
+- Auth routes<br>
 \+ ---------- + --------------------------------- + ----------------------------------------------- +<br>
-| HTTP Verbs | Endpoints                         | Action                                          |
+| HTTP Verbs | Endpoints                         | Action                                          |<br>
 \+ ---------- + --------------------------------- + ----------------------------------------------- +<br>
-| POST       | /transcendence/auth/signin/local  | To login an existing user account               |
-| POST       | /transcendence/auth/logout        | To logout (through refresh token)               |
-| POST       | /transcendence/auth/refresh       | To update refresh token (through refresh token) |
+| POST       | /transcendence/auth/signin/local  | To login an existing user account               |<br>
+| POST       | /transcendence/auth/logout        | To logout (through refresh token)               |<br>
+| POST       | /transcendence/auth/refresh       | To update refresh token (through refresh token) |<br>
 \+ ---------- + --------------------------------- + ----------------------------------------------- +<br>
