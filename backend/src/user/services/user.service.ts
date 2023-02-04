@@ -17,7 +17,7 @@ export class UserService {
     private readonly matchRepo: Repository<Match>,
   ) {}
 
-  /* CREATE */
+  /* ------------------------ CREATE ------------------------ */
 
   async create(dto: UserDto): Promise<User> {
     const user = new User();
@@ -33,7 +33,7 @@ export class UserService {
     return this.userRepo.save(user);
   }
 
-  /* READ */
+  /* ------------------------- READ ------------------------- */
 
   findAll(): Promise<User[]> {
     return this.userRepo.find();
@@ -77,7 +77,7 @@ export class UserService {
     return matches;
   }
 
-  /* UPDATE */
+  /* ------------------------- UPDATE ------------------------ */
 
   async update(id: number, newUser: User): Promise<User> {
     // check for user  with id:id and null body
@@ -153,7 +153,28 @@ export class UserService {
     if (user.avatar) await this.avatarService.delete(user.avatar.id);
   }
 
-  /* DELETE */
+  async toggleFollow(uid: number, tid: number): Promise<number[]> {
+    if (uid === tid) return [];
+
+    const user = await this.findOne(uid);
+    const target = await this.findOne(tid);
+
+    let follows = user.follows;
+    const index = follows.indexOf(target.id);
+
+    if (index === -1) follows = [...follows, target.id];
+    else follows = [...follows.slice(0, index), ...follows.slice(index + 1)];
+
+    try {
+      await this.userRepo.update(user.id, { follows: follows });
+    } catch (error) {
+      throw new Error(`Could not update user: ${error.message}`);
+    }
+
+    return follows;
+  }
+
+  /* ------------------------- DELETE ------------------------- */
 
   async delete(id: number): Promise<User> {
     let user = await this.findOne(id);
