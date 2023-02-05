@@ -22,6 +22,18 @@ export class UserService {
   async create(dto: UserDto): Promise<User> {
     const user = new User();
 
+    if (this.userRepo.findOne({ where: { username: dto.username } }))
+      throw new HttpException(
+        `usrrname ${dto.username} is already occupied`,
+        HttpStatus.BAD_REQUEST,
+      );
+
+    if (this.userRepo.findOne({ where: { email: dto.email } }))
+      throw new HttpException(
+        `email ${dto.email} is already occupied`,
+        HttpStatus.BAD_REQUEST,
+      );
+
     user.first_name = dto.first_name;
     user.last_name = dto.last_name;
     user.username = dto.username;
@@ -30,7 +42,13 @@ export class UserService {
     user.gender = dto.gender;
     user.date_of_birth = dto.date_of_birth;
 
-    return this.userRepo.save(user);
+    try {
+      await this.userRepo.save(user);
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
+
+    return user;
   }
 
   /* ------------------------- READ ------------------------- */
