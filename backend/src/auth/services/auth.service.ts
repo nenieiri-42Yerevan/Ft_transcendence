@@ -3,6 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 import { SignInDto, TokenDto } from '../dto';
 import { UserService } from '../../user/services/user.service';
 import { SessionService } from '../../user/services/session.service';
+import { Session } from '../../user/entities';
 import * as argon from 'argon2';
 
 @Injectable()
@@ -24,16 +25,30 @@ export class AuthService {
         tokens.refresh_token,
         user,
       );
-      await this.sessionService.update(user.id, new_session);
       return tokens;
     } else throw new HttpException('Wrong password', HttpStatus.NOT_FOUND);
   }
 
   // logout
-  logout() {}
+  async logout(rt: string) {
+	  const session = await this.sessionService.read(rt);
+	  await this.sessionService.delete(session['id']);
+  }
 
-  // logout
-  refreshTokens() {}
+  // refresh
+  async refreshTokens(userId: number, rt: string) {
+	  const user = await this.userService.findOne(userId, ['sessions']);
+
+	  if (user) {
+
+		  const session = await this.sessionService.read(rt);
+		  const tokens = await this.generateJWT(user.id, user.username);
+		  this.sessionService.update(session.id, {
+			  refresh_token: tokens.refresh_token,
+		  } as Session);
+
+	  } else throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+  }
 
   // generating and returning JSON Web Token
   async generateJWT(userId: number, username: string) {

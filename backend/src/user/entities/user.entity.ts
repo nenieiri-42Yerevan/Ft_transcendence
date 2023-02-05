@@ -51,6 +51,12 @@ export class User {
   @CreateDateColumn({ default: () => 'NOW()' })
   created_at: Date;
 
+  @Column('int', { array: true, default: [] })
+  follows: number[];
+
+  @Column('int', { array: true, default: [] })
+  blocked: number[];
+
   @OneToOne(() => Avatar, (avatar) => avatar.user)
   avatar: Avatar;
 
