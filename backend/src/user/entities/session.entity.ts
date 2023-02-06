@@ -14,10 +14,7 @@ export class Session {
   id: number;
 
   @Column({ nullable: true })
-  access_token: string;
-
-  @Column({ nullable: true })
-  refresh_token: string;
+  token: string;
 
   @ManyToOne(() => User, (user) => user.sessions, { onDelete: 'CASCADE' })
   @JoinColumn()

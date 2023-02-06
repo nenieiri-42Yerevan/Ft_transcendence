@@ -6,14 +6,19 @@ import {
   ParseIntPipe,
   Post,
   Put,
+  Req,
   Res,
   StreamableFile,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
 import { UserDto } from '../dto';
 import { User } from '../entities';
 import { AvatarService } from '../services/avatar.service';
 import { UserService } from '../services/user.service';
 import { Response } from 'express';
+import { GetUserId, Public } from '../../common/decorators';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('user')
 export class UserController {
@@ -52,16 +57,23 @@ export class UserController {
     return this.avatarService.toStreamableFile(avatar.data);
   }
 
-  @Put('/:id/update')
-  async update(
-    @Param('id', ParseIntPipe) id: number,
-    @Body() user: User,
-  ): Promise<User> {
+  @Put('update-user')
+  async updateUser(@GetUserId() id: number, @Body() user: User): Promise<User> {
     const current = await this.userService.findOne(id);
 
-    return this.userService.updateUser(current.id, user);
+    return this.userService.update(current.id, user);
   }
 
+  @Put('update-avatar')
+  @UseInterceptors(FileInterceptor('file'))
+  updateAvatar(
+    @GetUserId() id: number,
+    @UploadedFile() file: Express.Multer.File,
+  ): Promise<void> {
+    return this.userService.setAvatar(id, file);
+  }
+
+  @Public()
   @Post('signup')
   async create(@Body() dto: UserDto): Promise<User> {
     return await this.userService.create(dto);
