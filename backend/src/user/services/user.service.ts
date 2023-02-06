@@ -22,13 +22,13 @@ export class UserService {
   async create(dto: UserDto): Promise<User> {
     const user = new User();
 
-    if (this.userRepo.findOne({ where: { username: dto.username } }))
+    if (!this.userRepo.findOne({ where: { username: dto.username } }))
       throw new HttpException(
         `userrname ${dto.username} is already occupied`,
         HttpStatus.BAD_REQUEST,
       );
 
-    if (this.userRepo.findOne({ where: { email: dto.email } }))
+    if (!this.userRepo.findOne({ where: { email: dto.email } }))
       throw new HttpException(
         `email ${dto.email} is already occupied`,
         HttpStatus.BAD_REQUEST,
