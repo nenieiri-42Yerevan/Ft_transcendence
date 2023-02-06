@@ -76,8 +76,8 @@ To be witten...
 
 <br>
 
-| HTTP Verbs | Endpoints                        | Action                                          |
-| ---------- | -------------------------------- | ----------------------------------------------- |
-| POST       | /transcendence/auth/signin/local | To login an existing user account               |
-| POST       | /transcendence/auth/logout       | To logout (through refresh token)               |
-| POST       | /transcendence/auth/refresh      | To update refresh token (through refresh token) |
+| HTTP Verbs | Endpoints                       	    | Action                                   |
+| ---------- | ------------------------------------ | ---------------------------------------- |
+| POST       | /transcendence/auth/signin/local     | To login an existing user account        |
+| POST       | /transcendence/auth/logout           | To logout                                |
+| POST       | /transcendence/auth/refresh          | To get a new pair of tokens              |
