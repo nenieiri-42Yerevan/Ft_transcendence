@@ -24,6 +24,7 @@ export class AuthService {
     if (user && (await argon.verify(user.password, dto.password))) {
       const tokens = await this.generateJWT(user.id, user.username);
       const new_session = await this.sessionService.create(
+        tokens.access_token,
         tokens.refresh_token,
         user,
       );
@@ -32,8 +33,8 @@ export class AuthService {
   }
 
   // logout
-  async logout(rt: string) {
-    const session = await this.sessionService.read(rt);
+  async logout(at: string) {
+    const session = await this.sessionService.read_AT(at);
     await this.sessionService.delete(session['id']);
   }
 
@@ -42,10 +43,11 @@ export class AuthService {
     const user = await this.userService.findOne(userId, ['sessions']);
 
     if (user) {
-      const session = await this.sessionService.read(rt);
+      const session = await this.sessionService.read_RT(rt);
       const tokens = await this.generateJWT(user.id, user.username);
       this.sessionService.update(session.id, {
-        token: tokens.refresh_token,
+        access_token: tokens.access_token,
+        refresh_token: tokens.refresh_token,
       } as Session);
     } else throw new HttpException('User not found', HttpStatus.NOT_FOUND);
   }
