@@ -4,19 +4,20 @@ import { Form, Field } from "react-final-form";
 import TextInput from "./inputs/TextInput";
 import PasswordInput from "./inputs/PasswordInput";
 import axios from "axios";
+import Background from "./background";
 
 
 interface Data {
-    username: string;
+    login: string;
     password: string;
 }
 const SignIn = () => {
     const onsubmit = (data: Data) => {
         const sendData = {
-            username: data.username,
+            username: data.login,
             password: data.password,
         };
-        axios.post('/transcendence/auth/signin/local', sendData)
+        axios.post('http://localhost:7000/transcendence/auth/signin/local', sendData)
         .then(function (response) {
             console.log(response);
         })
@@ -26,6 +27,7 @@ const SignIn = () => {
         
     }
     return (
+        <>
         <div className="backdrop-blur-md p-0 lg:px-4 xl:px-16 bg-black/50 min-w-full min-h-full z-[668] absolute flex justify-between bg-clip-padding">
             <div className="h-screen ml-64 items-center text-lg md:text-2xl pt-10 justify-center hidden sm:hidden lg:flex  lg:justify-center xl:flex xl:justify-center " >
                 <p className="text-3xl md:text-5xl text-center">enjoy the <b className="text-red-900">Game</b></p>
@@ -77,6 +79,9 @@ const SignIn = () => {
                     )}
                 </Form>
             </div>
-        </div> )
+        </div> 
+        <Background />
+    </>
+    )
 }
 export default SignIn;

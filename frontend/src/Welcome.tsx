@@ -43,7 +43,7 @@ const Welcome = () => {
                             urus. Etiam fringilla, purus vitae lobortis auctor, ligula ante volutpat est, in euismod lectus risus congue ipsum. 
                             Pellentesque blandit interdum magna, non dapibus est bibendum et. Nam vel purus nec lectus cursus scelerisque eget non ligula. Quisque ut tincidunt elit.
                         </p>
-                    </div
+                    </div>
                 </div>
             </div>
             <Background/>
