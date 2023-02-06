@@ -24,7 +24,7 @@ export class UserService {
 
     if (this.userRepo.findOne({ where: { username: dto.username } }))
       throw new HttpException(
-        `usrrname ${dto.username} is already occupied`,
+        `userrname ${dto.username} is already occupied`,
         HttpStatus.BAD_REQUEST,
       );
 
