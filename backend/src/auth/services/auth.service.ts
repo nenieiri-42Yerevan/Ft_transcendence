@@ -23,7 +23,6 @@ export class AuthService {
     if (user && (await argon.verify(user.password, dto.password))) {
       const tokens = await this.generateJWT(user.id, user.username);
       const new_session = await this.sessionService.create(
-        null,
         tokens.refresh_token,
         user,
       );
@@ -46,7 +45,7 @@ export class AuthService {
 		  const session = await this.sessionService.read(rt);
 		  const tokens = await this.generateJWT(user.id, user.username);
 		  this.sessionService.update(session.id, {
-			  refresh_token: tokens.refresh_token,
+			  token: tokens.refresh_token,
 		  } as Session);
 
 	  } else throw new HttpException('User not found', HttpStatus.NOT_FOUND);
