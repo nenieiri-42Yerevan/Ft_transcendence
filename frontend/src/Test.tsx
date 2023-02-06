@@ -1,9 +1,9 @@
 import React from "react";
 import { render } from "react-dom";
 import { Form, Field } from "react-final-form";
-import RadioInput from "./inputs/RadioInput";
-import TextInput from "./inputs/TextInput";
-import SelectInput from "./inputs/SelectInput";
+import RadioInput from "./Form/inputs/RadioInput";
+import TextInput from "./Form/inputs/TextInput";
+import SelectInput from "./Form/inputs/SelectInput";
 
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
