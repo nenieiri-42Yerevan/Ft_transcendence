@@ -5,6 +5,7 @@ import { UserService } from '../../user/services/user.service';
 import { SessionService } from '../../user/services/session.service';
 import { Session } from '../../user/entities';
 import * as argon from 'argon2';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AuthService {
@@ -12,6 +13,7 @@ export class AuthService {
     private userService: UserService,
     private sessionService: SessionService,
     private jwtService: JwtService,
+    private configService: ConfigService,
   ) {}
 
   // creatinhg user session and connection
@@ -59,7 +61,7 @@ export class AuthService {
           username: username,
         },
         {
-          secret: 'at-token',
+          secret: this.configService.get<string>('AT_TOKEN'),
           expiresIn: 60 * 15,
         },
       ),
@@ -69,7 +71,7 @@ export class AuthService {
           username: username,
         },
         {
-          secret: 'rt-token',
+          secret: this.configService.get<string>('RT_TOKEN'),
           expiresIn: 60 * 60 * 24 * 7,
         },
       ),
