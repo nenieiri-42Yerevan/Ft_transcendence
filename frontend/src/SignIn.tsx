@@ -5,6 +5,7 @@ import TextInput from "./inputs/TextInput";
 import PasswordInput from "./inputs/PasswordInput";
 import axios from "axios";
 import Background from "./background";
+import { useState } from 'react';
 
 
 interface Data {
@@ -12,6 +13,8 @@ interface Data {
     password: string;
 }
 const SignIn = () => {
+    const [error, setError] = useState(""); // added state to store error message
+
     const onsubmit = (data: Data) => {
         const sendData = {
             username: data.login,
@@ -19,10 +22,16 @@ const SignIn = () => {
         };
         axios.post('http://localhost:7000/transcendence/auth/signin/local', sendData)
         .then(function (response) {
+            const accessToken = response.data.access_token;
+             if (!accessToken) {
+               setError("Something is wrong"); // added error message if no access token received
+               return;
+            }
+            sessionStorage.setItem("access_token", accessToken);
             console.log(response);
         })
         .catch(function (error) {
-            console.log(error);
+            setError("Wrong Login or Password"); // added error message on axios error
         });
         
     }
@@ -35,9 +44,10 @@ const SignIn = () => {
             <div className="flex  justify-center items-center forms min-w-full min-h-screen lg:min-w-fit lg:min-h-fit">
                 <Form
                     onSubmit={onsubmit}
-                >
+                    >
                     {({ handleSubmit, form, submitting, pristine, values, errors }) => (
                         <form onSubmit={handleSubmit} id="signin-form" className="flex flex-col justify-around backdrop-blur-md bg-[#9e9c9c33] outline-none border-[#ffffff1a] bg-clip-padding shadow-md shadow-[#2e364408]  min-w-full min-h-screen lg:min-w-fit lg:min-h-fit box-border rounded-none lg:rounded-3xl xl:rounded-3xl m-0 lg:ml-10 xl:ml-10  p-12 px-12 text-white">
+                            {error && <div className="text-red-600">{error}</div>} {/* added error message display */}
                             <Field<string>
                                 name="login"
                                 placeholder="login"
