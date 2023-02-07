@@ -39,6 +39,8 @@ To be witten...
 
 ### API Endpoints 🔗
 
+<br>
+
 - Main route
 
 | HTTP Verbs | Endpoints      | Action              |
