@@ -20,19 +20,24 @@ export class UserService {
   /* ------------------------ CREATE ------------------------ */
 
   async create(dto: UserDto): Promise<User> {
-    const user = new User();
+    let user = await this.userRepo.findOne({
+      where: [{ username: dto.username }, { email: dto.email }],
+    });
 
-    if (!this.userRepo.findOne({ where: { username: dto.username } }))
-      throw new HttpException(
-        `userrname ${dto.username} is already occupied`,
-        HttpStatus.BAD_REQUEST,
-      );
+    if (user !== null) {
+      if (user.username === dto.username)
+        throw new HttpException(
+          `userrname ${dto.username} is already occupied`,
+          HttpStatus.BAD_REQUEST,
+        );
+      else
+        throw new HttpException(
+          `email ${dto.email} is already occupied`,
+          HttpStatus.BAD_REQUEST,
+        );
+    }
 
-    if (!this.userRepo.findOne({ where: { email: dto.email } }))
-      throw new HttpException(
-        `email ${dto.email} is already occupied`,
-        HttpStatus.BAD_REQUEST,
-      );
+    user = new User();
 
     user.first_name = dto.first_name;
     user.last_name = dto.last_name;
