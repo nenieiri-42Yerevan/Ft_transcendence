@@ -62,7 +62,8 @@ To be witten...
 | GET        | /transcendence/user:username         | To get a user by username                |
 | GET        | /transcendence/user:id/avatar        | To get a user's avatar by user id        |
 | GET        | /transcendence/user:id/matches       | To get a user's match history by user id |
-| PUT        | /transcendence/user/update-user:id   | To update a user                         |
+| GET        | /transcendence/user:id/follows       | To get all users followd by another user |
+| PUT        | /transcendence/user/update-user:id   | To update a user by id                   |
 | PUT        | /transcendence/user/update-avatar:id | To update a user's avatar                |
 | PUT        | /transcendence/user/follow/:uid/:tid | To follow/unfollow a user                |
 | PUT        | /transcendence/user/block/:uid/:tid  | To block/unblock a user                  |
