@@ -66,6 +66,11 @@ export class UserController {
     return this.userService.findFollows(id);
   }
 
+  @Get('/:id/blocked')
+  findBlocked(@Param('id', ParseIntPipe) id: number): Promise<User[]> {
+    return this.userService.findBlocked(id);
+  }
+
   @Put('/update-user:id')
   async updateUser(
     @Param('id', ParseIntPipe) id: number,
