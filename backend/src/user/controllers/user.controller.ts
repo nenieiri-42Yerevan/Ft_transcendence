@@ -61,7 +61,7 @@ export class UserController {
     return this.userService.findMatches(id);
   }
 
-  @Put('/update-user/:id')
+  @Put('/update-user:id')
   async updateUser(
     @Param('id', ParseIntPipe) id: number,
     @Body() user: User,
@@ -71,7 +71,7 @@ export class UserController {
     return this.userService.update(current.id, user);
   }
 
-  @Put('/update-avatar/:id')
+  @Put('/update-avatar:id')
   @UseInterceptors(FileInterceptor('file'))
   updateAvatar(
     @Param('id', ParseIntPipe) id: number,
