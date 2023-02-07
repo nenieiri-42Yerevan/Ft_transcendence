@@ -61,6 +61,11 @@ export class UserController {
     return this.userService.findMatches(id);
   }
 
+  @Get('/:id/follows')
+  findFollows(@Param('id', ParseIntPipe) id: number): Promise<User[]> {
+    return this.userService.findFollows(id);
+  }
+
   @Put('/update-user:id')
   async updateUser(
     @Param('id', ParseIntPipe) id: number,
