@@ -43,6 +43,8 @@ To be witten...
 
 - Main route
 
+<br>
+
 | HTTP Verbs | Endpoints      | Action              |
 | ---------- | -------------- | ------------------- |
 | GET        | /transcendence | To get welcome page |
