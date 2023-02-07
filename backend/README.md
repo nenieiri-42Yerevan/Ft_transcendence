@@ -47,7 +47,9 @@ To be witten...
 
 <br>
 
-- User routes<br>
+- User routes
+
+<br>
 
 | HTTP Verbs | Endpoints                            | Action                          |
 | ---------- | ------------------------------------ | ------------------------------- |
@@ -62,7 +64,9 @@ To be witten...
 
 <br>
 
-- Auth routes<br>
+- Auth routes
+
+<br>
 
 | HTTP Verbs | Endpoints                        | Action                                          |
 | ---------- | -------------------------------- | ----------------------------------------------- |
