@@ -107,11 +107,25 @@ export class UserService {
     if (!user) throw new HttpException('User not found!', HttpStatus.NOT_FOUND);
 
     user.follows.forEach(async (id) => {
-      let follow = await this.findOne(id);
-      follows.push(follow);
+      let f = await this.findOne(id);
+      follows.push(f);
     });
 
     return follows;
+  }
+
+  async findBlocked(id: number): Promise<User[]> {
+    const blocked: User[] = [];
+    const user: User = await this.findOne(id);
+
+    if (!user) throw new HttpException('User not found!', HttpStatus.NOT_FOUND);
+
+    user.blocked.forEach(async (id) => {
+      let b = await this.findOne(id);
+      blocked.push(b);
+    });
+
+    return blocked;
   }
 
   /* ------------------------- UPDATE ------------------------ */
