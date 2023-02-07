@@ -55,16 +55,18 @@ To be witten...
 
 <br>
 
-| HTTP Verbs | Endpoints                            | Action                          |
-| ---------- | ------------------------------------ | ------------------------------- |
-| GET        | /transcendence                       | To get welcome page             |
-| GET        | /transcendence/user                  | To get all the users            |
-| GET        | /transcendence/user:id               | To get a user by id             |
-| GET        | /transcendence/user:username         | To get a user by username       |
-| GET        | /transcendence/user:id/avatar        | To get a user avatar by user id |
-| PUT        | /transcendence/user/update-user:id   | To update a user                |
-| PUT        | /transcendence/user/update-avatar:id | To update a user's avatar       |
-| POST       | /transcendence/user/signup           | To sign up a new user account   |
+| HTTP Verbs | Endpoints                            | Action                                   |
+| ---------- | ------------------------------------ | ---------------------------------------- |
+| GET        | /transcendence/user                  | To get all the users                     |
+| GET        | /transcendence/user:id               | To get a user by id                      |
+| GET        | /transcendence/user:username         | To get a user by username                |
+| GET        | /transcendence/user:id/avatar        | To get a user's avatar by user id        |
+| GET        | /transcendence/user:id/matches       | To get a user's match history by user id |
+| PUT        | /transcendence/user/update-user:id   | To update a user                         |
+| PUT        | /transcendence/user/update-avatar:id | To update a user's avatar                |
+| PUT        | /transcendence/user/follow/:uid/:tid | To follow/unfollow a user                |
+| PUT        | /transcendence/user/block/:uid/:tid  | To block/unblock a user                  |
+| POST       | /transcendence/user/signup           | To sign up a new user account            |
 
 <br>
 
