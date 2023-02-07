@@ -100,6 +100,20 @@ export class UserService {
     return matches;
   }
 
+  async findFollows(id: number): Promise<User[]> {
+    const follows: User[] = [];
+    const user: User = await this.findOne(id);
+
+    if (!user) throw new HttpException('User not found!', HttpStatus.NOT_FOUND);
+
+    user.follows.forEach(async (id) => {
+      let follow = await this.findOne(id);
+      follows.push(follow);
+    });
+
+    return follows;
+  }
+
   /* ------------------------- UPDATE ------------------------ */
 
   async update(id: number, newUser: User): Promise<User> {
