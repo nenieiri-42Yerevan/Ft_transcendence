@@ -56,7 +56,7 @@ export class UserController {
     return this.avatarService.toStreamableFile(avatar.data);
   }
 
-  @Get('/matches/:id')
+  @Get('/:id/matches')
   findMatches(@Param('id', ParseIntPipe) id: number): Promise<Match[]> {
     return this.userService.findMatches(id);
   }
