@@ -13,13 +13,11 @@ export class SessionService {
   /* CREATE */
 
   async create(
-    access_token: string,
-    refresh_token: string,
+    token: string,
     owner: User,
   ): Promise<Session> {
     let session = this.sessionRepo.create({
-      access_token,
-      refresh_token,
+      token,
       owner,
     });
 
@@ -34,10 +32,10 @@ export class SessionService {
 
   /* READ */
 
-  async read(refresh_token: string): Promise<Session> {
+  async read(token: string): Promise<Session> {
     let session = null;
 
-    if (refresh_token) session = await this.sessionRepo.findOne({ where: { refresh_token } });
+    if (token) session = await this.sessionRepo.findOne({ where: { token } });
 
     if (!session)
       throw new HttpException('Session not found', HttpStatus.NOT_FOUND);

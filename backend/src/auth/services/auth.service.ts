@@ -5,6 +5,7 @@ import { UserService } from '../../user/services/user.service';
 import { SessionService } from '../../user/services/session.service';
 import { Session } from '../../user/entities';
 import * as argon from 'argon2';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AuthService {
@@ -12,6 +13,7 @@ export class AuthService {
     private userService: UserService,
     private sessionService: SessionService,
     private jwtService: JwtService,
+    private configService: ConfigService,
   ) {}
 
   // creatinhg user session and connection
@@ -21,7 +23,6 @@ export class AuthService {
     if (user && (await argon.verify(user.password, dto.password))) {
       const tokens = await this.generateJWT(user.id, user.username);
       const new_session = await this.sessionService.create(
-        null,
         tokens.refresh_token,
         user,
       );
@@ -44,7 +45,7 @@ export class AuthService {
 		  const session = await this.sessionService.read(rt);
 		  const tokens = await this.generateJWT(user.id, user.username);
 		  this.sessionService.update(session.id, {
-			  refresh_token: tokens.refresh_token,
+			  token: tokens.refresh_token,
 		  } as Session);
 
 	  } else throw new HttpException('User not found', HttpStatus.NOT_FOUND);
@@ -59,7 +60,7 @@ export class AuthService {
           username: username,
         },
         {
-          secret: 'at-token',
+          secret: this.configService.get<string>('AT_TOKEN'),
           expiresIn: 60 * 15,
         },
       ),
@@ -69,7 +70,7 @@ export class AuthService {
           username: username,
         },
         {
-          secret: 'rt-token',
+          secret: this.configService.get<string>('RT_TOKEN'),
           expiresIn: 60 * 60 * 24 * 7,
         },
       ),
