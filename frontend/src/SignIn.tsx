@@ -1,8 +1,8 @@
 import React from "react";
-import logo from "./assets/images/logo.png"
+// import logo from "./assets/images/logo.png"
 import { Form, Field } from "react-final-form";
-import TextInput from "./inputs/TextInput";
-import PasswordInput from "./inputs/PasswordInput";
+import TextInput from "./Form/inputs/TextInput";
+import PasswordInput from "./Form/inputs/PasswordInput";
 import axios from "axios";
 
 
@@ -17,13 +17,13 @@ const SignIn = () => {
             password: data.password,
         };
         axios.post('/transcendence/auth/signin/local', sendData)
-        .then(function (response) {
-            console.log(response);
-        })
-        .catch(function (error) {
-            console.log(error);
-        });
-        
+            .then(function (response) {
+                console.log(response);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+
     }
     return (
         <div className="backdrop-blur-md p-0 lg:px-4 xl:px-16 bg-black/50 min-w-full min-h-full z-[668] absolute flex justify-between bg-clip-padding">
@@ -41,34 +41,34 @@ const SignIn = () => {
                                 placeholder="login"
                                 id="signlogin"
                                 key={"login"} >
-                                    {({ input, meta, ...rest }) => (
-                                            <div className="mt-1 lg:mt-4 xl:mt-6">
-                                                <label htmlFor="signlogin" className="font-bold">Login: </label>
-                                                {
-                                                    // (meta.error && meta.touched) ?
-                                                    // <TextInput input={input} className=" rounded-md bg-[#2d2727] outline-red-900 mt-2 outline-none min-w-full block p-1 md:p-2 lg:p-3" meta={meta} {...rest} />
-                                                    // :
-                                                    <TextInput input={input} className=" rounded-md bg-[#2d2727] outline-[#2d2727] mt-2 outline-none min-w-full block p-1 md:p-2 lg:p-3" meta={meta} {...rest} />
-                                                }
-                                            </div>
-                                        )}
+                                {({ input, meta, ...rest }) => (
+                                    <div className="mt-1 lg:mt-4 xl:mt-6">
+                                        <label htmlFor="signlogin" className="font-bold">Login: </label>
+                                        {
+                                            // (meta.error && meta.touched) ?
+                                            // <TextInput input={input} className=" rounded-md bg-[#2d2727] outline-red-900 mt-2 outline-none min-w-full block p-1 md:p-2 lg:p-3" meta={meta} {...rest} />
+                                            // :
+                                            <TextInput input={input} className=" rounded-md bg-[#2d2727] outline-[#2d2727] mt-2 outline-none min-w-full block p-1 md:p-2 lg:p-3" meta={meta} {...rest} />
+                                        }
+                                    </div>
+                                )}
                             </Field>
                             <Field<string>
                                 name="password"
                                 placeholder="password"
                                 id="signlpsw"
                                 key={"password"} >
-                                    {({ input, meta, ...rest }) => (
-                                            <div className="mt-1 lg:mt-4 xl:mt-6">
-                                                <label htmlFor="signlogin" className="font-bold">Login: </label>
-                                                {
-                                                    // (meta.error && meta.touched) ?
-                                                    // <TextInput input={input} className=" rounded-md bg-[#2d2727] outline-red-900 mt-2 outline-none min-w-full block p-1 md:p-2 lg:p-3" meta={meta} {...rest} />
-                                                    // :
-                                                    <PasswordInput input={input} className=" rounded-md bg-[#2d2727] outline-[#2d2727] mt-2 outline-none min-w-full block p-1 md:p-2 lg:p-3" meta={meta} {...rest} />
-                                                }
-                                            </div>
-                                        )}
+                                {({ input, meta, ...rest }) => (
+                                    <div className="mt-1 lg:mt-4 xl:mt-6">
+                                        <label htmlFor="signlogin" className="font-bold">Login: </label>
+                                        {
+                                            // (meta.error && meta.touched) ?
+                                            // <TextInput input={input} className=" rounded-md bg-[#2d2727] outline-red-900 mt-2 outline-none min-w-full block p-1 md:p-2 lg:p-3" meta={meta} {...rest} />
+                                            // :
+                                            <PasswordInput input={input} className=" rounded-md bg-[#2d2727] outline-[#2d2727] mt-2 outline-none min-w-full block p-1 md:p-2 lg:p-3" meta={meta} {...rest} />
+                                        }
+                                    </div>
+                                )}
                             </Field>
                             <div className="mt-1 md:mt-20  xl:mt-10 text-red-900 font-bold flex justify-center">
                                 <button form="signin-form" type="submit" className="py-1 lg:py-2 px-8 rounded-md bg-[#2d2727] outline-[#2d2727] outline-none  hover:bg-red-50">Sign In</button>
@@ -77,6 +77,6 @@ const SignIn = () => {
                     )}
                 </Form>
             </div>
-        </div> )
+        </div>)
 }
 export default SignIn;

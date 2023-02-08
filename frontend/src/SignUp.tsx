@@ -1,5 +1,6 @@
 import React from "react";
 import { Form } from "react-final-form";
+import { useNavigate } from 'react-router-dom'
 import { FORM_ERROR } from 'final-form'
 import { setIn } from "final-form";
 
@@ -68,7 +69,7 @@ const validationScheme = Yup.object().shape({
 const validateForm = async (values: Data) => {
   try {
     await validationScheme.validate(values, { abortEarly: false });
-  } catch (err:any) {
+  } catch (err: any) {
     const errors = err.inner.reduce((formError: any, innerError: any) => {
       return setIn(formError, innerError.path, innerError.message);
     }, {});
@@ -76,101 +77,34 @@ const validateForm = async (values: Data) => {
     return errors;
   }
 };
-// const handleSubmitError = (error:any) => ({
-//   handleSubmit(values:any, form:any, callback:any) {
-//     axios
-//       .post('http://127.0.0.1:7000/transcendence/user/signup', values)
-//       .then(() => callback())
-//       .catch((error:any) => {
-//         form.batch(() => {
-//           form.change(setIn(form.getState(), 'submitError', error.message));
-//         });
-//       });
-//   },
-// });
 
-const setSubmitError = (submitError:any) => ({
-  meta: {
-    submitError: () => submitError
-  }
-});
-// const handleSubmitError = (error:any) => ({
-//   mutators: {
-//     },
-//   },
-//   handleSubmit(data:Data, form:any, callback:any) {
-//     console.log("handleSubmit");
-//     const sendData = {
-//           first_name: data.first_name,
-//           last_name: data.last_name,
-//           username: data.username,
-//           email: data.email,
-//           gender: data.gender,
-//           password: data.password,
-//           date_of_birth: data.day + "/" + data.month + "/" + data.year,
-//         };
-//     axios
-//       .post('http://127.0.0.1:7000/transcendence/user/signup', sendData)
-//       .then(() => callback())
-//       .catch((error) => {
-//         console.log(error.data.message);
-        
-//         form.mutators.setSubmitError(error.data.message);
-//       });
-//   },
-// });
- 
 const SignUp = () => {
-  // const onSubmit = async (data:Data) => {
-  //   try {
-  //     // submit logic here
-  //   } catch (error:any) {
-  //     return {
-  //       [FORM_ERROR]: error.response.data.message,
-  //     }
-  //   }
-  // }
-  // const formState = useForm();
-  // const form = useForm();
-  // useEffect(()=>{
-    //   console.log(sub);
-    
-    // })
-    // const [submitError, setSubmitError] = useState()
-    const onSubmit = (data: Data) => {
-      const sendData = {
-        first_name: data.first_name,
-        last_name: data.last_name,
-        username: data.username,
-        email: data.email,
-        gender: data.gender,
-        password: data.password,
-        date_of_birth: data.day + "/" + data.month + "/" + data.year,
-      };
-      // console.log(sendData);
-      axios
-        .post("http://127.0.0.1:7000/transcendence/user/signup", sendData)
-        .then( (response) => {
-          console.log(response.data.message);
-        })
-        .catch( (error) => {
-    
-            console.log(error);
-            console.log(error.response.data.message);
-            // setSubmitError()
-            // return  { [FORM_ERROR]: error.message};
-            // return {[FORM_ERROR]: error.response.data.message};
-            // alert(error.response.data.message)
-            // return {[FORM_ERROR]: error.response.data.message}
-            // throw new SubmissionError({
-            //     _error: error.message
-            // });
-          // console.log(error);
-        });
-      // console.log(sendData);
+  const navigate = useNavigate()
+  const onSubmit = async (data: Data) => {
+    const sendData = {
+      first_name: data.first_name,
+      last_name: data.last_name,
+      username: data.username,
+      email: data.email,
+      gender: data.gender,
+      password: data.password,
+      date_of_birth: data.day + "/" + data.month + "/" + data.year,
     };
-    return (
-      <>
+    try {
+      await axios
+        .post("http://127.0.0.1:7000/transcendence/user/signup", sendData)
+      navigate("/transcendence/user/signin")
+
+    }
+    catch (error: any) {
+      console.log(error);
+      console.log(error.response.data.message);
+      return { [FORM_ERROR]: error.response.data.message }
+
+    }
+  };
+  return (
+    <>
       <div className="  py-0 md:py-6 text-xs xl:text-xl gap-x-0 md:gap-x-4 lg:text-lg md:text-md sm:text-sm backdrop-blur-md p-0 lg:p-2 xl:p-3 bg-black/50 min-w-full min-h-full z-[668] absolute flex justify-center bg-clip-padding">
         <div className=" text-white hidden md:flex md:flex-col md:align-center  md:justify-center  ">
           <p className="text-center text-3xl lg:text-4xl xl:text-5xl">
@@ -179,11 +113,11 @@ const SignUp = () => {
         </div>
         <div className="flex justify-center md:text-lg items-center min-w-full min-h-screen md:min-w-fit md:min-h-fit">
           <Form
-            mutators={{ setSubmitError }}
             onSubmit={onSubmit}
             validate={validateForm}
             render={FormContent}
           />
+
         </div>
       </div>
       <Background />

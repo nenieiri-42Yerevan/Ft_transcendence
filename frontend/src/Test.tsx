@@ -1,101 +1,95 @@
-import React from "react";
-import { render } from "react-dom";
-import { Form, Field } from "react-final-form";
-import RadioInput from "./Form/inputs/RadioInput";
-import TextInput from "./Form/inputs/TextInput";
-import SelectInput from "./Form/inputs/SelectInput";
+import React from 'react'
+import Styles from './Styles'
+import { Form, Field } from 'react-final-form'
+import { FORM_ERROR } from 'final-form'
 
-const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
 
-type Stooge = "larry" | "moe" | "curly";
-interface Values {
-    firstName?: string;
-    lastName?: string;
-    employed: boolean;
-    favoriteColor?: string;
-    toppings?: string[];
-    sauces?: string[];
-    stooge: Stooge;
-    notes?: string;
+const onSubmit = async (values: any) => {
+    await sleep(300)
+    if (values.username !== 'erikras') {
+        return { username: 'Unknown username' }
+    }
+    if (values.password !== 'finalformrocks') {
+        return { [FORM_ERROR]: 'Login Failed' }
+    }
+    window.alert('LOGIN SUCCESS!')
 }
 
-const onSubmit = async (values: Values) => {
-    await sleep(300);
-    window.alert(JSON.stringify(values, undefined, 2));
-};
-
 const Test = () => (
-    <Form
-        onSubmit={onSubmit}
-        initialValues={{ stooge: "larry", employed: false }}
-        render={({ handleSubmit, form, submitting, pristine, values }) => (
-            <form onSubmit={handleSubmit}>
-                <div>
-                    <label>First Name</label>
-                    <Field<string>
-                        name="firstName"
-                        component={TextInput}
-                        placeholder="First Name"
-                    />
-                </div>
-                <div>
-                    <label>Last Name</label>
-                    <Field<string>
-                        name="lastName"
-                        component={TextInput}
-                        placeholder="Last Name"
-                    />
-                </div>
-                <div>
-                    <label>Favorite Color</label>
-                    <Field<string> name="favoriteColor" component={SelectInput}>
-                        <option />
-                        <option value="#ff0000">❤️ Red</option>
-                        <option value="#00ff00">💚 Green</option>
-                        <option value="#0000ff">💙 Blue</option>
+    <Styles>
+        <h1>React Final Form Example</h1>
+        <h2>Submission Errors</h2>
+        <a
+            href="https://final-form.org/react"
+            target="_blank"
+            rel="noopener noreferrer"
+        >
+            Read Docs
+        </a>
+        <div>
+            Only successful credentials are <code>erikras</code> and{' '}
+            <code>finalformrocks</code>.
+        </div>
+        <Form
+            onSubmit={onSubmit}
+            validate={values => {
+                const errors: any = {}
+                if (!values.username) {
+                    errors.username = 'Required'
+                }
+                if (!values.password) {
+                    errors.password = 'Required'
+                }
+                return errors
+            }}
+            render={({
+                submitError,
+                handleSubmit,
+                form,
+                submitting,
+                pristine,
+                values
+            }) => (
+                <form onSubmit={handleSubmit}>
+                    <Field name="username">
+                        {({ input, meta }) => (
+                            <div>
+                                <label>Username</label>
+                                <input {...input} type="text" placeholder="Username" />
+                                {(meta.error || meta.submitError) && meta.touched && (
+                                    <span>{meta.error || meta.submitError}</span>
+                                )}
+                            </div>
+                        )}
                     </Field>
-                </div>
-                <div>
-                    <label>Best Stooge</label>
-                    <div>
-                        <label>
-                            <Field<Stooge>
-                                name="stooge"
-                                component={RadioInput}
-                                type="radio"
-                                value="larry"
-                            />{" "}
-                            Larry
-                        </label>
-                        <label>
-                            <Field<Stooge>
-                                name="stooge"
-                                component={RadioInput}
-                                type="radio"
-                                value="moe"
-                            />{" "}
-                            Moe
-                        </label>
-                        <label>
-                            <Field<Stooge>
-                                name="stooge"
-                                component={RadioInput}
-                                type="radio"
-                                value="curly"
-                            />{" "}
-                            Curly
-                        </label>
+                    <Field name="password">
+                        {({ input, meta }) => (
+                            <div>
+                                <label>Password</label>
+                                <input {...input} type="password" placeholder="Password" />
+                                {meta.error && meta.touched && <span>{meta.error}</span>}
+                            </div>
+                        )}
+                    </Field>
+                    {submitError && <div className="error">{submitError}</div>}
+                    <div className="buttons">
+                        <button type="submit" disabled={submitting}>
+                            Log In
+                        </button>
+                        <button
+                            type="button"
+                            onClick={() => form.reset()}
+                            disabled={submitting || pristine}
+                        >
+                            Reset
+                        </button>
                     </div>
-                </div>
-                <div className="buttons">
-                    <button type="submit" disabled={submitting || pristine}>
-                        Submit
-                    </button>
-                </div>
-                <pre>{JSON.stringify(values, undefined, 2)}</pre>
-            </form>
-        )}
-    />
-);
-
+                    <pre>{JSON.stringify(values)}</pre>
+                </form>
+            )}
+        />
+    </Styles>
+)
 export default Test;
+// render(<App />, document.getElementById('root'))

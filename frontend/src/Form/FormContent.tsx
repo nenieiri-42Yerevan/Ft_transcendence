@@ -5,6 +5,7 @@ import PasswordInput from "./inputs/PasswordInput";
 import SelectInput from "./inputs/SelectInput";
 import { Field, FormSpy } from "react-final-form";
 
+
 type Gender = "male" | "female";
 const months: any[] = [
     { value: "January" },
@@ -19,48 +20,40 @@ const months: any[] = [
     { value: "October" },
     { value: "November" },
     { value: "December" },
-  ];
-  const getError = (err:any)=> {
+];
+const getError = (err: any) => {
     if (err.first_name)
-      return err.first_name;
+        return err.first_name;
     if (err.last_name)
-      return err.last_name;
+        return err.last_name;
     if (err.username)
-      return err.username;
+        return err.username;
     if (err.email)
-      return err.email;
+        return err.email;
     if (err.gender)
-      return err.gender;
+        return err.gender;
     if (err.password)
-      return err.password;
+        return err.password;
     if (err.repeat_password)
-      return err.repeat_password;
+        return err.repeat_password;
     if (err.day)
-      return err.day;
+        return err.day;
     if (err.month)
-      return err.month;
+        return err.month;
     if (err.year)
-      return err.year;
+        return err.year;
     return undefined;
-  }
-// const print = (name:string) =>{
-//     console.log(name );
-//     return 1;
-// }
-  const days: any[] = Array.from(Array(31).keys()).map((d) => d + 1);
-  const years: any[] = Array.from(Array(76).keys()).map((d) => d + 1940);
-const FormContent = (props:any) => {
-    
-    useEffect(()=>{
+}
 
-        // console.log();
-        
-        console.log("submiterror: ", props.submitError);
-        
-    });
+const days: any[] = Array.from(Array(31).keys()).map((d) => d + 1);
+const years: any[] = Array.from(Array(76).keys()).map((d) => d + 1940);
+const FormContent = (props: any) => {
+    useEffect(() => {
+        console.log(props.invalid);
+
+    })
     return (
         <form
-            method="post"
             onSubmit={props.handleSubmit}
             id="signup-form"
             className="flex flex-col justify-around
@@ -76,26 +69,26 @@ const FormContent = (props:any) => {
                 </p>
             </div>
             {
-                (props.hasValidationErrors) ?
-                    <FormSpy subscription={{errors: true}}>
-                        {({errors})=>(
-                            <pre className="text-red-900 text-xs flex">
-                                {getError(errors)}
-                            </pre>
-                        )}
-                    </FormSpy>
-                : <></>
-            }
-            {
-                props.submitError && (
-                    <FormSpy subscription={{submitError: true}}>
-                        {({submitError})=>(
+
+                props.submitError ? (
+                    <FormSpy subscription={{ submitError: true }}>
+                        {({ submitError }) => (
                             <pre className="text-red-900 text-xs">
                                 {submitError}
                             </pre>
                         )}
                     </FormSpy>
                 )
+                    :
+                    (props.hasValidationErrors) && (
+                        <FormSpy subscription={{ errors: true }}>
+                            {({ errors }) => (
+                                <pre className="text-red-900 text-xs flex">
+                                    {getError(errors)}
+                                </pre>
+                            )}
+                        </FormSpy>
+                    )
             }
             <div className="flex flex-col xs:flex xs:flex-row justify-between gap-x-3 gap-y-5 sm:gap-x-3">
                 <Field<string>
@@ -446,15 +439,18 @@ const FormContent = (props:any) => {
                     ))}
                 </Field>
             </div>
+            {/* {(props: any) => {
+                console.log((props.errors && Object.keys(props.errors).length !== 0) || (props.hasSubmitErrors && !props.dirtySinceLastSubmit))
+                return <></>
+            }} */}
             <hr className="border-1 border-gray-300 "></hr>
             <div className="text-red-900 font-bold flex justify-center">
                 <button
                     form="signup-form"
-                    disabled={props.errors && Object.keys(props.errors).length !== 0}
-                    onClick={() => props.form.reset}
+                    disabled={(props.errors && Object.keys(props.errors).length !== 0) || (props.hasSubmitErrors && !props.dirtySinceLastSubmit)}
                     type="submit"
                     className={"py-1 xs:py-1.5 lg:py-2 px-8 rounded-md  outline-[#2d2727] outline-none " + (
-                        (props.errors && Object.keys(props.errors).length !== 0)
+                        ((props.errors && Object.keys(props.errors).length !== 0) || (props.hasSubmitErrors && !props.dirtySinceLastSubmit))
                             ? "disabled bg-[#a79c9b]"
                             : "bg-[#2d2727] hover:bg-red-50")
                     }
