@@ -48,6 +48,9 @@ export class User {
   @Column({ default: Status.OFFLIEN })
   status: Status;
 
+  @Column({ default: false })
+  TFA_enabled: boolean;
+
   @CreateDateColumn({ default: () => 'NOW()' })
   created_at: Date;
 
