@@ -4,23 +4,10 @@ import TextInput from "./inputs/TextInput";
 import PasswordInput from "./inputs/PasswordInput";
 import SelectInput from "./inputs/SelectInput";
 import { Field, FormSpy } from "react-final-form";
+import { Gender, days, months, years } from "Utils/Scheme";
 
 
-type Gender = "male" | "female";
-const months: any[] = [
-    { value: "January" },
-    { value: "February" },
-    { value: "March" },
-    { value: "April" },
-    { value: "May" },
-    { value: "June" },
-    { value: "July" },
-    { value: "August" },
-    { value: "September" },
-    { value: "October" },
-    { value: "November" },
-    { value: "December" },
-];
+
 const getError = (err: any) => {
     if (err.first_name)
         return err.first_name;
@@ -45,13 +32,8 @@ const getError = (err: any) => {
     return undefined;
 }
 
-const days: any[] = Array.from(Array(31).keys()).map((d) => d + 1);
-const years: any[] = Array.from(Array(76).keys()).map((d) => d + 1940);
-const FormContent = (props: any) => {
-    useEffect(() => {
-        console.log(props.invalid);
 
-    })
+const FormContent = (props: any) => {
     return (
         <form
             onSubmit={props.handleSubmit}
@@ -439,10 +421,6 @@ const FormContent = (props: any) => {
                     ))}
                 </Field>
             </div>
-            {/* {(props: any) => {
-                console.log((props.errors && Object.keys(props.errors).length !== 0) || (props.hasSubmitErrors && !props.dirtySinceLastSubmit))
-                return <></>
-            }} */}
             <hr className="border-1 border-gray-300 "></hr>
             <div className="text-red-900 font-bold flex justify-center">
                 <button
