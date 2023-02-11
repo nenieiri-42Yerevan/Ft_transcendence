@@ -19,7 +19,7 @@ export class SocketGateway {
   ) {}
 
   @WebSocketServer()
-  server;
+  server: any;
 
   afterInit(srv: Server): void {
     this.socketService.server = srv;
@@ -34,6 +34,28 @@ export class SocketGateway {
       if (!user) client.disconnect();
 
       await this.userService.setStatus(user.id, Status.ONLINE);
+    } catch {}
+  }
+
+  onDisconnect(client: Socket): void {
+    try {
+      if (!client.data.user) return;
+
+      const uid = client.data.user.id;
+
+      setTimeout(async () => {
+        const socket: any = Array.from(this.server.sockets.values()).find(
+          (socket: Socket) => socket.data.user.id == uid,
+        );
+
+        if (socket) return;
+
+        const user = await this.userService.findOne(uid);
+        if (!user) return;
+
+        if (user.status == Status.ONLINE)
+          await this.userService.setStatus(uid, Status.OFFLINE);
+      }, 5 * 1000);
     } catch {}
   }
 }
