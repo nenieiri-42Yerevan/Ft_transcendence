@@ -1,5 +1,9 @@
 import { ConfigService } from '@nestjs/config';
-import { WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
+import {
+  SubscribeMessage,
+  WebSocketGateway,
+  WebSocketServer,
+} from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { AuthService } from 'src/auth/services/auth.service';
 import { Status } from 'src/user/entities';
@@ -8,7 +12,7 @@ import { SocketService } from './socket.service';
 
 @WebSocketGateway({
   cors: { origin: '' },
-  namespace: 'notify',
+  namespace: 'gateway',
 })
 export class SocketGateway {
   constructor(
@@ -56,6 +60,24 @@ export class SocketGateway {
         if (user.status == Status.ONLINE)
           await this.userService.setStatus(uid, Status.OFFLINE);
       }, 5 * 1000);
+    } catch {}
+  }
+
+  @SubscribeMessage('message')
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+  onMessage(client: Socket, data: any): void {
+    try {
+      const user = client.data.user;
+      if (!user) return;
+
+      const socket: any = Array.from(this.server.sockets.values()).find(
+        (socket: Socket) => socket.data.user.id == data.id,
+      );
+      if (!socket) client.emit('error', 'User not found!');
+      else {
+        data.id = user.id;
+        socket.emit('message', data);
+      }
     } catch {}
   }
 }
