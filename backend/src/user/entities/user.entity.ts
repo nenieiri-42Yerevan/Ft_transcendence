@@ -12,7 +12,7 @@ export type Gender = 'male' | 'female';
 
 export enum Status {
   OFFLIEN = 0,
-  ONLIEN,
+  ONLINE,
   GAME,
 }
 
