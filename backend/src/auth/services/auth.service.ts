@@ -3,9 +3,10 @@ import { JwtService } from '@nestjs/jwt';
 import { SignInDto, TokenDto } from '../dto';
 import { UserService } from '../../user/services/user.service';
 import { SessionService } from '../../user/services/session.service';
-import { Session } from '../../user/entities';
+import { Session, User } from '../../user/entities';
 import * as argon from 'argon2';
 import { ConfigService } from '@nestjs/config';
+import { Socket } from 'socket.io';
 
 @Injectable()
 export class AuthService {
@@ -32,23 +33,21 @@ export class AuthService {
 
   // logout
   async logout(rt: string) {
-	  const session = await this.sessionService.read(rt);
-	  await this.sessionService.delete(session['id']);
+    const session = await this.sessionService.read(rt);
+    await this.sessionService.delete(session['id']);
   }
 
   // refresh
   async refreshTokens(userId: number, rt: string) {
-	  const user = await this.userService.findOne(userId, ['sessions']);
+    const user = await this.userService.findOne(userId, ['sessions']);
 
-	  if (user) {
-
-		  const session = await this.sessionService.read(rt);
-		  const tokens = await this.generateJWT(user.id, user.username);
-		  this.sessionService.update(session.id, {
-			  token: tokens.refresh_token,
-		  } as Session);
-
-	  } else throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+    if (user) {
+      const session = await this.sessionService.read(rt);
+      const tokens = await this.generateJWT(user.id, user.username);
+      this.sessionService.update(session.id, {
+        token: tokens.refresh_token,
+      } as Session);
+    } else throw new HttpException('User not found', HttpStatus.NOT_FOUND);
   }
 
   // generating and returning JSON Web Token
@@ -79,5 +78,30 @@ export class AuthService {
       access_token: at,
       refresh_token: rt,
     };
+  }
+
+  // verifying JWT token
+  verifyJWT(token: string): any {
+    try {
+      return this.jwtService.verify(token);
+    } catch {
+      return null;
+    }
+  }
+
+  // retrieving user from socket
+  async retrieveUser(client: Socket): Promise<User> {
+    const authorization = client.handshake.headers.authorization;
+    const token = authorization && authorization.split(' ')[1];
+
+    if (!token) return null;
+
+    const payload = this.verifyJWT(token);
+    if (!payload) return null;
+
+    const user = await this.userService.findOne(payload.sub).catch(() => null);
+    if (!user) return null;
+
+    return user;
   }
 }
