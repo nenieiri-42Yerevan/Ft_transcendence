@@ -11,7 +11,7 @@ import { Avatar, Session, Match } from './index';
 export type Gender = 'male' | 'female';
 
 export enum Status {
-  OFFLIEN = 0,
+  OFFLINE = 0,
   ONLINE,
   GAME,
 }
@@ -45,7 +45,7 @@ export class User {
   @Column({ default: 0 })
   rank: number;
 
-  @Column({ default: Status.OFFLIEN })
+  @Column({ default: Status.OFFLINE })
   status: Status;
 
   @Column({ default: false })
