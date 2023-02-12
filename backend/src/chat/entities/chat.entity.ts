@@ -1,6 +1,4 @@
-import { User } from 'src/user/entities';
 import {
-  Column,
   Entity,
   JoinTable,
   ManyToMany,
@@ -9,6 +7,7 @@ import {
   TableInheritance,
 } from 'typeorm';
 import { Message } from './message.entity';
+import { User } from 'src/user/entities';
 
 @Entity()
 @TableInheritance()
