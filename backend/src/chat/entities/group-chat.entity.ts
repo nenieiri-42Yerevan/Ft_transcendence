@@ -1,16 +1,8 @@
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  OneToMany,
-  PrimaryColumn,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
-import { Chat } from './chat.entity';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { User } from 'src/user/entities';
 import { Muted } from './muted.entity';
 import { Banned } from './banned.entity';
+import { Chat } from './chat.entity';
 
 @Entity()
 export class GroupChat extends Chat {
@@ -23,7 +15,7 @@ export class GroupChat extends Chat {
   @Column({ nullable: true })
   password: string;
 
-  @ManyToOne(() => User, (user) => user.createdGroups)
+  @ManyToOne(() => User, { eager: true, onDelete: 'CASCADE' })
   @JoinColumn()
   owner: User;
 
