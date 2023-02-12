@@ -7,8 +7,10 @@ import { MatchService } from './services/match.service';
 import { SessionService } from './services/session.service';
 import { UserService } from './services/user.service';
 
+let entities = [User, Avatar, Session, Match];
+
 @Module({
-  imports: [TypeOrmModule.forFeature([User, Avatar, Session, Match])],
+  imports: [TypeOrmModule.forFeature(entities)],
   controllers: [UserController],
   providers: [UserService, AvatarService, SessionService, MatchService],
   exports: [UserService, SessionService],
