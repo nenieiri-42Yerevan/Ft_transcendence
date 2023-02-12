@@ -9,7 +9,7 @@ import {
 import { GroupChat } from './group-chat.entity';
 
 @Entity()
-export class BannedUser {
+export class Banned {
   @PrimaryGeneratedColumn()
   id: number;
 
