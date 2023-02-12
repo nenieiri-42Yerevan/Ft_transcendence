@@ -9,7 +9,7 @@ import { User } from 'src/user/entities';
 import { GroupChat } from './group-chat.entity';
 
 @Entity()
-export class MutedUser {
+export class Muted {
   @PrimaryGeneratedColumn()
   id: number;
 
