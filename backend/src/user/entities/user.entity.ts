@@ -77,7 +77,4 @@ export class User {
 
   @ManyToMany(() => Chat, (chat) => chat.users)
   chats: Chat[];
-
-  @OneToMany(() => GroupChat, (gc) => gc.owner)
-  createdGroups: GroupChat[];
 }
