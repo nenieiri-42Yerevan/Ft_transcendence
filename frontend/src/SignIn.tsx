@@ -23,7 +23,7 @@ const SignIn = () => {
             .post('http://127.0.0.1:7000/transcendence/auth/signin/local', sendData)
     
         }
-        catch (error: any) {
+    catch (error: any) {
         console.log(error);
         console.log(error.response.data.message);
         return { [FORM_ERROR]: error.response.data.message }
