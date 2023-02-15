@@ -19,9 +19,14 @@ const SignIn = () => {
             password: data.password,
         };
     try {
-        await axios
+            const response = await axios
             .post('http://127.0.0.1:7000/transcendence/auth/signin/local', sendData)
-    
+            const accessToken = response.data.access_token;
+             if (!accessToken) {
+                return { [FORM_ERROR]: "Something is wrong" }
+            }
+            sessionStorage.setItem("access_token", accessToken);
+            console.log(response);
         }
     catch (error: any) {
         console.log(error);
