@@ -18,11 +18,13 @@ import { UserService } from '../services/user.service';
 import { Response } from 'express';
 import { Public } from '../../common/decorators';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { SessionService } from '../services/session.service';
 
 @Controller('user')
 export class UserController {
   constructor(
     private readonly userService: UserService,
+    private readonly sessionService: SessionService,
     private readonly avatarService: AvatarService,
   ) {}
 
@@ -39,6 +41,11 @@ export class UserController {
   @Get('/:username')
   findByUsername(@Param('username') username: string): Promise<User> {
     return this.userService.findOne(username);
+  }
+
+  @Get('/:token')
+  findBySession(@Param('token') rtoken: string): Promise<User> {
+    return this.sessionService.findOneBytoken(rtoken);
   }
 
   @Get('/:id/avatar')
