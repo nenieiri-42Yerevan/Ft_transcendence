@@ -60,6 +60,7 @@ To be witten...
 | GET        | /transcendence/user                  | To get all the users                     |
 | GET        | /transcendence/user:id               | To get a user by id                      |
 | GET        | /transcendence/user:username         | To get a user by username                |
+| GET        | /transcendence/user:token            | To get a user by session refresh token   |
 | GET        | /transcendence/user:id/avatar        | To get a user's avatar by user id        |
 | GET        | /transcendence/user:id/matches       | To get a user's match history by user id |
 | GET        | /transcendence/user:id/follows       | To get all users followd by another user |
@@ -76,8 +77,8 @@ To be witten...
 
 <br>
 
-| HTTP Verbs | Endpoints                       	    | Action                                   |
-| ---------- | ------------------------------------ | ---------------------------------------- |
-| POST       | /transcendence/auth/signin/local     | To login an existing user account        |
-| POST       | /transcendence/auth/logout           | To logout                                |
-| POST       | /transcendence/auth/refresh          | To get a new pair of tokens              |
+| HTTP Verbs | Endpoints                        | Action                            |
+| ---------- | -------------------------------- | --------------------------------- |
+| POST       | /transcendence/auth/signin/local | To login an existing user account |
+| POST       | /transcendence/auth/logout       | To logout                         |
+| POST       | /transcendence/auth/refresh      | To get a new pair of tokens       |
