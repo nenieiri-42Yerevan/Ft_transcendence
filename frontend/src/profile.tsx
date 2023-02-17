@@ -2,9 +2,19 @@ import Background from "./background";
 import avatar from "./assets/images/avatar.png"
 import pong from "./assets/images/pong.png"
 import { Link } from "react-router-dom";
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+import Fields from './Fields'
 
 const Profile = () => {
-
+    const [username, setUsername] = useState('');
+    
+    useEffect(() => {
+        axios.get('http://127.0.0.1:7000/transcendence/user:token')
+        .then(response => setUsername(response.data.username))
+        .catch(error => console.log(error));
+    }, []);
+        
     return (
         <>
             <div className = "flex flex-col justify-center backdrop-blur-md min-h-screen min-w-full items-center bg-black/50 z-[668] absolute">
@@ -23,30 +33,15 @@ const Profile = () => {
                             <p className="text-white font-bold flex justify-between"><img className = "w-[3em]" src = {pong}></img>Friends <span>more</span></p>
                         </div>
                         <hr />
-                        <div className="flex flex-row m-1 items-center justify-between">
-                            <img src = {avatar} className = "w-[3em] h-fit"></img>
-                            <span>arastepa</span>
-                        </div>
+                        <Fields/>
                         <hr />
-                        <div className="flex flex-row m-1 items-center justify-between">
-                            <img src = {avatar} className = "w-[3em] h-fit"></img>
-                            <span>arastepa</span>
-                        </div>
+                        <Fields/>
                         <hr />
-                        <div className="flex flex-row m-1 items-center justify-between">
-                            <img src = {avatar} className = "w-[3em] h-fit"></img>
-                            <span>arastepa</span>
-                        </div>
+                        <Fields/>
                         <hr />
-                        <div className="flex flex-row m-1 items-center justify-between">
-                            <img src = {avatar} className = "w-[3em] h-fit"></img>
-                            <span>arastepa</span>
-                        </div>
+                        <Fields/>
                         <hr />
-                        <div className="flex flex-row items-center justify-between">
-                            <img src = {avatar} className = "w-[3em] h-fit"></img>
-                            <span>arastepa</span>
-                        </div>
+                        <Fields/>
                     </div>
                 </div>
                 <div className="m-5">
