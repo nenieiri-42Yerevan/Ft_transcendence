@@ -1,7 +1,10 @@
+import { Chat } from 'src/chat/entities/chat.entity';
+import { GroupChat } from 'src/chat/entities/group-chat.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
+  ManyToMany,
   OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
@@ -71,4 +74,7 @@ export class User {
 
   @OneToMany(() => Match, (match) => match.loser)
   lost: Match[];
+
+  @ManyToMany(() => Chat, (chat) => chat.users)
+  chats: Chat[];
 }

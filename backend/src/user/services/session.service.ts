@@ -13,11 +13,13 @@ export class SessionService {
   /* CREATE */
 
   async create(
-    token: string,
+    access_token: string,
+    refresh_token: string,
     owner: User,
   ): Promise<Session> {
     let session = this.sessionRepo.create({
-      token,
+      access_token,
+      refresh_token,
       owner,
     });
 
@@ -32,10 +34,44 @@ export class SessionService {
 
   /* READ */
 
-  async read(token: string): Promise<Session> {
+  async findOneBytoken(rtoken: string): Promise<User> {
     let session = null;
 
-    if (token) session = await this.sessionRepo.findOne({ where: { token } });
+    if (!rtoken)
+      throw new HttpException(
+        'Invalid token provided!',
+        HttpStatus.BAD_REQUEST,
+      );
+
+    try {
+      session = await this.sessionRepo.findOne({
+        where: { refresh_token: rtoken },
+        relations: ['owner'],
+      });
+    } catch (error) {
+      throw new HttpException('Session not found', HttpStatus.BAD_REQUEST);
+    }
+
+    return session.owner;
+  }
+
+  async read_AT(access_token: string): Promise<Session> {
+    let session = null;
+
+    if (access_token)
+      session = await this.sessionRepo.findOne({ where: { access_token } });
+
+    if (!session)
+      throw new HttpException('Session not found', HttpStatus.NOT_FOUND);
+
+    return session;
+  }
+
+  async read_RT(refresh_token: string): Promise<Session> {
+    let session = null;
+
+    if (refresh_token)
+      session = await this.sessionRepo.findOne({ where: { refresh_token } });
 
     if (!session)
       throw new HttpException('Session not found', HttpStatus.NOT_FOUND);

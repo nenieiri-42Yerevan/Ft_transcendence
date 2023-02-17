@@ -1,12 +1,13 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { SignInDto, TokenDto } from '../dto';
+import { SignInDto, SignInTFADto, TokenDto } from '../dto';
 import { UserService } from '../../user/services/user.service';
 import { SessionService } from '../../user/services/session.service';
 import { Session, User } from '../../user/entities';
 import * as argon from 'argon2';
 import { ConfigService } from '@nestjs/config';
 import { Socket } from 'socket.io';
+import { speakeasy } from 'speakeasy';
 
 @Injectable()
 export class AuthService {
@@ -24,16 +25,44 @@ export class AuthService {
     if (user && (await argon.verify(user.password, dto.password))) {
       const tokens = await this.generateJWT(user.id, user.username);
       const new_session = await this.sessionService.create(
+        tokens.access_token,
         tokens.refresh_token,
         user,
       );
+//	  if (user.TFA_enabled == true)
+//		  return ;
+      return tokens;
+    } else throw new HttpException('Wrong password', HttpStatus.NOT_FOUND);
+  }
+
+  // creatinhg user session and connection (2FA)
+  async signinLocalTFA(dto: SignInTFADto): Promise<TokenDto> {
+    const user = await this.userService.findOne(dto.username);
+
+    if (user && (await argon.verify(user.password, dto.password))) {
+      const tokens = await this.generateJWT(user.id, user.username);
+      const new_session = await this.sessionService.create(
+        tokens.access_token,
+        tokens.refresh_token,
+        user,
+      );
+	  
+	  const verified = speakeasy.totp.verify({
+		 // secret: user.secret,
+		 encoding: 'base32',
+		 token: dto.TFA,
+		 window: 1
+	  });
+	  if (!verified)
+		  throw new HttpException('Wrong TFA', HttpStatus.NOT_FOUND);
+
       return tokens;
     } else throw new HttpException('Wrong password', HttpStatus.NOT_FOUND);
   }
 
   // logout
-  async logout(rt: string) {
-    const session = await this.sessionService.read(rt);
+  async logout(at: string) {
+    const session = await this.sessionService.read_AT(at);
     await this.sessionService.delete(session['id']);
   }
 
@@ -42,10 +71,11 @@ export class AuthService {
     const user = await this.userService.findOne(userId, ['sessions']);
 
     if (user) {
-      const session = await this.sessionService.read(rt);
+      const session = await this.sessionService.read_RT(rt);
       const tokens = await this.generateJWT(user.id, user.username);
       this.sessionService.update(session.id, {
-        token: tokens.refresh_token,
+        access_token: tokens.access_token,
+        refresh_token: tokens.refresh_token,
       } as Session);
     } else throw new HttpException('User not found', HttpStatus.NOT_FOUND);
   }
@@ -103,5 +133,24 @@ export class AuthService {
     if (!user) return null;
 
     return user;
+  }
+
+  async enableTFA(userId: number)
+  {
+    const user = await this.userService.findOne(userId);
+	  try
+	  {
+		  const secret = speakeasy.generateSecret().base32;
+		  // add this secret to user table 2FA and return it
+	  } catch (error)
+	  {
+		  throw new HttpException('Error generating the secret', HttpStatus.INTERNAL_SERVER_ERROR);
+	  }
+  }
+
+  async disableTFA(userId: number)
+  {
+    const user = await this.userService.findOne(userId);
+	  // delete secret from user table 2FA
   }
 }
