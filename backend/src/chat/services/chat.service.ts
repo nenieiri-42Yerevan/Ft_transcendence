@@ -69,6 +69,19 @@ export class ChatService {
     return message;
   }
 
+  async openChat(uid: number, tid: number): Promise<Chat> {
+    if (uid == tid)
+      throw new HttpException(
+        'Users cannot creat chat with themselves',
+        HttpStatus.FORBIDDEN,
+      );
+
+    const user = await this.userService.findOne(uid);
+    const target = await this.userService.findOne(tid);
+
+    return await this.createChat([user, target]);
+  }
+
   /* READ */
 
   async findOne(chatId: number, relations = [] as string[]): Promise<Chat> {
