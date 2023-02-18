@@ -14,6 +14,9 @@ export class GroupChatService {
     @InjectRepository(GroupChat)
     private readonly groupChatRepo: Repository<GroupChat>,
 
+    @InjectRepository(GroupChat)
+    private readonly messageRepo: Repository<Message>,
+
     @InjectRepository(Muted)
     private readonly mutedUserRepo: Repository<Muted>,
 
@@ -83,5 +86,39 @@ export class GroupChatService {
 
     delete chat.password;
     return chat;
+  }
+
+  /* READ */
+
+  async findOne(
+    groupId: number,
+    relations = [] as string[],
+    needPass?: boolean,
+  ): Promise<GroupChat> {
+    let gchat = null;
+
+    if (groupId)
+      gchat = await this.groupChatRepo.findOne({
+        where: { id: groupId },
+        relations,
+      });
+
+    if (!gchat)
+      throw new HttpException('Group Chat not found', HttpStatus.NOT_FOUND);
+
+    if (!needPass) delete gchat.password;
+
+    return gchat;
+  }
+
+  /* DELETE */
+
+  async delete(id: number): Promise<void> {
+    const gchat = await this.findOne(id, ['users', 'muted', 'banned', 'logs']);
+
+    await this.messageRepo.remove(gchat.messages);
+    await this.mutedUserRepo.remove(gchat.muted);
+    await this.bannedUserRepo.remove(gchat.banned);
+    await this.groupChatRepo.remove(gchat);
   }
 }
