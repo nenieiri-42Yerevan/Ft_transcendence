@@ -95,10 +95,10 @@ export class ChatService {
     return chat;
   }
 
-  async findAll(userId: number): Promise<Chat[]> {
+  async findAll(uid: number): Promise<Chat[]> {
     const chats = await this.chatRepo.find({
       relations: ['users', 'messages'],
-      where: { users: { id: userId } },
+      where: { users: { id: uid } },
     });
 
     return chats;
