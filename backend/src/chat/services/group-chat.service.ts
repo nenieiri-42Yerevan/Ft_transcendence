@@ -112,6 +112,27 @@ export class GroupChatService {
     return gchat;
   }
 
+  async findAll(): Promise<GroupChat[]> {
+    const gchats = await this.groupChatRepo.find();
+
+    gchats.forEach((chat) => delete chat.password);
+    return gchats;
+  }
+
+  async findUserChats(uid: number): Promise<GroupChat[]> {
+    const uncompleted: GroupChat[] = await this.groupChatRepo
+      .createQueryBuilder('gchat')
+      .innerJoin('gchat.users', 'user')
+      .where('user.id = :uid', { uid })
+      .getMany();
+
+    const unresolved: Promise<GroupChat>[] = uncompleted.map((gchat) =>
+      this.findOne(gchat.id, ['users', 'muted', 'banned', 'messages']),
+    );
+
+    return await Promise.all(unresolved);
+  }
+
   /* UPDATE */
 
   async updatePassword(
