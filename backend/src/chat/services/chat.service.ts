@@ -90,4 +90,17 @@ export class ChatService {
 
     return chats;
   }
+
+  /* DELETE */
+
+  async delete(chatId: number): Promise<void> {
+    const chat = await this.findOne(chatId, ['messages']);
+
+    try {
+      await this.messageRepo.remove(chat.messages);
+      await this.chatRepo.delete(chat.id);
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
+  }
 }
