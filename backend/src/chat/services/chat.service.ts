@@ -19,7 +19,7 @@ export class ChatService {
 
   /* CREATE */
 
-  async create(users: User[]): Promise<Chat> {
+  async createChat(users: User[]): Promise<Chat> {
     if (users.length > 2)
       throw new HttpException(
         'Too many users for a chat',
@@ -37,12 +37,45 @@ export class ChatService {
     return chat;
   }
 
+  async createMessage(
+    chatId: number,
+    userId: number,
+    text: string,
+  ): Promise<Message> {
+    const chat = await this.findOne(chatId);
+
+    const sender = await this.userService.findOne(userId);
+    const reciever = chat.users.find((user) => user.id != sender.id);
+
+    if (!reciever)
+      throw new HttpException('User not found!', HttpStatus.NOT_FOUND);
+
+    if (reciever.blocked.includes(sender.id))
+      throw new HttpException('User is blocked!', HttpStatus.CONFLICT);
+
+    const message = this.messageRepo.create({ content: text, author: sender });
+
+    try {
+      await this.messageRepo.save(message);
+      await this.chatRepo
+        .createQueryBuilder()
+        .relation(Chat, 'messages')
+        .of(chat)
+        .add(message);
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
+
+    return message;
+  }
+
   /* READ */
 
-  async findOne(id: number, relations = [] as string[]): Promise<Chat> {
+  async findOne(chatId: number, relations = [] as string[]): Promise<Chat> {
     let chat = null;
 
-    if (id) chat = await this.chatRepo.findOne({ where: { id }, relations });
+    if (chatId)
+      chat = await this.chatRepo.findOne({ where: { id: chatId }, relations });
 
     if (!chat) throw new HttpException('Chat not found!', HttpStatus.NOT_FOUND);
 
