@@ -54,6 +54,9 @@ export class User {
   @Column({ default: false })
   TFA_enabled: boolean;
 
+  @Column({ default: null })
+  TFA_secret: string;
+
   @CreateDateColumn({ default: () => 'NOW()' })
   created_at: Date;
 
