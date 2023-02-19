@@ -81,5 +81,6 @@ To be witten...
 | HTTP Verbs | Endpoints                        | Action                            |
 | ---------- | -------------------------------- | --------------------------------- |
 | POST       | /transcendence/auth/signin/local | To login an existing user account |
+| POST       | /transcendence/auth/signin/2FA   | To continue login through 2FA     |
 | POST       | /transcendence/auth/logout       | To logout                         |
 | POST       | /transcendence/auth/refresh      | To get a new pair of tokens       |

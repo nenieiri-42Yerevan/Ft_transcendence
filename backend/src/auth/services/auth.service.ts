@@ -36,19 +36,11 @@ export class AuthService {
   }
 
   // creatinhg user session and connection (2FA)
-  async signinLocalTFA(dto: SignInTFADto): Promise<TokenDto> {
+  async signinTFA(dto: SignInTFADto): Promise<TokenDto> {
     const user = await this.userService.findOne(dto.username);
-
-    if (user && (await argon.verify(user.password, dto.password))) {
-      const tokens = await this.generateJWT(user.id, user.username);
-      const new_session = await this.sessionService.create(
-        tokens.access_token,
-        tokens.refresh_token,
-        user,
-      );
 	  
 	  const verified = speakeasy.totp.verify({
-		 // secret: user.secret,
+		 secret: user.TFA_secret,
 		 encoding: 'base32',
 		 token: dto.TFA,
 		 window: 1
@@ -56,8 +48,14 @@ export class AuthService {
 	  if (!verified)
 		  throw new HttpException('Wrong TFA', HttpStatus.NOT_FOUND);
 
+      const tokens = await this.generateJWT(user.id, user.username);
+      const new_session = await this.sessionService.create(
+        tokens.access_token,
+        tokens.refresh_token,
+        user,
+      );
+
       return tokens;
-    } else throw new HttpException('Wrong password', HttpStatus.NOT_FOUND);
   }
 
   // logout
@@ -135,22 +133,24 @@ export class AuthService {
     return user;
   }
 
-  async enableTFA(userId: number)
+  async enableTFA(userId: number) : Promise<string>
   {
     const user = await this.userService.findOne(userId);
 	  try
 	  {
 		  const secret = speakeasy.generateSecret().base32;
-		  // add this secret to user table 2FA and return it
+		  user.TFA_secret = secret;
+		  return secret;
 	  } catch (error)
 	  {
-		  throw new HttpException('Error generating the secret', HttpStatus.INTERNAL_SERVER_ERROR);
+		  throw new HttpException('Error when generating the 2FA secret', 
+		  							HttpStatus.INTERNAL_SERVER_ERROR);
 	  }
   }
 
   async disableTFA(userId: number)
   {
     const user = await this.userService.findOne(userId);
-	  // delete secret from user table 2FA
+	user.TFA_secret = null;
   }
 }

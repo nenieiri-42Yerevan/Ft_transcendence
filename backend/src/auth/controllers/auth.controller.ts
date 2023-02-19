@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import { AtGuard, RtGuard } from '../../common/guards';
 import { AuthService } from '../services/auth.service';
-import { SignInDto, TokenDto } from '../dto';
+import { SignInDto, SignInTFADto, TokenDto } from '../dto';
 import { Request } from 'express';
 import { GetUser, GetUserId, Public } from '../../common/decorators';
 
@@ -22,6 +22,13 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   signinLocal(@Body() dto: SignInDto): Promise<TokenDto> {
     return this.authService.signinLocal(dto);
+  }
+
+  @Public()
+  @Post('signin/2FA')
+  @HttpCode(HttpStatus.OK)
+  signinTFA(@Body() dto: SignInTFADto): Promise<TokenDto> {
+    return this.authService.signinTFA(dto);
   }
 
   @Public()
