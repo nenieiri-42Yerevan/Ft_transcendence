@@ -29,8 +29,8 @@ export class AuthService {
         tokens.refresh_token,
         user,
       );
-//	  if (user.TFA_enabled == true)
-//		  return ;
+	  if (user.TFA_enabled == true)
+		  throw new HttpException(user.username, HttpStatus.FORBIDDEN);
       return tokens;
     } else throw new HttpException('Wrong password', HttpStatus.NOT_FOUND);
   }

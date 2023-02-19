@@ -31,12 +31,11 @@ export class AuthController {
     return this.authService.signinTFA(dto);
   }
 
-  @Public()
-  @UseGuards(RtGuard)
+  @UseGuards(AtGuard)
   @Post('logout')
   @HttpCode(HttpStatus.OK)
-  logout(@GetUser('refreshToken') refreshToken: string) {
-	  this.authService.logout(refreshToken);
+  logout(@GetUser('accessToken') accessToken: string) {
+	  this.authService.logout(accessToken);
   }
 
   @Public()
