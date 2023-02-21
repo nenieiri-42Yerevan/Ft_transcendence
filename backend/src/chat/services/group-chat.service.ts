@@ -291,7 +291,7 @@ export class GroupChatService {
         HttpStatus.FORBIDDEN,
       );
 
-    if (!chat.users.find((user1) => user1.id == user.id))
+    if (!chat.users.find((u) => u.id == user.id))
       throw new HttpException(
         'User is not in the group!',
         HttpStatus.NOT_FOUND,
@@ -321,6 +321,46 @@ export class GroupChatService {
     try {
       await this.groupChatRepo.save(chat);
       await this.bannedUserRepo.save(banned);
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  async muteUser(uid: number, gchatId: number, adminId: number): Promise<void> {
+    const user = await this.userService.findOne(uid);
+    const admin = await this.userService.findOne(adminId);
+    const chat = await this.findOne(gchatId, ['users', 'muted']);
+
+    if (chat.owner.id == user.id)
+      throw new HttpException(
+        'The owner cannot be muted!',
+        HttpStatus.FORBIDDEN,
+      );
+
+    if (!chat.users.find((u) => u.id == user.id))
+      throw new HttpException(
+        'User is not in the group!',
+        HttpStatus.NOT_FOUND,
+      );
+
+    if (!chat.admins.find((adminId) => adminId == admin.id))
+      throw new HttpException(
+        'User is not an admin in this group!',
+        HttpStatus.FORBIDDEN,
+      );
+
+    if (chat.muted.find((u) => u.user.id == user.id))
+      throw new HttpException('User is already muted!', HttpStatus.FORBIDDEN);
+
+    const time = new Date(Date.now() + temporary);
+    const muted = this.mutedUserRepo.create({
+      user,
+      endOfMute: time,
+      group: chat,
+    });
+
+    try {
+      await this.mutedUserRepo.save(muted);
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
