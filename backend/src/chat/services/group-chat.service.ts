@@ -7,6 +7,8 @@ import { Banned, GroupChat, Message, Muted } from '../entities';
 import * as argon from 'argon2';
 import { PasswordDto } from '../dto/password.dto';
 
+const temporary = 30 * 60 * 1000;
+
 @Injectable()
 export class GroupChatService {
   constructor(
@@ -276,5 +278,51 @@ export class GroupChatService {
     if (index == -1) return;
 
     await this.bannedUserRepo.delete(user.id);
+  }
+
+  async banUser(uid: number, gchatId: number, adminId: number): Promise<void> {
+    const admin = await this.userService.findOne(adminId);
+    const user = await this.userService.findOne(uid);
+    const chat = await this.findOne(gchatId, ['users', 'banned']);
+
+    if (chat.owner.id == user.id)
+      throw new HttpException(
+        'The owner cannot be banned!',
+        HttpStatus.FORBIDDEN,
+      );
+
+    if (!chat.users.find((user1) => user1.id == user.id))
+      throw new HttpException(
+        'User is not in the group!',
+        HttpStatus.NOT_FOUND,
+      );
+
+    if (!chat.admins.find((adminId) => adminId == admin.id))
+      throw new HttpException(
+        'User is not an admin in this group!',
+        HttpStatus.FORBIDDEN,
+      );
+
+    if (chat.banned.find((banned) => banned.user.id == user.id))
+      throw new HttpException('User is already banned!', HttpStatus.FORBIDDEN);
+
+    const time = new Date(Date.now() + temporary);
+    const banned = this.bannedUserRepo.create({
+      user,
+      endOfBan: time,
+      group: chat,
+    });
+
+    chat.users.splice(
+      chat.users.findIndex((u) => u.id == user.id),
+      1,
+    );
+
+    try {
+      await this.groupChatRepo.save(chat);
+      await this.bannedUserRepo.save(banned);
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
   }
 }
