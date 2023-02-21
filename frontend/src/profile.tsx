@@ -9,7 +9,11 @@ import Fields from './Fields'
 const Profile = () => {
     const [username, setUsername] = useState('');
     useEffect(() => {
-        axios.get('http://127.0.0.1:7000/transcendence/user:' + sessionStorage.getItem('access_token'))
+        axios.get('http://127.0.0.1:7000/transcendence/user/' + sessionStorage.getItem('refresh_token'), {
+            headers: {
+                'authorization': 'Bearer ' + sessionStorage.getItem('access_token')
+            }
+        })
         .then(response => setUsername(response.data.username))
         .catch(error => console.log(error));
     }, []);

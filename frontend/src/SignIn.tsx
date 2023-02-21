@@ -22,11 +22,13 @@ const SignIn = () => {
             const response = await axios
             .post('http://127.0.0.1:7000/transcendence/auth/signin/local', sendData)
             const accessToken = response.data.access_token;
-             if (!accessToken) {
+            const refreshToken = response.data.refresh_token;
+            console.log(response);
+             if (!accessToken || !refreshToken) {
                 return { [FORM_ERROR]: "Something is wrong" }
             }
             sessionStorage.setItem("access_token", accessToken);
-            console.log(response);
+            sessionStorage.setItem("refresh_token", refreshToken);
         }
     catch (error: any) {
         console.log(error);
