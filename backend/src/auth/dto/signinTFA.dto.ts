@@ -6,8 +6,5 @@ export class SignInTFADto
 	username: string;
 
 	@IsNotEmpty()
-	password: string;
-
-	@IsNotEmpty()
 	TFA: string;
 }
