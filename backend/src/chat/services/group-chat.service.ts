@@ -119,7 +119,7 @@ export class GroupChatService {
     return gchats;
   }
 
-  async findUserChats(uid: number): Promise<GroupChat[]> {
+  async findUserGroups(uid: number): Promise<GroupChat[]> {
     const uncompleted: GroupChat[] = await this.groupChatRepo
       .createQueryBuilder('gchat')
       .innerJoin('gchat.users', 'user')
@@ -175,13 +175,38 @@ export class GroupChatService {
     }
   }
 
-  async checkPassword(id: number, password: string): Promise<boolean> {
-    if (!password) return false;
+  async addUser(gchat: GroupChat, uid: number): Promise<void> {
+    const user = await this.userService.findOne(uid);
+    const chat = await this.findOne(gchat.id, ['users', 'banned'], true);
 
-    const gchat = await this.findOne(id, [], true);
-    if (!gchat) return false;
+    if (!chat.public) {
+      let valid = true;
 
-    return await argon.verify(gchat.password, password);
+      if (chat.password)
+        valid = await argon.verify(gchat.password, chat.password);
+      if (!valid)
+        throw new HttpException('Incorrect password', HttpStatus.FORBIDDEN);
+    }
+
+    for (const banned of chat.banned) {
+      if (banned.user.id == user.id) {
+        const time = new Date();
+
+        if (banned.endOfBan > time)
+          throw new HttpException('User is banned!', HttpStatus.FORBIDDEN);
+
+        await this.unbannUser(banned, chat);
+      }
+    }
+
+    if (chat.users.find((user1) => user1.id == user.id))
+      throw new HttpException('User is already in group!', HttpStatus.CONFLICT);
+
+    await this.groupChatRepo
+      .createQueryBuilder()
+      .relation(GroupChat, 'users')
+      .of(chat)
+      .add(user);
   }
 
   /* DELETE */
@@ -232,5 +257,24 @@ export class GroupChatService {
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
+  }
+
+  /* UTILS */
+
+  async checkPassword(id: number, password: string): Promise<boolean> {
+    if (!password) return false;
+
+    const gchat = await this.findOne(id, [], true);
+    if (!gchat) return false;
+
+    return await argon.verify(gchat.password, password);
+  }
+
+  async unbannUser(user: Banned, gchat: GroupChat): Promise<void> {
+    const index = gchat.banned.findIndex((user1) => user1.id == user.id);
+
+    if (index == -1) return;
+
+    await this.bannedUserRepo.delete(user.id);
   }
 }
