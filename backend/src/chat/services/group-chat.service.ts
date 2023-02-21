@@ -211,75 +211,6 @@ export class GroupChatService {
       .add(user);
   }
 
-  /* DELETE */
-
-  async delete(id: number): Promise<void> {
-    const gchat = await this.findOne(id, ['users', 'muted', 'banned', 'logs']);
-
-    await this.messageRepo.remove(gchat.messages);
-    await this.mutedUserRepo.remove(gchat.muted);
-    await this.bannedUserRepo.remove(gchat.banned);
-    await this.groupChatRepo.remove(gchat);
-  }
-
-  async deleteUserFromGroup(
-    uid: number,
-    gid: number,
-    admin?: number,
-  ): Promise<void> {
-    const user = await this.userService.findOne(uid);
-    const gchat = await this.findOne(gid, ['users']);
-
-    if (admin && admin != user.id) {
-      if (gchat.admins.indexOf(admin) == -1)
-        throw new HttpException(
-          "User isn't admin in the group",
-          HttpStatus.FORBIDDEN,
-        );
-
-      if (user.id == gchat.owner.id)
-        throw new HttpException('Cannot kick the owner', HttpStatus.FORBIDDEN);
-
-      const index = gchat.admins.indexOf(user.id);
-      if (index != -1) gchat.admins.splice(index, 1);
-    } else if (user.id == gchat.owner.id) return await this.delete(gchat.id);
-
-    {
-      const index = gchat.users.findIndex((user1) => user1.id == user.id);
-      if (index == -1)
-        throw new HttpException(
-          'User is not in the group',
-          HttpStatus.NOT_FOUND,
-        );
-      gchat.users.splice(index, 1);
-    }
-
-    try {
-      await this.groupChatRepo.save(gchat);
-    } catch (error) {
-      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
-    }
-  }
-
-  /* UTILS */
-
-  async checkPassword(id: number, password: string): Promise<boolean> {
-    if (!password) return false;
-
-    const gchat = await this.findOne(id, [], true);
-    if (!gchat) return false;
-
-    return await argon.verify(gchat.password, password);
-  }
-
-  async unbannUser(user: Banned, gchat: GroupChat): Promise<void> {
-    const index = gchat.banned.findIndex((user1) => user1.id == user.id);
-
-    if (index == -1) return;
-
-    await this.bannedUserRepo.delete(user.id);
-  }
-
   async banUser(uid: number, gchatId: number, adminId: number): Promise<void> {
     const admin = await this.userService.findOne(adminId);
     const user = await this.userService.findOne(uid);
@@ -364,5 +295,81 @@ export class GroupChatService {
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
+  }
+
+  /* DELETE */
+
+  async delete(id: number): Promise<void> {
+    const gchat = await this.findOne(id, ['users', 'muted', 'banned', 'logs']);
+
+    await this.messageRepo.remove(gchat.messages);
+    await this.mutedUserRepo.remove(gchat.muted);
+    await this.bannedUserRepo.remove(gchat.banned);
+    await this.groupChatRepo.remove(gchat);
+  }
+
+  async deleteUserFromGroup(
+    uid: number,
+    gid: number,
+    admin?: number,
+  ): Promise<void> {
+    const user = await this.userService.findOne(uid);
+    const gchat = await this.findOne(gid, ['users']);
+
+    if (admin && admin != user.id) {
+      if (gchat.admins.indexOf(admin) == -1)
+        throw new HttpException(
+          "User isn't admin in the group",
+          HttpStatus.FORBIDDEN,
+        );
+
+      if (user.id == gchat.owner.id)
+        throw new HttpException('Cannot kick the owner', HttpStatus.FORBIDDEN);
+
+      const index = gchat.admins.indexOf(user.id);
+      if (index != -1) gchat.admins.splice(index, 1);
+    } else if (user.id == gchat.owner.id) return await this.delete(gchat.id);
+
+    {
+      const index = gchat.users.findIndex((user1) => user1.id == user.id);
+      if (index == -1)
+        throw new HttpException(
+          'User is not in the group',
+          HttpStatus.NOT_FOUND,
+        );
+      gchat.users.splice(index, 1);
+    }
+
+    try {
+      await this.groupChatRepo.save(gchat);
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  async unbannUser(user: Banned, gchat: GroupChat): Promise<void> {
+    const index = gchat.banned.findIndex((user1) => user1.id == user.id);
+
+    if (index == -1) return;
+
+    await this.bannedUserRepo.delete(user.id);
+  }
+
+  async unmuteUser(user: Muted, gchat: GroupChat): Promise<void> {
+    const index = gchat.muted.findIndex((user1) => user1.id == user.id);
+    if (index == -1) return;
+
+    await this.mutedUserRepo.delete(user.id);
+  }
+
+  /* UTILS */
+
+  async checkPassword(id: number, password: string): Promise<boolean> {
+    if (!password) return false;
+
+    const gchat = await this.findOne(id, [], true);
+    if (!gchat) return false;
+
+    return await argon.verify(gchat.password, password);
   }
 }
