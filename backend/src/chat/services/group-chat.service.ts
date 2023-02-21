@@ -297,6 +297,46 @@ export class GroupChatService {
     }
   }
 
+  async addMessage(id: number, message: string, uid: number): Promise<void> {
+    const user = await this.userService.findOne(uid);
+    const chat = await this.findOne(id, ['users', 'messages', 'muted']);
+
+    if (!chat.users.find((u) => u.id == user.id))
+      throw new HttpException('User is not in the group', HttpStatus.NOT_FOUND);
+
+    {
+      const muted = chat.muted.find((u) => u.user.id == user.id);
+
+      if (muted) {
+        const time = new Date();
+
+        if (muted.endOfMute > time)
+          throw new HttpException(
+            'User is muted from this group!',
+            HttpStatus.FORBIDDEN,
+          );
+
+        await this.unmuteUser(muted, chat);
+      }
+    }
+
+    const log = this.logRepository.create({
+      content: message,
+      author: user,
+    });
+
+    try {
+      await this.logRepository.save(log);
+      await this.groupChatRepo
+        .createQueryBuilder()
+        .relation(GroupChat, 'messages')
+        .of(chat)
+        .add(log);
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
+  }
+
   /* DELETE */
 
   async delete(id: number): Promise<void> {
