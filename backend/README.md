@@ -61,7 +61,7 @@ To be witten...
 | GET        | /transcendence/user:id               | To get a user by id                      |
 | GET        | /transcendence/user:username         | To get a user by username                |
 =======
-| GET        | /transcendence/user:token            | To get a user by session refresh token   |
+| GET        | /transcendence/user/getUser          | To get a user                            |
 | GET        | /transcendence/user:id/avatar        | To get a user's avatar by user id        |
 | GET        | /transcendence/user:id/matches       | To get a user's match history by user id |
 | GET        | /transcendence/user:id/follows       | To get all users followd by another user |
