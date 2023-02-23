@@ -56,7 +56,7 @@ export class ChatController {
     return this.groupChatService.createGroupChat(gchat, uid);
   }
 
-  @Post('/message/create//:cid/:uid')
+  @Post('/message/create/:cid/:uid')
   createChatMessage(
     @Param('cid', ParseIntPipe) cid: number,
     @Param('uid', ParseIntPipe) uid: number,
@@ -74,7 +74,7 @@ export class ChatController {
     return this.groupChatService.updatePassword(pass, gid, uid);
   }
 
-  @Post('/message/create//:cid/:uid')
+  @Post('/group/message/add/:cid/:uid')
   addMessage(
     @Param('cid', ParseIntPipe) cid: number,
     @Param('uid', ParseIntPipe) uid: number,
