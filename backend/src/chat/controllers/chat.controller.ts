@@ -117,4 +117,9 @@ export class ChatController {
   unmuteUser(@Body() user: Muted, @Body() gchat: GroupChat): Promise<void> {
     return this.groupChatService.unmuteUser(user, gchat);
   }
+
+  @Delete('/group/delete/:uid')
+  delete(@Param('uid', ParseIntPipe) uid: number): Promise<void> {
+    return this.groupChatService.delete(uid);
+  }
 }

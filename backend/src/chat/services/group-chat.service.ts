@@ -211,7 +211,7 @@ export class GroupChatService {
       .add(user);
   }
 
-  async banUser(uid: number, gchatId: number, adminId: number): Promise<void> {
+  async bannUser(uid: number, gchatId: number, adminId: number): Promise<void> {
     const admin = await this.userService.findOne(adminId);
     const user = await this.userService.findOne(uid);
     const chat = await this.findOne(gchatId, ['users', 'banned']);
