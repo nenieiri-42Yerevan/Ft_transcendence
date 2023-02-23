@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   ParseIntPipe,
@@ -8,7 +9,7 @@ import {
 } from '@nestjs/common';
 import { User } from 'src/user/entities';
 import { PasswordDto } from '../dto/password.dto';
-import { GroupChat, Chat } from '../entities';
+import { GroupChat, Chat, Message, Banned, Muted } from '../entities';
 import { ChatService } from '../services/chat.service';
 import { GroupChatService } from '../services/group-chat.service';
 
@@ -19,9 +20,14 @@ export class ChatController {
     private readonly groupChatService: GroupChatService,
   ) {}
 
-  @Get('/:id')
-  findAll(@Param('id', ParseIntPipe) uid: number): Promise<Chat[]> {
+  @Get('/:uid')
+  findAllForUser(@Param('uid', ParseIntPipe) uid: number): Promise<Chat[]> {
     return this.chatService.findAll(uid);
+  }
+
+  @Get('/:id')
+  findChatById(@Param('id', ParseIntPipe) id: number): Promise<Chat> {
+    return this.chatService.findOne(id);
   }
 
   @Get('/group/')
@@ -29,25 +35,86 @@ export class ChatController {
     return this.groupChatService.findAll();
   }
 
-  @Post('/create/:id')
-  createChat(@Body() users: User[]): Promise<Chat> {
-    return this.chatService.createChat(users);
+  @Get('/group/:gid')
+  findGroupById(@Param('gid', ParseIntPipe) gid: number): Promise<GroupChat> {
+    return this.groupChatService.findOne(gid);
   }
 
-  @Post('/group/create/:id')
+  @Post('/create/:uid/:tid')
+  createChat(
+    @Param('uid', ParseIntPipe) uid: number,
+    @Param('tid', ParseIntPipe) tid: number,
+  ): Promise<Chat> {
+    return this.chatService.openChat(uid, tid);
+  }
+
+  @Post('/group/create/:uid')
   createGroupChat(
-    @Param('id', ParseIntPipe) uid: number,
+    @Param('uid', ParseIntPipe) uid: number,
     @Body() gchat: GroupChat,
   ): Promise<GroupChat> {
     return this.groupChatService.createGroupChat(gchat, uid);
   }
 
+  @Post('/message/create//:cid/:uid')
+  createChatMessage(
+    @Param('cid', ParseIntPipe) cid: number,
+    @Param('uid', ParseIntPipe) uid: number,
+    @Body() text: string,
+  ): Promise<Message> {
+    return this.chatService.createMessage(cid, uid, text);
+  }
+
   @Post('/group/update/:gid/:uid')
-  changePass(
+  updatePassword(
     @Param('gid', ParseIntPipe) gid: number,
     @Param('uid', ParseIntPipe) uid: number,
     @Body() pass: PasswordDto,
   ): Promise<void> {
     return this.groupChatService.updatePassword(pass, gid, uid);
+  }
+
+  @Post('/group/add/:uid')
+  addUser(
+    @Param('uid', ParseIntPipe) uid: number,
+    @Body() gchat: GroupChat,
+  ): Promise<void> {
+    return this.groupChatService.addUser(gchat, uid);
+  }
+
+  @Delete('/group/delete/:uid/:gid/')
+  deleteUserFromGroup(
+    @Param('uid', ParseIntPipe) uid: number,
+    @Param('gid', ParseIntPipe) gid: number,
+  ): Promise<void> {
+    return this.groupChatService.deleteUserFromGroup(uid, gid);
+  }
+
+  @Post('/group/bann/:uid/:gid/:adminId')
+  bannUser(
+    @Param('uid', ParseIntPipe) uid: number,
+    @Param('gid', ParseIntPipe) gid: number,
+    @Param('adminId', ParseIntPipe) adminId: number,
+  ): Promise<void> {
+    return this.groupChatService.bannUser(uid, gid, adminId);
+  }
+
+  @Post('/group/unbann/')
+  unbanUser(@Body() user: Banned, @Body() gchat: GroupChat): Promise<void> {
+    return this.groupChatService.unbannUser(user, gchat);
+  }
+
+  @Post('/group/mute/:uid/:gid/:adminId')
+  muteUser(
+    @Param('uid', ParseIntPipe) uid: number,
+    @Param('gid', ParseIntPipe) gid: number,
+    @Param('adminId', ParseIntPipe) adminId: number,
+  ): Promise<void> {
+    return this.groupChatService.muteUser(uid, gid, adminId);
+  }
+
+  @Post('/group/unbann/')
+  unmuteUser(@Body() user: Muted, @Body() gchat: GroupChat): Promise<void> {
+    return this.groupChatService.unmuteUser(user, gchat);
   }
 }
