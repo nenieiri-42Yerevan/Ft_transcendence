@@ -74,6 +74,15 @@ export class ChatController {
     return this.groupChatService.updatePassword(pass, gid, uid);
   }
 
+  @Post('/message/create//:cid/:uid')
+  addMessage(
+    @Param('cid', ParseIntPipe) cid: number,
+    @Param('uid', ParseIntPipe) uid: number,
+    @Body() text: string,
+  ): Promise<void> {
+    return this.groupChatService.addMessage(cid, text, uid);
+  }
+
   @Post('/group/add/:uid')
   addUser(
     @Param('uid', ParseIntPipe) uid: number,
@@ -118,7 +127,7 @@ export class ChatController {
     return this.groupChatService.unmuteUser(user, gchat);
   }
 
-  @Delete('/group/delete/:uid')
+  @Delete('/delete/:uid')
   delete(@Param('uid', ParseIntPipe) uid: number): Promise<void> {
     return this.groupChatService.delete(uid);
   }
