@@ -29,6 +29,7 @@ const SignIn = () => {
             }
             sessionStorage.setItem("access_token", accessToken);
             sessionStorage.setItem("refresh_token", refreshToken);
+            await getUserInfo();
         }
     catch (error: any) {
         console.log(error);
@@ -37,6 +38,18 @@ const SignIn = () => {
     
         }
     }
+    const getUserInfo = async () => {
+        try {
+          const response = await axios.get('http://localhost:7000/transcendence/user?getuser', {
+            headers: {
+              Authorization: `Bearer ${sessionStorage.getItem('access_token')}`
+            }
+          });
+          console.log(response.data); // Here you can log or handle the user information
+        } catch (error) {
+          console.log(error);
+        }
+      }
     return (
         <>
         <div className="backdrop-blur-md p-0 flex-row lg:px-4 xl:px-16 bg-black/50 min-w-full min-h-full z-[668] absolute flex justify-between bg-clip-padding">
