@@ -7,7 +7,6 @@ import {
   ParseIntPipe,
   Post,
 } from '@nestjs/common';
-import { User } from 'src/user/entities';
 import { PasswordDto } from '../dto/password.dto';
 import { GroupChat, Chat, Message, Banned, Muted } from '../entities';
 import { ChatService } from '../services/chat.service';
