@@ -5,7 +5,10 @@ import PasswordInput from "./Form/inputs/PasswordInput";
 import axios from "axios";
 import { FORM_ERROR } from 'final-form';
 import FormLogin from "Form/formLogin";
+import { useState, useEffect } from 'react';
 import Background from "./background";
+import Profile from "./profile"
+import { useNavigate} from "react-router-dom";
 
 
 interface Data {
@@ -13,6 +16,8 @@ interface Data {
     password: string;
 }
 const SignIn = () => {
+    const [userData, setUserData] = useState<any>(null);
+    const location = useNavigate();
     const onsubmit = async (data: Data) => {
         const sendData = {
             username: data.login,
@@ -29,7 +34,10 @@ const SignIn = () => {
             }
             sessionStorage.setItem("access_token", accessToken);
             sessionStorage.setItem("refresh_token", refreshToken);
-            await getUserInfo();
+            const userInfo = await getUserInfo();
+            setUserData(userInfo);
+            location(`./../profile`);
+
         }
     catch (error: any) {
         console.log(error);
@@ -46,6 +54,7 @@ const SignIn = () => {
             }
           });
           console.log(response.data); // Here you can log or handle the user information
+          return (response.data);
         } catch (error) {
           console.log(error);
         }

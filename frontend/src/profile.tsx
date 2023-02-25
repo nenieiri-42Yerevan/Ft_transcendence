@@ -7,7 +7,6 @@ import axios from 'axios';
 import Fields from './Fields'
 
 const Profile = () => {
-        
     return (
         <>
             <div className = "flex flex-col justify-center backdrop-blur-md min-h-screen min-w-full items-center bg-black/50 z-[668] absolute">
@@ -16,7 +15,7 @@ const Profile = () => {
                         <div className="flex justify-center">
                             <img src = {avatar} className = " block w-[10em] h-fit"></img>
                         </div>
-                        <p className="text-2xl pb-5 text-center">arastepa</p>
+                        <p className="text-2xl pb-5 text-center"></p>
                         <p className=" text-2xl text-center">arastepa@student.42yerevan.am</p>
                         <p className="text-2xl flex justify-between">Win Count <span>1</span></p>
                         <p className="text-2xl flex justify-between">Loss Count <span>1</span></p>
