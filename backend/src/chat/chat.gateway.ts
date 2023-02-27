@@ -32,6 +32,8 @@ export class ChatGateway implements OnGatewayConnection {
     Object.assign(this.server, { cors: { origin } });
   }
 
+  /* Handle Connect/Disconnect */
+
   async handleConnection(client: Socket): Promise<any> {
     try {
       const user = await this.authService.retrieveUser(client);
@@ -47,6 +49,26 @@ export class ChatGateway implements OnGatewayConnection {
       client.data.user = user;
 
       client.emit('info', { user, userGroups, groups, userChats });
+    } catch {}
+  }
+
+  handleDisconnect(client: Socket): Promise<any> {
+    try {
+      if (!client.data.user) return;
+
+      return this.userService.setStatus(client.data.user.id, Status.ONLINE);
+    } catch {}
+  }
+
+  emitGroup(gchat: any, event: string, ...args: any): void {
+    try {
+      if (!gchat.users) return;
+
+      const sockets: any[] = Array.from(this.server.sockets.values());
+      sockets.forEach((socket) => {
+        if (gchat.users.find((user) => user.id == socket.data.user.id))
+          socket.emit(event, ...args);
+      });
     } catch {}
   }
 }
