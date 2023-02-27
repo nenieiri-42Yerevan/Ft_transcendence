@@ -1,0 +1,52 @@
+import { ConfigService } from '@nestjs/config';
+import {
+  OnGatewayConnection,
+  WebSocketGateway,
+  WebSocketServer,
+} from '@nestjs/websockets';
+import { Socket } from 'socket.io';
+import { AuthService } from 'src/auth/services/auth.service';
+import { Status } from 'src/user/entities';
+import { UserService } from 'src/user/services/user.service';
+import { ChatService } from './services/chat.service';
+import { GroupChatService } from './services/group-chat.service';
+
+@WebSocketGateway({
+  cors: { origin: '' },
+  namespace: 'chat',
+})
+export class ChatGateway implements OnGatewayConnection {
+  constructor(
+    private readonly authService: AuthService,
+    private readonly userService: UserService,
+    private readonly groupChatService: GroupChatService,
+    private readonly chatService: ChatService,
+    private readonly configService: ConfigService,
+  ) {}
+
+  @WebSocketServer()
+  server: any;
+
+  afterInit(): void {
+    const origin = this.configService.get<string>('FRONT_URL');
+    Object.assign(this.server, { cors: { origin } });
+  }
+
+  async handleConnection(client: Socket): Promise<any> {
+    try {
+      const user = await this.authService.retrieveUser(client);
+      if (!user) return client.disconnect();
+
+      await this.userService.setStatus(user.id, Status.CHAT);
+
+      const userGroups = await this.groupChatService.findUserGroups(user.id);
+      const userChats = await this.chatService.findAll(user.id);
+
+      const groups = await this.groupChatService.findAll();
+
+      client.data.user = user;
+
+      client.emit('info', { user, userGroups, groups, userChats });
+    } catch {}
+  }
+}
