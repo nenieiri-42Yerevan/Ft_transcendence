@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { ConfigService } from '@nestjs/config';
 import {
   OnGatewayConnection,
