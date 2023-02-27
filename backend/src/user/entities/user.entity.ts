@@ -1,5 +1,4 @@
 import { Chat } from 'src/chat/entities/chat.entity';
-import { GroupChat } from 'src/chat/entities/group-chat.entity';
 import {
   Column,
   CreateDateColumn,
@@ -17,6 +16,7 @@ export enum Status {
   OFFLINE = 0,
   ONLINE,
   GAME,
+  CHAT,
 }
 
 @Entity()
