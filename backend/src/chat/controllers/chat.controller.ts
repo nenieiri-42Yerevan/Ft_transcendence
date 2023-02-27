@@ -64,7 +64,7 @@ export class ChatController {
     return this.chatService.createMessage(cid, uid, text);
   }
 
-  @Post('/group/update/:gid/:uid')
+  @Post('/group/update-pass/:gid/:uid')
   updatePassword(
     @Param('gid', ParseIntPipe) gid: number,
     @Param('uid', ParseIntPipe) uid: number,
@@ -73,13 +73,13 @@ export class ChatController {
     return this.groupChatService.updatePassword(pass, gid, uid);
   }
 
-  @Post('/group/message/add/:cid/:uid')
+  @Post('/group/message/add/:gid/:uid')
   addMessage(
-    @Param('cid', ParseIntPipe) cid: number,
+    @Param('gid', ParseIntPipe) gid: number,
     @Param('uid', ParseIntPipe) uid: number,
     @Body() text: string,
   ): Promise<void> {
-    return this.groupChatService.addMessage(cid, text, uid);
+    return this.groupChatService.addMessage(gid, text, uid);
   }
 
   @Post('/group/add/:uid')
@@ -121,7 +121,7 @@ export class ChatController {
     return this.groupChatService.muteUser(uid, gid, adminId);
   }
 
-  @Post('/group/unbann/')
+  @Post('/group/unmute/')
   unmuteUser(@Body() user: Muted, @Body() gchat: GroupChat): Promise<void> {
     return this.groupChatService.unmuteUser(user, gchat);
   }
