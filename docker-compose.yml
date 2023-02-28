@@ -8,9 +8,9 @@ services:
     ports:
       - 5434:5432
     volumes:
-      - "./backend/data:/var/lib/postgresql"
+      - "./database/data:/var/lib/postgresql"
     networks:
-      - backend
+      - database
     env_file:
       - .env
   
@@ -20,20 +20,38 @@ services:
     ports:
       - 5050:80
     networks:
-      - backend
+      - database
     env_file:
       - .env
   
   frontend:
-    build: ./requirements/
+    build:
+      context: ./
+      dockerfile: ./requirements/frontend/Dockerfile
     container_name: frontend
-    restart: always
+    restart: on-failure
     ports: 
       - 3000:3000
     volumes:
       - "./frontend/:/frontend/"
     networks:
       - frontend
+
+  backend:
+    build:
+      context: ./
+      dockerfile: ./requirements/backend/Dockerfile
+    container_name: backend
+    restart: on-failure
+    depends_on:
+      - postgres
+      - pgadmin
+    ports: 
+      - 7000:7000
+    volumes:
+      - "./backend/:/backend/"
+    networks:
+      - backend
 
 volumes:
   postgres:
@@ -42,7 +60,7 @@ volumes:
     driver_opts:
       type: none
       o: bind
-      device: ./backend/data
+      device: ./database/data
 
   frontend:
     driver: local
@@ -52,7 +70,17 @@ volumes:
       o: bind
       device: ./frontend
 
+  backend:
+    driver: local
+    name: back_srcs
+    driver_opts:
+      type: none
+      o: bind
+      device: ./backend
+
 networks:
+  database:
+
   backend:
 
   frontend:

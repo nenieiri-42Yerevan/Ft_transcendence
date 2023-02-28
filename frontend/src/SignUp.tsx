@@ -97,8 +97,8 @@ const SignUp = () => {
 
     }
     catch (error: any) {
-      console.log(error);
-      console.log(error.response.data.message);
+      // console.log(error);
+      // console.log(error.response.data.message);
       return { [FORM_ERROR]: error.response.data.message }
 
     }

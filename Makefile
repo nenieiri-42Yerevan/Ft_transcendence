@@ -37,7 +37,7 @@ logs:
 
 prune: down
 	@echo "$(RED)█████████████████████ Remove Everything ██████████████████████$(RESET)"
-	@sudo rm -rf backend/data
+	@rm -rf database/data
 	@docker system prune -f
 
 re: prune all
