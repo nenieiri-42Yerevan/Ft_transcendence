@@ -19,3 +19,5 @@ backend/.nyc_output
 
 # database files
 backend/data
+
+frontend/node_modules

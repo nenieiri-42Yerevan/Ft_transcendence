@@ -10,7 +10,7 @@ import { entities } from './index';
       inject: [ConfigService],
       useFactory: (env: ConfigService) => ({
         type: 'postgres',
-        host: 'localhost',
+        host: env.get('POSTGRES_HOST'),
         port: env.get<number>('POSTGRES_PORT'),
         username: env.get('POSTGRES_USER'),
         password: env.get('POSTGRES_PASSWORD'),
