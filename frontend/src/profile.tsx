@@ -5,8 +5,13 @@ import { Link } from "react-router-dom";
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import Fields from './Fields'
+import { useSelector } from 'react-redux';
+import {selectUser} from './Slices/userSlice';
 
 const Profile = () => {
+    const userInfo = useSelector(selectUser);
+    console.log("llll");
+    console.log(userInfo);
     return (
         <>
             <div className = "flex flex-col justify-center backdrop-blur-md min-h-screen min-w-full items-center bg-black/50 z-[668] absolute">
@@ -15,10 +20,9 @@ const Profile = () => {
                         <div className="flex justify-center">
                             <img src = {avatar} className = " block w-[10em] h-fit"></img>
                         </div>
-                        <p className="text-2xl pb-5 text-center"></p>
-                        <p className=" text-2xl text-center">arastepa@student.42yerevan.am</p>
-                        <p className="text-2xl flex justify-between">Win Count <span>1</span></p>
-                        <p className="text-2xl flex justify-between">Loss Count <span>1</span></p>
+                        <p className="text-2xl pb-5 text-center">{userInfo.username}</p>
+                        <p className=" text-2xl text-center">{userInfo.email}</p>
+                        <p className="text-2xl flex justify-between">Rank: <span>{userInfo.rank}</span></p>
                     </div>
                     <div className="m-5 flex w-[30em] flex-col justify-start min-w-full lg:min-w-fit h-fit p-8 bg-[#9e9c9c33] rounded-md shadow-lg">
                         <div>

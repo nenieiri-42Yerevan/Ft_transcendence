@@ -1,14 +1,13 @@
 import React from "react";
 import { Form, Field } from "react-final-form";
-import TextInput from "./Form/inputs/TextInput";
-import PasswordInput from "./Form/inputs/PasswordInput";
 import axios from "axios";
 import { FORM_ERROR } from 'final-form';
 import FormLogin from "Form/formLogin";
-import { useState, useEffect } from 'react';
 import Background from "./background";
-import Profile from "./profile"
 import { useNavigate} from "react-router-dom";
+import { useDispatch, useSelector } from 'react-redux';
+import { selectUser, setUserInfo } from './Slices/userSlice';
+import {fetchUserImage} from './Slices/userSlice';
 
 
 interface Data {
@@ -16,28 +15,28 @@ interface Data {
     password: string;
 }
 const SignIn = () => {
-    const [userData, setUserData] = useState<any>(null);
     const location = useNavigate();
+    const dispatch = useDispatch();
+    const info = useSelector(selectUser);
     const onsubmit = async (data: Data) => {
         const sendData = {
             username: data.login,
             password: data.password,
         };
-    try {
+        try {
             const response = await axios
             .post('http://127.0.0.1:7000/transcendence/auth/signin/local', sendData)
             const accessToken = response.data.access_token;
             const refreshToken = response.data.refresh_token;
             console.log(response);
-             if (!accessToken || !refreshToken) {
+            if (!accessToken || !refreshToken) {
                 return { [FORM_ERROR]: "Something is wrong" }
             }
             sessionStorage.setItem("access_token", accessToken);
             sessionStorage.setItem("refresh_token", refreshToken);
             const userInfo = await getUserInfo();
-            setUserData(userInfo);
-            location(`./../profile`);
-
+            dispatch(setUserInfo(userInfo));
+            {userInfo && location(`./../profile`)};
         }
     catch (error: any) {
         console.log(error);
@@ -53,7 +52,7 @@ const SignIn = () => {
               Authorization: `Bearer ${sessionStorage.getItem('access_token')}`
             }
           });
-          console.log(response.data); // Here you can log or handle the user information
+          await fetchUserImage(dispatch, info);
           return (response.data);
         } catch (error) {
           console.log(error);
