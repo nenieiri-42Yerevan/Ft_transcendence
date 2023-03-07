@@ -10,7 +10,6 @@ import {selectUser} from './Slices/userSlice';
 
 const Profile = () => {
     const userInfo = useSelector(selectUser);
-    console.log("llll");
     console.log(userInfo);
     return (
         <>
