@@ -119,8 +119,6 @@ export class GroupChatService {
     gchats.forEach((chat) => delete chat.password);
     return gchats;
   }
-
-
   async findUserGroups(uid: number): Promise<GroupChat[]> {
     const uncompleted: GroupChat[] = await this.groupChatRepo
       .createQueryBuilder('gchat')
