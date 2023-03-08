@@ -16,7 +16,7 @@ import { Match, User } from '../entities';
 import { AvatarService } from '../services/avatar.service';
 import { UserService } from '../services/user.service';
 import { Response } from 'express';
-import { Public } from '../../common/decorators';
+import { Public, GetUserId } from '../../common/decorators';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { SessionService } from '../services/session.service';
 
@@ -43,9 +43,9 @@ export class UserController {
     return this.userService.findOne(username);
   }
 
-  @Get('/:token')
-  findBySession(@Param('token') rtoken: string): Promise<User> {
-    return this.sessionService.findOneBytoken(rtoken);
+  @Get('/getUser')
+  findBySession(@GetUserId() userId: number): Promise<User> {
+    return this.userService.findOne(userId);
   }
 
   @Get('/:id/avatar')

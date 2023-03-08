@@ -13,20 +13,28 @@ interface Data {
     password: string;
 }
 const SignIn = () => {
+    const location = useNavigate();
+    const dispatch = useDispatch();
+    const info = useSelector(selectUser);
     const onsubmit = async (data: Data) => {
         const sendData = {
             username: data.login,
             password: data.password,
         };
-    try {
+        try {
             const response = await axios
             .post('http://127.0.0.1:7000/transcendence/auth/signin/local', sendData)
             const accessToken = response.data.access_token;
-             if (!accessToken) {
+            const refreshToken = response.data.refresh_token;
+            console.log(response);
+            if (!accessToken || !refreshToken) {
                 return { [FORM_ERROR]: "Something is wrong" }
             }
             sessionStorage.setItem("access_token", accessToken);
-            console.log(response);
+            sessionStorage.setItem("refresh_token", refreshToken);
+            const userInfo = await getUserInfo();
+            dispatch(setUserInfo(userInfo));
+            {userInfo && location(`./../profile`)};
         }
     catch (error: any) {
         console.log(error);
@@ -35,6 +43,19 @@ const SignIn = () => {
     
         }
     }
+    const getUserInfo = async () => {
+        try {
+          const response = await axios.get('http://localhost:7000/transcendence/user?getuser', {
+            headers: {
+              Authorization: `Bearer ${sessionStorage.getItem('access_token')}`
+            }
+          });
+          await fetchUserImage(dispatch, info);
+          return (response.data);
+        } catch (error) {
+          console.log(error);
+        }
+      }
     return (
         <>
             <div className="backdrop-blur-md p-0 lg:px-4 xl:px-16 bg-black/50 min-w-full min-h-full z-[668] absolute flex justify-between bg-clip-padding">

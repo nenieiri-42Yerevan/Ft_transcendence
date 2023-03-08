@@ -8,7 +8,6 @@ import * as argon from 'argon2';
 import { PasswordDto } from '../dto/password.dto';
 
 const temporary = 30 * 60 * 1000;
-
 @Injectable()
 export class GroupChatService {
   constructor(
@@ -120,7 +119,6 @@ export class GroupChatService {
     gchats.forEach((chat) => delete chat.password);
     return gchats;
   }
-
   async findUserGroups(uid: number): Promise<GroupChat[]> {
     const uncompleted: GroupChat[] = await this.groupChatRepo
       .createQueryBuilder('gchat')
@@ -176,7 +174,6 @@ export class GroupChatService {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
   }
-
   async addUser(gchat: GroupChat, uid: number): Promise<void> {
     const user = await this.userService.findOne(uid);
     const chat = await this.findOne(gchat.id, ['users', 'banned'], true);
