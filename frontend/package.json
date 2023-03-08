@@ -6,6 +6,7 @@
     "@lemoncode/fonk": "^1.5.4",
     "@lemoncode/fonk-final-form": "^2.3.4",
     "@mierak/react-virtualized-grid": "^0.0.5-ALPHA",
+    "@mui/material": "^5.11.8",
     "@react-three/drei": "^9.54.2",
     "@react-three/fiber": "^8.10.1",
     "@reduxjs/toolkit": "^1.9.3",

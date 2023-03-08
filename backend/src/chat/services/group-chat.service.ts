@@ -7,6 +7,7 @@ import { Banned, GroupChat, Message, Muted } from '../entities';
 import * as argon from 'argon2';
 import { PasswordDto } from '../dto/password.dto';
 
+const temporary = 30 * 60 * 1000;
 @Injectable()
 export class GroupChatService {
   constructor(
@@ -119,7 +120,8 @@ export class GroupChatService {
     return gchats;
   }
 
-  async findUserChats(uid: number): Promise<GroupChat[]> {
+
+  async findUserGroups(uid: number): Promise<GroupChat[]> {
     const uncompleted: GroupChat[] = await this.groupChatRepo
       .createQueryBuilder('gchat')
       .innerJoin('gchat.users', 'user')
@@ -174,14 +176,164 @@ export class GroupChatService {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
   }
+  async addUser(gchat: GroupChat, uid: number): Promise<void> {
+    const user = await this.userService.findOne(uid);
+    const chat = await this.findOne(gchat.id, ['users', 'banned'], true);
 
-  async checkPassword(id: number, password: string): Promise<boolean> {
-    if (!password) return false;
+    if (!chat.public) {
+      let valid = true;
 
-    const gchat = await this.findOne(id, [], true);
-    if (!gchat) return false;
+      if (chat.password)
+        valid = await argon.verify(gchat.password, chat.password);
+      if (!valid)
+        throw new HttpException('Incorrect password', HttpStatus.FORBIDDEN);
+    }
 
-    return await argon.verify(gchat.password, password);
+    for (const banned of chat.banned) {
+      if (banned.user.id == user.id) {
+        const time = new Date();
+
+        if (banned.endOfBan > time)
+          throw new HttpException('User is banned!', HttpStatus.FORBIDDEN);
+
+        await this.unbannUser(banned, chat);
+      }
+    }
+
+    if (chat.users.find((user1) => user1.id == user.id))
+      throw new HttpException('User is already in group!', HttpStatus.CONFLICT);
+
+    await this.groupChatRepo
+      .createQueryBuilder()
+      .relation(GroupChat, 'users')
+      .of(chat)
+      .add(user);
+  }
+
+  async bannUser(uid: number, gchatId: number, adminId: number): Promise<void> {
+    const admin = await this.userService.findOne(adminId);
+    const user = await this.userService.findOne(uid);
+    const chat = await this.findOne(gchatId, ['users', 'banned']);
+
+    if (chat.owner.id == user.id)
+      throw new HttpException(
+        'The owner cannot be banned!',
+        HttpStatus.FORBIDDEN,
+      );
+
+    if (!chat.users.find((u) => u.id == user.id))
+      throw new HttpException(
+        'User is not in the group!',
+        HttpStatus.NOT_FOUND,
+      );
+
+    if (!chat.admins.find((adminId) => adminId == admin.id))
+      throw new HttpException(
+        'User is not an admin in this group!',
+        HttpStatus.FORBIDDEN,
+      );
+
+    if (chat.banned.find((banned) => banned.user.id == user.id))
+      throw new HttpException('User is already banned!', HttpStatus.FORBIDDEN);
+
+    const time = new Date(Date.now() + temporary);
+    const banned = this.bannedUserRepo.create({
+      user,
+      endOfBan: time,
+      group: chat,
+    });
+
+    chat.users.splice(
+      chat.users.findIndex((u) => u.id == user.id),
+      1,
+    );
+
+    try {
+      await this.groupChatRepo.save(chat);
+      await this.bannedUserRepo.save(banned);
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  async muteUser(uid: number, gchatId: number, adminId: number): Promise<void> {
+    const user = await this.userService.findOne(uid);
+    const admin = await this.userService.findOne(adminId);
+    const chat = await this.findOne(gchatId, ['users', 'muted']);
+
+    if (chat.owner.id == user.id)
+      throw new HttpException(
+        'The owner cannot be muted!',
+        HttpStatus.FORBIDDEN,
+      );
+
+    if (!chat.users.find((u) => u.id == user.id))
+      throw new HttpException(
+        'User is not in the group!',
+        HttpStatus.NOT_FOUND,
+      );
+
+    if (!chat.admins.find((adminId) => adminId == admin.id))
+      throw new HttpException(
+        'User is not an admin in this group!',
+        HttpStatus.FORBIDDEN,
+      );
+
+    if (chat.muted.find((u) => u.user.id == user.id))
+      throw new HttpException('User is already muted!', HttpStatus.FORBIDDEN);
+
+    const time = new Date(Date.now() + temporary);
+    const muted = this.mutedUserRepo.create({
+      user,
+      endOfMute: time,
+      group: chat,
+    });
+
+    try {
+      await this.mutedUserRepo.save(muted);
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  async addMessage(id: number, message: string, uid: number): Promise<void> {
+    const user = await this.userService.findOne(uid);
+    const chat = await this.findOne(id, ['users', 'messages', 'muted']);
+
+    if (!chat.users.find((u) => u.id == user.id))
+      throw new HttpException('User is not in the group', HttpStatus.NOT_FOUND);
+
+    {
+      const muted = chat.muted.find((u) => u.user.id == user.id);
+
+      if (muted) {
+        const time = new Date();
+
+        if (muted.endOfMute > time)
+          throw new HttpException(
+            'User is muted from this group!',
+            HttpStatus.FORBIDDEN,
+          );
+
+        await this.unmuteUser(muted, chat);
+      }
+    }
+
+    const log = this.logRepository.create({
+      content: message,
+      author: user,
+    });
+
+    try {
+      await this.logRepository.save(log);
+      await this.groupChatRepo
+        .createQueryBuilder()
+        .relation(GroupChat, 'messages')
+        .of(chat)
+        .add(log);
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
   }
 
   /* DELETE */
@@ -232,5 +384,31 @@ export class GroupChatService {
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
+  }
+
+  async unbannUser(user: Banned, gchat: GroupChat): Promise<void> {
+    const index = gchat.banned.findIndex((user1) => user1.id == user.id);
+
+    if (index == -1) return;
+
+    await this.bannedUserRepo.delete(user.id);
+  }
+
+  async unmuteUser(user: Muted, gchat: GroupChat): Promise<void> {
+    const index = gchat.muted.findIndex((user1) => user1.id == user.id);
+    if (index == -1) return;
+
+    await this.mutedUserRepo.delete(user.id);
+  }
+
+  /* UTILS */
+
+  async checkPassword(id: number, password: string): Promise<boolean> {
+    if (!password) return false;
+
+    const gchat = await this.findOne(id, [], true);
+    if (!gchat) return false;
+
+    return await argon.verify(gchat.password, password);
   }
 }

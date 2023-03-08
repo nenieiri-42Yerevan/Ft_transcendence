@@ -60,8 +60,7 @@ To be witten...
 | GET        | /transcendence/user                  | To get all the users                     |
 | GET        | /transcendence/user:id               | To get a user by id                      |
 | GET        | /transcendence/user:username         | To get a user by username                |
-=======
-| GET        | /transcendence/user:getUser          | To get a user                            |
+| GET        | /transcendence/user:token            | To get a user by session refresh token   |
 | GET        | /transcendence/user:id/avatar        | To get a user's avatar by user id        |
 | GET        | /transcendence/user:id/matches       | To get a user's match history by user id |
 | GET        | /transcendence/user:id/follows       | To get all users followd by another user |
@@ -84,3 +83,29 @@ To be witten...
 | POST       | /transcendence/auth/signin/2FA   | To continue login through 2FA     |
 | POST       | /transcendence/auth/logout       | To logout                         |
 | POST       | /transcendence/auth/refresh      | To get a new pair of tokens       |
+
+<br>
+
+- Chat routes
+
+<br>
+
+| HTTP Verbs | Endpoints                                          | Action                                         |
+| ---------- | -------------------------------------------------- | ---------------------------------------------- |
+| GET        | /transcendence/chat/:uid                           | To get all DM chats for a user                 |
+| GET        | /transcendence/chat/:id                            | To get a chat by id                            |
+| GET        | /transcendence/chat/group                          | To get all the group chats                     |
+| GET        | /transcendence/chat/:gid                           | To get a group chat by id                      |
+| POST       | /transcendence/chat/create/:uid/:tid               | To create a chat between two users             |
+| POST       | /transcendence/chat/group/create/:uid              | To create a group chat between by a user       |
+| POST       | /transcendence/chat/message/create/:cid/:uid       | To create a message in a chat by a user        |
+| POST       | /transcendence/chat/group/update-pass/:gid/:uid    | To update a group chat password by a user      |
+| POST       | /transcendence/chat/group/message/add/:gid/:uid    | To write a message to a group chat by a user   |
+| POST       | /transcendence/chat/group/message/add/:gid/:uid    | To write a message to a group chat by a user   |
+| POST       | /transcendence/chat/group/add/:uid                 | To add a user to a group chat                  |
+| DELETE     | /transcendence/chat/group/delete/:uid/:gid         | To delete a user from a group chat             |
+| POST       | /transcendence/chat/group/bann/:uid/:gid:/:adminId | To bann a user from a group chat with an admin |
+| POST       | /transcendence/chat/group/unbann                   | To unbann a user given as a Body               |
+| POST       | /transcendence/chat/group/mute/:uid/:gid:/:adminId | To mute a user from a group chat with an admin |
+| POST       | /transcendence/chat/group/unmute                   | To unmute a user given as a Body               |
+| POST       | /transcendence/chat/delete/:uid                    | To delete a user given by id                   |

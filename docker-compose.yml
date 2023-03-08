@@ -2,36 +2,99 @@ version: "3.8"
 
 services:
 
-  postgres:
+  database:
     image: postgres:15
     container_name: database
+    restart: on-failure
     ports:
-      - 5434:5432
+      - 5432:5432
     volumes:
-      - "./backend/data:/var/lib/postgresql"
+      - "./database/data:/var/lib/postgresql"
     networks:
-      - backend
+      - database
     env_file:
       - .env
   
   pgadmin:
     image: dpage/pgadmin4
     container_name: pgadmin
+    restart: on-failure
+    depends_on:
+      - database
     ports:
-      - 5050:80
+      - 5050:5050
     networks:
+      - database
+    env_file:
+      - .env
+  
+  frontend:
+    build:
+      context: ./
+      dockerfile: ./frontend/Dockerfile
+    container_name: frontend
+    restart: on-failure
+    depends_on:
+      - backend
+    ports: 
+      - 3000:3000
+    volumes:
+      - "./frontend/:/frontend/"
+    networks:
+      - frontend
       - backend
     env_file:
       - .env
 
+  backend:
+    build:
+      context: ./
+      dockerfile: ./backend/Dockerfile
+    container_name: backend
+    restart: on-failure
+    depends_on:
+      - database
+    ports: 
+      - 7000:7000
+    volumes:
+      - "./backend/:/backend/"
+    networks:
+      - backend
+      - frontend
+      - database
+    env_file:
+      - .env
+    environment:
+      POSTGRES_HOST: database
+
 volumes:
-  postgres:
+  database:
     driver: local
     name: database
     driver_opts:
       type: none
       o: bind
-      device: ./backend/data
+      device: ./database/data
+
+  frontend:
+    driver: local
+    name: front_srcs
+    driver_opts:
+      type: none
+      o: bind
+      device: ./frontend
+
+  backend:
+    driver: local
+    name: back_srcs
+    driver_opts:
+      type: none
+      o: bind
+      device: ./backend
 
 networks:
+  database:
+
   backend:
+
+  frontend:
