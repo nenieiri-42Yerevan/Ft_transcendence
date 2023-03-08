@@ -12,6 +12,7 @@ import SignIn from "./SignIn";
 import Profile from "./profile";
 import Welcome from "./Welcome";
 import Test from "./Test";
+import Dashboard from "./Dashboard";
 
 
 
@@ -29,6 +30,7 @@ export default function App(props: any) {
           <Route path="/transcendence/user/signin" element={<SignIn />} />
           <Route path="/transcendence/user/profile" element={<Profile />} />
           <Route path="/test" element={<Test />}></Route>
+          <Route path="/dashboard" element={<Dashboard />}></Route>
         </Routes>
       </Router>
     </>
