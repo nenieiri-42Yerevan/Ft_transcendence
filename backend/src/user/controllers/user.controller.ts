@@ -43,9 +43,9 @@ export class UserController {
     return this.userService.findOne(username);
   }
 
-  @Get('/getUser')
-  findBySession(@GetUserId() userId: number): Promise<User> {
-    return this.userService.findOne(userId);
+  @Get('/:token')
+  findBySession(@Param('token') rtoken: string): Promise<User> {
+    return this.sessionService.findOneBytoken(rtoken);
   }
 
   @Get('/:id/avatar')
