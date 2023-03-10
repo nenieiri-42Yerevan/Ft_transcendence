@@ -25,7 +25,12 @@ const SignIn = () => {
              if (!accessToken) {
                 return { [FORM_ERROR]: "Something is wrong" }
             }
+            const refreshToken = response.data.refresh_token;
+             if (!refreshToken) {
+                return { [FORM_ERROR]: "Something is wrong" }
+            }
             sessionStorage.setItem("access_token", accessToken);
+            sessionStorage.setItem("refresh_token", refreshToken);
             console.log(response);
         }
     catch (error: any) {

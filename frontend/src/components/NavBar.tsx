@@ -5,9 +5,11 @@ import { Link } from "react-router-dom";
 
 interface Props {
   activeTab: string;
+  userName?: string;
+  avatarUrl?: string;
 }
 
-const Navigation: FC<Props> = ({ activeTab }) => {
+const Navigation: FC<Props> = ({ activeTab, userName, avatarUrl }) => {
   
   const menuItems = [
     { label: "Dashboard", path: "/dashboard" },
@@ -17,6 +19,8 @@ const Navigation: FC<Props> = ({ activeTab }) => {
     { label: "Game", path: "/new-game" },
   ];
 
+  avatarUrl = avatarUrl ?? avatar;
+  
   return (
     <nav className="flex items-center justify-between flex-wrap bg-black p-6">
       
@@ -41,12 +45,12 @@ const Navigation: FC<Props> = ({ activeTab }) => {
       </div>
       <a className="block mt-4 lg:inline-block lg:mt-0 text-white text-2xl hover:text-gray-500 mr-4 ml-auto">
             <img
-                src={avatar}
-                alt="User Avatar"
+                src={avatarUrl}
+                alt={userName}
                 className="rounded-full h-8 w-8"
               />
             </a>
-          <Link to="/transcendence/user/profile" className="block mt-4 lg:inline-block lg:mt-0 text-white text-2xl hover:text-gray-500 mr-4 ml-auto">UserName</Link>
+          <Link to="/transcendence/user/profile" className="block mt-4 lg:inline-block lg:mt-0 text-white text-2xl hover:text-gray-500 mr-4 ml-auto">{userName}</Link>
       </div>
     </nav>
   );
