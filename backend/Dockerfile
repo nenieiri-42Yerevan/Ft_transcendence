@@ -23,4 +23,4 @@ RUN cd backend && npm install
 EXPOSE 7000
 
 # Start the backend app when the container starts
-CMD ["npm", "run", "server"]
+CMD ["npm", "run", "start:dev", "--watch"]

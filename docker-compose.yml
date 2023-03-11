@@ -22,7 +22,7 @@ services:
     depends_on:
       - database
     ports:
-      - 5050:5050
+      - 5050:80
     networks:
       - database
     env_file:
@@ -57,7 +57,7 @@ services:
     ports: 
       - 7000:7000
     volumes:
-      - "./backend/:/backend/"
+      - "./backend/src:/app/backend/src"
     networks:
       - backend
       - frontend
@@ -90,7 +90,7 @@ volumes:
     driver_opts:
       type: none
       o: bind
-      device: ./backend
+      device: ./backend/src
 
 networks:
   database:

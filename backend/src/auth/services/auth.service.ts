@@ -65,9 +65,9 @@ export class AuthService {
   }
 
   // refresh
-  async refreshTokens(userId: number, rt: string) {
+  async refreshTokens(userId: number, rt: string): Promise<TokenDto> {
+    console.log("BACKEND RT:" + rt);
     const user = await this.userService.findOne(userId, ['sessions']);
-
     if (user) {
       const session = await this.sessionService.read_RT(rt);
       const tokens = await this.generateJWT(user.id, user.username);
@@ -75,6 +75,7 @@ export class AuthService {
         access_token: tokens.access_token,
         refresh_token: tokens.refresh_token,
       } as Session);
+      return tokens;
     } else throw new HttpException('User not found', HttpStatus.NOT_FOUND);
   }
 

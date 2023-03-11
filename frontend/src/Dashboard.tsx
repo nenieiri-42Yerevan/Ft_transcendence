@@ -1,16 +1,18 @@
 import React, { useState } from 'react';
 import Background from "./background";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Navigation from "./components/NavBar";
 import search_img from "./assets/images/search.png";
 import axios from "axios";
 import { useEffect } from 'react';
+import refreshToken from 'Utils/refreshToken';
 
 
 const Dashboard = () => {
     const [UserName, setName] = useState<string | undefined>('');
     const [UserId, setId] = useState('');
     const [AvatarUrl, setAvatar] = useState<string | undefined>();
+    const Navigate = useNavigate();
 
     console.log(`access tkn: ${sessionStorage.getItem("access_token")}`);
     console.log(`refresh tkn: ${sessionStorage.getItem("refresh_token")}`);
@@ -22,20 +24,18 @@ const Dashboard = () => {
                   Authorization: `Bearer ${sessionStorage.getItem('access_token')}`
                 }});
             console.log(response);
-            console.log(response.data[0].username);
             setName(response.data[0].username);
-
             setId(response.data[0].id);
-            //const Avatar = await axios.get(`http://localhost:7000/transcendence/user${userId}/avatar`);
-            //console.log(Avatar);
-            //const Matches = await axios.get(`http://localhost:7000/transcendence/user${userId}/matches`);
-            //console.log(Matches);
         } catch (error:any) {
             console.log(error);
-            
+            if ((await refreshToken()) != 200) {
+                Navigate("/transcendence/user/signin");
+            } else {
+                getUser();
+            }
         }
     }
-
+/*
     const getAvatar = async (UserId:string) => {
         try {
             const Avatar = await axios.get(`http://localhost:7000/transcendence/user${UserId}/avatar`);
@@ -45,10 +45,10 @@ const Dashboard = () => {
             console.log(error);
         }
     }
-
+*/
+    //refreshToken(Navigate);
     useEffect(() => {
         getUser();
-        getAvatar(UserId);
       }, []);
       console.log(`UserName : ${UserName}`);
       console.log(`Avatar : ${AvatarUrl}`);
