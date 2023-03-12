@@ -9,7 +9,7 @@ services:
     ports:
       - 5432:5432
     volumes:
-      - "./database/data:/var/lib/postgresql"
+      - "./database/data:/var/lib/postgresql/data"
     networks:
       - database
     env_file:
