@@ -14,9 +14,6 @@ pnpm-debug.log*
 coverage
 .nyc_output
 
-# database files
-data
-
 # Items that don't need to be in a Docker image.
 # Anything not used by the build system should go here.
 Dockerfile
