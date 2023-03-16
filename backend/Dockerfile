@@ -1,20 +1,21 @@
 # Use an official Node.js runtime as a parent image
 FROM node:18
 
+# RUN npm install -g @nestjs/cli
+
+RUN mkdir -p /app/backend
+
 # Set the working directory to /app
-WORKDIR /app
+WORKDIR /app/backend
 
-# RUN npm install -g react-scripts
+COPY package*.json .
 
-COPY ./package*.json /app
-
+# Install dependencies in the backend folder
 RUN npm install
 
 # Copy the backend folder into the container
-COPY ./backend /app/backend
+COPY . .
 
-# Install dependencies in the backend folder
-RUN cd backend && npm install
 
 # # Build the app for production
 # RUN npm run build --prefix backend
@@ -23,4 +24,4 @@ RUN cd backend && npm install
 EXPOSE 7000
 
 # Start the backend app when the container starts
-CMD ["npm", "run", "server"]
+CMD ["npm", "run", "start:dev"]
