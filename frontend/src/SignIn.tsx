@@ -8,6 +8,7 @@ import { useNavigate} from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 import { selectUser, setUserInfo } from './Slices/userSlice';
 import {fetchUserImage} from './Slices/userSlice';
+import { NeverStencilFunc } from "three";
 
 
 interface Data {
@@ -47,12 +48,14 @@ const SignIn = () => {
     }
     const getUserInfo = async () => {
         try {
-          const response = await axios.get('http://localhost:7000/transcendence/user?getuser', {
+          const response = await axios.get(`http://localhost:7000/transcendence/user?token=${sessionStorage.getItem('refresh_token')}`, {
             headers: {
               Authorization: `Bearer ${sessionStorage.getItem('access_token')}`
             }
           });
           await fetchUserImage(dispatch, info);
+          console.log("nnn");
+          console.log(response.data);
           return (response.data);
         } catch (error) {
           console.log(error);

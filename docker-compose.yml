@@ -33,13 +33,13 @@ services:
       context: ./
       dockerfile: ./frontend/Dockerfile
     container_name: frontend
-    restart: on-failure
+    restart: always
     depends_on:
       - backend
     ports: 
       - 3000:3000
     volumes:
-      - "./frontend/:/frontend/"
+      - "./frontend/:/app/frontend/"
     networks:
       - frontend
       - backend
@@ -57,7 +57,7 @@ services:
     ports: 
       - 7000:7000
     volumes:
-      - "./backend/:/backend/"
+      - "./backend/:/app/backend/"
     networks:
       - backend
       - frontend
