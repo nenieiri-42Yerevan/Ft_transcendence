@@ -57,7 +57,7 @@ services:
     ports: 
       - 7000:7000
     volumes:
-      - "./backend/:/app/backend/"
+      - "./backend/:/backend/"
     networks:
       - backend
       - frontend

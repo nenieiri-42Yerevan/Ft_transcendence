@@ -8,8 +8,6 @@ import { useNavigate} from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 import { selectUser, setUserInfo } from './Slices/userSlice';
 import {fetchUserImage} from './Slices/userSlice';
-import { NeverStencilFunc } from "three";
-
 
 interface Data {
     login: string;
