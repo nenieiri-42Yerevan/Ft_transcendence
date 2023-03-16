@@ -51,13 +51,13 @@ services:
       context: ./
       dockerfile: ./backend/Dockerfile
     container_name: backend
-    restart: on-failure
+    restart: always
     depends_on:
       - database
     ports: 
       - 7000:7000
     volumes:
-      - "./backend/:/backend/"
+      - "./backend/:/app/backend/"
     networks:
       - backend
       - frontend
