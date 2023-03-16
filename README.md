@@ -13,4 +13,5 @@
 * [Sargis Hovsepyan (shovsepy)](https://github.com/Sargis-Hovsepyan)
 * [Hovsep Hayrapetyan (hohayrap)](https://github.com/Hoso1999)
 * [Ara Stepanyan (arastepa)](https://github.com/arastepa)
+* [Igor Zheltukhin (rstephan)](https://github.com/Gilliam6)
 * [Volodya Ismailyan (vismaily)](https://github.com/nenieiri)
