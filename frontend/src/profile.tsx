@@ -10,7 +10,6 @@ import {selectUser} from './Slices/userSlice';
 
 const Profile = () => {
     const userInfo = useSelector(selectUser);
-    console.log(userInfo);
     return (
         <>
             <div className = "flex flex-col justify-center backdrop-blur-md min-h-screen min-w-full items-center bg-black/50 z-[668] absolute">
