@@ -3,18 +3,18 @@ FROM node:18
 
 # RUN npm install -g @nestjs/cli
 
-RUN mkdir -p /app/backend
+RUN mkdir -p /backend
 
 # Set the working directory to /app
-WORKDIR /app/backend
+WORKDIR /backend
 
-COPY package*.json .
+COPY --chown=node:node package*.json .
 
 # Install dependencies in the backend folder
 RUN npm install
 
 # Copy the backend folder into the container
-COPY . .
+COPY --chown=node:node . .
 
 
 # # Build the app for production

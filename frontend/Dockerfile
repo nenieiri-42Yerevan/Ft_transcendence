@@ -4,18 +4,18 @@ FROM node:18
 # RUN npm install -g react-scripts
 # RUN npm install -g typescript
 
-RUN mkdir -p /app/frontend
+RUN mkdir -p /frontend
 
 # Set the working directory to /app
-WORKDIR /app/frontend
+WORKDIR /frontend
 
-COPY package*.json .
+COPY --chown=node:node package*.json .
 
 # Install dependencies in the frontend folder
 RUN npm install
 
 # Copy the frontend folder into the container
-COPY . .
+COPY --chown=node:node . .
 
 
 # # Build the app for production

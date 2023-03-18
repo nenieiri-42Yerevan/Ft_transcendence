@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { FORM_ERROR } from 'final-form'
 import { Data, validate } from "Utils/Scheme"
 import FormContent from "Form/FormContent";
-import Background from "./background";
+import Background from "./Background";
 import axios from "axios";
 
 
