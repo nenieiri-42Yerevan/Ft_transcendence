@@ -66,7 +66,6 @@ export class AuthService {
 
   // refresh
   async refreshTokens(userId: number, rt: string): Promise<TokenDto> {
-    console.log("BACKEND RT:" + rt);
     const user = await this.userService.findOne(userId, ['sessions']);
     if (user) {
       const session = await this.sessionService.read_RT(rt);

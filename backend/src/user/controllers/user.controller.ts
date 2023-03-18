@@ -35,6 +35,7 @@ export class UserController {
 
   @Get('/:id')
   findById(@Param('id', ParseIntPipe) id: number): Promise<User> {
+    console.log("HI USER");
     return this.userService.findOne(id);
   }
 
