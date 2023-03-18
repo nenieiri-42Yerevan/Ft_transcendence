@@ -1,8 +1,9 @@
-import Background from "./background";
+import Background from "./Background";
 import avatar from "./assets/images/avatar.png"
 import pong from "./assets/images/pong.png"
 import { Link } from "react-router-dom";
 import { useState, useEffect } from 'react';
+import {useLocation, useNavigate} from 'react-router-dom';
 import axios from 'axios';
 import Fields from './Fields'
 import { useSelector } from 'react-redux';
@@ -10,9 +11,16 @@ import {selectUser} from './Slices/userSlice';
 
 const Profile = () => {
     const userInfo = useSelector(selectUser);
+    const location = useLocation();
+    const navigate = useNavigate();
+    const removeToken = () => {
+        sessionStorage.removeItem("refresh_token");
+        sessionStorage.removeItem("access_token");
+    }
     console.log(userInfo);
     return (
         <>
+        {location.state.authorized && navigate("/transcendence/user/signin")}
             <div className = "flex flex-col justify-center backdrop-blur-md min-h-screen min-w-full items-center bg-black/50 z-[668] absolute">
                 <div className="flex flex-col justify-center lg:flex-row">
                     <div className="m-6 w-[30em] justify-center bg-[#9e9c9c33] items-center min-w-full lg:min-w-fit h-fit p-8 rounded-md">
@@ -40,7 +48,7 @@ const Profile = () => {
                     </div>
                 </div>
                 <div className="m-5">
-                    <Link to="#" className="m-3 bg-red-800 md:m-5 text-center bg-[#e4e9ff1a] hover:bg-[#7d7d7d] text-white font-bold py-3 rounded min-w-full md:min-w-[15em] md:mt-20 p-[3em]">
+                    <Link to="/transcendence/user/signin" onClick={removeToken} className="m-3 bg-red-800 md:m-5 text-center bg-[#e4e9ff1a] hover:bg-[#7d7d7d] text-white font-bold py-3 rounded min-w-full md:min-w-[15em] md:mt-20 p-[3em]">
                             Log Out
                     </Link>
                     <Link to="#" className="m-3 md:m-5 text-center bg-[#e4e9ff1a] hover:bg-[#7d7d7d] text-white font-bold py-3 rounded min-w-full md:min-w-[15em] md:mt-20 p-[3em]">

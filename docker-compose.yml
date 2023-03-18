@@ -9,7 +9,7 @@ services:
     ports:
       - 5432:5432
     volumes:
-      - "./database/data:/var/lib/postgresql"
+      - "./backend/data:/var/lib/postgresql/data"
     networks:
       - database
     env_file:
@@ -34,6 +34,9 @@ services:
       dockerfile: Dockerfile
     container_name: frontend
     restart: on-failure
+    volumes:
+      - "./frontend:/frontend"
+      - "/frontend/node_modules"
     depends_on:
       - backend
     ports: 
@@ -50,6 +53,9 @@ services:
       dockerfile: Dockerfile
     container_name: backend
     restart: on-failure
+    volumes:
+      - "./backend:/backend"
+      - "/backend/node_modules"
     depends_on:
       - database
     ports: 
@@ -71,7 +77,7 @@ volumes:
     driver_opts:
       type: none
       o: bind
-      device: ./database/data
+      device: ./backend/database
 
 networks:
   database:

@@ -3,7 +3,7 @@ import { Form, Field } from "react-final-form";
 import axios from "axios";
 import { FORM_ERROR } from 'final-form';
 import FormLogin from "Form/formLogin";
-import Background from "./background";
+import Background from "./Background";
 import { useNavigate} from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 import { selectUser, setUserInfo } from './Slices/userSlice';
@@ -35,7 +35,7 @@ const SignIn = () => {
             sessionStorage.setItem("refresh_token", refreshToken);
             const userInfo = await getUserInfo();
             dispatch(setUserInfo(userInfo));
-            {userInfo && location(`./../profile`)};
+            {userInfo && location(`/transcendence/user/profile`, { state: { authorized: true } } )};
         }
     catch (error: any) {
         console.log(error);

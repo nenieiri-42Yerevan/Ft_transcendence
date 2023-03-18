@@ -37,6 +37,8 @@ logs:
 
 prune: down
 	@echo "$(RED)█████████████████████ Remove Everything ██████████████████████$(RESET)"
+	@rm -rf backend/node_modules
+	@rm -rf frontend/node_modules
 	@rm -rf database/data
 	@docker system prune -f -a
 
