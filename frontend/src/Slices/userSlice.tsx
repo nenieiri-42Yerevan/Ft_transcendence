@@ -27,13 +27,12 @@ export const userSlice = createSlice({
   initialState,
   reducers: {
     setUserInfo: (state, action: any) => {
-      console.log("hiii");
-      state.username = action.payload[0].username;
-      state.name = action.payload[0].first_name;
-      state.lastName = action.payload[0].last_name;
-      state.email = action.payload[0].email;
-      state.rank = action.payload[0].rank;
-      state.id = action.payload[0].id;
+      state.username = action.payload.username;
+      state.name = action.payload.first_name;
+      state.lastName = action.payload.last_name;
+      state.email = action.payload.email;
+      state.rank = action.payload.rank;
+      state.id = action.payload.id;
     },
     setUserImage: (state, action: any) => {
       state.img = action.payload;
@@ -53,7 +52,6 @@ export const fetchUserImage = async (dispatch: any, info: any) =>  {
       }
     });
     dispatch(setUserImage(response.data));
-    console.log("hiiii");
     console.log(response.data);
   } catch (error) {
     console.error(error);

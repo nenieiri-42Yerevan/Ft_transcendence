@@ -39,8 +39,10 @@ services:
       - "/frontend/node_modules"
     depends_on:
       - backend
-    ports: 
+    ports:
       - 3000:3000
+    volumes:
+      - "./frontend/src:/app/frontend/src"
     networks:
       - frontend
       - backend
