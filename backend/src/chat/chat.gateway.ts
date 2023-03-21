@@ -7,10 +7,12 @@ import {
   WebSocketGateway,
   WebSocketServer,
 } from '@nestjs/websockets';
+import * as argon from 'argon2';
 import { Socket } from 'socket.io';
 import { AuthService } from 'src/auth/services/auth.service';
 import { Status } from 'src/user/entities';
 import { UserService } from 'src/user/services/user.service';
+import { GroupChat } from './entities';
 import { ChatService } from './services/chat.service';
 import { GroupChatService } from './services/group-chat.service';
 
@@ -112,6 +114,51 @@ export class ChatGateway implements OnGatewayConnection {
       this.emitGroup(gchat, 'text', {
         user: { id: user.id, username: user.username },
         ...data,
+      });
+    } catch {}
+  }
+
+  @SubscribeMessage('join')
+  async joinGroup(client: Socket, partialGroup: GroupChat): Promise<void> {
+    try {
+      let gchat = await this.groupChatService.findOne(
+        partialGroup.id,
+        [],
+        true,
+      );
+      if (!gchat.public && partialGroup.password)
+        client.emit(
+          'passwordValide',
+          argon.verify(partialGroup.password, gchat.password),
+        );
+
+      await this.groupChatService.addUser(partialGroup, client.data.user.id);
+
+      gchat = await this.groupChatService.findOne(gchat.id, ['users']);
+      this.emitGroup(gchat, 'join', { gchat, user: client.data.user });
+    } catch {}
+  }
+
+  @SubscribeMessage('leave')
+  async leaveChannel(client: Socket, data: any): Promise<void> {
+    try {
+      let user = client.data.user;
+      if (data.userId) user = await this.userService.findOne(data.userId);
+
+      const gchat = await this.groupChatService.findOne(data.channelId, [
+        'users',
+      ]);
+      await this.groupChatService.deleteUserFromGroup(
+        user.id,
+        data.channelId,
+        client.data.user.id,
+      );
+
+      const is_delete = gchat.owner.id == user.id ? true : false;
+      this.emitGroup(gchat, 'leave', {
+        gchat,
+        user,
+        is_delete: is_delete,
       });
     } catch {}
   }
