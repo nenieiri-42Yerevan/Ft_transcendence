@@ -2,6 +2,7 @@
 import { ConfigService } from '@nestjs/config';
 import {
   OnGatewayConnection,
+  SubscribeMessage,
   WebSocketGateway,
   WebSocketServer,
 } from '@nestjs/websockets';
@@ -70,6 +71,30 @@ export class ChatGateway implements OnGatewayConnection {
         if (gchat.users.find((user) => user.id == socket.data.user.id))
           socket.emit(event, ...args);
       });
+    } catch {}
+  }
+
+  @SubscribeMessage('group-chat')
+  async getGroup(client: Socket, id: number): Promise<void> {
+    try {
+      const gchat = await this.groupChatService.findOne(id, [
+        'users',
+        'messages',
+        'muted',
+        'banned',
+      ]);
+      client.emit('group-chat', gchat);
+    } catch {}
+  }
+
+  @SubscribeMessage('my-chats')
+  async getUserChats(client: Socket): Promise<void> {
+    try {
+      const chats = await this.groupChatService.findUserGroups(
+        client.data.user.id,
+      );
+
+      client.emit('my-chats', chats);
     } catch {}
   }
 }
