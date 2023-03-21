@@ -33,7 +33,7 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
     container_name: frontend
-    restart: on-failure
+    restart: always
     volumes:
       - "./frontend:/frontend"
       - "/frontend/node_modules"
@@ -41,8 +41,6 @@ services:
       - backend
     ports:
       - 3000:3000
-    volumes:
-      - "./frontend/src:/app/frontend/src"
     networks:
       - frontend
       - backend
@@ -54,7 +52,7 @@ services:
       context: ./backend
       dockerfile: Dockerfile
     container_name: backend
-    restart: on-failure
+    restart: always
     volumes:
       - "./backend:/backend"
       - "/backend/node_modules"
