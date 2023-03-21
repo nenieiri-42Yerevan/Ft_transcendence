@@ -6,18 +6,26 @@ import { useState, useEffect } from 'react';
 import {useLocation, useNavigate} from 'react-router-dom';
 import axios from 'axios';
 import Fields from './Fields'
-import { useSelector } from 'react-redux';
-import {selectUser} from './Slices/userSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import {selectUser, fetchFriends} from './Slices/userSlice';
 
 const Profile = () => {
     const userInfo = useSelector(selectUser);
     const location = useLocation();
+    const dispatch = useDispatch();
     const navigate = useNavigate();
     const removeToken = () => {
         sessionStorage.removeItem("refresh_token");
         sessionStorage.removeItem("access_token");
     }
     console.log(userInfo);
+    useEffect(() => {
+        for (let id of userInfo.follows)
+        {
+            console.log(id);
+            fetchFriends(dispatch, id);
+        }
+    }, []);
     return (
         <>
         {location.state.authorized && navigate("/transcendence/user/signin")}
@@ -36,15 +44,14 @@ const Profile = () => {
                             <p className="text-white font-bold flex justify-between"><img className = "w-[3em]" src = {pong}></img>Friends <span>more</span></p>
                         </div>
                         <hr />
-                        <Fields/>
-                        <hr />
-                        <Fields/>
-                        <hr />
-                        <Fields/>
-                        <hr />
-                        <Fields/>
-                        <hr />
-                        <Fields/>
+                        <div>
+                        {/* {userInfo.friends.map((friend:string, index:number) => (
+                            <div className="flex flex-row m-1 items-center justify-between" key={index}>
+                            <img src={avatar} className="w-[3em] h-fit"></img>
+                            <span>{friend}</span>
+                            </div>
+                        ))} */}
+                        </div>
                     </div>
                 </div>
                 <div className="m-5">

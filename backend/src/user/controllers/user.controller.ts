@@ -47,12 +47,10 @@ export class UserController {
   }
   
 
-  @Get('/:id')
+  @Get('/:id/user')
   findById(@Param('id', ParseIntPipe) id: number): Promise<User> {
     return this.userService.findOne(id);
   }
-
-
 
   @Get('/:id/avatar')
   async findAvatar(

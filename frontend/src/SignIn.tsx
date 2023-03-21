@@ -51,7 +51,6 @@ const SignIn = () => {
               Authorization: `Bearer ${sessionStorage.getItem('access_token')}`
             }
           });
-          await fetchUserImage(dispatch, info);
           console.log("nnn");
           console.log(response.data);
           return (response.data);
