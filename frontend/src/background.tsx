@@ -38,7 +38,7 @@ import { OrbitControls, PerspectiveCamera } from '@react-three/drei'
 //   );
 // }
 
-const background = () => {
+const Background = () => {
     return (
         <>
             <Canvas className="scene"
@@ -78,4 +78,4 @@ const background = () => {
 }
 
 
-export default background;
+export default Background;

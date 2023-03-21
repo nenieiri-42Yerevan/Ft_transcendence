@@ -1,20 +1,22 @@
 # Use an official Node.js runtime as a parent image
 FROM node:18
 
-# Set the working directory to /app
-WORKDIR /app
-
 # RUN npm install -g react-scripts
+# RUN npm install -g typescript
 
-COPY ./package*.json /app
+RUN mkdir -p /frontend
 
+# Set the working directory to /app
+WORKDIR /frontend
+
+COPY --chown=node:node package*.json .
+
+# Install dependencies in the frontend folder
 RUN npm install
 
 # Copy the frontend folder into the container
-COPY ./frontend /app/frontend
+COPY --chown=node:node . .
 
-# Install dependencies in the frontend folder
-RUN cd frontend && npm install
 
 # # Build the app for production
 # RUN npm run build --prefix frontend
@@ -23,5 +25,4 @@ RUN cd frontend && npm install
 EXPOSE 3000
 
 # Start the frontend app when the container starts
-CMD ["npm", "run", "client"]
-
+CMD ["npm", "start"]

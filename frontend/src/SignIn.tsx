@@ -3,12 +3,11 @@ import { Form, Field } from "react-final-form";
 import axios from "axios";
 import { FORM_ERROR } from 'final-form';
 import FormLogin from "Form/formLogin";
-import Background from "./background";
+import Background from "./Background";
 import { useNavigate} from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 import { selectUser, setUserInfo } from './Slices/userSlice';
 import {fetchUserImage} from './Slices/userSlice';
-
 
 interface Data {
     login: string;
@@ -36,7 +35,7 @@ const SignIn = () => {
             sessionStorage.setItem("refresh_token", refreshToken);
             const userInfo = await getUserInfo();
             dispatch(setUserInfo(userInfo));
-            {userInfo && location(`./../profile`)};
+            {userInfo && location(`/transcendence/user/profile`, { state: { authorized: true } } )};
         }
     catch (error: any) {
         console.log(error);
@@ -47,12 +46,14 @@ const SignIn = () => {
     }
     const getUserInfo = async () => {
         try {
-          const response = await axios.get('http://localhost:7000/transcendence/user?getuser', {
+          const response = await axios.get(`http://localhost:7000/transcendence/user/${sessionStorage.getItem('refresh_token')}`, {
             headers: {
               Authorization: `Bearer ${sessionStorage.getItem('access_token')}`
             }
           });
           await fetchUserImage(dispatch, info);
+          console.log("nnn");
+          console.log(response.data);
           return (response.data);
         } catch (error) {
           console.log(error);

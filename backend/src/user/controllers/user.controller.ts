@@ -30,23 +30,29 @@ export class UserController {
 
   @Get('/')
   findAll(): Promise<User[]> {
+    console.log("mmm");
     return this.userService.findAll();
   }
+  
+  @Get('/:token')
+  findBySession(@Param('token') rtoken: string): Promise<User> {
+    console.log("vvv");
+    return this.sessionService.findOneBytoken(rtoken);
+  }
+  
+  @Get('/:username')
+  findByUsername(@Param('username') username: string): Promise<User> {
+    console.log("bbb");
+    return this.userService.findOne(username);
+  }
+  
 
   @Get('/:id')
   findById(@Param('id', ParseIntPipe) id: number): Promise<User> {
     return this.userService.findOne(id);
   }
 
-  @Get('/:username')
-  findByUsername(@Param('username') username: string): Promise<User> {
-    return this.userService.findOne(username);
-  }
 
-  @Get('/getUser')
-  findBySession(@GetUserId() userId: number): Promise<User> {
-    return this.userService.findOne(userId);
-  }
 
   @Get('/:id/avatar')
   async findAvatar(
