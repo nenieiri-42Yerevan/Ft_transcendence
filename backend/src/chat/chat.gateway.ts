@@ -163,6 +163,8 @@ export class ChatGateway implements OnGatewayConnection {
     } catch {}
   }
 
+  /* TODO: Add toggleAdmin functionality  */
+
   @SubscribeMessage('ban')
   async toggleBan(client: Socket, data: any): Promise<void> {
     try {
