@@ -223,4 +223,25 @@ export class ChatGateway implements OnGatewayConnection {
       });
     } catch {}
   }
+
+  /* DIRECT MESSAGE:D ---------------------------------------------------------------------- */
+
+  @SubscribeMessage('chat')
+  async getDMChannel(client: Socket, channelid: number): Promise<void> {
+    try {
+      const chat = await this.chatService.findOne(channelid, [
+        'messages',
+        'users',
+      ]);
+      client.emit('chat', chat);
+    } catch {}
+  }
+
+  @SubscribeMessage('my-chats')
+  async getDMChannelMe(client: Socket): Promise<void> {
+    try {
+      const chats = await this.chatService.findAll(client.data.user.id);
+      client.emit('my-chats', chats);
+    } catch {}
+  }
 }
