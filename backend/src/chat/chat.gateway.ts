@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+import { HttpException, HttpStatus } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import {
   OnGatewayConnection,
@@ -95,6 +96,23 @@ export class ChatGateway implements OnGatewayConnection {
       );
 
       client.emit('my-chats', chats);
+    } catch {}
+  }
+
+  @SubscribeMessage('text')
+  async handleMessage(client: Socket, data: any): Promise<void> {
+    try {
+      const user = client.data.user;
+      const gchat = await this.groupChatService.findOne(data.id, ['users']);
+
+      if (data.value.length >= 1 << 8)
+        throw new HttpException('text is too long', HttpStatus.BAD_REQUEST);
+
+      await this.groupChatService.addMessage(data.id, data.value, user.id);
+      this.emitGroup(gchat, 'text', {
+        user: { id: user.id, username: user.username },
+        ...data,
+      });
     } catch {}
   }
 }
