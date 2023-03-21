@@ -162,4 +162,65 @@ export class ChatGateway implements OnGatewayConnection {
       });
     } catch {}
   }
+
+  @SubscribeMessage('ban')
+  async toggleBan(client: Socket, data: any): Promise<void> {
+    try {
+      const gchat = await this.groupChatService.findOne(data.channelId, [
+        'users',
+        'banned',
+      ]);
+      const curuser = await this.userService.findOne(data.userId);
+      const admin = client.data.user;
+
+      const banned = gchat.banned.find(
+        (banned) => banned.user.id == data.user.id,
+      );
+
+      if (banned) await this.groupChatService.unbannUser(banned, gchat);
+      else await this.groupChatService.bannUser(curuser.id, gchat.id, admin.id);
+
+      const new_channel = await this.groupChatService.findOne(data.channelId, [
+        'banned',
+      ]);
+
+      this.emitGroup(gchat, 'ban', {
+        channel: {
+          id: gchat.id,
+          name: gchat.name,
+          banned: new_channel.banned,
+        },
+        user: { id: admin.id, username: admin.username },
+        banned_user: { id: curuser.id, username: curuser.username },
+      });
+    } catch {}
+  }
+
+  @SubscribeMessage('mute')
+  async toggleMute(client: Socket, data: any): Promise<void> {
+    try {
+      let gchat = await this.groupChatService.findOne(data.channelId, [
+        'users',
+        'muted',
+      ]);
+      const curuser = await this.userService.findOne(data.userId);
+      const admin = client.data.user;
+
+      const muted = gchat.muted.find((muted) => muted.user.id == data.userId);
+
+      if (muted) await this.groupChatService.unmuteUser(muted, gchat);
+      else await this.groupChatService.muteUser(curuser.id, gchat.id, admin.id);
+
+      gchat = await this.groupChatService.findOne(data.channelId, [
+        'users',
+        'muted',
+      ]);
+
+      this.emitGroup(gchat, 'mute', {
+        channel: { id: gchat.id, name: gchat.name, muted: gchat.muted },
+        user: { id: admin.id, username: admin.username },
+        muted_user: { id: curuser.id, username: curuser.username },
+      });
+    } catch {}
+  }
 }
