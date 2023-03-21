@@ -227,7 +227,7 @@ export class ChatGateway implements OnGatewayConnection {
   /* DIRECT MESSAGE:D ---------------------------------------------------------------------- */
 
   @SubscribeMessage('chat')
-  async getDMChannel(client: Socket, channelid: number): Promise<void> {
+  async getChat(client: Socket, channelid: number): Promise<void> {
     try {
       const chat = await this.chatService.findOne(channelid, [
         'messages',
@@ -238,10 +238,44 @@ export class ChatGateway implements OnGatewayConnection {
   }
 
   @SubscribeMessage('my-chats')
-  async getDMChannelMe(client: Socket): Promise<void> {
+  async GetUserChats(client: Socket): Promise<void> {
     try {
       const chats = await this.chatService.findAll(client.data.user.id);
       client.emit('my-chats', chats);
+    } catch {}
+  }
+
+  @SubscribeMessage('join-chat')
+  async joinChat(client: Socket, userId: number): Promise<void> {
+    try {
+      const chat = await this.chatService.openChat(client.data.user.id, userId);
+      this.emitGroup(chat, 'join-chat');
+    } catch {}
+  }
+
+  @SubscribeMessage('textDM')
+  async sendMessageDM(client: Socket, data: any): Promise<void> {
+    try {
+      const chat = await this.chatService.findOne(data.channelId, ['users']);
+
+      const other = chat.users.find((user) => user.id != client.data.user.id);
+
+      if (other && other.blocked.includes(client.data.user.id))
+        client.emit('blocked');
+
+      if (data.text.length >= 1 << 8)
+        throw new HttpException('text is too long', HttpStatus.BAD_REQUEST);
+
+      const message = await this.chatService.createMessage(
+        chat.id,
+        client.data.user.id,
+        data.text,
+      );
+      this.emitGroup(chat, 'textDM', {
+        user: message.author,
+        text: message.content,
+        channelId: chat.id,
+      });
     } catch {}
   }
 }
