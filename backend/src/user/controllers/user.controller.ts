@@ -20,7 +20,7 @@ import { Public, GetUserId } from '../../common/decorators';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { SessionService } from '../services/session.service';
 
-@Controller('user')
+@Controller('/user')
 export class UserController {
   constructor(
     private readonly userService: UserService,
@@ -30,24 +30,24 @@ export class UserController {
 
   @Get('/')
   findAll(): Promise<User[]> {
-    console.log("mmm");
+    console.log('mmm');
     return this.userService.findAll();
   }
-  
-  @Get('/:token')
+
+  @Get('/by-token/:token')
   findBySession(@Param('token') rtoken: string): Promise<User> {
-    console.log("vvv");
+    console.log('vvv');
     return this.sessionService.findOneBytoken(rtoken);
   }
-  
-  @Get('/:username')
+
+  @Get('/by-name/:username')
   findByUsername(@Param('username') username: string): Promise<User> {
-    console.log("bbb");
+    console.log('bbb');
     return this.userService.findOne(username);
   }
   
 
-  @Get('/:id/user')
+  @Get('/by-id/:id')
   findById(@Param('id', ParseIntPipe) id: number): Promise<User> {
     return this.userService.findOne(id);
   }
@@ -82,7 +82,7 @@ export class UserController {
     return this.userService.findBlocked(id);
   }
 
-  @Put('/update-user:id')
+  @Put('/update-user/:id')
   async updateUser(
     @Param('id', ParseIntPipe) id: number,
     @Body() user: User,
@@ -92,7 +92,7 @@ export class UserController {
     return this.userService.update(current.id, user);
   }
 
-  @Put('/update-avatar:id')
+  @Put('/update-avatar/:id')
   @UseInterceptors(FileInterceptor('file'))
   updateAvatar(
     @Param('id', ParseIntPipe) id: number,
