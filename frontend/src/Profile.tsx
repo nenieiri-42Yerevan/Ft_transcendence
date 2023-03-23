@@ -2,10 +2,10 @@ import Background from "./Background";
 import avatar from "./assets/images/avatar.png"
 import pong from "./assets/images/pong.png"
 import { Link } from "react-router-dom";
+import Profilmenu from './profilemenu';
 import { useState, useEffect } from 'react';
 import {useLocation, useNavigate} from 'react-router-dom';
 import axios from 'axios';
-import Fields from './Fields'
 import { useDispatch, useSelector } from 'react-redux';
 import {selectUser, setFriends} from './Slices/userSlice';
 
@@ -42,6 +42,7 @@ const Profile = () => {
         <>
         {/* {location.state.authorized && navigate("/transcendence/user/signin")} */}
             <div className = "flex flex-col justify-center backdrop-blur-md min-h-full min-w-full items-center bg-black/50 z-[668] absolute">
+                <Profilmenu/>
                 <div className="flex flex-col justify-center lg:flex-row">
                     <div className="m-6 w-[30em] justify-center bg-[#9e9c9c33] items-center min-w-full lg:min-w-fit h-fit p-8 rounded-md">
                         <div className="flex justify-center">
