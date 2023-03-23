@@ -7,7 +7,6 @@ import Background from "./Background";
 import { useNavigate} from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 import { selectUser, setUserInfo } from './Slices/userSlice';
-import {fetchUserImage} from './Slices/userSlice';
 
 interface Data {
     login: string;
@@ -46,7 +45,7 @@ const SignIn = () => {
     }
     const getUserInfo = async () => {
         try {
-          const response = await axios.get(`http://localhost:7000/transcendence/user/${sessionStorage.getItem('refresh_token')}`, {
+          const response = await axios.get(`http://localhost:7000/transcendence/user/by-token/${sessionStorage.getItem('refresh_token')}`, {
             headers: {
               Authorization: `Bearer ${sessionStorage.getItem('access_token')}`
             }
