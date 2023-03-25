@@ -12,6 +12,7 @@ interface UserInfo {
   id: number,
   img: string,
   follows: number[],
+  chats: object[]
 }
 
 export const initialState: UserInfo = {
@@ -24,6 +25,7 @@ export const initialState: UserInfo = {
   img: '',
   names: [],
   follows: [],
+  chats: []
 };
 
 export const userSlice = createSlice({
@@ -44,11 +46,14 @@ export const userSlice = createSlice({
     },
     setFriends: (state, action : PayloadAction<string[]>) => {
       state.names = action.payload;
+    },
+    setChats: (state, action : PayloadAction<object[]>) =>{
+      state.chats = action.payload;
     }
   },
 });
 
-export const { setUserInfo, setUserImage, setFriends } = userSlice.actions;
+export const { setUserInfo, setUserImage, setFriends, setChats } = userSlice.actions;
 
 export const selectUser = (state: any) => state.user;
 

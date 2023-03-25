@@ -2,7 +2,8 @@ import Background from "./Background";
 import avatar from "./assets/images/avatar.png"
 import pong from "./assets/images/pong.png"
 import { Link } from "react-router-dom";
-import Profilmenu from './profilemenu';
+import Profilemenu from './Profilemenu';
+import  React from "react";
 import { useState, useEffect } from 'react';
 import {useLocation, useNavigate} from 'react-router-dom';
 import axios from 'axios';
@@ -42,7 +43,7 @@ const Profile = () => {
         <>
         {/* {location.state.authorized && navigate("/transcendence/user/signin")} */}
             <div className = "flex flex-col justify-center backdrop-blur-md min-h-full min-w-full items-center bg-black/50 z-[668] absolute">
-                <Profilmenu/>
+                <Profilemenu/>
                 <div className="flex flex-col justify-center lg:flex-row">
                     <div className="m-6 w-[30em] justify-center bg-[#9e9c9c33] items-center min-w-full lg:min-w-fit h-fit p-8 rounded-md">
                         <div className="flex justify-center">
@@ -58,7 +59,7 @@ const Profile = () => {
                         </div>
                         <hr />
                         <div>
-                        {userInfo.names.map((friend:string, index:number) => (
+                        {userInfo.names && userInfo.names.map((friend:string, index:number) => (
                             <div className="flex flex-row m-1 items-center justify-between" key={index}>
                             <img src={avatar} className="w-[3em] h-fit"></img>
                             <span>{friend}</span>
