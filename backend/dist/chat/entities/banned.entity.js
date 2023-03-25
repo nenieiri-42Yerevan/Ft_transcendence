@@ -1,0 +1,40 @@
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Banned = void 0;
+const entities_1 = require("../../user/entities");
+const typeorm_1 = require("typeorm");
+const group_chat_entity_1 = require("./group-chat.entity");
+let Banned = class Banned {
+};
+__decorate([
+    (0, typeorm_1.PrimaryGeneratedColumn)(),
+    __metadata("design:type", Number)
+], Banned.prototype, "id", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'timestamptz' }),
+    __metadata("design:type", Date)
+], Banned.prototype, "endOfBan", void 0);
+__decorate([
+    (0, typeorm_1.ManyToOne)(() => entities_1.User, { eager: true, onDelete: 'CASCADE' }),
+    (0, typeorm_1.JoinColumn)(),
+    __metadata("design:type", entities_1.User)
+], Banned.prototype, "user", void 0);
+__decorate([
+    (0, typeorm_1.ManyToOne)(() => group_chat_entity_1.GroupChat),
+    (0, typeorm_1.JoinColumn)(),
+    __metadata("design:type", group_chat_entity_1.GroupChat)
+], Banned.prototype, "group", void 0);
+Banned = __decorate([
+    (0, typeorm_1.Entity)()
+], Banned);
+exports.Banned = Banned;
+//# sourceMappingURL=banned.entity.js.map

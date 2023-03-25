@@ -20,8 +20,6 @@ coverage
 # database files
 data
 
-node_modules
-
 # Items that don't need to be in a Docker image.
 # Anything not used by the build system should go here.
 Dockerfile
