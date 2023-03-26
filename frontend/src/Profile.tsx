@@ -39,24 +39,20 @@ const Profile = () => {
         };
         fetchFriendsData();
       }, []);
-    return (
+      return (
         <>
-        {/* {location.state.authorized && navigate("/transcendence/user/signin")} */}
-            <div className = "flex flex-col justify-center backdrop-blur-md min-h-full min-w-full items-center bg-black/50 z-[668] absolute">
-                <Profilemenu/>
-                <div className="flex flex-col justify-center lg:flex-row">
-                    <div className="m-6 w-[30em] justify-center bg-[#9e9c9c33] items-center min-w-full lg:min-w-fit h-fit p-8 rounded-md">
-                        <div className="flex justify-center">
-                            <img src = {avatar} className = " block w-[10em] h-fit"></img>
+            <Profilemenu/>
+            <div className = "flex flex-row justify-between backdrop-blur-md min-h-full min-w-full bg-black/50 z-[668] absolute">
+                <div className="w-full m-4 rounded">
+                    <div className="bg-[#1E1E1E] w-full flex flex-col p-5 items-center">
+                        <img src={avatar} alt="Profile" className="rounded-full w-32 h-32 object-cover" />
+                        <div className="mt-1">
+                            <h1 className="font-bold text-4xl text-white">John Doe</h1>
+                            <p className="text-white">Player ID: 123456</p>
                         </div>
-                        <p className="text-2xl pb-5 text-center">{userInfo.username}</p>
-                        <p className=" text-2xl text-center">{userInfo.email}</p>
-                        <p className="text-2xl flex justify-between">Rank: <span>{userInfo.rank}</span></p>
                     </div>
-                    <div className="m-5 flex w-[30em] flex-col justify-start min-w-full lg:min-w-fit min-h-full p-8 bg-[#9e9c9c33] rounded-md shadow-lg">
-                        <div>
-                            <p className="text-white font-bold flex justify-between"><img className = "w-[3em]" src = {pong}></img>Friends <span>more</span></p>
-                        </div>
+                    <div className="w-full bg-[#1E1E1E] p-8 mt-2 rounded">
+                        <h2 className="font-bold text-2xl text-white text-center  flex justify-between"><img className = "w-[2em]" src = {pong}></img>Game Stats</h2>
                         <hr />
                         <div>
                         {userInfo.names && userInfo.names.map((friend:string, index:number) => (
@@ -66,20 +62,40 @@ const Profile = () => {
                             </div>
                         ))}
                         </div>
+                        <p className="text-white flex justify-between p-2">Rank: <span>1</span></p>
+                        <p className="text-white flex justify-between p-2">Games Played: <span>1</span></p>
+                        <p className="text-white flex justify-between p-2">Win Rate: <span>1</span></p>
                     </div>
                 </div>
-                <div className="m-5">
-                    <Link to="/transcendence/user/signin" onClick={removeToken} className="m-3 bg-red-800 md:m-5 text-center bg-[#e4e9ff1a] hover:bg-[#7d7d7d] text-white font-bold py-3 rounded min-w-full md:min-w-[15em] md:mt-20 p-[3em]">
-                            Log Out
-                    </Link>
-                    <Link to="#" className="m-3 md:m-5 text-center bg-[#e4e9ff1a] hover:bg-[#7d7d7d] text-white font-bold py-3 rounded min-w-full md:min-w-[15em] md:mt-20 p-[3em]">
-                            Enable 2FA
-                    </Link>
+                <div className="w-full h-fit bg-[#1E1E1E] m-4 p-8 rounded">
+                    <h2 className="font-bold text-2xl text-white text-center  flex justify-between"><img className = "w-[2em]" src = {pong}></img>Played Matches</h2>
+                    <hr />
+                    <p className="text-white flex justify-between p-2">you win against: <span>1</span></p>
+                    <p className="text-white flex justify-between p-2">You lost against: <span>1</span></p>
+                    <p className="text-white flex justify-between p-2">you Win against: <span>1</span></p>
+                        {/* {playedMatches.map((match, index) => (
+                        <div key={index} className="flex justify-between items-center border-b py-4">
+                            <p className="text-lg">{match.opponent}</p>
+                            <p className={`text-lg ${match.result === 'win' ? 'text-green-500' : 'text-red-500'}`}>{match.result}</p>
+                        </div>
+                        ))} */}
+                </div>
+                <div className="w-full h-fit m-4 bg-[#1E1E1E] p-8 rounded">
+                    <h2 className="font-bold text-2xl text-white text-center  flex justify-between"><img className = "w-[2em]" src = {pong}></img>Friends <span>more</span></h2>
+                    <hr />
+                    <p className="text-white text-center p-2">arastepa</p>
+                    <p className="text-white text-center p-2">arastepa</p>
+                    <p className="text-white text-center p-2">arastepa</p>
+                    {/* {friends.map((friend, index) => (
+                    <div key={index} className="flex justify-between items-center border-b py-4">
+                        <p className="text-lg">{friend.name}</p>
+                        <p className={`text-lg ${friend.status === 'online' ? 'text-green-500' : 'text-red-500'}`}>{friend.status}</p>
+                    </div>
+                    ))} */}
                 </div>
             </div>
-            <Background/>
+        <Background/>
         </>
-    );
-    
+    ); 
 }
 export default Profile;

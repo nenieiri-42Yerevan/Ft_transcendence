@@ -44,6 +44,8 @@ export const validationScheme = Yup.object().shape({
         .test("not_be_year", "Year is required.", (value) => value !== "Year"),
 });
 
+
+
 export interface Data {
     first_name: string,
     last_name: string,
@@ -56,6 +58,12 @@ export interface Data {
     day: string,
     year: string
 }
+
+// export interface DmChat
+// {
+
+// }
+
 
 export const days: any[] = Array.from(Array(31).keys()).map((d) => d + 1);
 export const years: any[] = Array.from(Array(76).keys()).map((d) => d + 1940);
