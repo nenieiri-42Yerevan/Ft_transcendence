@@ -55,7 +55,7 @@ const Profile = () => {
                     <h2 className="font-bold text-2xl text-white text-center  flex justify-between"><img className = "w-[2em]" src = {pong}></img>Friends <span>more</span></h2>
                     <hr />
                     {userInfo.names && userInfo.names.slice(0, 5).map((name: string, index: number) => (
-                        <p key={index} className="text-white text-center p-2">{name}</p>
+                        <p key={index} className="text-white text-center p-2 flex justify-between"><img className = "w-[2em]" src = {avatar}></img> <span>{name}</span></p>
                     ))}
                 </div>
             </div>
