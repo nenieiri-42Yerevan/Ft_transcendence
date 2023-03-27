@@ -6,7 +6,7 @@ import FormLogin from "Form/formLogin";
 import Background from "./Background";
 import { useNavigate} from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
-import { selectUser, setUserInfo } from './Slices/userSlice';
+import { selectUser, setUserInfo, getUserInfo } from './Slices/userSlice';
 
 interface Data {
     login: string;
@@ -26,7 +26,6 @@ const SignIn = () => {
             .post('http://127.0.0.1:7000/transcendence/auth/signin/local', sendData)
             const accessToken = response.data.access_token;
             const refreshToken = response.data.refresh_token;
-            console.log(response);
             if (!accessToken || !refreshToken) {
                 return { [FORM_ERROR]: "Something is wrong" }
             }
@@ -37,26 +36,9 @@ const SignIn = () => {
             {userInfo && location(`/transcendence/user/profile`, { state: { authorized: true } } )};
         }
     catch (error: any) {
-        console.log(error);
-        console.log(error.response.data.message);
         return { [FORM_ERROR]: error.response.data.message }
-    
         }
     }
-    const getUserInfo = async () => {
-        try {
-          const response = await axios.get(`http://localhost:7000/transcendence/user/by-token/${sessionStorage.getItem('refresh_token')}`, {
-            headers: {
-              Authorization: `Bearer ${sessionStorage.getItem('access_token')}`
-            }
-          });
-          console.log("nnn");
-          console.log(response.data);
-          return (response.data);
-        } catch (error) {
-          console.log(error);
-        }
-      }
       return (
         <>
         <div className="backdrop-blur-md p-0 flex-row lg:px-4 xl:px-16 bg-black/50 min-w-full min-h-full z-[668] absolute flex justify-between bg-clip-padding">

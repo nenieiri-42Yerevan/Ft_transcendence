@@ -70,7 +70,6 @@ export const fetchFriendsData = async (dispatch:any,userInfo: UserInfo) => {
       console.log(error);
     }
   }
-  console.log(friendNames);
   dispatch(setFriends(friendNames));
 };
 
@@ -86,3 +85,16 @@ export const fetchMatches = async (dispatch:any,userInfo: UserInfo) => {
     console.log(error);
   }
 };
+
+export const getUserInfo = async () => {
+  try {
+    const response = await axios.get(`http://localhost:7000/transcendence/user/by-token/${sessionStorage.getItem('refresh_token')}`, {
+      headers: {
+        Authorization: `Bearer ${sessionStorage.getItem('access_token')}`
+      }
+    });
+    return (response.data);
+  } catch (error) {
+    console.log(error);
+  }
+}
