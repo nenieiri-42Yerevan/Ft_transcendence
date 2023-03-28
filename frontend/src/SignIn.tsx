@@ -39,23 +39,6 @@ const SignIn = () => {
         return { [FORM_ERROR]: error.response.data.message }
         }
     }
-<<<<<<< HEAD
-    const getUserInfo = async () => {
-        try {
-          const response = await axios.get(`http://localhost:7000/transcendence/user/by-token/${sessionStorage.getItem('refresh_token')}`, {
-            headers: {
-              Authorization: `Bearer ${sessionStorage.getItem('access_token')}`
-            }
-          });
-          console.log("nnn");
-          console.log(response.data);
-          return (response.data);
-        } catch (error) {
-          console.log(error);
-        }
-      }
-=======
->>>>>>> arastepa
       return (
         <>
         <div className="backdrop-blur-md p-0 flex-row lg:px-4 xl:px-16 bg-black/50 min-w-full min-h-full z-[668] absolute flex justify-between bg-clip-padding">
