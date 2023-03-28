@@ -22,7 +22,7 @@ services:
     depends_on:
       - database
     ports:
-      - 5050:5050
+      - 5050:80
     networks:
       - database
     env_file:
