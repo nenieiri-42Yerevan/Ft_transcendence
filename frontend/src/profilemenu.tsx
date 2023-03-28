@@ -1,7 +1,9 @@
 import { Link } from "react-router-dom";
+import {logOut} from './Slices/userSlice';
 
 const profilemenu = () => {
     const removeToken = () => {
+        logOut();
         sessionStorage.removeItem("refresh_token");
         sessionStorage.removeItem("access_token");
     }

@@ -14,10 +14,6 @@ const Profile = () => {
     const location = useLocation();
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const removeToken = () => {
-        sessionStorage.removeItem("refresh_token");
-        sessionStorage.removeItem("access_token");
-    }
     useEffect(() => {
         const authorized = location.state ? location.state.authorized : false;
         if (!authorized)

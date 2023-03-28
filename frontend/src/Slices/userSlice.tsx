@@ -98,3 +98,15 @@ export const getUserInfo = async () => {
     console.log(error);
   }
 }
+
+export const logOut = async () => {
+  try {
+    const response = await axios.post(`http://localhost:7000/transcendence/auth/logout`,{}, {
+      headers: {
+        Authorization: `Bearer ${sessionStorage.getItem('access_token')}`
+      }
+    });
+  } catch (error) {
+    console.log(error);
+  }
+}
