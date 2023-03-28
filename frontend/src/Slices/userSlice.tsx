@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import axios from "axios";
-import { useSelector } from 'react-redux';
+import { Dispatch } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 interface UserInfo {
   username: string;
@@ -53,3 +54,47 @@ export const { setUserInfo, setUserImage, setFriends } = userSlice.actions;
 export const selectUser = (state: any) => state.user;
 
 export default userSlice.reducer;
+
+export const fetchFriendsData = async (dispatch:any,userInfo: UserInfo) => {
+  const friendIds = userInfo.follows;
+  const friendNames:string[] = [];
+  for (const id of friendIds) {
+    try {
+      const response = await axios.get(`http://localhost:7000/transcendence/user/by-id/${id}`, {
+        headers: {
+            Authorization: `Bearer ${sessionStorage.getItem('access_token')}`
+          }
+      });
+      friendNames.push(response.data.username);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  dispatch(setFriends(friendNames));
+};
+
+export const fetchMatches = async (dispatch:any,userInfo: UserInfo) => {
+  try
+  {
+    const response = await axios.get(`http://localhost:7000/transcendence/user/${userInfo.id}/matches`, {
+      headers: {
+        Authorization: `Bearer ${sessionStorage.getItem('access_token')}`
+      }})
+    //dispatch(setFriends(friendNames));
+  }catch (error) {
+    console.log(error);
+  }
+};
+
+export const getUserInfo = async () => {
+  try {
+    const response = await axios.get(`http://localhost:7000/transcendence/user/by-token/${sessionStorage.getItem('refresh_token')}`, {
+      headers: {
+        Authorization: `Bearer ${sessionStorage.getItem('access_token')}`
+      }
+    });
+    return (response.data);
+  } catch (error) {
+    console.log(error);
+  }
+}
