@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-const profilemenu = () => {
+const Profilemenu = () => {
     const removeToken = () => {
         sessionStorage.removeItem("refresh_token");
         sessionStorage.removeItem("access_token");
@@ -33,4 +33,4 @@ const profilemenu = () => {
 
 }
 
-export default profilemenu;
+export default Profilemenu;

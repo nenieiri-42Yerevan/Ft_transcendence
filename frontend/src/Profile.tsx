@@ -2,7 +2,7 @@ import Background from "./Background";
 import avatar from "./assets/images/avatar.png"
 import pong from "./assets/images/pong.png"
 import { Link } from "react-router-dom";
-import Profilmenu from './profilemenu';
+import Profilmenu from './Profilemenu';
 import { useState, useEffect } from 'react';
 import {useLocation, useNavigate} from 'react-router-dom';
 import axios from 'axios';
@@ -40,7 +40,6 @@ const Profile = () => {
                             <p className="text-white">{userInfo.username && userInfo.username}</p>
                         </div>
                     </div>
-<<<<<<< HEAD
                     <div className="m-5 flex w-[30em] flex-col justify-start min-w-full lg:min-w-fit min-h-full p-8 bg-[#9e9c9c33] rounded-md shadow-lg">
                         <div>
                             <p className="text-white font-bold flex justify-between"><img className = "w-[3em]" src = {pong}></img>Friends <span>more</span></p>
@@ -54,12 +53,10 @@ const Profile = () => {
                             </div>
                         ))}
                         </div>
-=======
                     <div className="w-full bg-[#1E1E1E] p-8 mt-2 rounded">
                         <h2 className="font-bold text-2xl text-white text-center  flex justify-between"><img className = "w-[2em]" src = {pong}></img>Game Stats</h2>
                         <hr />
                         <p className="text-white flex justify-between p-2">Rank: <span>{userInfo.rank && userInfo.rank}</span></p>
->>>>>>> arastepa
                     </div>
                 </div>
                 <div className="w-full h-fit bg-[#1E1E1E] m-4 p-8 rounded">
