@@ -9,7 +9,7 @@ services:
     ports:
       - 5432:5432
     volumes:
-      - "./database/data:/var/lib/postgresql/data"
+      - "./backend/data:/var/lib/postgresql/data"
     networks:
       - database
     env_file:
@@ -30,16 +30,18 @@ services:
   
   frontend:
     build:
-      context: ./
-      dockerfile: ./frontend/Dockerfile
+      context: ./frontend
+      dockerfile: Dockerfile
     container_name: frontend
-    restart: on-failure
+    restart: always
+    volumes:
+      - "./frontend:/frontend"
+      - "/frontend/node_modules"
     depends_on:
       - backend
-    ports: 
+    ports:
       - 3000:3000
-    volumes:
-      - "./frontend/:/app/frontend/"
+      
     networks:
       - frontend
       - backend
@@ -48,16 +50,17 @@ services:
 
   backend:
     build:
-      context: ./
-      dockerfile: ./backend/Dockerfile
+      context: ./backend
+      dockerfile: Dockerfile
     container_name: backend
-    restart: on-failure
+    restart: always
+    volumes:
+      - "./backend:/backend"
+      - "/backend/node_modules"
     depends_on:
       - database
     ports: 
       - 7000:7000
-    volumes:
-      - "./backend/src:/app/backend/src"
     networks:
       - backend
       - frontend
@@ -67,6 +70,7 @@ services:
     environment:
       POSTGRES_HOST: database
 
+
 volumes:
   database:
     driver: local
@@ -74,23 +78,7 @@ volumes:
     driver_opts:
       type: none
       o: bind
-      device: ./database/data
-
-  frontend:
-    driver: local
-    name: front_srcs
-    driver_opts:
-      type: none
-      o: bind
-      device: ./frontend
-
-  backend:
-    driver: local
-    name: back_srcs
-    driver_opts:
-      type: none
-      o: bind
-      device: ./backend/src
+      device: ./backend/database
 
 networks:
   database:

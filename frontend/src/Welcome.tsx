@@ -3,7 +3,7 @@ import React from "react";
 // import { Canvas, useFrame } from "@react-three/fiber";
 // import SkyBox from "./Skybox";
 // import Scene from "./Scene"
-import Background from "./background";
+import Background from "./Background";
 // import { OrbitControls, PerspectiveCamera } from '@react-three/drei'
 import welphoto from "./assets/images/welcomepagephoto.png"
 import { Link } from "react-router-dom";
