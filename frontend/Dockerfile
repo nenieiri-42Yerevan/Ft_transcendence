@@ -8,8 +8,7 @@ WORKDIR /app
 COPY ./frontend /app/frontend
 
 # Install dependencies in the frontend folder
-RUN cd frontend && npm install && npm run build
-
+RUN cd frontend && npm install
 # Expose the port used by the frontend app
 EXPOSE 3000
 

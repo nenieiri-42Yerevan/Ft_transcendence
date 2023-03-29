@@ -39,7 +39,7 @@ services:
     ports: 
       - 3000:3000
     volumes:
-      - "./frontend/src/:/app/frontend/src/"
+      - "./frontend/:/app/frontend/"
     networks:
       - frontend
       - backend

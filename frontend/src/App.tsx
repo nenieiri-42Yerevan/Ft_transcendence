@@ -29,8 +29,7 @@ export default function App(props: any) {
           <Route path="/transcendence/user/signup" element={<SignUp />} />
           <Route path="/transcendence/user/signin" element={<SignIn />} />
           <Route path="/transcendence/user/profile" element={<Profile />} />
-          <Route path="/test" element={<Test />}></Route>
-          <Route path="/dashboard" element={<Dashboard />}></Route>
+          <Route path="/transcendence/user/dashboard" element={<Dashboard />}></Route>
         </Routes>
       </Router>
     </>

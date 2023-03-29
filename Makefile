@@ -14,7 +14,7 @@ build:
 
 up:
 	@echo "$(GREEN)██████████████████████ Running Containers ██████████████████████$(RESET)"
-	@docker compose up -d
+	@docker compose up -d 
 	@echo "$(RED)╔════════════════════════════║NOTE:║════════════════════════╗$(RESET)"
 	@echo "$(RED)║   $(BLUE) You can see The Containers logs using $(YELLOW)make logs        $(RED)║$(RESET)"
 	@echo "$(RED)╚═══════════════════════════════════════════════════════════╝$(RESET)"
@@ -38,7 +38,7 @@ logs:
 prune: down
 	@echo "$(RED)█████████████████████ Remove Everything ██████████████████████$(RESET)"
 	@rm -rf database/data
-	@docker system prune -f
+	@docker system prune -a -f
 
 re: prune all
 

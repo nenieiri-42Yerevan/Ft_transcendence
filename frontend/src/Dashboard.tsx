@@ -6,11 +6,13 @@ import search_img from "./assets/images/search.png";
 import axios from "axios";
 import { useEffect } from 'react';
 import refreshToken from 'Utils/refreshToken';
-
+import GameHistoryTable from './components/GameHistoryBoard';
+import LeaderBoard from './components/LeaderBoard';
+import ActiveChallenges from './components/RequestsBoard';
 
 const Dashboard = () => {
-    const [UserName, setName] = useState<string | undefined>('');
-    const [UserId, setId] = useState('');
+    const [UserName, setName] = useState<string | undefined>();
+    const [UserId, setId] = useState<string | undefined> ();
     const [AvatarUrl, setAvatar] = useState<string | undefined>();
     const Navigate = useNavigate();
 
@@ -35,28 +37,15 @@ const Dashboard = () => {
             }
         }
     }
-/*
-    const getAvatar = async (UserId:string) => {
-        try {
-            const Avatar = await axios.get(`http://localhost:7000/transcendence/user${UserId}/avatar`);
-            console.log(Avatar);
-            setAvatar(Avatar.data);
-        } catch (error:any) {
-            console.log(error);
-        }
-    }
-*/
-    //refreshToken(Navigate);
+
     useEffect(() => {
         getUser();
       }, []);
-      console.log(`UserName : ${UserName}`);
-      console.log(`Avatar : ${AvatarUrl}`);
 
       return (
         <>
             <Navigation activeTab={'Dashboard'} userName={UserName} avatarUrl={AvatarUrl}/>
-            <div className="  py-0 md:py-6 text-xs xl:text-xl gap-x-0 md:gap-x-4 lg:text-lg md:text-md sm:text-sm backdrop-blur-md p-0 lg:p-2 xl:p-3 bg-black/50 min-w-full min-h-full z-[668] absolute flex justify-center space-between bg-clip-padding text-white text-2xl">
+            <div className="  py-0 md:py-6 text-xs xl:text-xl gap-x-0 md:gap-x-4 lg:text-lg md:text-md sm:text-sm backdrop-blur-md p-0 lg:p-2 xl:p-3 bg-dark-blue min-w-full min-h-full z-[668] absolute flex justify-center space-between bg-clip-padding text-white text-2xl">
                 <div className='flex w-full'>
                 <div className='flex w-1/6'> 
                     <form className='flex items-start'>
@@ -64,9 +53,9 @@ const Dashboard = () => {
                         <button type="submit"><img className="h-7 w-7" src={search_img} /></button>
                     </form>
                 </div>
-                <div className="flex-column w-2/6">Game History</div>
-                <div className="flex w-2/6">Ere</div>
-                <div className="flex w-1/6">van</div>
+                <GameHistoryTable userId={UserId} />
+                <ActiveChallenges userId={UserId} />
+                <LeaderBoard userId={UserId} />
                 </div>
             </div>
 
