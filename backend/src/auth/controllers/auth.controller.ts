@@ -45,7 +45,8 @@ export class AuthController {
   refreshTokens(
   		@GetUserId() userId: number,
   		@GetUser('refreshToken') refreshToken: string
-	) {
-	  this.authService.refreshTokens(userId, refreshToken);
+	): Promise<TokenDto> {
+    console.log(`HELOO ${refreshToken}`);
+	  return this.authService.refreshTokens(userId, refreshToken);
   }
 }

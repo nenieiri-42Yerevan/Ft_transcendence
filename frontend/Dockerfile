@@ -12,6 +12,7 @@ WORKDIR /frontend
 COPY --chown=node:node package*.json .
 
 # Install dependencies in the frontend folder
+
 RUN npm install
 
 # Copy the frontend folder into the container

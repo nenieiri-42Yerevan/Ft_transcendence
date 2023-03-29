@@ -4,7 +4,11 @@ module.exports = {
     './src/**/*.{js,jsx,ts,tsx}',
   ],
   theme: {
-    extend: {},
+    extend: {
+      backgroundColor: {
+        'dark-blue': '#080323',
+      }
+    },
     screens: {
       '2xs': '300px',
       // => @media (min-width: 300px) { ... }
@@ -25,6 +29,7 @@ module.exports = {
       '2xl': '1536px',
       // => @media (min-width: 1536px) { ... }
     }
+
   },
   plugins: [],
 }
