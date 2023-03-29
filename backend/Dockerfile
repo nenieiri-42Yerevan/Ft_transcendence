@@ -17,6 +17,7 @@ RUN npm install
 COPY --chown=node:node . .
 
 
+
 # # Build the app for production
 # RUN npm run build --prefix backend
 
@@ -24,4 +25,5 @@ COPY --chown=node:node . .
 EXPOSE 7000
 
 # Start the backend app when the container starts
+
 CMD ["npm", "run", "start:dev"]

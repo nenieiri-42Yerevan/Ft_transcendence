@@ -20,6 +20,8 @@ const Navigation: FC<Props> = ({ activeTab, userName, avatarUrl }) => {
   ];
 
   avatarUrl = avatarUrl ?? avatar;
+  userName = userName ?? "Undefined";
+
   
   return (
     <nav className="flex items-center justify-between flex-wrap bg-black p-6">

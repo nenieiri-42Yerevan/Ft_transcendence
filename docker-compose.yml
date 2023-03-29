@@ -41,6 +41,7 @@ services:
       - backend
     ports:
       - 3000:3000
+      
     networks:
       - frontend
       - backend
