@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 import classNames from "classnames";
-import avatar from "../assets/images/avatar.png";
+import avatar from "@SRC_DIR/assets/images/avatar.png";
 import { Link } from "react-router-dom";
 
 interface Props {

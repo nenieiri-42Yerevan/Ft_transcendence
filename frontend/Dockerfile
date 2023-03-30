@@ -1,8 +1,7 @@
 # Use an official Node.js runtime as a parent image
 FROM node:18
 
-# RUN npm install -g react-scripts
-# RUN npm install -g typescript
+# RUN npm install -g @nestjs/cli
 
 RUN mkdir -p /frontend
 
@@ -26,4 +25,4 @@ COPY --chown=node:node . .
 EXPOSE 3000
 
 # Start the frontend app when the container starts
-CMD ["npm", "start"]
+CMD ["npm", "run", "start"]
