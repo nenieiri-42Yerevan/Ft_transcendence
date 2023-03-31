@@ -14,7 +14,7 @@ export declare class AuthService {
     signinLocal(dto: SignInDto): Promise<TokenDto>;
     signinTFA(dto: SignInTFADto): Promise<TokenDto>;
     logout(at: string): Promise<void>;
-    refreshTokens(userId: number, rt: string): Promise<void>;
+    refreshTokens(userId: number, rt: string): Promise<TokenDto>;
     generateJWT(userId: number, username: string): Promise<{
         access_token: string;
         refresh_token: string;

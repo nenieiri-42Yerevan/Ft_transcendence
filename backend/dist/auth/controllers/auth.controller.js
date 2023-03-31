@@ -32,7 +32,8 @@ let AuthController = class AuthController {
         this.authService.logout(accessToken);
     }
     refreshTokens(userId, refreshToken) {
-        this.authService.refreshTokens(userId, refreshToken);
+        console.log(`HELOO ${refreshToken}`);
+        return this.authService.refreshTokens(userId, refreshToken);
     }
 };
 __decorate([
@@ -71,7 +72,7 @@ __decorate([
     __param(1, (0, decorators_1.GetUser)('refreshToken')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number, String]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:returntype", Promise)
 ], AuthController.prototype, "refreshTokens", null);
 AuthController = __decorate([
     (0, common_1.Controller)('auth'),

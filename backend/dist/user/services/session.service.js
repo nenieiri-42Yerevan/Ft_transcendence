@@ -60,6 +60,7 @@ let SessionService = class SessionService {
     }
     async read_RT(refresh_token) {
         let session = null;
+        console.log;
         if (refresh_token)
             session = await this.sessionRepo.findOne({ where: { refresh_token } });
         if (!session)

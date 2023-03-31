@@ -56,7 +56,9 @@ let UserService = class UserService {
     }
     async findOne(property, relations = []) {
         let user = null;
+        console.log("I'm trying to find someone...");
         if (property && typeof property == 'number') {
+            console.log("I'm trying to find someone...");
             user = await this.userRepo.findOne({
                 where: { id: property },
                 relations,

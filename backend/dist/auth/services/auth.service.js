@@ -63,6 +63,7 @@ let AuthService = class AuthService {
                 access_token: tokens.access_token,
                 refresh_token: tokens.refresh_token,
             });
+            return tokens;
         }
         else
             throw new common_1.HttpException('User not found', common_1.HttpStatus.NOT_FOUND);

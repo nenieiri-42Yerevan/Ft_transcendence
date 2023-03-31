@@ -1,38 +1,29 @@
-// import React from "react";
-import React, { useRef, useState } from "react";
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import './App.css';
+import './Skybox.scss';
+import SignUp from './components/SignUp';
+import SignIn from './components/SignIn';
+import Profile from './components/Profile';
+import Welcome from './components/Welcome';
+import Chat from './components/Chat/Chat';
+import Dashboard from "./components/Dashboard";
 
-import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
-
-// import SkyBox from "./Skybox";
-// import angleToRadians from "./Angle";
-import "./Skybox.scss"
-import "./App.scss"
-import SignUp from "./SignUp";
-import SignIn from "./SignIn";
-import Profile from "./Profile";
-import Welcome from "./Welcome";
-import Test from "./Test";
-import Chat from "Chat/Chat";
-
-
-
-export default function App(props: any) {
-  // const orbitControlsRef = useRef(null);
-  // const ballRef = useRef(null);
-  // const boxRef = useRef();
+const App = (props: any) => {
   return (
     <>
-      {/* <Test/> */}
       <Router>
         <Routes>
           <Route path="/transcendence" element={<Welcome />} />
           <Route path="/transcendence/user/signup" element={<SignUp />} />
           <Route path="/transcendence/user/signin" element={<SignIn />} />
           <Route path="/transcendence/user/profile" element={<Profile />} />
-          <Route path="/test" element={<Test />}></Route>
-          <Route path="/transcendence/user/chat" element={<Chat />}></Route>
+          <Route path="/transcendence/user/dashboard" element={<Dashboard />} />
+          <Route path="/transcendence/user/chat" element={<Chat />} />
         </Routes>
       </Router>
     </>
   );
-}
+};
+
+export default App;

@@ -6,5 +6,5 @@ export declare class AuthController {
     signinLocal(dto: SignInDto): Promise<TokenDto>;
     signinTFA(dto: SignInTFADto): Promise<TokenDto>;
     logout(accessToken: string): void;
-    refreshTokens(userId: number, refreshToken: string): void;
+    refreshTokens(userId: number, refreshToken: string): Promise<TokenDto>;
 }

@@ -34,8 +34,6 @@ frontend/yarn-error.log*
 backend/node_modules
 backend/.pnp
 backend/.pnp.js
-
-backend/**.DS_Store
 backend/*.sw[po]
 
 # testing
@@ -54,3 +52,6 @@ backend/.env.production.local
 backend/npm-debug.log*
 backend/yarn-debug.log*
 backend/yarn-error.log*
+
+# database files
+database/data

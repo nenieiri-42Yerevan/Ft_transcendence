@@ -1,7 +1,10 @@
 **.DS_Store
 *.sw[po]
 
-# modules
+# BACKEND
+
+# compiled output
+dist
 node_modules
 
 # logs
@@ -13,6 +16,9 @@ pnpm-debug.log*
 # tests
 coverage
 .nyc_output
+
+# database files
+data
 
 # Items that don't need to be in a Docker image.
 # Anything not used by the build system should go here.
