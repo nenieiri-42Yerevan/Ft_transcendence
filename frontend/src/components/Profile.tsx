@@ -15,10 +15,6 @@ const Profile = () => {
     const location = useLocation();
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const removeToken = () => {
-        sessionStorage.removeItem("refresh_token");
-        sessionStorage.removeItem("access_token");
-    }
     useEffect(() => {
         const authorized = location.state ? location.state.authorized : false;
         if (!authorized)
@@ -39,6 +35,7 @@ const Profile = () => {
                         <div className="mt-1">
                             <h1 className="font-bold text-4xl text-white">{userInfo.name && userInfo.name + " " + userInfo.lastName && userInfo.lastName}</h1>
                             <p className="text-white">{userInfo.username && userInfo.username}</p>
+                            <Link to="/transcendence/user/profile/settings" className="bg-[#1e81b0] p-1">Settings</Link>
                         </div>
                     </div>
                     <div className="w-full bg-[#1E1E1E] p-8 mt-2 rounded">
