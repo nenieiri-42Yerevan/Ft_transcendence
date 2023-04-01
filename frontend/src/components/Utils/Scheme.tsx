@@ -45,6 +45,19 @@ export const validationScheme = Yup.object().shape({
     .test('not_be_year', 'Year is required.', (value) => value !== 'Year'),
 });
 
+
+export const validationSettings = Yup.object().shape({
+  first_name: Yup.string()
+    .required('First name is required.')
+    .matches(/^[a-zA-Z]+$/),
+  last_name: Yup.string()
+    .required('Last name is required.')
+    .matches(/^[a-zA-Z]+$/),
+  email: Yup.string()
+    .required('Email is required.')
+    .email('Must be valid email address.'),
+});
+
 export interface Data {
   first_name: string;
   last_name: string;
@@ -80,6 +93,18 @@ export type Gender = 'male' | 'female';
 export const validate = async (values: Data) => {
   try {
     await validationScheme.validate(values, { abortEarly: false });
+  } catch (err: any) {
+    const errors = err.inner.reduce((formError: any, innerError: any) => {
+      return setIn(formError, innerError.path, innerError.message);
+    }, {});
+
+    return errors;
+  }
+};
+
+export const validateSettings = async (values: Data) => {
+  try {
+    await validationSettings.validate(values, { abortEarly: false });
   } catch (err: any) {
     const errors = err.inner.reduce((formError: any, innerError: any) => {
       return setIn(formError, innerError.path, innerError.message);

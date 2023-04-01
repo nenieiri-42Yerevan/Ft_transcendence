@@ -33,7 +33,7 @@ const Profile = () => {
                     <div className="bg-[#1E1E1E] w-full flex flex-col p-5 items-center">
                         <img src={avatar} alt="Profile" className="rounded-full w-32 h-32 object-cover" />
                         <div className="mt-1">
-                            <h1 className="font-bold text-4xl text-white">{userInfo.name && userInfo.name + " " + userInfo.lastName && userInfo.lastName}</h1>
+                            <h1 className="font-bold text-4xl text-white">{userInfo.name && userInfo.name} <span>{userInfo.lastName && userInfo.lastName}</span></h1>
                             <p className="text-white">{userInfo.username && userInfo.username}</p>
                             <Link to="/transcendence/user/profile/settings" className="bg-[#1e81b0] p-1">Settings</Link>
                         </div>
