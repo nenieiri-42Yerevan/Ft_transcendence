@@ -1,3 +1,4 @@
+"use client";
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
@@ -8,12 +9,7 @@ import { store } from './components/Slices/store';
 import { PersistGate } from 'redux-persist/integration/react';
 import * as THREE from 'three';
 
-interface ErrorBoundaryState {
-  hasError: boolean;
-}
-interface ErrorBoundaryProps {
-  children: React.ReactNode;
-}
+import { ErrorBoundary } from "react-error-boundary";
 
 let renderer: THREE.WebGLRenderer;
 let scene: THREE.Scene;
@@ -63,40 +59,38 @@ function animate() {
 
 init();
 
-class ErrorBoundary extends React.Component<
-  ErrorBoundaryProps,
-  ErrorBoundaryState
-> {
-  constructor(props: ErrorBoundaryProps) {
-    super(props);
-    this.state = { hasError: false };
-  }
-
-  static getDerivedStateFromError(error: Error) {
-    return { hasError: true };
-  }
-
-  componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
-    console.error('Error:', error, errorInfo);
-  }
-
-  render() {
-    if (this.state.hasError) {
-      return <h1>{this.state.hasError}</h1>;
-    }
-
-    return this.props.children;
-  }
-}
-
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement,
 );
+
+const ShowError = ({ error, resetErrorBoundary }) => {
+
+  return (
+    <div role="alert">
+      <p>Something went wrong:</p>
+      <pre style={{ color: "red" }}>{error.message}</pre>
+      <button onClick={resetErrorBoundary}>Try again</button>
+    </div>
+  );
+}
+
+const logError = (error: Error, info: { componentStack: string }) => {
+  console.log("Error dectected");
+  console.log(error);
+  console.log("Error details");
+  console.log(info);
+  
+};
+
 root.render(
   <React.StrictMode>
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
-        <ErrorBoundary>
+        <ErrorBoundary
+          fallbackRender={ShowError}
+          onError={logError}
+          onReset={() => window.location.reload()}
+        >
           <App />
         </ErrorBoundary>
       </PersistGate>

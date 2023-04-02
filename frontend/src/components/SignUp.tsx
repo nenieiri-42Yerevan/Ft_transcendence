@@ -21,7 +21,7 @@ const SignUp = () => {
     };
     try {
       await axios.post(
-        'http://127.0.0.1:7000/transcendence/user/signup',
+        `${process.env.BACK_URL}/transcendence/user/signup`,
         sendData,
       );
       navigate('/transcendence/user/signin');
