@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 const refreshToken = async ():Promise<number> => {
     try {
     const rt = sessionStorage.getItem('refresh_token');
-    const response = await axios.post('http://localhost:7000/transcendence/auth/refresh',{},{
+    const response = await axios.post(`${process.env.BACK_URL}/transcendence/auth/refresh`,{},{
         headers: {
           Authorization: `Bearer ${rt}`,
         }});

@@ -12,7 +12,7 @@ const ActiveChallenges: FC<Props> = ({userId}) => {
     const [matches, setMatches] = useState<Array<Object>>();
     const getMatches = async () => {
         try {
-            const response = await axios.get(`http://localhost:7000/transcendence/user${userId}/matches`, {
+            const response = await axios.get(`${process.env.BACK_URL}/transcendence/user${userId}/matches`, {
                 headers: {
                   Authorization: `Bearer ${sessionStorage.getItem('access_token')}`
                 }});

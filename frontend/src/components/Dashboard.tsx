@@ -21,7 +21,7 @@ const Dashboard = () => {
     
     const getUser = async () => {
         try {
-            const response = await axios.get('http://localhost:7000/transcendence/user?getuser', {
+            const response = await axios.get(`${process.env.BACK_URL}/transcendence/user?getuser`, {
                 headers: {
                   Authorization: `Bearer ${sessionStorage.getItem('access_token')}`
                 }});

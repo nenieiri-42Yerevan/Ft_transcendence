@@ -19,11 +19,11 @@ const persistConfig = {
   storage,
 };
 
-const roodReduser = combineReducers({
+const rootReducer = combineReducers({
   user: userReducer,
 });
 
-const persistedReducer = persistReducer(persistConfig, roodReduser);
+const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 const store = configureStore({
   reducer: persistedReducer,
