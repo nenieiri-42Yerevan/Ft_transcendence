@@ -18,8 +18,8 @@ const Profile = () => {
         if (!userInfo.user)
             navigate("/transcendence/user/signin");
         else {
-            fetchFriendsData(dispatch, userInfo);
-            fetchMatches(dispatch, userInfo);
+            fetchFriendsData(0, dispatch, userInfo);
+            fetchMatches(0, dispatch, userInfo);
         }
     }, []);
     return (

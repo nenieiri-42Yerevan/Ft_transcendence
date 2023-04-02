@@ -88,7 +88,7 @@ export const selectUser = (state: any) => state.user;
 
 export default userSlice.reducer;
 
-export const fetchFriendsData = async (dispatch: any, userInfo: UserInfo) => {
+export const fetchFriendsData = async (flag:number, dispatch: any, userInfo: UserInfo) => {
   const friendIds = userInfo.follows;
   const friendNames: string[] = [];
   for (const id of friendIds) {
@@ -106,10 +106,13 @@ export const fetchFriendsData = async (dispatch: any, userInfo: UserInfo) => {
       console.log(error);
     }
   }
-  dispatch(setFriends(friendNames));
+  if (flag == 0)
+    dispatch(setFriends(friendNames));
+  else
+    return (friendNames);
 };
 
-export const fetchMatches = async (dispatch: any, userInfo: UserInfo) => {
+export const fetchMatches = async (flag:number, dispatch: any, userInfo: UserInfo) => {
   try {
     const response = await axios.get(
       `${process.env.BACK_URL}/transcendence/user/${userInfo.id}/matches`,
@@ -162,3 +165,19 @@ export const getUserByName = async (data: any) => {
   }
 }
 
+export const getUserById = async (id: any) => {
+  try {
+    const response = await axios.get(`${process.env.BACK_URL}/transcendence/user/by-id/${id}`,
+    {
+        headers: {
+          Authorization: `Bearer ${sessionStorage.getItem('access_token')}`
+        }
+    }
+    );
+    return (response.data);
+  } 
+  catch (error) {
+    console.log(error);
+
+  }
+}
