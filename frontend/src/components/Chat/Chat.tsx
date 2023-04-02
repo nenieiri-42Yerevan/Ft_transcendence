@@ -1,27 +1,36 @@
 import axios from "axios";
-import React, { useState } from "react";
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useState, useEffect } from "react";
+import { useSelector } from 'react-redux';
 import { Form } from "react-final-form";
-import { FORM_ERROR } from 'final-form'
-import {selectUser} from '../Slices/userSlice';
+import { selectUser, getUserByName } from '../Slices/userSlice';
 import Modal from "react-modal";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import NewChat from "./NewChat";
 
 
 const Chat = () => {
     const userInfo = useSelector(selectUser);
+    const navigate = useNavigate();
+    useEffect(() => {
+        if (!userInfo.user)
+            navigate("/transcendence/user/signin");
+        else {
+
+        }
+
+    }, []);
+    // const userInfo = useSelector(selectUser);
     const [isOpen, setIsOpen] = useState(false)
     const chats = [
-        {user: "user1"},
-        {user: "user2"},
-        {user: "user3"},
-        {user: "user4"},
-        {user: "user4"},
-        {user: "user5"},
-        {user: "user6"},
-        {user: "user7"},
-        {user: "user8"},
+        { user: "user1" },
+        { user: "user2" },
+        { user: "user3" },
+        { user: "user4" },
+        { user: "user4" },
+        { user: "user5" },
+        { user: "user6" },
+        { user: "user7" },
+        { user: "user8" },
     ];
     const handleOpenModal = () => {
         setIsOpen(true);
@@ -30,33 +39,19 @@ const Chat = () => {
         setIsOpen(false)
     }
 
-    const onSubmit = async (data: any) => {
+    // const onSubmit = async (data: any) => {
 
-        // const sendData = {
-            
-        // //   first_name: data.first_name,
-        // //   last_name: data.last_name,
-        // //   username: data.username,
-        // //   email: data.email,
-        // //   gender: data.gender,
-        // //   password: data.password,
-        // //   date_of_birth: data.day + "/" + data.month + "/" + data.year,
-        // };
-        try {
-            const user = await axios
-                            .post(`${process.env.BACK_URL}/transcendence/user/by-name/${data.search}`);
-            console.log(user);
-            
-            // const res = await axios
-            //                 .post(`/transcendence/chat/create/${userInfo.id}/${user.data}`)
-        //   navigate("/transcendence/user/signin")
-    
-        }
-        catch (error: any) {
-          return { [FORM_ERROR]: error.response.data.message }
-    
-        }
-      };
+    //     try {
+    //         const response = await axios.post(`${process.env.BACK_URL}/transcendence/user/by-name/${data.name}`, {}, {
+    //             headers: {
+    //                 Authorization: `Bearer ${sessionStorage.getItem('access_token')}`
+    //             }
+    //         });
+    //     } catch (error) {
+    //         return { [FORM_ERROR]: error.response.data.message }
+
+    //     }
+    // };
 
     // const newChat = async () => {
     //     axios.post(`/transcendence/chat/create/${userInfo.id}/:tid`)
@@ -83,9 +78,9 @@ const Chat = () => {
                         </div>
                     </Modal>
                     {
-                        chats && chats.map((elem, index)=>(
+                        chats && chats.map((elem, index) => (
                             <a href="#" key={`user_${index}`} className="text-gray-400 hover:text-white py-2 px-4">{elem.user}</a>
-                    ))}
+                        ))}
                 </nav>
             </div>
             <div className="flex-1 flex flex-col bg-black/90 border border-black">

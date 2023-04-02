@@ -1,7 +1,10 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import axios from 'axios';
+import { FORM_ERROR } from 'final-form'
+
 // import { Dispatch } from 'react';
 // import { useDispatch, useSelector } from 'react-redux';
+import { GetUser } from '../../../../backend/src/common/decorators/GetUser';
 
 interface UserInfo {
   username: string;
@@ -15,41 +18,71 @@ interface UserInfo {
   follows: number[];
 }
 
-export const initialState: UserInfo = {
-  username: '',
-  name: '',
-  lastName: '',
-  email: '',
-  rank: 0,
-  id: 0,
-  img: '',
-  names: [],
-  follows: [],
+interface User {
+  user: UserInfo | null
+  isLoading: boolean;
+  error: string | null;
+}
+
+export const initialState: User = {
+  user: null,
+  isLoading: false,
+  error: null
 };
+
+
 
 export const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
     setUserInfo: (state, action: any) => {
-      state.username = action.payload.username;
-      state.name = action.payload.first_name;
-      state.lastName = action.payload.last_name;
-      state.email = action.payload.email;
-      state.rank = action.payload.rank;
-      state.id = action.payload.id;
-      state.follows = action.payload.follows;
+      const user: UserInfo = {
+        ...state.user,
+        username: action.payload.username,
+        name: action.payload.first_name,
+        lastName: action.payload.last_name,
+        email: action.payload.email,
+        rank: action.payload.rank,
+        id: action.payload.id,
+        follows: action.payload.follows
+      }
+      state.user = user;
+      state.isLoading = false;
+      state.error = null;
+    },
+    loginRequest: (state) => {
+      state.isLoading = true;
+      state.error = null;
+      // console.log(state);
+
+    },
+    loginFailure: (state, action: PayloadAction<string>) => {
+      state.isLoading = false;
+      state.error = action.payload;
+    },
+    logout: (state) => {
+      state.user = null;
+      state.isLoading = false;
+      state.error = null;
     },
     setUserImage: (state, action: any) => {
-      state.img = action.payload;
+      state.user.img = action.payload;
     },
     setFriends: (state, action: PayloadAction<string[]>) => {
-      state.names = action.payload;
+      state.user.names = action.payload;
     },
   },
 });
 
-export const { setUserInfo, setUserImage, setFriends } = userSlice.actions;
+export const {
+  setUserInfo,
+  setUserImage,
+  setFriends,
+  logout,
+  loginFailure,
+  loginRequest
+} = userSlice.actions;
 
 export const selectUser = (state: any) => state.user;
 
@@ -111,13 +144,21 @@ export const getUserInfo = async () => {
 }
 
 export const logOut = async () => {
+
+}
+
+export const getUserByName = async (data: any) => {
   try {
-    const response = await axios.post(`${process.env.BACK_URL}/transcendence/auth/logout`,{}, {
-      headers: {
-        Authorization: `Bearer ${sessionStorage.getItem('access_token')}`
-      }
-    });
+    const response = await axios.get(`${process.env.BACK_URL}/transcendence/user/by-name/${data.name}`
+      //   headers: {
+      //     Authorization: `Bearer ${sessionStorage.getItem('access_token')}`
+      //   }
+
+    );
+    console.log(response);
   } catch (error) {
-    console.log(error);
+    return { [FORM_ERROR]: error.response.data.message }
+
   }
 }
+
