@@ -6,16 +6,22 @@ import { FORM_ERROR } from 'final-form'
 // import { useDispatch, useSelector } from 'react-redux';
 import { GetUser } from '../../../../backend/src/common/decorators/GetUser';
 
+export interface Friends {
+  name: string,
+  id: number
+}
+
 interface UserInfo {
   username: string;
-  name: string;
+  name: Friends[];
   lastName: string;
   email: string;
   rank: number;
-  names: string[];
+  names: string;
   id: number;
   img: string;
   follows: number[];
+  blocked: number[];
 }
 
 interface User {
@@ -45,7 +51,8 @@ export const userSlice = createSlice({
         email: action.payload.email,
         rank: action.payload.rank,
         id: action.payload.id,
-        follows: action.payload.follows
+        follows: action.payload.follows,
+        blocked: action.payload.blocked,
       }
       state.user = user;
       state.isLoading = false;
@@ -72,12 +79,20 @@ export const userSlice = createSlice({
     setFriends: (state, action: PayloadAction<string[]>) => {
       state.user.names = action.payload;
     },
+    setFollows: (state, action: PayloadAction<string[]>) => {
+      state.user.follows = action.payload;
+    },
+    setBlocked: (state, action: PayloadAction<string[]>) => {
+      state.user.blocked = action.payload;
+    },
   },
 });
 
 export const {
   setUserInfo,
   setUserImage,
+  setFollows,
+  setBlocked,
   setFriends,
   logout,
   loginFailure,
@@ -90,7 +105,7 @@ export default userSlice.reducer;
 
 export const fetchFriendsData = async (flag:number, dispatch: any, userInfo: UserInfo) => {
   const friendIds = userInfo.follows;
-  const friendNames: string[] = [];
+  const friendNames: Friends[] = [];
   for (const id of friendIds) {
     try {
       const response = await axios.get(
@@ -101,7 +116,7 @@ export const fetchFriendsData = async (flag:number, dispatch: any, userInfo: Use
           },
         },
       );
-      friendNames.push(response.data.username);
+      friendNames.push({name: response.data.username, id: id});
     } catch (error) {
       console.log(error);
     }
@@ -175,6 +190,41 @@ export const getUserById = async (id: any) => {
     }
     );
     return (response.data);
+  } 
+  catch (error) {
+    console.log(error);
+
+  }
+}
+
+export const follow = async (dispatch: any, userInfo: UserInfo, id: number)=>{
+  try {
+    const response = await axios.put(`${process.env.BACK_URL}/transcendence/user/follow/${userInfo.id}/${id}`,{},
+    {
+        headers: {
+          Authorization: `Bearer ${sessionStorage.getItem('access_token')}`
+        }
+    }
+    );
+    dispatch(setFollows(response.data));
+  }
+  catch (error) {
+    console.log(error);
+
+  }
+}
+
+
+export const block = async (dispatch, userInfo: UserInfo, id: number)=>{
+  try {
+    const response = await axios.put(`${process.env.BACK_URL}/transcendence/user/block/${userInfo.id}/${id}`, {},
+    {
+        headers: {
+          Authorization: `Bearer ${sessionStorage.getItem('access_token')}`
+        }
+    }
+    );
+    dispatch(setBlocked(response.data));
   } 
   catch (error) {
     console.log(error);

@@ -33,6 +33,7 @@ const SignIn = () => {
             sessionStorage.setItem("refresh_token", refreshToken);
             const userInfo = await getUserInfo();
             dispatch(setUserInfo(userInfo));
+            console.log(userInfo);
             navigate("/transcendence/user/profile");
         }
         catch (error: any) {

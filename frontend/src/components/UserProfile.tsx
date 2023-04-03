@@ -8,13 +8,14 @@ import { useState, useEffect } from 'react';
 import {useLocation, useNavigate} from 'react-router-dom';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
-import {fetchFriendsData , fetchMatches, UserInfo, getUserById, getUserInfo, selectUser, setFriends} from './Slices/userSlice';
+import {fetchFriendsData , fetchMatches, block, follow, getUserById, Friends, selectUser} from './Slices/userSlice';
 
 const UserProfile = () => {
     const {id} = useParams();
     const dispatch = useDispatch();
     const [userInfo, setUserInfo] = useState(null);
     const [friends, setFriends] = useState(null);
+    const current = useSelector(selectUser);
     useEffect(() => {
       console.log(id);
         getUserById(id).then(async userInfo => {
@@ -36,7 +37,8 @@ const UserProfile = () => {
                         <div className="mt-1">
                             <h1 className="font-bold text-4xl text-white">{userInfo && userInfo.first_name && userInfo.first_name} <span>{userInfo && userInfo.last_name && userInfo.last_name}</span></h1>
                             <p className="text-white">{userInfo && userInfo.username && userInfo.username}</p>
-                            <Link to="/transcendence/user/profile/settings" className="bg-[#1e81b0] p-1">Settings</Link>
+                            <p><button onClick = {()=>follow(dispatch, current.user, id)} className="bg-[#1e81b0] p-1 w-40">{current.user.follows.includes(Number(id)) ? "Unfollow" : "follow"}</button></p>
+                            <p><button onClick = {()=>block(dispatch, current.user, id)} className="bg-red-600 p-1 w-40">{current.user.blocked.includes(Number(id)) ? "Unblock" : "Block"}</button></p>
                         </div>
                     </div>
                     <div className="w-full bg-[#1E1E1E] p-8 mt-2 rounded">
@@ -53,8 +55,8 @@ const UserProfile = () => {
                 <div className="w-full h-fit m-4 bg-[#1E1E1E] p-8 rounded">
                     <h2 className="font-bold text-2xl text-white text-center  flex justify-between"><img className = "w-[2em]" src = {pong}></img>Friends <span>more</span></h2>
                     <hr />
-                    {friends  && friends.slice(0, 5).map((name: string, index: number) => (
-                        <p key={index} className="text-white text-center p-2 flex justify-between"><img className = "w-[2em]" src = {avatar}></img> <span>{name}</span></p>
+                    {friends  && friends.slice(0, 5).map((obj: Friends, index: number) => (
+                        <p key={index} className="text-white text-center p-2 flex justify-between"><img className="w-[2em]" src={avatar}></img> <Link className="p-2 hover:bg-[#1E81B0]" to= {`/transcendence/user/profile/${obj.id}`}>{obj.name}</Link></p>
                     ))}
                 </div>
             </div>

@@ -8,7 +8,7 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchFriendsData, fetchMatches, selectUser, setFriends } from './Slices/userSlice';
+import { fetchFriendsData, fetchMatches, selectUser, Friends } from './Slices/userSlice';
 
 const Profile = () => {
     const userInfo = useSelector(selectUser);
@@ -18,8 +18,11 @@ const Profile = () => {
         if (!userInfo.user)
             navigate("/transcendence/user/signin");
         else {
-            fetchFriendsData(0, dispatch, userInfo);
-            fetchMatches(0, dispatch, userInfo);
+            fetchFriendsData(0, dispatch, userInfo.user);
+            fetchMatches(0, dispatch, userInfo.user);
+            console.log("nn");
+            console.log(userInfo);
+            
         }
     }, []);
     return (
@@ -30,15 +33,15 @@ const Profile = () => {
                     <div className="bg-[#1E1E1E] w-full flex flex-col p-5 items-center">
                         <img src={avatar} alt="Profile" className="rounded-full w-32 h-32 object-cover" />
                         <div className="mt-1">
-                            <h1 className="font-bold text-4xl text-white">{userInfo.name && userInfo.name} <span>{userInfo.lastName && userInfo.lastName}</span></h1>
-                            <p className="text-white">{userInfo.username && userInfo.username}</p>
-                            <Link to="/transcendence/user/profile/settings" className="bg-[#1e81b0] p-1">Settings</Link>
+                            <h1 className="font-bold text-4xl text-white">{userInfo.user.name && userInfo.user.name} <span>{userInfo.user.lastName && userInfo.user.lastName}</span></h1>
+                            <p className="text-white">{userInfo.user.username && userInfo.user.username}</p>
+                            <Link to="/transcendence/user/profile/settings" className="bg-[#1e81b0] p-1 px-10">Settings</Link>
                         </div>
                     </div>
                     <div className="w-full bg-[#1E1E1E] p-8 mt-2 rounded">
                         <h2 className="font-bold text-2xl text-white text-center  flex justify-between"><img className="w-[2em]" src={pong}></img>Game Stats</h2>
                         <hr />
-                        <p className="text-white flex justify-between p-2">Rank: <span>{userInfo.rank && userInfo.rank}</span></p>
+                        <p className="text-white flex justify-between p-2">Rank: <span>{userInfo.user.rank && userInfo.user.rank}</span></p>
                     </div>
                 </div>
                 <div className="w-full h-fit bg-[#1E1E1E] m-4 p-8 rounded">
@@ -49,8 +52,8 @@ const Profile = () => {
                 <div className="w-full h-fit m-4 bg-[#1E1E1E] p-8 rounded">
                     <h2 className="font-bold text-2xl text-white text-center  flex justify-between"><img className="w-[2em]" src={pong}></img>Friends <span>more</span></h2>
                     <hr />
-                    {userInfo.names && userInfo.names.slice(0, 5).map((name: string, index: number) => (
-                        <p key={index} className="text-white text-center p-2 flex justify-between"><img className="w-[2em]" src={avatar}></img> <span>{name}</span></p>
+                    {userInfo.user.names && userInfo.user.names.slice(0, 5).map((obj: Friends, index: number) => (
+                        <p key={index} className="text-white text-center p-2 flex justify-between"><img className="w-[2em]" src={avatar}></img> <Link className="hover:bg-[#1E81B0] p-2" to= {`/transcendence/user/profile/${obj.id}`}>{obj.name}</Link></p>
                     ))}
                 </div>
             </div>

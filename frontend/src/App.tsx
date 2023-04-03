@@ -5,6 +5,7 @@ import './Skybox.scss';
 import SignUp from './components/SignUp';
 import SignIn from './components/SignIn';
 import Profile from './components/Profile';
+import UserProfile from './components/UserProfile';
 import Settings from './components/Settings';
 import Welcome from './components/Welcome';
 import Chat from './components/Chat/Chat';
@@ -19,6 +20,7 @@ const App = (props: any) => {
           <Route path="/transcendence/user/signup" element={<SignUp />} />
           <Route path="/transcendence/user/signin" element={<SignIn />} />
           <Route path="/transcendence/user/profile" element={<Profile />} />
+          <Route path="/transcendence/user/profile/:id" element={<UserProfile />} />
           <Route path="/transcendence/user/profile/settings" element={<Settings />} />
           <Route path="/transcendence/user/dashboard" element={<Dashboard />} />
           <Route path="/transcendence/user/chat" element={<Chat />} />
