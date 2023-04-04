@@ -25,8 +25,10 @@ const UserProfile = () => {
           console.log(friends);
           setFriends(friends);
           // await fetchMatches(1, dispatch, userInfo);
-        });
+        }).catch(error=>{});
       }, [id]);
+      if (userInfo == null)
+        return (<h1>User Not Found</h1>);
       return (
         <>
             <Profilmenu/>
