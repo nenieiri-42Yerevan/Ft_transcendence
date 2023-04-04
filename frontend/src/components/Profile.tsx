@@ -10,6 +10,7 @@ import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchFriendsData, fetchMatches, selectUser, Friends } from './Slices/userSlice';
 import refreshToken from "./Utils/refreshToken";
+import Footer from "./Footer";
 
 const Profile = () => {
     const userInfo = useSelector(selectUser);
@@ -28,8 +29,9 @@ const Profile = () => {
     }, []);
     return (
         <>
+        <div className ="backdrop-blur-md flex flex-col min-h-full min-w-full bg-black/50 z-[668] absolute">
             <Profilmenu />
-            <div className="flex md:flex-row flex-col justify-between backdrop-blur-md min-h-full min-w-full bg-black/50 z-[668] absolute">
+            <div className="flex md:flex-row flex-col min-h-screen justify-between">
                 <div className="w-full m-4 rounded">
                     <div className="bg-[#1E1E1E] w-full border-[#393939] border-solid border flex flex-col p-5 items-center">
                         <img src={avatar} alt="Profile" className="rounded-full w-32 h-32 object-cover" />
@@ -60,7 +62,9 @@ const Profile = () => {
                     <p className = "text-white text-center p-2 flex justify-between hover:bg-[#616161]">{ userInfo.user.names && userInfo.user.names.length === 0 && "No Data"} </p>
                 </div>
             </div>
-            <Background />
+            <Footer/>
+        </div>
+        <Background />
         </>
     );
 }

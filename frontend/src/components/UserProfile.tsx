@@ -9,6 +9,7 @@ import {useLocation, useNavigate} from 'react-router-dom';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import {fetchFriendsData , fetchMatches, block, follow, getUserById, Friends, selectUser} from './Slices/userSlice';
+import Footer from "./Footer";
 
 const UserProfile = () => {
     const {id} = useParams();
@@ -31,8 +32,9 @@ const UserProfile = () => {
         return (<h1>User Not Found</h1>);
       return (
         <>
+        <div className="backdrop-blur-md flex flex-col min-h-full min-w-full bg-black/50 z-[668] absolute">
             <Profilmenu/>
-            <div className = "flex md:flex-row flex-col justify-between backdrop-blur-md min-h-full min-w-full bg-black/50 z-[668] absolute">
+            <div className = "flex md:flex-row flex-col justify-between min-h-screen min-w-full">
                 <div className="w-full m-4 rounded">
                     <div className="bg-[#1E1E1E] border-[#393939] border-solid border w-full flex flex-col p-5 items-center">
                         <img src={avatar} alt="Profile" className="rounded-full w-32 h-32 object-cover" />
@@ -64,6 +66,8 @@ const UserProfile = () => {
                     <p className = "text-white text-center p-2 flex justify-between hover:bg-[#616161]">{ friends && friends.length === 0 && "No Data"} </p>
                 </div>
             </div>
+            <Footer/>
+        </div>
         <Background/>
         </>
     ); 
