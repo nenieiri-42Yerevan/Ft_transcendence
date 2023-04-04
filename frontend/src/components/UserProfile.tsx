@@ -30,7 +30,7 @@ const UserProfile = () => {
       return (
         <>
             <Profilmenu/>
-            <div className = "flex flex-row justify-between backdrop-blur-md min-h-full min-w-full bg-black/50 z-[668] absolute">
+            <div className = "flex md:flex-row flex-col justify-between backdrop-blur-md min-h-full min-w-full bg-black/50 z-[668] absolute">
                 <div className="w-full m-4 rounded">
                     <div className="bg-[#1E1E1E] border-[#393939] border-solid border w-full flex flex-col p-5 items-center">
                         <img src={avatar} alt="Profile" className="rounded-full w-32 h-32 object-cover" />
