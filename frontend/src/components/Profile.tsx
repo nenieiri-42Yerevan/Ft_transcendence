@@ -17,6 +17,7 @@ const Profile = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [imageFile, setImageFile] = useState<File | null>(null);
+    const [flag, setflag] = useState(0);
     useEffect(() => {
         if (!userInfo.user)
             navigate("/transcendence/user/signin");
@@ -30,7 +31,8 @@ const Profile = () => {
     }, []);
     useEffect(()=>{
         getAvatar(dispatch, userInfo.user.id);
-    }, [imageFile])
+        console.log(flag);
+    }, [flag])
     return (
         <>
         <div className ="backdrop-blur-md flex flex-col min-h-full min-w-full bg-black/50 z-[668] absolute">
@@ -43,7 +45,7 @@ const Profile = () => {
                             <h1 className="font-bold text-4xl text-white">{userInfo.user.name && userInfo.user.name} <span>{userInfo.user.lastName && userInfo.user.lastName}</span></h1>
                             <p className="text-white mb-8">{userInfo.user.username && userInfo.user.username}</p>
                             <input className="text-white p-1 my-2 " id="profile-image" type="file" accept="image/*" onChange={(e) => setImageFile(e.target.files && e.target.files[0])} />
-                            <p><button className="bg-[#1e81b0] p-1 my-2 w-40" onClick={async ()=>{await setAvatar(imageFile, userInfo.user.id, dispatch)}}>Upload</button></p>
+                            <p><button className="bg-[#1e81b0] p-1 my-2 w-40" onClick={async ()=>{await setAvatar(imageFile, userInfo.user.id, dispatch); setflag(1)}}>Upload</button></p>
                             <Link to="/transcendence/user/profile/settings" className="bg-[#1e81b0] block p-1 my-2 w-40 text-center">Settings</Link>
                         </div>
                     </div>

@@ -25,7 +25,7 @@ interface UserInfo {
 }
 
 interface User {
-  user: UserInfo | null
+  user: UserInfo | null;
   isLoading: boolean;
   error: string | null;
 }
@@ -73,7 +73,7 @@ export const userSlice = createSlice({
       state.isLoading = false;
       state.error = null;
     },
-    setUserImage: (state, action: any) => {
+    setUserImage: (state, action: PayloadAction<string>) => {
       if (state.user)
         state.user.img = action.payload;
     },
@@ -218,7 +218,7 @@ export const follow = async (dispatch: any, userInfo: UserInfo, id: number)=>{
   }
 }
 
-export const getAvatar = async (id: any, dispatch: any) => {
+export const getAvatar = async (dispatch: any, id:number) => {
   try {
     const response = await axios.get(`${process.env.BACK_URL}/transcendence/user/${id}/avatar`,
     {
@@ -228,8 +228,15 @@ export const getAvatar = async (id: any, dispatch: any) => {
     }
     );
     console.log("avatar: ");
-    console.log(response.data);
-    dispatch(setUserImage(response.data));
+    console.log(response);
+    const base64 = btoa(
+      new Uint8Array(response.data).reduce(
+        (data, byte) => data + String.fromCharCode(byte),
+        '',
+      ),
+    );
+
+    dispatch(setUserImage("data:;base64," + base64));
     return (response.status);
   } 
   catch (error) {
@@ -241,10 +248,13 @@ export const getAvatar = async (id: any, dispatch: any) => {
 
 export const setAvatar = async ( imageFile: any,id: any, dispatch: any) => {
   const formData = new FormData();
-  formData.append("avatar", imageFile);
+  console.log(imageFile);
+  
+  formData.append("file", imageFile);
+  console.log(formData);
   try {
     const response = await axios.put(`${process.env.BACK_URL}/transcendence/user/update-avatar/${id}`,
-    FormData,
+    formData,
     {
         headers: {
           Authorization: `Bearer ${sessionStorage.getItem('access_token')}`,
@@ -252,9 +262,7 @@ export const setAvatar = async ( imageFile: any,id: any, dispatch: any) => {
         },
     }
     );
-    console.log("avatar: ");
-    console.log(response.data);
-    dispatch(setUserImage(response.data));
+    console.log(response);
     return (response.status);
   } 
   catch (error) {
