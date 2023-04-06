@@ -13,13 +13,13 @@ export interface Friends {
 
 interface UserInfo {
   username: string;
-  name: Friends[];
+  names?: Friends[] | undefined;
   lastName: string;
   email: string;
   rank: number;
-  names: string;
+  name: string;
   id: number;
-  img: string;
+  img?: string | undefined;
   follows: number[];
   blocked: number[];
 }
@@ -74,16 +74,20 @@ export const userSlice = createSlice({
       state.error = null;
     },
     setUserImage: (state, action: any) => {
-      state.user.img = action.payload;
+      if (state.user)
+        state.user.img = action.payload;
     },
-    setFriends: (state, action: PayloadAction<string[]>) => {
-      state.user.names = action.payload;
+    setFriends: (state, action: PayloadAction<Friends[]>) => {
+      if (state.user)
+        state.user.names = action.payload;
     },
-    setFollows: (state, action: PayloadAction<string[]>) => {
-      state.user.follows = action.payload;
+    setFollows: (state, action: PayloadAction<number[]>) => {
+      if (state.user)
+        state.user.follows = action.payload;
     },
-    setBlocked: (state, action: PayloadAction<string[]>) => {
-      state.user.blocked = action.payload;
+    setBlocked: (state, action: PayloadAction<number[]>) => {
+      if (state.user)
+        state.user.blocked = action.payload;
     },
   },
 });
@@ -214,6 +218,47 @@ export const follow = async (dispatch: any, userInfo: UserInfo, id: number)=>{
   }
 }
 
+export const getAvatar = async (id: any, dispatch: any) => {
+  try {
+    const response = await axios.get(`${process.env.BACK_URL}/transcendence/user/${id}/avatar`,
+    {
+        headers: {
+          Authorization: `Bearer ${sessionStorage.getItem('access_token')}`
+        }
+    }
+    );
+    console.log("avatar: ");
+    console.log(response.data);
+    dispatch(setUserImage(response.data));
+    return (response.status);
+  } 
+  catch (error) {
+    console.log(error);
+    return (error.response.status);
+
+  }
+}
+
+// export const setAvatar = async (id: any, dispatch: any) => {
+//   try {
+//     const response = await axios.get(`${process.env.BACK_URL}/transcendence/user/${id}/avatar`,
+//     {
+//         headers: {
+//           Authorization: `Bearer ${sessionStorage.getItem('access_token')}`
+//         }
+//     }
+//     );
+//     console.log("avatar: ");
+//     console.log(response.data);
+//     dispatch(setUserImage(response.data));
+//     return (response.status);
+//   } 
+//   catch (error) {
+//     console.log(error);
+//     return (error.response.status);
+
+//   }
+// }
 
 export const block = async (dispatch, userInfo: UserInfo, id: number)=>{
   try {

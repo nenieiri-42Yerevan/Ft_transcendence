@@ -27,7 +27,7 @@ const Profilemenu = () => {
   return (
     <>
       <nav className="flex justify-between w-full py-2 px-4 bg-[#1E1E1E] text-white">
-        <ul className="flex space-x-4">
+        <ul className="flex gap-4">
           <li>
             <Link to="#">Dashboard</Link>
           </li>
@@ -40,16 +40,18 @@ const Profilemenu = () => {
           <li>
             <Link to="#">Game</Link>
           </li>
-          <li className="absolute right-0">
-            <Link
+          
+           
+        </ul>
+        <div className='flex flex-row justify-end'>
+        <Link
               to="/transcendence/user/signin"
               onClick={logOut}
-              className="m-3 mr-0 text-center text-red-900 font-bold py-3 "
+              className="text-center text-red-900 font-bold"
             >
               Log Out
             </Link>
-          </li>
-        </ul>
+        </div>
       </nav>
     </>
   );

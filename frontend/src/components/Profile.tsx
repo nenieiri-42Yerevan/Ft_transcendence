@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Background from "./Background";
 import avatar from "@SRC_DIR/assets/images/avatar.png"
 import pong from "@SRC_DIR/assets/images/pong.png"
@@ -8,7 +8,7 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchFriendsData, fetchMatches, selectUser, Friends } from './Slices/userSlice';
+import { fetchFriendsData, fetchMatches, selectUser, Friends, getAvatar } from './Slices/userSlice';
 import refreshToken from "./Utils/refreshToken";
 import Footer from "./Footer";
 
@@ -22,6 +22,7 @@ const Profile = () => {
         else {
             fetchFriendsData(0, dispatch, userInfo.user);
             fetchMatches(0, dispatch, userInfo.user);
+            // getAvatar(dispatch, userInfo.user.id);
             console.log("nn");
             console.log(userInfo);
             

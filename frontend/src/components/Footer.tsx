@@ -5,7 +5,7 @@ const footer = ()=>{
     return (
     <div className="bg-py-4 text-2xl">
         <div className="container mx-auto px-4">
-            <p className="text-gray-400 text-center">
+            <div className="text-gray-400 text-center">
                 <img className = "mx-auto w-32" src={logo} alt="logo" />
                 Ft_transcendence last commone core project
                 <h1 className="text-[#1E81B0]">The Team</h1>
@@ -16,7 +16,7 @@ const footer = ()=>{
                     <p className="m-2">hohayrap </p>
                     <p className="m-2">Rstephan </p>
                 </div>
-            </p>
+            </div>
             <p className="text-center text-gray-400 text-sm">
             &copy; 2023 My Website. All rights reserved.
             </p>
