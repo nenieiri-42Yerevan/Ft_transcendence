@@ -8,7 +8,7 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchFriendsData, fetchMatches, selectUser, Friends, getAvatar } from './Slices/userSlice';
+import { fetchFriendsData, fetchMatches, selectUser, Friends, getAvatar, setAvatar } from './Slices/userSlice';
 import refreshToken from "./Utils/refreshToken";
 import Footer from "./Footer";
 
@@ -16,13 +16,14 @@ const Profile = () => {
     const userInfo = useSelector(selectUser);
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const [imageFile, setImageFile] = useState<File | null>(null);
     useEffect(() => {
         if (!userInfo.user)
             navigate("/transcendence/user/signin");
         else {
             fetchFriendsData(0, dispatch, userInfo.user);
             fetchMatches(0, dispatch, userInfo.user);
-            // getAvatar(dispatch, userInfo.user.id);
+            getAvatar(dispatch, userInfo.user.id);
             console.log("nn");
             console.log(userInfo);
             
@@ -39,6 +40,8 @@ const Profile = () => {
                         <div className="mt-1">
                             <h1 className="font-bold text-4xl text-white">{userInfo.user.name && userInfo.user.name} <span>{userInfo.user.lastName && userInfo.user.lastName}</span></h1>
                             <p className="text-white mb-8">{userInfo.user.username && userInfo.user.username}</p>
+                            <input className="bg-[#1e81b0] p-1 my-2 " id="profile-image" type="file" accept="image/*" onChange={(e) => setImageFile(e.target.files && e.target.files[0])} />
+                            <p><button className="bg-[#1e81b0] p-1 my-2 px-10 w-40" onClick={async ()=>{await setAvatar(imageFile, userInfo.user.id, dispatch)}}>Upload</button></p>
                             <Link to="/transcendence/user/profile/settings" className="bg-[#1e81b0] p-1 py-2 px-10 rounded-sm">Settings</Link>
                         </div>
                     </div>

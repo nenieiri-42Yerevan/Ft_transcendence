@@ -15,7 +15,7 @@ const UserProfile = () => {
     const {id} = useParams();
     const dispatch = useDispatch();
     const [userInfo, setUserInfo] = useState(null);
-    const [friends, setFriends] = useState(null);
+    const [friends, setFriends] = useState<Friends[]>([]);
     const current = useSelector(selectUser);
     useEffect(() => {
       console.log(id);
@@ -24,7 +24,8 @@ const UserProfile = () => {
           const friends = await fetchFriendsData(1, dispatch, userInfo);
           console.log("lll");
           console.log(friends);
-          setFriends(friends);
+          if (friends)
+            setFriends(friends);
           // await fetchMatches(1, dispatch, userInfo);
         }).catch(error=>{});
       }, [id]);

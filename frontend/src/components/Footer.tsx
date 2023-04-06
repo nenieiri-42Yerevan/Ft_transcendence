@@ -1,5 +1,5 @@
 import React from "react";
-import logo from "../assets/images/pink.svg"
+import logo from "@SRC_DIR/assets/images/pink.svg"
 
 const footer = ()=>{
     return (

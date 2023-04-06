@@ -13,7 +13,7 @@ export interface Friends {
 
 interface UserInfo {
   username: string;
-  names?: Friends[] | undefined;
+  names?: Friends[];
   lastName: string;
   email: string;
   rank: number;
@@ -239,26 +239,29 @@ export const getAvatar = async (id: any, dispatch: any) => {
   }
 }
 
-// export const setAvatar = async (id: any, dispatch: any) => {
-//   try {
-//     const response = await axios.get(`${process.env.BACK_URL}/transcendence/user/${id}/avatar`,
-//     {
-//         headers: {
-//           Authorization: `Bearer ${sessionStorage.getItem('access_token')}`
-//         }
-//     }
-//     );
-//     console.log("avatar: ");
-//     console.log(response.data);
-//     dispatch(setUserImage(response.data));
-//     return (response.status);
-//   } 
-//   catch (error) {
-//     console.log(error);
-//     return (error.response.status);
+export const setAvatar = async ( File: any,id: any, dispatch: any) => {
+  try {
+    const response = await axios.put(`${process.env.BACK_URL}/transcendence/user/update-avatar/${id}`,
+    {
+      
+    },
+    {
+        headers: {
+          Authorization: `Bearer ${sessionStorage.getItem('access_token')}`
+        }
+    }
+    );
+    console.log("avatar: ");
+    console.log(response.data);
+    dispatch(setUserImage(response.data));
+    return (response.status);
+  } 
+  catch (error) {
+    console.log(error);
+    return (error.response.status);
 
-//   }
-// }
+  }
+}
 
 export const block = async (dispatch, userInfo: UserInfo, id: number)=>{
   try {
