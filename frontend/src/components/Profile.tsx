@@ -23,12 +23,14 @@ const Profile = () => {
         else {
             fetchFriendsData(0, dispatch, userInfo.user);
             fetchMatches(0, dispatch, userInfo.user);
-            getAvatar(dispatch, userInfo.user.id);
             console.log("nn");
             console.log(userInfo);
             
         }
     }, []);
+    useEffect(()=>{
+        getAvatar(dispatch, userInfo.user.id);
+    }, [imageFile])
     return (
         <>
         <div className ="backdrop-blur-md flex flex-col min-h-full min-w-full bg-black/50 z-[668] absolute">
@@ -36,7 +38,7 @@ const Profile = () => {
             <div className="flex md:flex-row flex-col min-h-screen justify-between">
                 <div className="w-full m-4 rounded">
                     <div className="bg-[#1E1E1E] w-full border-[#393939] border-solid border flex flex-col p-5 items-center">
-                        <img src={avatar} alt="Profile" className="rounded-full w-32 h-32 object-cover" />
+                        <img src={userInfo.user.img ? userInfo.user.img : avatar} alt="Profile" className="rounded-full w-32 h-32 object-cover" />
                         <div className="mt-1">
                             <h1 className="font-bold text-4xl text-white">{userInfo.user.name && userInfo.user.name} <span>{userInfo.user.lastName && userInfo.user.lastName}</span></h1>
                             <p className="text-white mb-8">{userInfo.user.username && userInfo.user.username}</p>

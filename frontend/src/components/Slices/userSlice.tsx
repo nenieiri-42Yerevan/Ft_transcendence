@@ -239,16 +239,17 @@ export const getAvatar = async (id: any, dispatch: any) => {
   }
 }
 
-export const setAvatar = async ( File: any,id: any, dispatch: any) => {
+export const setAvatar = async ( imageFile: any,id: any, dispatch: any) => {
+  const formData = new FormData();
+  formData.append("avatar", imageFile);
   try {
     const response = await axios.put(`${process.env.BACK_URL}/transcendence/user/update-avatar/${id}`,
-    {
-      
-    },
+    FormData,
     {
         headers: {
-          Authorization: `Bearer ${sessionStorage.getItem('access_token')}`
-        }
+          Authorization: `Bearer ${sessionStorage.getItem('access_token')}`,
+          "Content-Type": "multipart/form-data",
+        },
     }
     );
     console.log("avatar: ");
