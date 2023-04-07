@@ -8,7 +8,7 @@ import { useState, useEffect } from 'react';
 import {useLocation, useNavigate} from 'react-router-dom';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
-import {fetchFriendsData , fetchMatches, block, follow, getUserById, Friends, selectUser} from './Slices/userSlice';
+import {fetchFriendsData , fetchMatches, block, follow, getUserById, Friends, selectUser, getAvatar} from './Slices/userSlice';
 import Footer from "./Footer";
 
 const UserProfile = () => {
@@ -17,16 +17,17 @@ const UserProfile = () => {
     const [userInfo, setUserInfo] = useState(null);
     const [friends, setFriends] = useState<Friends[]>([]);
     const current = useSelector(selectUser);
+    const [photo, setphoto] = useState<string | undefined>('');
     useEffect(() => {
       console.log(id);
         getUserById(id).then(async userInfo => {
           setUserInfo(userInfo);
           const friends = await fetchFriendsData(1, dispatch, userInfo);
-          console.log("lll");
-          console.log(friends);
           if (friends)
             setFriends(friends);
           // await fetchMatches(1, dispatch, userInfo);
+          const photo = await getAvatar(1, dispatch, id);
+          setphoto(photo);
         }).catch(error=>{});
       }, [id]);
       if (userInfo == null)
@@ -38,7 +39,7 @@ const UserProfile = () => {
             <div className = "flex md:flex-row flex-col justify-between min-h-screen min-w-full">
                 <div className="w-full m-4 rounded">
                     <div className="bg-[#1E1E1E] border-[#393939] border-solid border w-full flex flex-col p-5 items-center">
-                        <img src={avatar} alt="Profile" className="rounded-full w-32 h-32 object-cover" />
+                        <img src={photo ? photo : avatar} alt="Profile" className="rounded-full w-32 h-32 object-cover" />
                         <div className="mt-1">
                             <h1 className="font-bold text-4xl text-white">{userInfo && userInfo.first_name && userInfo.first_name} <span>{userInfo && userInfo.last_name && userInfo.last_name}</span></h1>
                             <p className="text-white">{userInfo && userInfo.username && userInfo.username}</p>

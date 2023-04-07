@@ -73,9 +73,9 @@ export const userSlice = createSlice({
       state.isLoading = false;
       state.error = null;
     },
-    setUserImage: (state, action: PayloadAction<string>) => {
+    setUserImage: (state, action: PayloadAction<any>) => {
       if (state.user)
-        state.user.img = action.payload;
+        state.user.img = action.payload;    
     },
     setFriends: (state, action: PayloadAction<Friends[]>) => {
       if (state.user)
@@ -218,30 +218,27 @@ export const follow = async (dispatch: any, userInfo: UserInfo, id: number)=>{
   }
 }
 
-export const getAvatar = async (dispatch: any, id:number) => {
+export const getAvatar = async (flag: number, dispatch: any, id: string | undefined) => {
   try {
-    const response = await axios.get(`${process.env.BACK_URL}/transcendence/user/${id}/avatar`,
+    const response = await fetch(`${process.env.BACK_URL}/transcendence/user/${id}/avatar`,
     {
         headers: {
           Authorization: `Bearer ${sessionStorage.getItem('access_token')}`
         }
     }
-    );
-    console.log("avatar: ");
+    ).then(res=>res.arrayBuffer())
+    .then(buf => new Blob([buf], { type: 'image/png' }))
+    .then(blob => URL.createObjectURL(blob));
+    console.log("zzz");
+    
     console.log(response);
-    const base64 = btoa(
-      new Uint8Array(response.data).reduce(
-        (data, byte) => data + String.fromCharCode(byte),
-        '',
-      ),
-    );
-
-    dispatch(setUserImage("data:;base64," + base64));
-    return (response.status);
+    if (flag == 0)
+      dispatch(setUserImage(response));
+    else if (flag == 1)
+      return(response);
   } 
   catch (error) {
     console.log(error);
-    return (error.response.status);
 
   }
 }
@@ -249,9 +246,7 @@ export const getAvatar = async (dispatch: any, id:number) => {
 export const setAvatar = async ( imageFile: any,id: any, dispatch: any) => {
   const formData = new FormData();
   console.log(imageFile);
-  
   formData.append("file", imageFile);
-  console.log(formData);
   try {
     const response = await axios.put(`${process.env.BACK_URL}/transcendence/user/update-avatar/${id}`,
     formData,
