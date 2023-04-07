@@ -11,7 +11,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchFriendsData, fetchMatches, selectUser, Friends, getAvatar, setAvatar } from './Slices/userSlice';
 import refreshToken from "./Utils/refreshToken";
 import Footer from "./Footer";
-import { log } from "console";
 
 const Profile = () => {
     const userInfo = useSelector(selectUser);
@@ -26,11 +25,13 @@ const Profile = () => {
             fetchFriendsData(0, dispatch, userInfo.user);
             fetchMatches(0, dispatch, userInfo.user);
             console.log("nn");
-            console.log(userInfo);     
+            console.log(userInfo);
+            
         }
     }, []);
     useEffect(()=>{
-        getAvatar(0, dispatch, userInfo.user.id);
+        getAvatar(dispatch, userInfo.user.id);
+        console.log(flag);
     }, [flag])
     return (
         <>
@@ -39,7 +40,7 @@ const Profile = () => {
             <div className="flex md:flex-row flex-col min-h-screen justify-between">
                 <div className="w-full m-4 rounded">
                     <div className="bg-[#1E1E1E] w-full border-[#393939] border-solid border flex flex-col p-5 items-center">
-                        <img src={userInfo.user.img ? userInfo.user.img : avatar } alt="Profile" className="rounded-full w-32 h-32" />
+                        <img src={userInfo.user.img ? userInfo.user.img : avatar} alt="Profile" className="rounded-full w-32 h-32 object-cover" />
                         <div className="mt-1">
                             <h1 className="font-bold text-4xl text-white">{userInfo.user.name && userInfo.user.name} <span>{userInfo.user.lastName && userInfo.user.lastName}</span></h1>
                             <p className="text-white mb-8">{userInfo.user.username && userInfo.user.username}</p>
