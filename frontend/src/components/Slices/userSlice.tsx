@@ -25,7 +25,7 @@ interface UserInfo {
 }
 
 interface User {
-  user: UserInfo | null
+  user: UserInfo | null;
   isLoading: boolean;
   error: string | null;
 }
@@ -73,11 +73,7 @@ export const userSlice = createSlice({
       state.isLoading = false;
       state.error = null;
     },
-<<<<<<< HEAD
     setUserImage: (state, action: PayloadAction<any>) => {
-=======
-    setUserImage: (state, action: any) => {
->>>>>>> parent of 9dcdeec2 (..)
       if (state.user)
         state.user.img = action.payload;    
     },
@@ -253,7 +249,7 @@ export const setAvatar = async ( imageFile: any,id: any, dispatch: any) => {
   formData.append("file", imageFile);
   try {
     const response = await axios.put(`${process.env.BACK_URL}/transcendence/user/update-avatar/${id}`,
-    FormData,
+    formData,
     {
         headers: {
           Authorization: `Bearer ${sessionStorage.getItem('access_token')}`,
@@ -261,9 +257,7 @@ export const setAvatar = async ( imageFile: any,id: any, dispatch: any) => {
         },
     }
     );
-    console.log("avatar: ");
-    console.log(response.data);
-    dispatch(setUserImage(response.data));
+    console.log(response);
     return (response.status);
   } 
   catch (error) {
