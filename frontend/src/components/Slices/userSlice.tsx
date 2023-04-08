@@ -226,14 +226,18 @@ export const getAvatar = async (flag: number, dispatch: any, id: string | undefi
           Authorization: `Bearer ${sessionStorage.getItem('access_token')}`
         }
     }
-    ).then(res=>res.arrayBuffer())
+    );
+    if (!response.ok) {
+      throw new Error(`HTTP error ${response.status}`);
+    }
+    const blob = await response.arrayBuffer()
     .then(buf => new Blob([buf], { type: 'image/png' }))
-    .then(blob => URL.createObjectURL(blob));
+    const url = URL.createObjectURL(blob);
     console.log("zzz");
     
-    console.log(response);
+    console.log(url);
     if (flag == 0)
-      dispatch(setUserImage(response));
+      dispatch(setUserImage(url));
     else if (flag == 1)
       return(response);
   } 

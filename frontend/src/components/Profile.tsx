@@ -11,14 +11,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchFriendsData, fetchMatches, selectUser, Friends, getAvatar, setAvatar } from './Slices/userSlice';
 import refreshToken from "./Utils/refreshToken";
 import Footer from "./Footer";
-import { log } from "console";
 
 const Profile = () => {
     const userInfo = useSelector(selectUser);
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [imageFile, setImageFile] = useState<File | null>(null);
-    const [flag, setflag] = useState(0);
     useEffect(() => {
         if (!userInfo.user)
             navigate("/transcendence/user/signin");
@@ -29,9 +27,6 @@ const Profile = () => {
             console.log(userInfo);     
         }
     }, []);
-    useEffect(()=>{
-        getAvatar(0, dispatch, userInfo.user.id);
-    }, [flag])
     return (
         <>
         <div className ="backdrop-blur-md flex flex-col min-h-full min-w-full bg-black/50 z-[668] absolute">
@@ -44,7 +39,7 @@ const Profile = () => {
                             <h1 className="font-bold text-4xl text-white">{userInfo.user.name && userInfo.user.name} <span>{userInfo.user.lastName && userInfo.user.lastName}</span></h1>
                             <p className="text-white mb-8">{userInfo.user.username && userInfo.user.username}</p>
                             <input className="text-white p-1 my-2 " id="profile-image" type="file" accept="image/*" onChange={(e) => setImageFile(e.target.files && e.target.files[0])} />
-                            <p><button className="bg-[#1e81b0] p-1 my-2 w-40" onClick={async ()=>{await setAvatar(imageFile, userInfo.user.id, dispatch); setflag(1)}}>Upload</button></p>
+                            <p><button className="bg-[#1e81b0] p-1 my-2 w-40" onClick={async ()=>{await setAvatar(imageFile, userInfo.user.id, dispatch); getAvatar(0, dispatch, userInfo.user.id);}}>Upload</button></p>
                             <Link to="/transcendence/user/profile/settings" className="bg-[#1e81b0] block p-1 my-2 w-40 text-center">Settings</Link>
                         </div>
                     </div>
