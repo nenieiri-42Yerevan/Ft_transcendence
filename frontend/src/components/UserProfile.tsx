@@ -19,6 +19,7 @@ const UserProfile = () => {
     const [friends, setFriends] = useState<Friends[]>([]);
     const current = useSelector(selectUser);
     const [photo, setphoto] = useState<string>('');
+    const [loaded, setloaded] = useState(false);
     if (id == current.user.id)
         return (
             <Profile/>
@@ -33,7 +34,10 @@ const UserProfile = () => {
           // await fetchMatches(1, dispatch, userInfo);
           const photo = await getAvatar(1, dispatch, id);
           if (photo)
+          {
             setphoto(photo);
+        }
+        setloaded(true);
         }).catch(error=>{});
       }, [id]);
       if (userInfo == null)
@@ -45,7 +49,7 @@ const UserProfile = () => {
             <div className = "flex md:flex-row flex-col justify-between min-h-screen min-w-full">
                 <div className="w-full m-4 rounded">
                     <div className="bg-[#1E1E1E] border-[#393939] border-solid border w-full flex flex-col p-5 items-center">
-                        <img src={photo ? photo : avatar} alt="Profile" className="rounded-full w-32 h-32 object-cover" />
+                        <img src={loaded ? (photo ? photo : avatar) : null} alt="Profile" className="rounded-full w-32 h-32 object-cover" />
                         <div className="mt-1">
                             <h1 className="font-bold text-4xl text-white">{userInfo && userInfo.first_name && userInfo.first_name} <span>{userInfo && userInfo.last_name && userInfo.last_name}</span></h1>
                             <p className="text-white">{userInfo && userInfo.username && userInfo.username}</p>
