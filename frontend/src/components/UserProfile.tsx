@@ -10,6 +10,7 @@ import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import {fetchFriendsData , fetchMatches, block, follow, getUserById, Friends, selectUser, getAvatar} from './Slices/userSlice';
 import Footer from "./Footer";
+import Profile from "./Profile";
 
 const UserProfile = () => {
     const {id} = useParams();
@@ -17,7 +18,11 @@ const UserProfile = () => {
     const [userInfo, setUserInfo] = useState(null);
     const [friends, setFriends] = useState<Friends[]>([]);
     const current = useSelector(selectUser);
-    const [photo, setphoto] = useState<string | undefined>('');
+    const [photo, setphoto] = useState<string>('');
+    if (id == current.user.id)
+        return (
+            <Profile/>
+        );
     useEffect(() => {
       console.log(id);
         getUserById(id).then(async userInfo => {
@@ -27,12 +32,13 @@ const UserProfile = () => {
             setFriends(friends);
           // await fetchMatches(1, dispatch, userInfo);
           const photo = await getAvatar(1, dispatch, id);
-          setphoto(photo);
+          if (photo)
+            setphoto(photo);
         }).catch(error=>{});
       }, [id]);
       if (userInfo == null)
         return (<h1>User Not Found</h1>);
-      return (
+    return (
         <>
         <div className="backdrop-blur-md flex flex-col min-h-full min-w-full bg-black/50 z-[668] absolute">
             <Profilmenu/>

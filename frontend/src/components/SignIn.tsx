@@ -33,7 +33,6 @@ const SignIn = () => {
             sessionStorage.setItem("refresh_token", refreshToken);
             const userInfo = await getUserInfo();
             dispatch(setUserInfo(userInfo));
-            const photo = getAvatar(0, dispatch, userInfo.id);
             console.log(userInfo);
             navigate("/transcendence/user/profile");
         }

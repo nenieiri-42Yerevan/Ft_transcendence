@@ -23,6 +23,7 @@ const Profile = () => {
         else {
             fetchFriendsData(0, dispatch, userInfo.user);
             fetchMatches(0, dispatch, userInfo.user);
+            getAvatar(0, dispatch, userInfo.user.id);
             console.log("nn");
             console.log(userInfo);     
         }
