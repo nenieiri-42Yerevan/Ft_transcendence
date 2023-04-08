@@ -8,7 +8,7 @@ RUN mkdir -p /frontend
 # Set the working directory to /app
 WORKDIR /frontend
 
-COPY --chown=node:node package*.json .
+COPY --chown=node:node package*.json ./
 
 # Install dependencies in the frontend folder
 
