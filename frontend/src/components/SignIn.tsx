@@ -6,7 +6,7 @@ import FormLogin from "./Form/formLogin";
 import Background from "./Background";
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectUser, setUserInfo, getUserInfo, loginRequest, loginFailure, getUserById } from './Slices/userSlice';
+import { selectUser, setUserInfo, getUserInfo, loginRequest, loginFailure, getUserById, getAvatar } from './Slices/userSlice';
 
 interface Data {
     login: string;
@@ -33,6 +33,7 @@ const SignIn = () => {
             sessionStorage.setItem("refresh_token", refreshToken);
             const userInfo = await getUserInfo();
             dispatch(setUserInfo(userInfo));
+            const photo = getAvatar(0, dispatch, userInfo.id);
             console.log(userInfo);
             navigate("/transcendence/user/profile");
         }

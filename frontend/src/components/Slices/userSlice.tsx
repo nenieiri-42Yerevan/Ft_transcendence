@@ -239,7 +239,7 @@ export const getAvatar = async (flag: number, dispatch: any, id: string | undefi
     if (flag == 0)
       dispatch(setUserImage(url));
     else if (flag == 1)
-      return(response);
+      return(url);
   } 
   catch (error) {
     console.log(error);
