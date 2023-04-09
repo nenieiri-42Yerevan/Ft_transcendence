@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import {fetchFriendsData , fetchMatches, block, follow, getUserById, Friends, selectUser, getAvatar} from './Slices/userSlice';
 import Footer from "./Footer";
 import Profile from "./Profile";
+import FriendsList from "./FriendsList";
 
 const UserProfile = () => {
     const {id} = useParams();
@@ -74,7 +75,7 @@ const UserProfile = () => {
                     <h2 className="font-bold text-2xl text-white text-center  flex justify-between"><img className = "w-[2em]" src = {pong}></img>Friends <span>more</span></h2>
                     <hr />
                     {friends  && friends.slice(0, 5).map((obj: Friends, index: number) => (
-                        <p key={index} className="text-white text-center p-2 flex justify-between hover:bg-[#616161]"><img className="w-[2em]" src={avatar}></img> <Link className="p-2 hover:bg-[#1E81B0]" to= {`/transcendence/user/profile/${obj.id}`}>{obj.name}</Link></p>
+                        <FriendsList index = {index} obj = {obj} key = {index}/>
                     ))}
                     <p className = "text-white text-center p-2 flex justify-between hover:bg-[#616161]">{ friends && friends.length === 0 && "No Data"} </p>
                 </div>

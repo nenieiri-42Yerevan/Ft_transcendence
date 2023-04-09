@@ -121,6 +121,8 @@ export const fetchFriendsData = async (flag:number, Navigate, dispatch: any, use
           },
         },
       );
+      console.log("ccc");
+      console.log(response);
       friendNames.push({name: response.data.username, id: id});
     } catch (error) {
       if (error.response.status == 401)
