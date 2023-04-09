@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { FORM_ERROR } from 'final-form'
+import refreshToken from '../Utils/refreshToken'
 
 // import { Dispatch } from 'react';
 // import { useDispatch, useSelector } from 'react-redux';
@@ -107,7 +108,7 @@ export const selectUser = (state: any) => state.user;
 
 export default userSlice.reducer;
 
-export const fetchFriendsData = async (flag:number, dispatch: any, userInfo: UserInfo) => {
+export const fetchFriendsData = async (flag:number, Navigate, dispatch: any, userInfo: UserInfo) => {
   const friendIds = userInfo.follows;
   const friendNames: Friends[] = [];
   for (const id of friendIds) {
@@ -122,6 +123,14 @@ export const fetchFriendsData = async (flag:number, dispatch: any, userInfo: Use
       );
       friendNames.push({name: response.data.username, id: id});
     } catch (error) {
+      if (error.response.status == 401)
+      {
+        if ((await refreshToken()) != 200) {
+          Navigate("/transcendence/user/signin");
+        } else {
+          fetchFriendsData(flag, Navigate, dispatch, userInfo);
+        }
+      }
       console.log(error);
     }
   }
@@ -131,7 +140,7 @@ export const fetchFriendsData = async (flag:number, dispatch: any, userInfo: Use
     return (friendNames);
 };
 
-export const fetchMatches = async (flag:number, dispatch: any, userInfo: UserInfo) => {
+export const fetchMatches = async (flag:number, Navigate, dispatch: any, userInfo: UserInfo) => {
   try {
     const response = await axios.get(
       `${process.env.BACK_URL}/transcendence/user/${userInfo.id}/matches`,
@@ -143,11 +152,19 @@ export const fetchMatches = async (flag:number, dispatch: any, userInfo: UserInf
     );
     //dispatch(setFriends(friendNames));
   } catch (error) {
+    if (error.response.status == 401)
+      {
+        if ((await refreshToken()) != 200) {
+          Navigate("/transcendence/user/signin");
+        } else {
+          fetchMatches(flag, Navigate, dispatch, userInfo);
+        }
+      }
     console.log(error);
   }
 };
 
-export const getUserInfo = async () => {
+export const getUserInfo = async (Navigate) => {
   try {
     const response = await axios.get(
       `${process.env.BACK_URL}/transcendence/user/by-token/${sessionStorage.getItem(
@@ -162,29 +179,33 @@ export const getUserInfo = async () => {
     return response.data;
   } catch (error) {
     console.log(error);
+    if (error.response.status == 401)
+    {
+      if ((await refreshToken()) != 200) {
+        Navigate("/transcendence/user/signin");
+      } else {
+        getUserInfo(Navigate);
+      }
+    }
   }
 }
 
-export const logOut = async () => {
+// export const getUserByName = async (data: any) => {
+//   try {
+//     const response = await axios.get(`${process.env.BACK_URL}/transcendence/user/by-name/${data.name}`
+//       //   headers: {
+//       //     Authorization: `Bearer ${sessionStorage.getItem('access_token')}`
+//       //   }
 
-}
+//     );
+//     console.log(response);
+//   } catch (error) {
+//     return { [FORM_ERROR]: error.response.data.message }
 
-export const getUserByName = async (data: any) => {
-  try {
-    const response = await axios.get(`${process.env.BACK_URL}/transcendence/user/by-name/${data.name}`
-      //   headers: {
-      //     Authorization: `Bearer ${sessionStorage.getItem('access_token')}`
-      //   }
+//   }
+// }
 
-    );
-    console.log(response);
-  } catch (error) {
-    return { [FORM_ERROR]: error.response.data.message }
-
-  }
-}
-
-export const getUserById = async (id: any) => {
+export const getUserById = async (id: any, Navigate) => {
   try {
     const response = await axios.get(`${process.env.BACK_URL}/transcendence/user/by-id/${id}`,
     {
@@ -197,11 +218,20 @@ export const getUserById = async (id: any) => {
   } 
   catch (error) {
     console.log(error);
+    if (error.response.status == 401)
+    {
+      if ((await refreshToken()) != 200) {
+        Navigate("/transcendence/user/signin");
+      } else {
+        getUserById(id, Navigate);
+      }
+    }
+    
 
   }
 }
 
-export const follow = async (dispatch: any, userInfo: UserInfo, id: number)=>{
+export const follow = async (dispatch: any, Navigate, userInfo: UserInfo, id: number)=>{
   try {
     const response = await axios.put(`${process.env.BACK_URL}/transcendence/user/follow/${userInfo.id}/${id}`,{},
     {
@@ -214,11 +244,20 @@ export const follow = async (dispatch: any, userInfo: UserInfo, id: number)=>{
   }
   catch (error) {
     console.log(error);
+    if (error.response.status == 401)
+    {
+      if ((await refreshToken()) != 200) {
+        Navigate("/transcendence/user/signin");
+      } else {
+        follow(dispatch, Navigate, userInfo, id);
+      }
+    }
+    
 
   }
 }
 
-export const getAvatar = async (flag: number, dispatch: any, id: string | undefined) => {
+export const getAvatar = async (flag: number, Navigate, dispatch: any, id: string | undefined) => {
   try {
     const response = await fetch(`${process.env.BACK_URL}/transcendence/user/${id}/avatar`,
     {
@@ -242,16 +281,25 @@ export const getAvatar = async (flag: number, dispatch: any, id: string | undefi
       return(url);
   } 
   catch (error) {
+    console.log("xxx");
     console.log(error);
     if (flag == 0)
       dispatch(setUserImage(null));
     else if (flag == 1)
       return (null);
+    if (error.response && error.response.status == 401)
+    {
+      if ((await refreshToken()) != 200) {
+        Navigate("/transcendence/user/signin");
+      } else {
+        getAvatar(flag, Navigate, dispatch, id);
+      }
+    }
 
   }
 }
 
-export const setAvatar = async ( imageFile: any,id: any, dispatch: any) => {
+export const setAvatar = async ( imageFile: any, Navigate, id: any, dispatch: any) => {
   const formData = new FormData();
   console.log(imageFile);
   formData.append("file", imageFile);
@@ -270,12 +318,20 @@ export const setAvatar = async ( imageFile: any,id: any, dispatch: any) => {
   } 
   catch (error) {
     console.log(error);
+    if (error.response.status == 401)
+    {
+      if ((await refreshToken()) != 200) {
+        Navigate("/transcendence/user/signin");
+      } else {
+        setAvatar(imageFile, Navigate, id, dispatch);
+      }
+    }
     return (error.response.status);
 
   }
 }
 
-export const block = async (dispatch, userInfo: UserInfo, id: number)=>{
+export const block = async (dispatch, Navigate, userInfo: UserInfo, id: number)=>{
   try {
     const response = await axios.put(`${process.env.BACK_URL}/transcendence/user/block/${userInfo.id}/${id}`, {},
     {
@@ -288,6 +344,13 @@ export const block = async (dispatch, userInfo: UserInfo, id: number)=>{
   } 
   catch (error) {
     console.log(error);
-
+    if (error.response.status == 401)
+    {
+      if ((await refreshToken()) != 200) {
+        Navigate("/transcendence/user/signin");
+      } else {
+        block(dispatch, Navigate, userInfo, id);
+      }
+    }
   }
 }

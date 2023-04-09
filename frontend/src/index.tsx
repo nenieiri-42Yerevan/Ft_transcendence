@@ -83,7 +83,7 @@ const logError = (error: Error, info: { componentStack: string }) => {
 };
 
 root.render(
-  <React.StrictMode>
+  // <React.StrictMode>
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
         <ErrorBoundary
@@ -95,5 +95,5 @@ root.render(
         </ErrorBoundary>
       </PersistGate>
     </Provider>
-  </React.StrictMode>,
+  // </React.StrictMode>,
 );

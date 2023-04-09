@@ -31,7 +31,7 @@ const SignIn = () => {
             }
             sessionStorage.setItem("access_token", accessToken);
             sessionStorage.setItem("refresh_token", refreshToken);
-            const userInfo = await getUserInfo();
+            const userInfo = await getUserInfo(navigate);
             dispatch(setUserInfo(userInfo));
             console.log(userInfo);
             navigate("/transcendence/user/profile");
