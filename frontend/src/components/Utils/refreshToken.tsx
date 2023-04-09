@@ -8,9 +8,10 @@ const refreshToken = async ():Promise<number> => {
         headers: {
           Authorization: `Bearer ${rt}`,
         }});
-        sessionStorage.setItem("access_token", response.data.accessToken);
-        sessionStorage.setItem("refresh_token", response.data.refreshToken);
-        return response.data.status;
+        sessionStorage.setItem("access_token", response.data.access_token);
+        sessionStorage.setItem("refresh_token", response.data.refresh_token);
+        console.log(response);
+        return response.status;
     } catch (error:any) {
         console.log(error);
         return error.response.status;
