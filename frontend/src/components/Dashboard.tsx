@@ -30,10 +30,13 @@ const Dashboard = () => {
             setId(response.data[0].id);
         } catch (error:any) {
             console.log(error);
-            if ((await refreshToken()) != 200) {
-                Navigate("/transcendence/user/signin");
-            } else {
-                getUser();
+            if (error.response.status == 401)
+            {
+                if ((await refreshToken()) != 200) {
+                    Navigate("/transcendence/user/signin");
+                } else {
+                    getUser();
+                }
             }
         }
     }
