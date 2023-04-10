@@ -71,6 +71,12 @@ export interface Data {
   year: string;
 }
 
+export interface EditInfo {
+  first_name: string;
+  last_name: string;
+  email: string;
+}
+
 export const days: any[] = Array.from(Array(31).keys()).map((d) => d + 1);
 export const years: any[] = Array.from(Array(76).keys()).map((d) => d + 1940);
 export const months: any[] = [
@@ -102,7 +108,7 @@ export const validate = async (values: Data) => {
   }
 };
 
-export const validateSettings = async (values: Data) => {
+export const validateSettings = async (values: EditInfo) => {
   try {
     await validationSettings.validate(values, { abortEarly: false });
   } catch (err: any) {

@@ -2,7 +2,7 @@ import React from 'react';
 import { Form } from 'react-final-form';
 import { useNavigate } from 'react-router-dom';
 import { FORM_ERROR } from 'final-form';
-import { Data, validateSettings } from './Utils/Scheme';
+import { Data, EditInfo, validateSettings } from './Utils/Scheme';
 import Background from './Background';
 import axios from 'axios';
 import FormEdit from './Form/FormEdit';
@@ -13,15 +13,15 @@ const Edit = () => {
     const userInfo = useSelector(selectUser);
     const navigate = useNavigate();
     const initialValues = {
-        first_name: userInfo.name,
-        last_name: userInfo.lastName,
-        email: userInfo.email,
+        first_name: userInfo.user.name,
+        last_name: userInfo.user.lastName,
+        email: userInfo.user.email,
       };
-    const onSubmit = async (data: Data) => {
+    const onSubmit = async (data: EditInfo) => {
         const sendData = {
-        first_name: data.first_name,
-        last_name: data.last_name,
-        email: data.email,
+            first_name: data.first_name,
+            last_name: data.last_name,
+            email: data.email,
         };
         console.log(data);
         try {
