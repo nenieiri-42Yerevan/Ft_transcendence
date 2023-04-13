@@ -1,60 +1,49 @@
 import React, { FC } from "react";
 import classNames from "classnames";
-import avatar from "@SRC_DIR/assets/images/avatar.png";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 interface Props {
-  activeTab: string;
   userName?: string;
-  avatarUrl?: string;
+  avatar?: string;
 }
 
-const Navigation: FC<Props> = ({ activeTab, userName, avatarUrl }) => {
-  
-  const menuItems = [
-    { label: "Dashboard", path: "/dashboard" },
-    { label: "Friends", path: "/friends" },
-    { label: "Chat", path: "/chat" },
-    { label: "Rules", path: "/rules" },
-    { label: "Game", path: "/new-game" },
-  ];
-
-  avatarUrl = avatarUrl ?? avatar;
-  userName = userName ?? "Undefined";
-
-  
+const Navigation: FC<Props> = ({ userName, avatar}) => {
+  const location = useLocation();
+  const activeTab = location.pathname;
   return (
-    <nav className="flex items-center justify-between flex-wrap bg-black p-6">
-      
-      <div className="w-full block flex-grow lg:flex lg:items-center lg:w-auto">
-        <div className="text-sm lg:flex-grow">
-          {menuItems.map((item) => (
-            <a
-              key={item.path}
-              href={item.path}
-              className={classNames(
-                "block mt-4 lg:inline-block lg:mt-0 text-white text-2xl hover:text-gray-500 mr-4",
-                {
-                  "font-bold": item.label === activeTab,
-                  "opacity-50": item.label !== activeTab,
-                }
-              )}
-              aria-disabled={item.label !== activeTab}
+    <>
+      <nav className="flex justify-between w-full h-10 py-2 px-4 bg-[#1E1E1E] text-white">
+        <ul className="flex gap-4">
+          <li>
+            <Link to="/transcendence/user/dashboard" className={classNames({"font-bold": activeTab.includes("/dashboard")
+              })}>Dashboard</Link>
+          </li>
+          <li>
+            <Link to="#" className={classNames({"font-bold": activeTab.includes("/friends")
+              })}>Friends</Link>
+          </li>
+          <li>
+            <Link to="/transcendence/user/chat" className={classNames({"font-bold": activeTab.includes("/chat")
+              })}>Chat</Link>
+          </li>
+          <li>
+            <Link to="#" className={classNames({"font-bold": activeTab.includes("/game")
+              })}>Game</Link>
+          </li>
+          
+           
+        </ul>
+        <div className='flex flex-row h-full justify-end'>
+          <img className='h-7 w-7 mr-3 item-center rounded-full' src={avatar}/>
+        <Link
+              to="/transcendence/user/profile"
+              className="text-center font-bold"
             >
-              {item.label}
-            </a>
-          ))}
-      </div>
-      <a className="block mt-4 lg:inline-block lg:mt-0 text-white text-2xl hover:text-gray-500 mr-4 ml-auto">
-            <img
-                src={avatarUrl}
-                alt={userName}
-                className="rounded-full h-8 w-8"
-              />
-            </a>
-          <Link to="/transcendence/user/profile" className="block mt-4 lg:inline-block lg:mt-0 text-white text-2xl hover:text-gray-500 mr-4 ml-auto">{userName}</Link>
-      </div>
-    </nav>
+              {userName}
+            </Link>
+        </div>
+      </nav>
+    </>
   );
 };
 

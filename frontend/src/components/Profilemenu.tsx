@@ -29,7 +29,7 @@ const Profilemenu = () => {
       <nav className="flex justify-between w-full py-2 px-4 bg-[#1E1E1E] text-white">
         <ul className="flex gap-4">
           <li>
-            <Link to="#">Dashboard</Link>
+            <Link to="/transcendence/user/dashboard">Dashboard</Link>
           </li>
           <li>
             <Link to="#">Friends</Link>

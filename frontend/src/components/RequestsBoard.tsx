@@ -3,29 +3,12 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 
 interface Props {
-    userId?: string;
+  userInfo?: object
 };
 
 
 
-const ActiveChallenges: FC<Props> = ({userId}) => {
-    const [matches, setMatches] = useState<Array<Object>>();
-    const getMatches = async () => {
-        try {
-            const response = await axios.get(`${process.env.BACK_URL}/transcendence/user${userId}/matches`, {
-                headers: {
-                  Authorization: `Bearer ${sessionStorage.getItem('access_token')}`
-                }});
-            console.log(response);
-            setMatches(response.data);
-        } catch (error:any) {
-            console.log(error);
-        }
-    }
-
-    useEffect(() => {
-        getMatches();
-      }, []);
+const ActiveChallenges: FC<Props> = ({userInfo}) => {
 
     return (<div className="w-2/6 rounded-2">
       <h2 className="flex items-center justify-center text-xl h-12 bg-gray-800 mr-2 ml-2 border-b border-white rounded-md">Active Challenges</h2>

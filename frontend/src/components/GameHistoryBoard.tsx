@@ -3,29 +3,14 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 
 interface Props {
-    userId?: string;
+  userInfo?: object;
 };
 
 
 
-const GameHistoryTable: FC<Props> = ({userId}) => {
+const GameHistoryTable: FC<Props> = ({userInfo}) => {
     const [matches, setMatches] = useState<Array<Object>>();
-    const getMatches = async () => {
-        try {
-            const response = await axios.get(`http://localhost:7000/transcendence/user${userId}/matches`, {
-                headers: {
-                  Authorization: `Bearer ${sessionStorage.getItem('access_token')}`
-                }});
-            console.log(response);
-            setMatches(response.data);
-        } catch (error:any) {
-            console.log(error);
-        }
-    }
-
-    useEffect(() => {
-        getMatches();
-      }, []);
+    
 
     return (<div className="w-2/6 rounded-2">
       <h2 className="flex items-center justify-center text-xl h-12 bg-gray-800 mr-2 ml-2 border-b border-white rounded-md">Game History</h2>
