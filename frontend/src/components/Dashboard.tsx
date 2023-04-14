@@ -31,7 +31,7 @@ const Dashboard = () => {
     }, []);
       return (
         <>
-            <Navigation activeTab={'Dashboard'} userName={userInfo.user.name} avatar={userInfo.user.img}/>
+            <Navigation />
             <div className="  py-0 md:py-6 text-xs xl:text-xl gap-x-0 md:gap-x-4 lg:text-lg md:text-md sm:text-sm backdrop-blur-md p-0 lg:p-2 xl:p-3 bg-dark-blue min-w-full min-h-full z-[668] absolute flex justify-center space-between bg-clip-padding text-white text-2xl">
                 <div className='flex w-full'>
                 <div className='flex w-1/6'> 

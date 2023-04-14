@@ -10,6 +10,7 @@ import Settings from './components/Settings';
 import Welcome from './components/Welcome';
 import Chat from './components/Chat/Chat';
 import Dashboard from "./components/Dashboard";
+import Game from "./components/Game/Game";
 
 const App = (props: any) => {
   return (
@@ -24,6 +25,7 @@ const App = (props: any) => {
           <Route path="/transcendence/user/profile/settings" element={<Settings />} />
           <Route path="/transcendence/user/dashboard" element={<Dashboard />} />
           <Route path="/transcendence/user/chat" element={<Chat />} />
+          <Route path="/transcendence/game" element={<Game />} />
         </Routes>
       </Router>
     </>
