@@ -202,7 +202,7 @@ export class UserService {
 
     try {
       await this.userRepo.update(user.id, { status });
-      this.notifyService.emitStatus(user.id, status);
+      //this.notifyService.emitStatus(user.id, status);
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
