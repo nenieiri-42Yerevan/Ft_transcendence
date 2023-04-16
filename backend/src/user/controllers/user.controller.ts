@@ -11,7 +11,7 @@ import {
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
-import { UserDto } from '../dto';
+import { UserDto, UserUpdateDto } from '../dto';
 import { Match, User } from '../entities';
 import { AvatarService } from '../services/avatar.service';
 import { UserService } from '../services/user.service';
@@ -45,7 +45,6 @@ export class UserController {
     console.log('bbb');
     return this.userService.findOne(username);
   }
-  
 
   @Get('/by-id/:id')
   findById(@Param('id', ParseIntPipe) id: number): Promise<User> {
@@ -85,11 +84,11 @@ export class UserController {
   @Put('/update-user/:id')
   async updateUser(
     @Param('id', ParseIntPipe) id: number,
-    @Body() user: User,
+    @Body() user: UserUpdateDto,
   ): Promise<User> {
     const current = await this.userService.findOne(id);
 
-    return this.userService.update(current.id, user);
+    return this.userService.update(current.id, user as User);
   }
 
   @Put('/update-avatar/:id')
