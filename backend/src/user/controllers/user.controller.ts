@@ -12,7 +12,7 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { UserDto, UserUpdateDto } from '../dto';
-import { Match, User } from '../entities';
+import { Match, Status, User } from '../entities';
 import { AvatarService } from '../services/avatar.service';
 import { UserService } from '../services/user.service';
 import { Response } from 'express';
@@ -79,6 +79,11 @@ export class UserController {
   @Get('/:id/blocked')
   findBlocked(@Param('id', ParseIntPipe) id: number): Promise<User[]> {
     return this.userService.findBlocked(id);
+  }
+
+  @Get('/:id/status')
+  findStatus(@Param('id', ParseIntPipe) id: number): Promise<Status> {
+    return this.userService.findStatus(id);
   }
 
   @Put('/update-user/:id')

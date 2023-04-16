@@ -132,6 +132,14 @@ export class UserService {
     return blocked;
   }
 
+  async findStatus(id: number): Promise<Status> {
+    const user: User = await this.findOne(id);
+
+    if (!user) throw new HttpException('User not found!', HttpStatus.NOT_FOUND);
+
+    return user.status;
+  }
+
   /* ------------------------- UPDATE ------------------------ */
 
   async update(id: number, newUser: User): Promise<User> {
