@@ -138,7 +138,12 @@ export class UserService {
     await this.findOne(id);
 
     // check for modifiable updates
-    const modifiable: Array<string> = ['first_name', 'last_name', 'username'];
+    const modifiable: Array<string> = [
+      'first_name',
+      'last_name',
+      'username',
+      'password',
+    ];
 
     for (const key of Object.keys(newUser)) {
       if (modifiable.indexOf(key) == -1)
