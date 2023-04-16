@@ -5,11 +5,13 @@ import * as argon from 'argon2';
 import { User, Avatar, Status, Match } from '../entities/';
 import { UserDto } from '../dto';
 import { AvatarService } from './avatar.service';
+import { SocketService } from 'src/socket/socket.service';
 
 @Injectable()
 export class UserService {
   constructor(
     private readonly avatarService: AvatarService,
+    private readonly notifyService: SocketService,
 
     @InjectRepository(User)
     private readonly userRepo: Repository<User>,
@@ -192,7 +194,7 @@ export class UserService {
 
     try {
       await this.userRepo.update(user.id, { status });
-      // TODO: notify user
+      this.notifyService.emitStatus(user.id, status);
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
