@@ -53,9 +53,13 @@ export const validationSettings = Yup.object().shape({
   last_name: Yup.string()
     .required('Last name is required.')
     .matches(/^[a-zA-Z]+$/),
-  email: Yup.string()
-    .required('Email is required.')
-    .email('Must be valid email address.'),
+  username: Yup.string()
+  .required('Username is required.')
+  .min(8, 'At least 8 characters long.')
+  .matches(
+    /^[a-zA-Z][a-zA-Z0-9_]{7,}[a-zA-Z0-9]$/,
+    "Contains at least 8 character long.\nShould start with lowercase or uppercase.\nContains lowercase, uppercase, digit or '_'.",
+  ),
 });
 
 export interface Data {
@@ -74,7 +78,7 @@ export interface Data {
 export interface EditInfo {
   first_name: string;
   last_name: string;
-  email: string;
+  username: string;
 }
 
 export const days: any[] = Array.from(Array(31).keys()).map((d) => d + 1);

@@ -7,30 +7,31 @@ import Background from './Background';
 import axios from 'axios';
 import FormEdit from './Form/FormEdit';
 import { useDispatch, useSelector } from 'react-redux';
-import {selectUser} from './Slices/userSlice';
+import {getUserInfo, selectUser, setUserInfo} from './Slices/userSlice';
 
 const Edit = () => {
     const userInfo = useSelector(selectUser);
     const navigate = useNavigate();
+    const dispatch = useDispatch();
     const initialValues = {
         first_name: userInfo.user.name,
         last_name: userInfo.user.lastName,
-        email: userInfo.user.email,
+        username: userInfo.user.username,
       };
     const onSubmit = async (data: EditInfo) => {
         const sendData = {
             first_name: data.first_name,
             last_name: data.last_name,
-            email: data.email,
+            username: data.username,
         };
         console.log(data);
         try {
             const response = await axios.put(
-                `http://localhost:7000/transcendence/user/update-user/${userInfo.id}`, 
+                `http://localhost:7000/transcendence/user/update-user/${userInfo.user.id}`, 
                 {
                     first_name: data.first_name,
                     last_name: data.last_name,
-                    email: data.email,
+                    username: data.username,
                 },
                 {
                     headers: {
@@ -38,6 +39,8 @@ const Edit = () => {
                     },
                 },
             );
+            console.log("hii"," " ,response);
+            dispatch(setUserInfo(await getUserInfo(navigate)));
         } catch (error: any) {
         return { [FORM_ERROR]: error.response.data.message };
         }

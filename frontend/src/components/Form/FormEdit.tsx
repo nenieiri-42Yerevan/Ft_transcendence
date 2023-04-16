@@ -119,35 +119,37 @@ const FormContent = (props: any) => {
             </Field>
         </div>
         <Field<string>
-            name="email"
-            title={props.errors && props.errors.email ? props.errors.email : ''}
-            placeholder="Email Address"
-            id="edit-email"
-            key={'email'}
-        >
-            {({ input, meta, ...rest }) => (
-            <div className=" flex flex-col gap-y-2">
-                <label htmlFor="edit-email" className="font-bold">
-                Email:
-                </label>
-                {meta.error && meta.touched ? (
-                <TextInput
+        name="username"
+        title={
+          props.errors && props.errors.username ? props.errors.username : ''
+        }
+        id="signup-username"
+        placeholder="Username"
+        key={'username'}
+      >
+        {({ input, meta, ...rest }) => (
+          <div className=" flex flex-col gap-y-2 ">
+            <label htmlFor="signup-username" className="font-bold">
+              Username:
+            </label>
+            {meta.error && meta.touched ? (
+              <TextInput
                 input={input}
-                    meta={meta}
-                    {...rest}
-                    className=" rounded-md bg-[#2d2727] outline-red-900  outline-none block min-w-full p-1 xs:p-1.5 sm:p-2 md:p-2 lg:p-3"
-                />
-                ) : (
-                <TextInput
-                    input={input}
-                    meta={meta}
-                    {...rest}
-                    className=" rounded-md bg-[#2d2727] outline-[#2d2727]  outline-none block min-w-full p-1 xs:p-1.5 sm:p-2 md:p-2 lg:p-3"
-                />
-                )}
-            </div>
+                meta={meta}
+                {...rest}
+                className=" rounded-md bg-[#2d2727] outline-red-900  outline-none block min-w-full p-1 xs:p-1.5 sm:p-2 md:p-2 lg:p-3"
+              />
+            ) : (
+              <TextInput
+                input={input}
+                meta={meta}
+                {...rest}
+                className=" rounded-md bg-[#2d2727] outline-[#2d2727]  outline-none block min-w-full p-1 xs:p-1.5 sm:p-2 md:p-2 lg:p-3"
+              />
             )}
-        </Field>
+          </div>
+        )}
+      </Field>
         <hr className="border-1 border-gray-300 "></hr>
         <div className="text-red-900 font-bold flex justify-center">
             <button
