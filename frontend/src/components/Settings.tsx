@@ -1,6 +1,6 @@
 import React from 'react';
 import { Form } from 'react-final-form';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { FORM_ERROR } from 'final-form';
 import { Data, EditInfo, validateSettings } from './Utils/Scheme';
 import Background from './Background';
@@ -48,8 +48,9 @@ const Edit = () => {
     return (
         <>
         <div className="  py-0 md:py-6 text-xs xl:text-xl gap-x-0 md:gap-x-4 lg:text-lg md:text-md sm:text-sm backdrop-blur-md p-0 lg:p-2 xl:p-3 bg-black/50 min-w-full min-h-full z-[668] absolute flex justify-center bg-clip-padding">
-            <div className="flex justify-center md:text-lg items-center min-w-full min-h-screen md:min-w-fit md:min-h-fit">
+            <div className="flex flex-col justify-center md:text-lg items-center min-w-full min-h-screen md:min-w-fit md:min-h-fit">
             <Form onSubmit={onSubmit} validate={validateSettings} render={FormEdit}  initialValues={initialValues}/>
+            
             </div>
         </div>
         <Background />

@@ -23,6 +23,7 @@ interface UserInfo {
   img?: string | undefined;
   follows: number[];
   blocked: number[];
+  Tfa: boolean;
 }
 
 interface User {
@@ -48,6 +49,7 @@ export const userSlice = createSlice({
         ...state.user,
         username: action.payload.username,
         name: action.payload.first_name,
+        //Tfa: action.payload.,
         lastName: action.payload.last_name,
         email: action.payload.email,
         rank: action.payload.rank,
@@ -352,6 +354,37 @@ export const block = async (dispatch, Navigate, userInfo: UserInfo, id: number)=
         Navigate("/transcendence/user/signin");
       } else {
         block(dispatch, Navigate, userInfo, id);
+      }
+    }
+  }
+}
+
+export const enable2fa = async (dispatch, Navigate, userInfo: UserInfo)=>{
+  try {
+    console.log("useinfo");
+    console.log(userInfo);
+    const response = await axios.post(`${process.env.BACK_URL}/transcendence/auth/TFA_enable/`, {},
+    {
+        headers: {
+          Authorization: `Bearer ${sessionStorage.getItem('access_token')}`
+        }
+    }
+    );
+    console.log("zzz");
+    console.log(await getUserInfo(Navigate));
+    
+    console.log(response);
+
+
+  } 
+  catch (error) {
+    console.log(error);
+    if (error.response.status == 401)
+    {
+      if ((await refreshToken()) != 200) {
+        Navigate("/transcendence/user/signin");
+      } else {
+        enable2fa(dispatch, Navigate, userInfo);
       }
     }
   }

@@ -7,7 +7,7 @@ import { Session, User } from '../../user/entities';
 import * as argon from 'argon2';
 import { ConfigService } from '@nestjs/config';
 import { Socket } from 'socket.io';
-import { speakeasy } from 'speakeasy';
+import * as speakeasy from 'speakeasy';
 
 @Injectable()
 export class AuthService {
@@ -30,7 +30,11 @@ export class AuthService {
         user,
       );
 	  if (user.TFA_enabled == true)
+    {
+      console.log("tfa");
 		  throw new HttpException(user.username, HttpStatus.FORBIDDEN);
+      
+    }
       return tokens;
     } else throw new HttpException('Wrong password', HttpStatus.NOT_FOUND);
   }
@@ -140,9 +144,11 @@ export class AuthService {
 	  {
 		  const secret = speakeasy.generateSecret().base32;
 		  user.TFA_secret = secret;
+      user.TFA_enabled = true;
+      this.userService.update(userId, user as User);
 		  return secret;
 	  } catch (error)
-	  {
+	  { 
 		  throw new HttpException('Error when generating the 2FA secret', 
 		  							HttpStatus.INTERNAL_SERVER_ERROR);
 	  }
@@ -151,6 +157,6 @@ export class AuthService {
   async disableTFA(userId: number)
   {
     const user = await this.userService.findOne(userId);
-	user.TFA_secret = null;
+	  user.TFA_secret = null;
   }
 }

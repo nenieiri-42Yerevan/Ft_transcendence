@@ -150,6 +150,41 @@ const FormContent = (props: any) => {
           </div>
         )}
       </Field>
+      <Field name="2fa" id="2fa">
+      {({ input, meta, ...rest })=> (
+        <div className="flex gap-y-2">
+            <label htmlFor="2fa" className="font-bold">
+                2FA:
+            </label>
+            <label htmlFor="2fa-enable" className="font-bold mx-3">
+                Enable:
+            </label>
+            <RadioInput
+                input={input}
+                value="enable"
+                label="2fa"
+                id="2fa-enable"
+                meta={meta}
+                name = "Enable"
+                checked = {userInfo.user.TFA_enabled && "checked"}
+                {...rest}
+            />
+            <label htmlFor="2fa-disable" className="font-bold mx-3">
+                    Disable:
+            </label>
+            <RadioInput
+                input={input}
+                value="disable"
+                label="2fa-disable"
+                id="2fa"
+                meta={meta}
+                name = "Disable"
+                checked = {!userInfo.user.TFA_enabled && "checked"}
+                {...rest}
+            />
+        </div>
+    )}
+    </Field>
         <hr className="border-1 border-gray-300 "></hr>
         <div className="text-red-900 font-bold flex justify-center">
             <button

@@ -8,7 +8,7 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchFriendsData, fetchMatches, selectUser, Friends, getAvatar, setAvatar } from './Slices/userSlice';
+import { fetchFriendsData, fetchMatches, selectUser, Friends, getAvatar, setAvatar, enable2fa } from './Slices/userSlice';
 import refreshToken from "./Utils/refreshToken";
 import Footer from "./Footer";
 import FriendsList from "./FriendsList";
@@ -26,7 +26,8 @@ const Profile = () => {
             fetchFriendsData(0, navigate, dispatch, userInfo.user);
             fetchMatches(0, navigate, dispatch, userInfo.user);
             getAvatar(0, navigate, dispatch, userInfo.user.id);
-            setloaded(true);    
+            setloaded(true);
+            //enable2fa(dispatch, navigate, userInfo);  
         }
     }, []);
     return (
