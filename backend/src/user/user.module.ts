@@ -18,7 +18,7 @@ let entities = [User, Avatar, Session, Match];
     AvatarService,
     SessionService,
     MatchService,
-    SocketService,
+    //SocketService,
   ],
   exports: [UserService, SessionService],
 })

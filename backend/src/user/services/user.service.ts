@@ -11,7 +11,7 @@ import { SocketService } from 'src/socket/socket.service';
 export class UserService {
   constructor(
     private readonly avatarService: AvatarService,
-    private readonly notifyService: SocketService,
+    //private readonly notifyService: SocketService,
 
     @InjectRepository(User)
     private readonly userRepo: Repository<User>,
@@ -153,6 +153,8 @@ export class UserService {
       'last_name',
       'username',
       'password',
+      'TFA_enabled',
+      'TFA_secret',
     ];
 
     for (const key of Object.keys(newUser)) {
