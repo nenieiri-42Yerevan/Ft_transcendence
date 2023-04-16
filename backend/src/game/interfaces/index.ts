@@ -1,2 +1,4 @@
 export * from './input.interface';
-export * from './game-options.interface';
+export * from './options.interface';
+export * from './player.interface';
+export * from './room.interface';
