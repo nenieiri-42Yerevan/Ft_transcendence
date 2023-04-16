@@ -17,7 +17,7 @@ import { ChatService } from './services/chat.service';
 import { GroupChatService } from './services/group-chat.service';
 
 @WebSocketGateway({
-  cors: { origin: '' },
+  cors: { origin: '*' },
   namespace: 'chat',
 })
 export class ChatGateway implements OnGatewayConnection {
