@@ -38,6 +38,7 @@ backend/*.sw[po]
 
 # testing
 backend/coverage
+backend/dist
 
 # production
 backend/build
