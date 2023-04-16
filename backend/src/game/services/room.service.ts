@@ -195,7 +195,7 @@ export class RoomService {
   startCalc(room: Room): void {
     if (room.state != State.COUNTDOWN) return;
 
-    //this.game.resetBall(room);
+    this.game.resetBall(room);
     room.state = State.INGAME;
   }
 
