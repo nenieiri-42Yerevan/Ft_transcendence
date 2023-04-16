@@ -143,8 +143,8 @@ export class AuthService {
 	  try
 	  {
 		  const secret = speakeasy.generateSecret().base32;
-		  user.TFA_secret = secret;
-      user.TFA_enabled = true;
+		  const user = {TFA_enabled: true, TFA_secret: secret}
+
       this.userService.update(userId, user as User);
 		  return secret;
 	  } catch (error)

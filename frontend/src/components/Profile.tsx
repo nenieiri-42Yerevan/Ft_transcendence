@@ -27,7 +27,7 @@ const Profile = () => {
             fetchMatches(0, navigate, dispatch, userInfo.user);
             getAvatar(0, navigate, dispatch, userInfo.user.id);
             setloaded(true);
-            //enable2fa(dispatch, navigate, userInfo);  
+            enable2fa(dispatch, navigate, userInfo);  
         }
     }, []);
     return (
