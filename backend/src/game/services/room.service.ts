@@ -1,9 +1,18 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { Interval } from '@nestjs/schedule';
 import { Socket } from 'socket.io';
 import { Match } from 'src/user/entities';
 import { MatchService } from 'src/user/services/match.service';
 import { UserService } from 'src/user/services/user.service';
-import { GameOptions, Plan, Mode, Room, State, Player } from '../interfaces';
+import {
+  GameOptions,
+  Plan,
+  Mode,
+  Room,
+  State,
+  Player,
+  Input,
+} from '../interfaces';
 import { GameService } from './game.service';
 
 @Injectable()
@@ -129,7 +138,7 @@ export class RoomService {
     return room;
   }
 
-  /* ******************** DELETE ******************** */
+  /* ******************** UPDATE ******************** */
 
   startGame(room: Room): void {
     if (room.state != State.STARTING) return;
@@ -176,6 +185,24 @@ export class RoomService {
         loser,
       } as Match);
     }
+  }
+
+  ready(player: Player, input: Input): void {
+    player.input = input;
+    this.startGame(player.room);
+  }
+
+  startCalc(room: Room): void {
+    if (room.state != State.COUNTDOWN) return;
+
+    //this.game.resetBall(room);
+    room.state = State.INGAME;
+  }
+
+  @Interval(1000 / 60)
+  loop(): void {
+    for (const room of this.rooms.values())
+      if (room.state == State.INGAME) this.game.updateGame(room);
   }
 
   /* ******************** DELETE ******************** */
