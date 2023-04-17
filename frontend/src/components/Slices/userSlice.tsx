@@ -23,7 +23,7 @@ interface UserInfo {
   img?: string | undefined;
   follows: number[];
   blocked: number[];
-  Tfa: boolean;
+  TFA_enabled: boolean;
 }
 
 interface User {
@@ -49,7 +49,7 @@ export const userSlice = createSlice({
         ...state.user,
         username: action.payload.username,
         name: action.payload.first_name,
-        //Tfa: action.payload.,
+        TFA_enabled: action.payload.TFA_enabled,
         lastName: action.payload.last_name,
         email: action.payload.email,
         rank: action.payload.rank,

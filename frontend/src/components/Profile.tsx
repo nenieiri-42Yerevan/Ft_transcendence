@@ -22,12 +22,11 @@ const Profile = () => {
     useEffect(() => {
         if (!userInfo.user)
             navigate("/transcendence/user/signin");
-        else {
+        else {    
             fetchFriendsData(0, navigate, dispatch, userInfo.user);
             fetchMatches(0, navigate, dispatch, userInfo.user);
             getAvatar(0, navigate, dispatch, userInfo.user.id);
             setloaded(true);
-            enable2fa(dispatch, navigate, userInfo);  
         }
     }, []);
     return (

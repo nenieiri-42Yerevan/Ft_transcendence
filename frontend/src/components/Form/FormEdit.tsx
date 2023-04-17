@@ -4,7 +4,7 @@ import TextInput from './inputs/TextInput';
 import PasswordInput from './inputs/PasswordInput';
 import { Field, FormSpy } from 'react-final-form';
 import { useDispatch, useSelector } from 'react-redux';
-import {selectUser} from '../Slices/userSlice';
+import {enable2fa, selectUser} from '../Slices/userSlice';
 
 const getError = (err: any) => {
   if (err.first_name) return err.first_name;
@@ -150,7 +150,7 @@ const FormContent = (props: any) => {
           </div>
         )}
       </Field>
-      <Field name="2fa" id="2fa">
+      <Field name="2fa" id="2fa" type = "radio">
       {({ input, meta, ...rest })=> (
         <div className="flex gap-y-2">
             <label htmlFor="2fa" className="font-bold">
@@ -161,12 +161,12 @@ const FormContent = (props: any) => {
             </label>
             <RadioInput
                 input={input}
-                value="enable"
-                label="2fa"
+                label="2fa-enable"
                 id="2fa-enable"
                 meta={meta}
-                name = "Enable"
-                checked = {userInfo.user.TFA_enabled && "checked"}
+                name = "2fa"
+                checked = {userInfo.user.TFA_enabled ? "checked" : undefined}
+                // onChange = {enable2fa}
                 {...rest}
             />
             <label htmlFor="2fa-disable" className="font-bold mx-3">
@@ -174,12 +174,11 @@ const FormContent = (props: any) => {
             </label>
             <RadioInput
                 input={input}
-                value="disable"
                 label="2fa-disable"
-                id="2fa"
+                id="2fa-disable"
                 meta={meta}
-                name = "Disable"
-                checked = {!userInfo.user.TFA_enabled && "checked"}
+                name = "2fa"
+                checked = {!userInfo.user.TFA_enabled ? "checked" : undefined }
                 {...rest}
             />
         </div>
