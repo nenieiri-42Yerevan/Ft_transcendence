@@ -29,37 +29,37 @@ export class AuthService {
         tokens.refresh_token,
         user,
       );
-	  if (user.TFA_enabled == true)
-    {
-      console.log("tfa");
-		  throw new HttpException(user.username, HttpStatus.FORBIDDEN);
-      
-    }
+      if (user.TFA_enabled == true)
+        throw new HttpException("Provide your 2fa code", HttpStatus.FORBIDDEN);
       return tokens;
-    } else throw new HttpException('Wrong password', HttpStatus.NOT_FOUND);
+    } else 
+      throw new HttpException('Wrong password', HttpStatus.NOT_FOUND);
   }
 
   // creatinhg user session and connection (2FA)
   async signinTFA(dto: SignInTFADto): Promise<TokenDto> {
     const user = await this.userService.findOne(dto.username);
-	  
-	  const verified = speakeasy.totp.verify({
-		 secret: user.TFA_secret,
-		 encoding: 'base32',
-		 token: dto.TFA,
-		 window: 1
-	  });
-	  if (!verified)
-		  throw new HttpException('Wrong TFA', HttpStatus.NOT_FOUND);
-
+	  console.log(user.TFA_secret);
+    if (user && (await argon.verify(user.password, dto.password))) {
+      const verified = speakeasy.totp.verify({
+        secret: user.TFA_secret,
+        encoding: 'base32',
+        token: dto.TFA,
+        window: 1
+      });
+      console.log(" ", verified);
+      
+      if (!verified)
+        throw new HttpException('Wrong TFA', HttpStatus.NOT_FOUND);
       const tokens = await this.generateJWT(user.id, user.username);
       const new_session = await this.sessionService.create(
         tokens.access_token,
         tokens.refresh_token,
         user,
       );
-
       return tokens;
+    } else 
+    throw new HttpException('Wrong password', HttpStatus.NOT_FOUND);
   }
 
   // logout

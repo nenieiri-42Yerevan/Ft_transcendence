@@ -71,7 +71,7 @@ const form2fa = (props: any) => {
           )}
         </Field>
         <Field<string>
-          name="2fa"
+          name="tfa"
           placeholder="2fa code"
           id="2falogin"
           key={'2fa'}

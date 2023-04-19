@@ -15,6 +15,11 @@ interface Data {
     login: string;
     password: string;
 }
+interface tfa {
+    login: string;
+    password: string;
+    tfa: string;
+}
 const SignIn = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -52,9 +57,37 @@ const SignIn = () => {
             }
         }
     }
+    const submit2fa = async (data)=>{
+        dispatch(loginRequest());
+        const sendData = {
+            username: data.login,
+            password: data.password,
+            TFA: data.tfa,
+        };
+        try {
+            const response = await axios
+            .post(`${process.env.BACK_URL}/transcendence/auth/signin/2FA`, sendData)
+            const accessToken = response.data.access_token;
+            const refreshToken = response.data.refresh_token;
+            if (!refreshToken) {
+                return { [FORM_ERROR]: "Something is wrong" }
+            }
+            sessionStorage.setItem("access_token", accessToken);
+            sessionStorage.setItem("refresh_token", refreshToken);
+            const userInfo = await getUserInfo(navigate);
+            dispatch(setUserInfo(userInfo));
+            console.log(userInfo);
+            navigate("/transcendence/user/profile");
+        }
+        catch(error)
+        {
+            dispatch(loginFailure(error.response.data.message))
+            return { [FORM_ERROR]: error.response.data.message }
+        }
+    }
     return (
         <>
-            {isError ? <Login onSub = {onsubmit} rend = {Form2fa}/> : <Login onSub = {onsubmit} rend = {FormLogin}/>}
+            {isError ? <Login onSub = {submit2fa} rend = {Form2fa}/> : <Login onSub = {onsubmit} rend = {FormLogin}/>}
         </>
     )
 }
