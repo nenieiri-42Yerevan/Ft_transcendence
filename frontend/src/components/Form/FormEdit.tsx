@@ -4,7 +4,8 @@ import TextInput from './inputs/TextInput';
 import PasswordInput from './inputs/PasswordInput';
 import { Field, FormSpy } from 'react-final-form';
 import { useDispatch, useSelector } from 'react-redux';
-import {enable2fa, selectUser} from '../Slices/userSlice';
+import {disable2fa, enable2fa, selectUser} from '../Slices/userSlice';
+import { useNavigate } from 'react-router-dom';
 
 const getError = (err: any) => {
   if (err.first_name) return err.first_name;
@@ -14,6 +15,8 @@ const getError = (err: any) => {
 };
 
 const FormContent = (props: any) => {
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
     const userInfo = useSelector(selectUser);
     console.log(props);
     return (
@@ -165,8 +168,8 @@ const FormContent = (props: any) => {
                 id="2fa-enable"
                 meta={meta}
                 name = "2fa"
-                checked = {userInfo.user.TFA_enabled ? "checked" : undefined}
-                // onChange = {enable2fa}
+                //checked = {userInfo.user.TFA_enabled ? "checked" : undefined}
+                onChange = {()=>{enable2fa(dispatch, navigate, userInfo.user)}}
                 {...rest}
             />
             <label htmlFor="2fa-disable" className="font-bold mx-3">
@@ -178,7 +181,8 @@ const FormContent = (props: any) => {
                 id="2fa-disable"
                 meta={meta}
                 name = "2fa"
-                checked = {!userInfo.user.TFA_enabled ? "checked" : undefined }
+                onChange = {()=>{disable2fa(dispatch, navigate, userInfo.user)}}
+                //checked = {!userInfo.user.TFA_enabled ? "checked" : undefined }
                 {...rest}
             />
         </div>

@@ -139,15 +139,13 @@ export class AuthService {
 
   async enableTFA(userId: number) : Promise<string>
   {
-    const user = await this.userService.findOne(userId);
 	  try
 	  {
 		  const secret = speakeasy.generateSecret().base32;
-		  const user = {TFA_enabled: true, TFA_secret: secret}
-
-      this.userService.update(userId, user as User);
+      this.userService.update(userId, {TFA_enabled: true, TFA_secret: secret} as User);
 		  return secret;
-	  } catch (error)
+	  }
+    catch (error)
 	  { 
 		  throw new HttpException('Error when generating the 2FA secret', 
 		  							HttpStatus.INTERNAL_SERVER_ERROR);
@@ -156,7 +154,6 @@ export class AuthService {
 
   async disableTFA(userId: number)
   {
-    const user = await this.userService.findOne(userId);
-	  user.TFA_secret = null;
+    await this.userService.update(userId, {TFA_enabled: false, TFA_secret: null} as User);
   }
 }

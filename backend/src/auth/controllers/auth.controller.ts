@@ -46,6 +46,14 @@ export class AuthController {
 	  return this.authService.enableTFA(userId);
   }
 
+  @Post('TFA_disable')
+  @HttpCode(HttpStatus.OK)
+  disableTFA(
+    @GetUserId() userId: number
+  ) {
+	  this.authService.disableTFA(userId);
+  }
+  
   @Public()
   @UseGuards(RtGuard)
   @Post('refresh')
