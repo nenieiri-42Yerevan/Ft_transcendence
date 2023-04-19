@@ -1,12 +1,15 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Form, Field } from "react-final-form";
 import axios from "axios";
 import { FORM_ERROR } from 'final-form';
 import FormLogin from "./Form/formLogin";
+import Login from "./Login"
 import Background from "./Background";
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectUser, setUserInfo, getUserInfo, loginRequest, loginFailure, getUserById, getAvatar } from './Slices/userSlice';
+import { useState } from "react";
+import Form2fa from "./Form/Form2fa";
 
 interface Data {
     login: string;
@@ -15,6 +18,7 @@ interface Data {
 const SignIn = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const [isError, setIsError] = useState(false);
     const onsubmit = async (data: Data) => {
         dispatch(loginRequest());
         const sendData = {
@@ -37,25 +41,20 @@ const SignIn = () => {
             navigate("/transcendence/user/profile");
         }
         catch (error: any) {
-            dispatch(loginFailure(error.response.data.message))
-            return { [FORM_ERROR]: error.response.data.message }
+            if (error.response.status == 403)
+            {
+                setIsError(true);
+            }
+            else
+            {
+                dispatch(loginFailure(error.response.data.message))
+                return { [FORM_ERROR]: error.response.data.message }
+            }
         }
     }
     return (
         <>
-            <div className="backdrop-blur-md p-0 flex-row lg:px-4 xl:px-16 bg-black/50 min-w-full min-h-full z-[668] absolute flex justify-between bg-clip-padding">
-                <div className="h-screen ml-64 items-center text-lg md:text-2xl pt-10 justify-center hidden sm:hidden lg:flex  lg:justify-center xl:flex xl:justify-center " >
-                    <p className="text-3xl md:text-5xl text-center">enjoy the <b className="text-red-900">Game</b></p>
-                </div>
-                <div className="flex flex-col justify-center items-center forms min-w-full min-h-screen lg:min-w-fit lg:min-h-fit">
-                    <Form
-                        onSubmit={onsubmit}
-                        render={FormLogin}
-                    >
-                    </Form>
-                </div>
-            </div>
-            <Background />
+            {isError ? <Login onSub = {onsubmit} rend = {Form2fa}/> : <Login onSub = {onsubmit} rend = {FormLogin}/>}
         </>
     )
 }
