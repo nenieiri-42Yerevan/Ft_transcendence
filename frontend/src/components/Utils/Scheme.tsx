@@ -53,6 +53,7 @@ export const validationSettings = Yup.object().shape({
   last_name: Yup.string()
     .required('Last name is required.')
     .matches(/^[a-zA-Z]+$/),
+  tfa:  Yup.string().required('TFA is required.'),
   username: Yup.string()
   .required('Username is required.')
   .min(8, 'At least 8 characters long.')
@@ -79,6 +80,7 @@ export interface EditInfo {
   first_name: string;
   last_name: string;
   username: string;
+  tfa: string;
 }
 
 export const days: any[] = Array.from(Array(31).keys()).map((d) => d + 1);
@@ -99,6 +101,7 @@ export const months: any[] = [
 ];
 
 export type Gender = 'male' | 'female';
+export type TFA = 'enable' | 'disable';
 
 export const validate = async (values: Data) => {
   try {
@@ -113,7 +116,7 @@ export const validate = async (values: Data) => {
 };
 
 export const validateSettings = async (values: EditInfo) => {
-  try {
+  try {  
     await validationSettings.validate(values, { abortEarly: false });
   } catch (err: any) {
     const errors = err.inner.reduce((formError: any, innerError: any) => {

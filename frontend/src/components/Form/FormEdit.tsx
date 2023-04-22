@@ -6,19 +6,20 @@ import { Field, FormSpy } from 'react-final-form';
 import { useDispatch, useSelector } from 'react-redux';
 import {disable2fa, enable2fa, selectUser} from '../Slices/userSlice';
 import { useNavigate } from 'react-router-dom';
+import {TFA} from "../Utils/Scheme";
 
 const getError = (err: any) => {
   if (err.first_name) return err.first_name;
   if (err.last_name) return err.last_name;
   if (err.email) return err.email;
+  if (err.tfa) return err.tfa;
   return undefined;
 };
 
-const FormContent = (props: any) => {
+const FormEdit = (props: any) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const userInfo = useSelector(selectUser);
-    console.log(props);
     return (
         <form
         onSubmit={props.handleSubmit}
@@ -153,41 +154,45 @@ const FormContent = (props: any) => {
           </div>
         )}
       </Field>
-      <Field name="2fa" id="2fa" type = "radio">
-      {({ input, meta, ...rest })=> (
-        <div className="flex gap-y-2">
-            <label htmlFor="2fa" className="font-bold">
-                2FA:
-            </label>
-            <label htmlFor="2fa-enable" className="font-bold mx-3">
-                Enable:
-            </label>
-            <RadioInput
-                input={input}
-                label="2fa-enable"
-                id="2fa-enable"
-                meta={meta}
-                name = "2fa"
-                //checked = {userInfo.user.TFA_enabled ? "checked" : undefined}
-                onChange = {()=>{enable2fa(dispatch, navigate, userInfo.user)}}
-                {...rest}
-            />
-            <label htmlFor="2fa-disable" className="font-bold mx-3">
-                    Disable:
-            </label>
-            <RadioInput
-                input={input}
-                label="2fa-disable"
-                id="2fa-disable"
-                meta={meta}
-                name = "2fa"
-                onChange = {()=>{disable2fa(dispatch, navigate, userInfo.user)}}
-                //checked = {!userInfo.user.TFA_enabled ? "checked" : undefined }
-                {...rest}
-            />
+      <div className="justify-self-end  flex xs:flex-row justify-center align-center xs:flex-between gap-x-5 gap-y-3  xs:gap-x-36  px-0 xs:px-3 md:px-4">
+        Enable TFA:
+          <Field<TFA>
+            name="tfa"
+            className="accent-[#2d2727]"
+            type="radio"
+            value="enable"
+            id="tfa-enable"
+            key={'tfa'}
+          >
+            {({ input, meta, ...rest }) => (
+              <div className="xs:justify-self-center">
+                <RadioInput input={input} meta={meta} {...rest} />
+                <label htmlFor="tfa-enable" className="ml-2">
+                  Enable
+                </label>
+              </div>
+            )}
+          </Field>
+          <div className="xs:justify-self-end">
+            <Field<TFA>
+              name="tfa"
+              type="radio"
+              value="disable"
+              id="tfa-disable"
+              className="ml-0  xs:ml-4 accent-[#2d2727]"
+              key={'tfa'}
+            >
+              {({ input, meta, ...rest }) => (
+                <div className="flex flex-between xs:block xs:justify-self-start">
+                  <RadioInput input={input} meta={meta} {...rest} />
+                  <label htmlFor="tfa-disable" className="ml-2">
+                    Disable
+                  </label>
+                </div>
+              )}
+            </Field>
+          </div>
         </div>
-    )}
-    </Field>
         <hr className="border-1 border-gray-300 "></hr>
         <div className="text-red-900 font-bold flex justify-center">
             <button
@@ -212,4 +217,4 @@ const FormContent = (props: any) => {
     );
 };
 
-export default FormContent;
+export default FormEdit;
