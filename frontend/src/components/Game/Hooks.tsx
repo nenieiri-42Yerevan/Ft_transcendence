@@ -1,40 +1,32 @@
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 
-function useArrowKeys() {
-  const [arrowKeysState, setArrowKeysState] = useState({ ArrowUp: 0, ArrowDown: 0});
+export function useKeyPress() {
+  const [keysPressed, setKeyPressed] = useState({});
+
+  function downHandler({ key }) {
+    setKeyPressed(prevState => ({
+      ...prevState,
+      [key]: true,
+    }));
+  }
+
+  function upHandler({ key }) {
+    setKeyPressed(prevState => ({
+      ...prevState,
+      [key]: false,
+    }));
+  }
 
   useEffect(() => {
-    function handleKeyDown(event: KeyboardEvent) {
-      setArrowKeysState(prevState => {
-        if (event.code === 'ArrowUp') {
-          return { ...prevState, ArrowUp: 1 };
-        } else if (event.code === 'ArrowDown') {
-          return { ...prevState, ArrowDown: 1 };
-        }
-        return prevState;
-      });
-    }
+    window.addEventListener('keydown', downHandler);
+    window.addEventListener('keyup', upHandler);
 
-    function handleKeyUp(event: KeyboardEvent) {
-      setArrowKeysState(prevState => {
-        if (event.code === 'ArrowUp') {
-          return { ...prevState, ArrowUp: 0 };
-        } else if (event.code === 'ArrowDown') {
-          return { ...prevState, ArrowDown: 0 };
-        }
-        return prevState;
-      });
-    }
-
-    window.addEventListener('keydown', handleKeyDown);
-    window.addEventListener('keyup', handleKeyUp);
+    // Remove event listeners on cleanup
     return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-      window.removeEventListener('keyup', handleKeyUp);
+      window.removeEventListener('keydown', downHandler);
+      window.removeEventListener('keyup', upHandler);
     };
-  }, []);
-
-  return arrowKeysState;
+  }, []); // Empty array ensures that effect is only run on mount and unmount
+  return keysPressed;
 }
-
-export default useArrowKeys;
+export default useKeyPress;

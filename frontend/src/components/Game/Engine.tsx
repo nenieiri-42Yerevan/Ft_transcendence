@@ -1,146 +1,206 @@
-import React, { useRef, useEffect, useState, useLayoutEffect } from 'react';
-import useArrowKeys from './Hooks';
+import React, {useRef, useEffect, useState, useLayoutEffect} from 'react';
 
-function PingPongGame () {
-        const canvasRef = useRef(null);
-        const divRef = useRef(null);
-        const arrowKeysState = useArrowKeys();
-        var state = {
-            scoreL:0,
-            scoreR:0,
-            speedX:10,
-            speedY:0,
-            ballOffsetX:0,
-            ballOffsetY:0,
-            ballX:0,
-            ballY:0,
-            paddleL:0,
-            paddleLOffset:0,
-            paddleR:0,
-            paddleROffset:0
-        };
-        resetGame();
-        useLayoutEffect(() => {
-            function handleResize() {
-                draw();
-            }
+class Engine extends React.Component {
+    constructor(props) {
+        super(props);
 
-            window.addEventListener('resize', handleResize);
+        this.divRef = React.createRef();
+        this.canvasRef = React.createRef();
+        this.state = InitialState();
+    }
 
-            // Reset canvas size on component unmount
-            return () => {
-            window.removeEventListener('resize', handleResize);
-            const canvas = canvasRef.current;
-            canvas.width = 0;
-            canvas.height = 0;
-            };
-        }, []);
+    componentDidMount(): void {
+        const div = this.divRef.current; 
+        const canvas = this.canvasRef.current;
+        const ctx = canvas.getContext('2d');
+        this.animationId = requestAnimationFrame(loop.bind(this));
+        window.addEventListener('keydown', this.keyInput);
+        function loop() {
+            canvas.width = div.offsetWidth;
+            canvas.height = div.offsetHeight;
+            this.draw(ctx, canvas);
+            this.animationId = requestAnimationFrame(loop.bind(this));
+        }
+    }
+    componentWillUnmount() {
+        cancelAnimationFrame(this.animationId);
+    }
+    /* reset the game */
+    resetGame = () => { this.setState({
+            ballX : 0.5,
+            ballY : 0.5,
 
-        useEffect(() => {
-            var requestId;
-            function render() {
-                requestId = requestAnimationFrame(render);
-                draw();
-            }
-            render();
-            return () => {
-                cancelAnimationFrame(requestId);
-            };
+            deltaY:         0, // change ball in Y AXIS
+            deltaX:         Math.random() > 0.5 ? 0.01 : -0.01, // change ball in  X AXIS
+
+            pause:          true, // pause the game
+
+            paddleL :       0.5,
+            paddleR :       0.5,
         });
+    }
 
-        return (
-            <div className="w-full md:w-4/5 h-screen bg-black" ref={divRef}>
-            <canvas ref={canvasRef}>
-            </ canvas>
-            </div>
-            );
+    /* check if we can move the player or opponent board */
+    moveBoard = (playerBoard, isUp) => {
+        }
+     
+    /* check if ball is touching the edge of board*/
+    touchingEdge = () => {} 
 
-        function draw() {
-            const canvas = canvasRef.current;
-            const parent = divRef.current;
-            const ctx = canvas.getContext('2d');
-            // Draw on the canvas using the state values
-            canvas.width = parent.offsetWidth;
-            canvas.height = parent.offsetHeight;
-            ctx.fillStyle = 'white';
-            ctx.fillRect(0, canvas.height/2- 50, 10, 100); //left paddle
-            ctx.fillRect(canvas.width - 10, canvas.height/2 - 50, 10, 100); // right paddle
-            ball(ctx);
+    /* check if ball is touching the player or opponent paddle */
+    touchingPaddle = () => {
+            if (
+                this.state.ballX >= 1 - this.state.paddleWidth * 2 &&
+                this.state.ballY <= this.state.paddleR + this.state.paddleHeight &&
+                this.state.ballY >= this.state.paddleR - this.state.paddleHeight
+                ) { 
+                this.setState({
+                    deltaX : -0.01,
+                    deltaY : -1 * this.state.deltaY,
+                    });
+            } else if (
+                this.state.ballX <= this.state.paddleWidth * 2 &&
+                this.state.ballY <= this.state.paddleL + this.state.paddleHeight &&
+                this.state.ballY >= this.state.paddleL - this.state.paddleHeight
+                ) {
+                this.setState({
+                    deltaX : 0.01,
+                    deltaY : -1 * this.state.deltaY,
+                    });
+            } else if ( this.state.ballX > 1 ) {
+                this.resetGame();
+                this.setState({
+                    scoreL : this.state.scoreL + 1
+                });
+            } else if ( this.state.ballX < 0 ) {
+                this.resetGame();
+                this.setState({
+                    scoreR : this.state.scoreR + 1
+                });
+            }
+            
+        }
+    
+    /* check if ball is touching the botom or top of paddle */
+    touchingPaddleEdge = () => {}
+    
+    /* check if ball made a score */
+
+    /* score render */
+    drawScore = (ctx, canvas) => {
+            var text = `${this.state.scoreL} : ${this.state.scoreR}`;
             ctx.font = '42px Arial';
-            const text = `${state.scoreL} : ${state.scoreR}`;
             const textWidth = ctx.measureText(text).width;
             const textX = (canvas.width - textWidth) / 2;
             const textY = (canvas.height * 0.1);
             ctx.fillText(text, textX, textY);
         }
-
-        function paddle(ctx) {
-            if (arrowKeysState.ArrowUp) {
-                console.log("UP KEY");
-                state.paddleLOffset -= 10;
-            } else if (arrowKeysState.ArrowDown) {
-                console.log("DOWN KEY");
-                state.paddleLOffset += 10;
-            }
-            state.paddleL = canvas.height/2- 50 + state.paddleLOffset;
-            state.paddleR = canvas.height/2- 50 + state.paddleROffset;
-            
-            ctx.fillRect(0, state.paddleL, 10, 100); //left paddle
-            ctx.fillRect(canvas.width - 10, state.paddleR, 10, 100); // right paddle
+    
+    /* bounce the  ball */
+    bounceBall = (ctx, canvas) => {
+        if (!this.state.pause) {
+            this.setState({
+                ballX : this.state.ballX + this.state.deltaX,
+                ballY : this.state.ballY + this.state.deltaY
+            });
+        } else {
+            var text = `PAUSE`;
+            ctx.font = '42px Arial';
+            const textWidth = ctx.measureText(text).width;
+            const textX = (canvas.width - textWidth) / 2;
+            const textY = (canvas.height * 0.45);
+            ctx.fillText(text, textX, textY);
         }
+        const ballWidth = canvas.width * 0.01;
+        const ballX = canvas.width * this.state.ballX;
+        const ballY = canvas.height * this.state.ballY;
+        ctx.fillRect(ballX - ballWidth/2, ballY - ballWidth/2, ballWidth, ballWidth);
+    }
+    
+    paddles = (ctx, canvas) => {
+        const paddleH = this.state.paddleHeight * canvas.height;
+        const paddleW = this.state.paddleWidth * canvas.width;
+        const paddleL = this.state.paddleL * canvas.height - paddleH;
+        const paddleR = this.state.paddleR * canvas.height - paddleH;
+        ctx.fillRect(0, paddleL, paddleW * 2, paddleH * 2);
+        ctx.fillRect(canvas.width - paddleW * 2, paddleR, paddleW * 2, paddleH * 2);
+    }
 
-        function ball(ctx) {
-            const canvas = canvasRef.current;
-            const ballHalfWidth = 5;
-            const ballHalfHeight = 5;
-
-            // Calculate the new position of the ball
-            state.ballX = canvas.width / 2 + state.ballOffsetX;
-            state.ballY = canvas.height / 2 + state.ballOffsetY;
-
-            // Check if the ball hits the left paddle
-            if (state.ballX - ballHalfWidth <= 10 &&
-                    state.ballY + ballHalfHeight >= canvas.height / 2 - 50 &&
-                    state.ballY - ballHalfHeight <= canvas.height / 2 + 50) {
-                state.speedX = 10; // Change the direction and speed of the ball
+    draw = (ctx, canvas) => {
+        ctx.fillStyle = 'white';
+        this.drawScore(ctx, canvas);
+        this.bounceBall(ctx, canvas);
+        this.touchingPaddle();
+        this.paddles(ctx, canvas);
+    }
+    /* handle the keyinput */ 
+    keyInput = ({keyCode}) => {
+        const PLAYER_UP   = 73;  // i
+        const PLAYER_DOWN = 75;  // k
+        const OPPONENT_UP    = 87; /* w */
+        const OPPONENT_DOWN    = 83; /* s */
+        const PAUSE    = 32; /* space */
+        
+        console.log(keyCode);
+        switch (keyCode) {
+            case PLAYER_UP: {
+                if (this.state.paddleL > 0.1) 
+                    this.setState({ paddleL : this.state.paddleL - 0.025 });
+                break;
             }
-
-            // Check if the ball hits the right paddle
-            if (state.ballX + ballHalfWidth >= canvas.width - 10 &&
-                    state.ballY + ballHalfHeight >= canvas.height / 2 - 50 &&
-                    state.ballY - ballHalfHeight <= canvas.height / 2 + 50) {
-                state.speedX = -10; // Change the direction and speed of the ball
+            case PLAYER_DOWN: {
+                if (this.state.paddleL < 0.95) 
+                    this.setState({ paddleL : this.state.paddleL + 0.025 });
+                break;
             }
-
-            // Check if the ball hits the top or bottom of the canvas
-            if (state.ballY - ballHalfHeight <= 0 || state.ballY + ballHalfHeight >= canvas.height) {
-                state.speedY = -state.speedY; // Change the direction of the ball
+            case OPPONENT_UP: {
+                if (this.state.paddleR > 0.1) 
+                    this.setState({ paddleR : this.state.paddleR - 0.025 });
+                break;
             }
-
-            // Draw the ball on the canvas
-            ctx.fillRect(state.ballX - ballHalfWidth, state.ballY - ballHalfHeight, ballHalfWidth * 2, ballHalfHeight * 2);
-
-            if (state.ballX < 0) {
-                state.scoreR += 1;
-                resetGame();
-            } else if (state.ballX > canvas.width) {
-                state.scoreL += 1;
-                resetGame();
+            case OPPONENT_DOWN:{
+                if (this.state.paddleR < 0.95) 
+                    this.setState({ paddleR : this.state.paddleR + 0.025 });
+                break;
             }
-            // Update the ball position for the next frame
-            state.ballOffsetX += state.speedX;
-            state.ballOffsetY += state.speedY;        
-            }
-        function resetGame() {
-            console.log("RESET");
-            state.ballOffsetY = 0;
-            state.ballOffsetX = 0;
-            state.paddleLOffset = 0;
-            state.paddleROffset = 0;
-            state.speedY = Math.random() * 20 - 10;
-            state.speedX = Math.random() < 0.5 ? -10 : 10;
-        }
+            case PAUSE:
+                this.setState({pause: !this.state.pause});
+                    break;
+        }   
+    }
+
+    /* render the jsx */
+    render() {
+        return (
+                <div className="w-full md:w-4/5 h-screen bg-black" ref={this.divRef}>
+                <canvas ref={this.canvasRef}>
+                </ canvas>
+                </div>
+               );
+    }
 
 }
-export default PingPongGame;
 
+const InitialState = () => {
+    return { 
+
+        /* Paddle Array */
+        paddleHeight :  0.05,
+        paddleWidth :   0.005,
+        paddleL :       0.5,
+        paddleR :       0.5,
+        /* ball */
+        ballX:          0.5,
+        ballY:          0.5,
+        ballSpeed:      0.1,   // speed of ball
+        deltaY:         0, // change ball in Y AXIS
+        deltaX:         0.01, // change ball in  X AXIS
+        /* pause */
+        pause:          true, // pause the game
+        /* Score */
+        scoreL:         0,
+        scoreR:         0,
+    }
+}
+
+export default Engine;
