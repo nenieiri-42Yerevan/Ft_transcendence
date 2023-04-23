@@ -13,7 +13,6 @@ const getError = (err: any) => {
   if (err.last_name) return err.last_name;
   if (err.email) return err.email;
   if (err.tfa) return err.tfa;
-  if (err.password) return err.password;
   if (err.new_password) return err.new_password;
   return undefined;
 };
@@ -195,38 +194,6 @@ const FormEdit = (props: any) => {
             </Field>
           </div>
         </div>
-        <Field<string>
-        name="password"
-        title={
-          props.errors && props.errors.password ? props.errors.password : ''
-        }
-        id="edit-password"
-        placeholder="Password"
-        key={'password'}
-      >
-        {({ input, meta, ...rest }) => (
-          <div className=" flex flex-col gap-y-2">
-            <label htmlFor="edit-password" className="font-bold">
-              Password:
-            </label>
-            {meta.error && meta.touched ? (
-              <PasswordInput
-                input={input}
-                meta={meta}
-                {...rest}
-                className=" rounded-md bg-[#2d2727] outline-red-900 min-w-full outline-none block p-1 xs:p-1.5 sm:p-2 md:p-2 lg:p-3"
-              />
-            ) : (
-              <PasswordInput
-                input={input}
-                meta={meta}
-                {...rest}
-                className=" rounded-md bg-[#2d2727] outline-[#2d2727] min-w-full outline-none block p-1 xs:p-1.5 sm:p-2 md:p-2 lg:p-3"
-              />
-            )}
-          </div>
-        )}
-      </Field>
       <Field<string>
         name="new_password"
         title={

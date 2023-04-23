@@ -63,13 +63,6 @@ export const validationSettings = Yup.object().shape({
     /^[a-zA-Z][a-zA-Z0-9_]{7,}[a-zA-Z0-9]$/,
     "Contains at least 8 character long.\nShould start with lowercase or uppercase.\nContains lowercase, uppercase, digit or '_'.",
   ),
-  password: Yup.string()
-  .required('Password is required.')
-  .min(8, 'At least 8 characters long.')
-  .matches(
-    /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
-    'Contains at least one lowercase letter.\nContains at least one uppercase letter.\nContains at least one digit.\nContains at least one special character.',
-  ),
   new_password: Yup.string()
   .required('Password is required.')
   .min(8, 'At least 8 characters long.')
@@ -97,7 +90,6 @@ export interface EditInfo {
   last_name: string;
   username: string;
   tfa: string;
-  password: string;
   new_password: string;
 }
 
@@ -134,12 +126,7 @@ export const validate = async (values: Data) => {
 };
 
 export const validateSettings = async (values: EditInfo) => {
-  const argon2 = require('argon2');
   try { 
-    console.log("hash", " ", values);
-    
-    const hashpass = await argon2.hash(values.password);
-    const hashnew = await argon2.hash(values.new_password);
     await validationSettings.validate(values, { abortEarly: false });
   } catch (err: any) {
     const errors = err.inner.reduce((formError: any, innerError: any) => {

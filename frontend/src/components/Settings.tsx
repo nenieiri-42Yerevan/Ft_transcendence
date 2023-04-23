@@ -21,7 +21,7 @@ const Edit = () => {
         first_name: userInfo.user.name,
         last_name: userInfo.user.lastName,
         username: userInfo.user.username,
-        password: userInfo.user.password,
+        new_password: userInfo.user.password,
       };
     const onSubmit = async (data: EditInfo) => {
         const sendData = {
