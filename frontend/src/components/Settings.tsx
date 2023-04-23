@@ -21,7 +21,6 @@ const Edit = () => {
         first_name: userInfo.user.name,
         last_name: userInfo.user.lastName,
         username: userInfo.user.username,
-        new_password: userInfo.user.password,
       };
     const onSubmit = async (data: EditInfo) => {
         const sendData = {
@@ -29,14 +28,15 @@ const Edit = () => {
             last_name: data.last_name,
             username: data.username,
         };
-        console.log("sata "  ,data);
+        if (data.new_password !== undefined) {
+            sendData['new_password'] = data.new_password;
+          }
+        console.log("sata "  ,sendData);
         try {
             const response = await axios.put(
                 `http://localhost:7000/transcendence/user/update-user/${userInfo.user.id}`, 
                 {
-                    first_name: data.first_name,
-                    last_name: data.last_name,
-                    username: data.username,
+                    sendData
                 },
                 {
                     headers: {
