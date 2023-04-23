@@ -35,8 +35,8 @@ const UserProfile = () => {
             {
                 setphoto(photo);
             }
-            setloaded(true);
         }).catch(error=>{});
+        setloaded(true);
     }, [id]);
     if (loaded && userInfo == null)
     return (<h1>User Not Found</h1>);

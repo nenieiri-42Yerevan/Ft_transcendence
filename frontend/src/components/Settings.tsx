@@ -21,6 +21,7 @@ const Edit = () => {
         first_name: userInfo.user.name,
         last_name: userInfo.user.lastName,
         username: userInfo.user.username,
+        password: userInfo.user.password,
       };
     const onSubmit = async (data: EditInfo) => {
         const sendData = {
@@ -66,7 +67,6 @@ const Edit = () => {
             <div className="flex flex-col justify-center md:text-lg items-center min-w-full min-h-screen md:min-w-fit md:min-h-fit">
                 {enabled && <Tfa user = {userInfo.user}  enabled={enabled}  onEnableChange={handleEnableChange}/>}
                 <Form onSubmit={onSubmit} validate={validateSettings} render={FormEdit}  initialValues={initialValues}/>
-            
             </div>
         </div>
         <Background />
