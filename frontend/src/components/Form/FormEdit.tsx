@@ -155,7 +155,7 @@ const FormEdit = (props: any) => {
         )}
       </Field>
       <div className="justify-self-end  flex xs:flex-row justify-center align-center xs:flex-between gap-x-5 gap-y-3  xs:gap-x-36  px-0 xs:px-3 md:px-4">
-        Enable TFA:
+        Enable 2FA:
           <Field<TFA>
             name="tfa"
             className="accent-[#2d2727]"
