@@ -29,8 +29,8 @@ export class AuthService {
         tokens.refresh_token,
         user,
       );
-	  if (user.TFA_enabled == true)
-		  throw new HttpException(user.username, HttpStatus.FORBIDDEN);
+      if (user.TFA_enabled == true)
+        throw new HttpException(user.username, HttpStatus.FORBIDDEN);
       return tokens;
     } else throw new HttpException('Wrong password', HttpStatus.NOT_FOUND);
   }
@@ -38,24 +38,23 @@ export class AuthService {
   // creatinhg user session and connection (2FA)
   async signinTFA(dto: SignInTFADto): Promise<TokenDto> {
     const user = await this.userService.findOne(dto.username);
-	  
-	  const verified = speakeasy.totp.verify({
-		 secret: user.TFA_secret,
-		 encoding: 'base32',
-		 token: dto.TFA,
-		 window: 1
-	  });
-	  if (!verified)
-		  throw new HttpException('Wrong TFA', HttpStatus.NOT_FOUND);
 
-      const tokens = await this.generateJWT(user.id, user.username);
-      const new_session = await this.sessionService.create(
-        tokens.access_token,
-        tokens.refresh_token,
-        user,
-      );
+    const verified = speakeasy.totp.verify({
+      secret: user.TFA_secret,
+      encoding: 'base32',
+      token: dto.TFA,
+      window: 1,
+    });
+    if (!verified) throw new HttpException('Wrong TFA', HttpStatus.NOT_FOUND);
 
-      return tokens;
+    const tokens = await this.generateJWT(user.id, user.username);
+    const new_session = await this.sessionService.create(
+      tokens.access_token,
+      tokens.refresh_token,
+      user,
+    );
+
+    return tokens;
   }
 
   // logout
@@ -133,24 +132,22 @@ export class AuthService {
     return user;
   }
 
-  async enableTFA(userId: number) : Promise<string>
-  {
+  async enableTFA(userId: number): Promise<string> {
     const user = await this.userService.findOne(userId);
-	  try
-	  {
-		  const secret = speakeasy.generateSecret().base32;
-		  user.TFA_secret = secret;
-		  return secret;
-	  } catch (error)
-	  {
-		  throw new HttpException('Error when generating the 2FA secret', 
-		  							HttpStatus.INTERNAL_SERVER_ERROR);
-	  }
+    try {
+      const secret = speakeasy.generateSecret().base32;
+      user.TFA_secret = secret;
+      return secret;
+    } catch (error) {
+      throw new HttpException(
+        'Error when generating the 2FA secret',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 
-  async disableTFA(userId: number)
-  {
+  async disableTFA(userId: number) {
     const user = await this.userService.findOne(userId);
-	user.TFA_secret = null;
+    user.TFA_secret = null;
   }
 }

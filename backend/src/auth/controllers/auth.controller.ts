@@ -1,11 +1,11 @@
 import {
-	Controller,
-	Post,
-	Body,
-	HttpCode,
-	HttpStatus,
-	UseGuards,
-	Req
+  Controller,
+  Post,
+  Body,
+  HttpCode,
+  HttpStatus,
+  UseGuards,
+  Req,
 } from '@nestjs/common';
 import { AtGuard, RtGuard } from '../../common/guards';
 import { AuthService } from '../services/auth.service';
@@ -35,7 +35,7 @@ export class AuthController {
   @Post('logout')
   @HttpCode(HttpStatus.OK)
   logout(@GetUser('accessToken') accessToken: string) {
-	  this.authService.logout(accessToken);
+    this.authService.logout(accessToken);
   }
 
   @Public()
@@ -43,10 +43,10 @@ export class AuthController {
   @Post('refresh')
   @HttpCode(HttpStatus.OK)
   refreshTokens(
-  		@GetUserId() userId: number,
-  		@GetUser('refreshToken') refreshToken: string
-	): Promise<TokenDto> {
+    @GetUserId() userId: number,
+    @GetUser('refreshToken') refreshToken: string,
+  ): Promise<TokenDto> {
     console.log(`HELOO ${refreshToken}`);
-	  return this.authService.refreshTokens(userId, refreshToken);
+    return this.authService.refreshTokens(userId, refreshToken);
   }
 }

@@ -6,11 +6,9 @@ import { UserModule } from '../user/user.module';
 import { AtStrategy, RtStrategy } from './strategies';
 
 @Module({
-	imports: [
-		UserModule,
-		JwtModule.register({})
-	],
-	controllers: [AuthController],
-	providers: [AuthService, AtStrategy, RtStrategy],
+  imports: [UserModule, JwtModule.register({})],
+  controllers: [AuthController],
+  providers: [AuthService, AtStrategy, RtStrategy],
+  exports: [AuthService],
 })
 export class AuthModule {}
