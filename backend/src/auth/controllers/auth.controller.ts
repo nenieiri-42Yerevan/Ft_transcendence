@@ -38,15 +38,30 @@ export class AuthController {
     this.authService.logout(accessToken);
   }
 
+  @Post('TFA_enable')
+  @HttpCode(HttpStatus.OK)
+  enableTFA(
+    @GetUserId() userId: number
+  ): Promise<string> {
+	  return this.authService.enableTFA(userId);
+  }
+
+  @Post('TFA_disable')
+  @HttpCode(HttpStatus.OK)
+  disableTFA(
+    @GetUserId() userId: number
+  ) {
+	  this.authService.disableTFA(userId);
+  }
+  
   @Public()
   @UseGuards(RtGuard)
   @Post('refresh')
   @HttpCode(HttpStatus.OK)
   refreshTokens(
-    @GetUserId() userId: number,
-    @GetUser('refreshToken') refreshToken: string,
-  ): Promise<TokenDto> {
-    console.log(`HELOO ${refreshToken}`);
-    return this.authService.refreshTokens(userId, refreshToken);
+  		@GetUserId() userId: number,
+  		@GetUser('refreshToken') refreshToken: string
+	): Promise<TokenDto> {
+	  return this.authService.refreshTokens(userId, refreshToken);
   }
 }

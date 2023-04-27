@@ -6,6 +6,7 @@ import refreshToken from '../Utils/refreshToken'
 // import { Dispatch } from 'react';
 // import { useDispatch, useSelector } from 'react-redux';
 import { GetUser } from '../../../../backend/src/common/decorators/GetUser';
+import { log } from 'console';
 
 export interface Friends {
   name: string,
@@ -23,6 +24,8 @@ interface UserInfo {
   img?: string | undefined;
   follows: number[];
   blocked: number[];
+  TFA_enabled: boolean;
+  TFA_secret: string;
 }
 
 interface User {
@@ -48,12 +51,14 @@ export const userSlice = createSlice({
         ...state.user,
         username: action.payload.username,
         name: action.payload.first_name,
+        TFA_enabled: action.payload.TFA_enabled,
         lastName: action.payload.last_name,
         email: action.payload.email,
         rank: action.payload.rank,
         id: action.payload.id,
         follows: action.payload.follows,
         blocked: action.payload.blocked,
+        TFA_secret: action.payload.TFA_secret,
       }
       state.user = user;
       state.isLoading = false;
@@ -352,6 +357,71 @@ export const block = async (dispatch, Navigate, userInfo: UserInfo, id: number)=
         Navigate("/transcendence/user/signin");
       } else {
         block(dispatch, Navigate, userInfo, id);
+      }
+    }
+  }
+}
+
+export const enable2fa = async (dispatch, Navigate, userInfo: UserInfo)=>{
+  try {
+    console.log("before");
+    console.log(userInfo);
+    const response = await axios.post(`${process.env.BACK_URL}/transcendence/auth/TFA_enable/`, {},
+    {
+        headers: {
+          Authorization: `Bearer ${sessionStorage.getItem('access_token')}`
+        }
+    }
+    );
+    console.log("after");
+    console.log(await getUserInfo(Navigate));
+    dispatch(setUserInfo(await getUserInfo(Navigate)));
+    
+    
+    console.log(response);
+
+
+  } 
+  catch (error) {
+    console.log(error);
+    if (error.response.status == 401)
+    {
+      if ((await refreshToken()) != 200) {
+        Navigate("/transcendence/user/signin");
+      } else {
+        enable2fa(dispatch, Navigate, userInfo);
+      }
+    }
+  }
+}
+
+export const disable2fa = async (dispatch, Navigate, userInfo: UserInfo)=>{
+  try {
+    console.log("before");
+    console.log(userInfo);
+    const response = await axios.post(`${process.env.BACK_URL}/transcendence/auth/TFA_disable/`, {},
+    {
+        headers: {
+          Authorization: `Bearer ${sessionStorage.getItem('access_token')}`
+        }
+    }
+    );
+    console.log("zzz");
+    console.log(await getUserInfo(Navigate));
+    dispatch(setUserInfo(await getUserInfo(Navigate)));
+    
+    console.log(response);
+
+
+  } 
+  catch (error) {
+    console.log(error);
+    if (error.response.status == 401)
+    {
+      if ((await refreshToken()) != 200) {
+        Navigate("/transcendence/user/signin");
+      } else {
+        disable2fa(dispatch, Navigate, userInfo);
       }
     }
   }

@@ -7,7 +7,7 @@ import { Session, User } from '../../user/entities';
 import * as argon from 'argon2';
 import { ConfigService } from '@nestjs/config';
 import { Socket } from 'socket.io';
-import { speakeasy } from 'speakeasy';
+import * as speakeasy from 'speakeasy';
 
 @Injectable()
 export class AuthService {
@@ -30,31 +30,36 @@ export class AuthService {
         user,
       );
       if (user.TFA_enabled == true)
-        throw new HttpException(user.username, HttpStatus.FORBIDDEN);
+        throw new HttpException("Provide your 2fa code", HttpStatus.FORBIDDEN);
       return tokens;
-    } else throw new HttpException('Wrong password', HttpStatus.NOT_FOUND);
+    } else 
+      throw new HttpException('Wrong password', HttpStatus.NOT_FOUND);
   }
 
   // creatinhg user session and connection (2FA)
   async signinTFA(dto: SignInTFADto): Promise<TokenDto> {
     const user = await this.userService.findOne(dto.username);
-
-    const verified = speakeasy.totp.verify({
-      secret: user.TFA_secret,
-      encoding: 'base32',
-      token: dto.TFA,
-      window: 1,
-    });
-    if (!verified) throw new HttpException('Wrong TFA', HttpStatus.NOT_FOUND);
-
-    const tokens = await this.generateJWT(user.id, user.username);
-    const new_session = await this.sessionService.create(
-      tokens.access_token,
-      tokens.refresh_token,
-      user,
-    );
-
-    return tokens;
+	  console.log(user.TFA_secret);
+    if (user && (await argon.verify(user.password, dto.password))) {
+      const verified = speakeasy.totp.verify({
+        secret: user.TFA_secret,
+        encoding: 'base32',
+        token: dto.TFA,
+        window: 1
+      });
+      console.log(" ", verified);
+      
+      if (!verified)
+        throw new HttpException('Wrong TFA', HttpStatus.NOT_FOUND);
+      const tokens = await this.generateJWT(user.id, user.username);
+      const new_session = await this.sessionService.create(
+        tokens.access_token,
+        tokens.refresh_token,
+        user,
+      );
+      return tokens;
+    } else 
+    throw new HttpException('Wrong password', HttpStatus.NOT_FOUND);
   }
 
   // logout
@@ -132,22 +137,23 @@ export class AuthService {
     return user;
   }
 
-  async enableTFA(userId: number): Promise<string> {
-    const user = await this.userService.findOne(userId);
-    try {
-      const secret = speakeasy.generateSecret().base32;
-      user.TFA_secret = secret;
-      return secret;
-    } catch (error) {
-      throw new HttpException(
-        'Error when generating the 2FA secret',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
-    }
+  async enableTFA(userId: number) : Promise<string>
+  {
+	  try
+	  {
+		  const secret = speakeasy.generateSecret().base32;
+      this.userService.update(userId, {TFA_enabled: true, TFA_secret: secret} as User);
+		  return secret;
+	  }
+    catch (error)
+	  { 
+		  throw new HttpException('Error when generating the 2FA secret', 
+		  							HttpStatus.INTERNAL_SERVER_ERROR);
+	  }
   }
 
-  async disableTFA(userId: number) {
-    const user = await this.userService.findOne(userId);
-    user.TFA_secret = null;
+  async disableTFA(userId: number)
+  {
+    await this.userService.update(userId, {TFA_enabled: false, TFA_secret: null} as User);
   }
 }

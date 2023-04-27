@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import { getAvatar } from './Slices/userSlice';
+import { getAvatar } from '../Slices/userSlice';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import avatar from "@SRC_DIR/assets/images/avatar.png";

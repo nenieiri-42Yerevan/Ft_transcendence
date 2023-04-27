@@ -4,6 +4,9 @@ export class SignInTFADto {
   @IsNotEmpty()
   username: string;
 
-  @IsNotEmpty()
-  TFA: string;
+	@IsNotEmpty()
+	password: string;
+
+	@IsNotEmpty()
+	TFA: string;
 }
