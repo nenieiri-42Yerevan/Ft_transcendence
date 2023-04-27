@@ -36,10 +36,7 @@ export class ChatGateway
   @WebSocketServer()
   server: any;
 
-  logger: Logger = new Logger('ChatGateway');
-
   afterInit(): void {
-    this.logger.log('wow');
     const origin = this.configService.get<string>('FRONT_URL');
     Object.assign(this.server, { cors: { origin } });
   }
