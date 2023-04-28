@@ -14,6 +14,7 @@ const getError = (err: any) => {
   if (err.email) return err.email;
   if (err.tfa) return err.tfa;
   if (err.new_password) return err.new_password;
+  if (err.cur_password) return err.cur_password;
   return undefined;
 };
 

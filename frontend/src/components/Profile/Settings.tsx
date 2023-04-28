@@ -41,7 +41,7 @@ const Edit = () => {
                     },
                 },
             );
-            if (data.new_password !== undefined) {
+            if (data.new_password !== undefined && data.cur_password !== undefined) {
                 await updatePass(dispatch, navigate, data, userInfo.user.id);
             }
             if (data.tfa == 'enable')

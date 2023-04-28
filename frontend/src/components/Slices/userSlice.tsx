@@ -458,5 +458,6 @@ export const updatePass = async (dispatch, Navigate, data: EditInfo, id:number)=
         updatePass(dispatch, Navigate, data, id);
       }
     }
+    throw error;
   }
 }
