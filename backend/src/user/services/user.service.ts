@@ -191,7 +191,7 @@ export class UserService {
   ): Promise<User> {
     let user: User = await this.findOne(id);
 
-    if (!argon.verify(user.password, oldPass))
+    if (!(await argon.verify(user.password, oldPass)))
       throw new HttpException('Old password mismatch!', HttpStatus.BAD_REQUEST);
 
     let result;
