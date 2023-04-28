@@ -15,14 +15,14 @@ import ActiveChallenges from './RequestsBoard';
 
 const Dashboard = () => {
     
+    const userInfo = useSelector(selectUser);
     const navigate = useNavigate();
     const dispatch = useDispatch();
-
-    const userInfo = useSelector(selectUser);
     useEffect(() => {
         if (!userInfo.user)
             navigate("/transcendence/user/signin");
         else {
+            console.log(userInfo.user);
             fetchFriendsData(0, dispatch, userInfo.user);
             fetchMatches(0, dispatch, userInfo.user);
             console.log("nn");

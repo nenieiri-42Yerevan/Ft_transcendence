@@ -30,9 +30,9 @@ class Engine extends React.Component {
             ballX : 0.5,
             ballY : 0.5,
 
-            deltaY:         0, // change ball in Y AXIS
-            deltaX:         Math.random() > 0.5 ? 0.01 : -0.01, // change ball in  X AXIS
-
+            deltaY:         -0.01 + Math.random() * 0.02, // change ball in  X AXIS
+            deltaX:         Math.random() > 0.5 ? 0.005 : -0.005, // change ball in  X AXIS
+            ballSpeed:      0.005,
             pause:          true, // pause the game
 
             paddleL :       0.5,
@@ -41,45 +41,74 @@ class Engine extends React.Component {
     }
 
     /* check if we can move the player or opponent board */
-    moveBoard = (playerBoard, isUp) => {
+    moveOpponent = (opponent) => {
+        if (opponent === 'R' && this.state.deltaX > 0) {
+            if (this.state.ballY > this.state.paddleR + this.state.paddleHeight && 
+                    this.state.paddleR < 0.95) {
+                this.setState({ paddleR : this.state.paddleR + 0.025 });
+            } else if (this.state.ballY < this.state.paddleR - this.state.paddleHeight && 
+                    this.state.paddleR > 0.05){
+                this.setState({ paddleR : this.state.paddleR - 0.025 });
+            }
+        } else if (opponent === 'L' && this.state.deltaX < 0) {
+            if (this.state.ballY > this.state.paddleL + this.state.paddleHeight && 
+                    this.state.paddleL < 0.95) {
+                this.setState({ paddleL : this.state.paddleL + 0.025 });
+            } else if (this.state.ballY < this.state.paddleL - this.state.paddleHeight && 
+                    this.state.paddleL > 0.05){
+                this.setState({ paddleL : this.state.paddleL - 0.025 });
+            }
+        
         }
+    }
      
     /* check if ball is touching the edge of board*/
-    touchingEdge = () => {} 
+    touchingEdge = () => {
+    if (this.state.ballY + this.state.ballW  >= 1 && this.state.deltaY > 0 ||
+        this.state.ballY - this.state.ballW  <= 0 && this.state.deltaY < 0) {
+        this.setState({
+            deltaY: -1 * this.state.deltaY,
+            });
+        }
+    } 
 
     /* check if ball is touching the player or opponent paddle */
-    touchingPaddle = () => {
-            if (
-                this.state.ballX >= 1 - this.state.paddleWidth * 2 &&
-                this.state.ballY <= this.state.paddleR + this.state.paddleHeight &&
-                this.state.ballY >= this.state.paddleR - this.state.paddleHeight
-                ) { 
-                this.setState({
-                    deltaX : -0.01,
-                    deltaY : -1 * this.state.deltaY,
-                    });
-            } else if (
-                this.state.ballX <= this.state.paddleWidth * 2 &&
-                this.state.ballY <= this.state.paddleL + this.state.paddleHeight &&
-                this.state.ballY >= this.state.paddleL - this.state.paddleHeight
-                ) {
-                this.setState({
-                    deltaX : 0.01,
-                    deltaY : -1 * this.state.deltaY,
-                    });
-            } else if ( this.state.ballX > 1 ) {
-                this.resetGame();
-                this.setState({
-                    scoreL : this.state.scoreL + 1
+    touchingPaddle = (canvas) => {
+        if (
+            this.state.ballX + this.state.ballW >= 1 - this.state.paddleWidth &&
+            this.state.ballY - this.state.ballW <= this.state.paddleR + this.state.paddleHeight &&
+            this.state.ballY + this.state.ballW >= this.state.paddleR - this.state.paddleHeight &&
+            this.state.deltaX > 0
+            ) { 
+            this.setState({
+                deltaX : -1 * this.state.ballSpeed,
+                deltaY : (this.state.ballY - this.state.paddleR)/5,
+                ballSpeed : this.state.ballSpeed + 0.0001
                 });
-            } else if ( this.state.ballX < 0 ) {
-                this.resetGame();
-                this.setState({
-                    scoreR : this.state.scoreR + 1
+        } else if (
+            this.state.ballX - this.state.ballW*2 <= this.state.paddleWidth &&
+            this.state.ballY - this.state.ballW <= this.state.paddleL + this.state.paddleHeight &&
+            this.state.ballY + this.state.ballW >= this.state.paddleL - this.state.paddleHeight &&
+            this.state.deltaX < 0
+            ) {
+            this.setState({
+                deltaX : this.state.ballSpeed,
+                deltaY : (this.state.ballY - this.state.paddleL)/5,
+                ballSpeed : this.state.ballSpeed + 0.0001
                 });
-            }
-            
+        } else if ( this.state.ballX > 1 ) {
+            this.resetGame();
+            this.setState({
+                scoreL : this.state.scoreL + 1
+            });
+        } else if ( this.state.ballX < 0 ) {
+            this.resetGame();
+            this.setState({
+                scoreR : this.state.scoreR + 1
+            });
         }
+        
+    }
     
     /* check if ball is touching the botom or top of paddle */
     touchingPaddleEdge = () => {}
@@ -88,13 +117,13 @@ class Engine extends React.Component {
 
     /* score render */
     drawScore = (ctx, canvas) => {
-            var text = `${this.state.scoreL} : ${this.state.scoreR}`;
-            ctx.font = '42px Arial';
-            const textWidth = ctx.measureText(text).width;
-            const textX = (canvas.width - textWidth) / 2;
-            const textY = (canvas.height * 0.1);
-            ctx.fillText(text, textX, textY);
-        }
+        var text = `${this.state.scoreL} : ${this.state.scoreR}`;
+        ctx.font = '42px Arial';
+        const textWidth = ctx.measureText(text).width;
+        const textX = (canvas.width - textWidth) / 2;
+        const textY = (canvas.height * 0.1);
+        ctx.fillText(text, textX, textY);
+    }
     
     /* bounce the  ball */
     bounceBall = (ctx, canvas) => {
@@ -111,10 +140,12 @@ class Engine extends React.Component {
             const textY = (canvas.height * 0.45);
             ctx.fillText(text, textX, textY);
         }
-        const ballWidth = canvas.width * 0.01;
+        const ballR = canvas.width * this.state.ballW;
         const ballX = canvas.width * this.state.ballX;
         const ballY = canvas.height * this.state.ballY;
-        ctx.fillRect(ballX - ballWidth/2, ballY - ballWidth/2, ballWidth, ballWidth);
+       // ctx.fillRect(ballX - ballWidth/2, ballY - ballWidth/2, ballWidth, ballWidth);
+        ctx.arc(ballX - ballR/2 , ballY - ballR/2, ballR, 0, 2 * Math.PI);
+        ctx.fill();
     }
     
     paddles = (ctx, canvas) => {
@@ -130,9 +161,15 @@ class Engine extends React.Component {
         ctx.fillStyle = 'white';
         this.drawScore(ctx, canvas);
         this.bounceBall(ctx, canvas);
-        this.touchingPaddle();
+        this.touchingPaddle(canvas);
+        this.touchingEdge();
+        this.moveOpponent('R');
+        this.moveOpponent('L');
         this.paddles(ctx, canvas);
     }
+    movePaddle = (key) => {
+             cancelAnimationFrame(this.current);
+        }
     /* handle the keyinput */ 
     keyInput = ({keyCode}) => {
         const PLAYER_UP   = 73;  // i
@@ -144,7 +181,7 @@ class Engine extends React.Component {
         console.log(keyCode);
         switch (keyCode) {
             case PLAYER_UP: {
-                if (this.state.paddleL > 0.1) 
+                if (this.state.paddleL > 0.05) 
                     this.setState({ paddleL : this.state.paddleL - 0.025 });
                 break;
             }
@@ -154,7 +191,7 @@ class Engine extends React.Component {
                 break;
             }
             case OPPONENT_UP: {
-                if (this.state.paddleR > 0.1) 
+                if (this.state.paddleR > 0.05) 
                     this.setState({ paddleR : this.state.paddleR - 0.025 });
                 break;
             }
@@ -192,9 +229,10 @@ const InitialState = () => {
         /* ball */
         ballX:          0.5,
         ballY:          0.5,
-        ballSpeed:      0.1,   // speed of ball
-        deltaY:         0, // change ball in Y AXIS
-        deltaX:         0.01, // change ball in  X AXIS
+        ballW:          0.01,
+        ballSpeed:      0.005,   // speed of ball
+        deltaY:         -0.01 + Math.random() * 0.02, // change ball in  X AXIS
+        deltaX:         0.005, // change ball in  X AXIS
         /* pause */
         pause:          true, // pause the game
         /* Score */
