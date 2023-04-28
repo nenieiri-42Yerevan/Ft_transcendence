@@ -120,7 +120,7 @@ To be witten...
 
 <br>
 
-- Notify WebSocket Routes
+- Notify WebSocket Route
 
 ```
 ws://loacalhost:7000/transcendence/notify
@@ -128,7 +128,7 @@ ws://loacalhost:7000/transcendence/notify
 
 <br>
 
-- Chat WebSocket Routes
+- Chat WebSocket Route
 
 ```
 ws://loacalhost:7000/transcendence/chat
