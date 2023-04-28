@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { SocketService } from 'src/socket/socket.service';
+import { NotifyService } from 'src/notify/notify.service';
 import { UserController } from './controllers/user.controller';
 import { User, Avatar, Session, Match } from './entities';
 import { AvatarService } from './services/avatar.service';
@@ -18,7 +18,7 @@ let entities = [User, Avatar, Session, Match];
     AvatarService,
     SessionService,
     MatchService,
-    //SocketService,
+    NotifyService,
   ],
   exports: [UserService, SessionService],
 })

@@ -5,13 +5,13 @@ import * as argon from 'argon2';
 import { User, Avatar, Status, Match } from '../entities/';
 import { UserDto } from '../dto';
 import { AvatarService } from './avatar.service';
-import { SocketService } from 'src/socket/socket.service';
+import { NotifyService } from 'src/notify/notify.service';
 
 @Injectable()
 export class UserService {
   constructor(
     private readonly avatarService: AvatarService,
-    //private readonly notifyService: SocketService,
+    private readonly notifyService: NotifyService,
 
     @InjectRepository(User)
     private readonly userRepo: Repository<User>,
@@ -66,10 +66,8 @@ export class UserService {
 
   async findOne(property, relations = [] as string[]): Promise<User> {
     let user = null;
-    console.log("I'm trying to find someone...");
 
     if (property && typeof property == 'number') {
-      console.log("I'm trying to find someone...");
       user = await this.userRepo.findOne({
         where: { id: property },
         relations,
@@ -152,7 +150,6 @@ export class UserService {
       'first_name',
       'last_name',
       'username',
-      'password',
       'TFA_enabled',
       'TFA_secret',
     ];
@@ -187,6 +184,27 @@ export class UserService {
     return newUser;
   }
 
+  async updatePassword(
+    id: number,
+    oldPass: string,
+    newPass: string,
+  ): Promise<User> {
+    let user: User = await this.findOne(id);
+
+    if (!argon.verify(user.password, oldPass))
+      throw new HttpException('Old password mismatch!', HttpStatus.BAD_REQUEST);
+
+    let result;
+    try {
+      let password = await argon.hash(newPass);
+      result = await this.userRepo.update(id, { password });
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
+
+    return result;
+  }
+
   async updateLevel(winner: User, loser: User): Promise<void> {
     try {
       await this.userRepo.update(winner.id, { rank: winner.rank + 1 });
@@ -204,7 +222,7 @@ export class UserService {
 
     try {
       await this.userRepo.update(user.id, { status });
-      //this.notifyService.emitStatus(user.id, status);
+      this.notifyService.emitStatus(user.id, status);
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }

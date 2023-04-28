@@ -55,22 +55,23 @@ To be witten...
 
 <br>
 
-| HTTP Verbs | Endpoints                             | Action                                   |
-| ---------- | ------------------------------------- | ---------------------------------------- |
-| GET        | /transcendence/user                   | To get all the users                     |
-| GET        | /transcendence/user/by-id/:id         | To get a user by id                      |
-| GET        | /transcendence/user/by-name/:username | To get a user by username                |
-| GET        | /transcendence/user/by-token/:token   | To get a user by session refresh token   |
-| GET        | /transcendence/user/:id/avatar        | To get a user's avatar by user id        |
-| GET        | /transcendence/user/:id/matches       | To get a user's match history by user id |
-| GET        | /transcendence/user/:id/follows       | To get all users followd by another user |
-| GET        | /transcendence/user/:id/blocked       | To get all users blocked by another user |
-| GET        | /transcendence/user/:id/status        | To get user's status by id               |
-| PUT        | /transcendence/user/update-user/:id   | To update a user by id                   |
-| PUT        | /transcendence/user/update-avatar/:id | To update a user's avatar by id          |
-| PUT        | /transcendence/user/follow/:uid/:tid  | To follow/unfollow a user by id          |
-| PUT        | /transcendence/user/block/:uid/:tid   | To block/unblock a user by id            |
-| POST       | /transcendence/user/signup            | To sign up a new user account            |
+| HTTP Verbs | Endpoints                               | Action                                   |
+| ---------- | --------------------------------------- | ---------------------------------------- |
+| GET        | /transcendence/user                     | To get all the users                     |
+| GET        | /transcendence/user/by-id/:id           | To get a user by id                      |
+| GET        | /transcendence/user/by-name/:username   | To get a user by username                |
+| GET        | /transcendence/user/by-token/:token     | To get a user by session refresh token   |
+| GET        | /transcendence/user/:id/avatar          | To get a user's avatar by user id        |
+| GET        | /transcendence/user/:id/matches         | To get a user's match history by user id |
+| GET        | /transcendence/user/:id/follows         | To get all users followd by another user |
+| GET        | /transcendence/user/:id/blocked         | To get all users blocked by another user |
+| GET        | /transcendence/user/:id/status          | To get user's status by id               |
+| PUT        | /transcendence/user/update-user/:id     | To update a user by id                   |
+| PUT        | /transcendence/user/update-password/:id | To update a user password by id          |
+| PUT        | /transcendence/user/update-avatar/:id   | To update a user's avatar by id          |
+| PUT        | /transcendence/user/follow/:uid/:tid    | To follow/unfollow a user by id          |
+| PUT        | /transcendence/user/block/:uid/:tid     | To block/unblock a user by id            |
+| POST       | /transcendence/user/signup              | To sign up a new user account            |
 
 <br>
 
@@ -112,3 +113,23 @@ To be witten...
 | POST       | /transcendence/chat/group/mute/:uid/:gid:/:adminId | To mute a user from a group chat with an admin |
 | POST       | /transcendence/chat/group/unmute                   | To unmute a user given as a Body               |
 | POST       | /transcendence/chat/delete/:uid                    | To delete a user given by id                   |
+
+<br>
+
+### Websocket API Endpoints 🔗
+
+<br>
+
+- Notify WebSocket Route
+
+```
+ws://loacalhost:7000/transcendence/notify
+```
+
+<br>
+
+- Chat WebSocket Route
+
+```
+ws://loacalhost:7000/transcendence/chat
+```

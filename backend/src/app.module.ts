@@ -6,6 +6,7 @@ import { AuthModule } from './auth/auth.module';
 import { APP_GUARD } from '@nestjs/core';
 import { AtGuard } from './common/guards';
 import { ChatModule } from './chat/chat.module';
+import { NotifyModule } from './notify/notify.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { ChatModule } from './chat/chat.module';
     UserModule,
     AuthModule,
     ChatModule,
+    NotifyModule,
   ],
   providers: [{ provide: APP_GUARD, useClass: AtGuard }],
 })
