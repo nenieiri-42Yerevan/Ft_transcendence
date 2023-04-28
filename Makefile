@@ -41,7 +41,6 @@ prune: down
 	@rm -rf frontend/node_modules
 	@rm -rf frontend/dist
 	@rm -rf backend/dist
-	@cd frontend && npm install && cd ..
 	@rm -rf database/data
 	@docker system prune -f -a
 
