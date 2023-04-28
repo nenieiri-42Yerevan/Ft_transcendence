@@ -152,7 +152,6 @@ export class UserService {
       'first_name',
       'last_name',
       'username',
-      'password',
       'TFA_enabled',
       'TFA_secret',
     ];
@@ -185,6 +184,27 @@ export class UserService {
 
     delete newUser.id;
     return newUser;
+  }
+
+  async updatePassword(
+    id: number,
+    oldPass: string,
+    newPass: string,
+  ): Promise<User> {
+    let user: User = await this.findOne(id);
+
+    if (!argon.verify(user.password, oldPass))
+      throw new HttpException('Old password mismatch!', HttpStatus.BAD_REQUEST);
+
+    let result;
+    try {
+      let password = await argon.hash(newPass);
+      result = await this.userRepo.update(id, { password });
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
+
+    return result;
   }
 
   async updateLevel(winner: User, loser: User): Promise<void> {

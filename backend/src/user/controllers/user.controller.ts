@@ -11,7 +11,7 @@ import {
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
-import { UserDto, UserUpdateDto } from '../dto';
+import { PasswordDto, UserDto, UserUpdateDto } from '../dto';
 import { Match, Status, User } from '../entities';
 import { AvatarService } from '../services/avatar.service';
 import { UserService } from '../services/user.service';
@@ -91,9 +91,15 @@ export class UserController {
     @Param('id', ParseIntPipe) id: number,
     @Body() user: UserUpdateDto,
   ): Promise<User> {
-    const current = await this.userService.findOne(id);
+    return this.userService.update(id, user as User);
+  }
 
-    return this.userService.update(current.id, user as User);
+  @Put('/update-password/:id')
+  async updatePassword(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() pass: PasswordDto,
+  ): Promise<User> {
+    return this.userService.updatePassword(id, pass.old, pass.current);
   }
 
   @Put('/update-avatar/:id')
