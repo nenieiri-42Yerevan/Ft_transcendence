@@ -2,14 +2,14 @@ import React from 'react';
 import { Form } from 'react-final-form';
 import { Link, useNavigate } from 'react-router-dom';
 import { FORM_ERROR } from 'final-form';
-import { Data, EditInfo, validateSettings } from './Utils/Scheme';
-import Background from './Background';
+import { Data, EditInfo, validateSettings } from '../Utils/Scheme';
+import Background from '../Background';
 import axios from 'axios';
-import FormEdit from './Form/FormEdit';
+import FormEdit from '../Form/FormEdit';
 import { useDispatch, useSelector } from 'react-redux';
-import {enable2fa, disable2fa, getUserInfo, selectUser, setUserInfo} from './Slices/userSlice';
+import {enable2fa, disable2fa, getUserInfo, selectUser, setUserInfo, updatePass} from '../Slices/userSlice';
 import { useState } from "react";
-import Tfa from './Tfa';
+import Tfa from '../Tfa';
 
 
 const Edit = () => {
@@ -28,10 +28,7 @@ const Edit = () => {
             last_name: data.last_name,
             username: data.username,
         };
-        if (data.new_password !== undefined) {
-            sendData['new_password'] = data.new_password;
-          }
-        console.log("sata "  ,sendData);
+        console.log("sata "  ,data);
         try {
             const response = await axios.put(
                 `http://localhost:7000/transcendence/user/update-user/${userInfo.user.id}`, 
@@ -44,6 +41,9 @@ const Edit = () => {
                     },
                 },
             );
+            if (data.new_password !== undefined) {
+                await updatePass(dispatch, navigate, data, userInfo.user.id);
+            }
             if (data.tfa == 'enable')
             {
                 await enable2fa(dispatch, navigate, userInfo.user);

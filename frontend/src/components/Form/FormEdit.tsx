@@ -194,6 +194,46 @@ const FormEdit = (props: any) => {
             </Field>
           </div>
         </div>
+        <Field<string>
+        name="cur_password"
+        title={
+          props.errors && props.errors.repeat_password
+            ? props.errors.repeat_password
+            : ''
+        }
+        id="edit-cur-password"
+        className={
+          'rounded-md bg-[#2d2727] min-w-full block p-1 xs:p-1.5 sm:p-2 md:p-2 lg:p-3 outline-none ' +
+          (props.errors && props.errors.repeat_password)
+            ? 'outline-red-900'
+            : ' outline-[#2d2727]'
+        }
+        placeholder="cur_Password"
+        key={'cur_password'}
+      >
+        {({ input, meta, ...rest }) => (
+          <div className=" flex flex-col gap-y-2">
+            <label htmlFor="edit-cur-password" className="font-bold">
+              Old Password:
+            </label>
+            {meta.error && meta.touched ? (
+              <PasswordInput
+                input={input}
+                meta={meta}
+                {...rest}
+                className="rounded-md bg-[#2d2727] outline-red-900 min-w-full block p-1 xs:p-1.5 md:p-2 lg:p-3 outline-none "
+              />
+            ) : (
+              <PasswordInput
+                input={input}
+                meta={meta}
+                {...rest}
+                className="rounded-md bg-[#2d2727] outline-[#2d2727] min-w-full  block p-1 xs:p-1.5 sm:p-2 md:p-2 lg:p-3 outline-none "
+              />
+            )}
+          </div>
+        )}
+      </Field>
       <Field<string>
         name="new_password"
         title={

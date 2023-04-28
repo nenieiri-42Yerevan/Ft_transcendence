@@ -6,7 +6,7 @@ import refreshToken from '../Utils/refreshToken'
 // import { Dispatch } from 'react';
 // import { useDispatch, useSelector } from 'react-redux';
 import { GetUser } from '../../../../backend/src/common/decorators/GetUser';
-import { log } from 'console';
+import { EditInfo } from '../Utils/Scheme';
 
 export interface Friends {
   name: string,
@@ -422,6 +422,40 @@ export const disable2fa = async (dispatch, Navigate, userInfo: UserInfo)=>{
         Navigate("/transcendence/user/signin");
       } else {
         disable2fa(dispatch, Navigate, userInfo);
+      }
+    }
+  }
+}
+
+
+export const updatePass = async (dispatch, Navigate, data: EditInfo, id:number)=>{
+  try {
+    console.log("psw ", data);
+    
+    const response = await axios.put(`${process.env.BACK_URL}/transcendence/user/update-password/${id}`, 
+    {
+      old: data.cur_password,
+      current: data.new_password,
+    },
+    {
+        headers: {
+          Authorization: `Bearer ${sessionStorage.getItem('access_token')}`
+        }
+    }
+    );
+    console.log("zzz");    
+    console.log(response);
+
+
+  } 
+  catch (error) {
+    console.log(error);
+    if (error.response.status == 401)
+    {
+      if ((await refreshToken()) != 200) {
+        Navigate("/transcendence/user/signin");
+      } else {
+        updatePass(dispatch, Navigate, data, id);
       }
     }
   }

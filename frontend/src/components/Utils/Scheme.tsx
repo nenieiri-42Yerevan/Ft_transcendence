@@ -63,6 +63,12 @@ export const validationSettings = Yup.object().shape({
     /^[a-zA-Z][a-zA-Z0-9_]{7,}[a-zA-Z0-9]$/,
     "Contains at least 8 character long.\nShould start with lowercase or uppercase.\nContains lowercase, uppercase, digit or '_'.",
   ),
+  cur_password: Yup.string()
+  .min(8, 'At least 8 characters long.')
+  .matches(
+    /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
+    'Contains at least one lowercase letter.\nContains at least one uppercase letter.\nContains at least one digit.\nContains at least one special character.',
+  ),
   new_password: Yup.string()
   .min(8, 'At least 8 characters long.')
   .matches(
@@ -89,6 +95,7 @@ export interface EditInfo {
   last_name: string;
   username: string;
   tfa: string;
+  cur_password: string;
   new_password: string;
 }
 
