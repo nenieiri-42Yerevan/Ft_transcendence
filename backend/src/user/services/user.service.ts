@@ -5,13 +5,13 @@ import * as argon from 'argon2';
 import { User, Avatar, Status, Match } from '../entities/';
 import { UserDto } from '../dto';
 import { AvatarService } from './avatar.service';
-import { SocketService } from 'src/socket/socket.service';
+import { NotifyService } from 'src/notify/notify.service';
 
 @Injectable()
 export class UserService {
   constructor(
     private readonly avatarService: AvatarService,
-    //private readonly notifyService: SocketService,
+    private readonly notifyService: NotifyService,
 
     @InjectRepository(User)
     private readonly userRepo: Repository<User>,
@@ -66,10 +66,8 @@ export class UserService {
 
   async findOne(property, relations = [] as string[]): Promise<User> {
     let user = null;
-    console.log("I'm trying to find someone...");
 
     if (property && typeof property == 'number') {
-      console.log("I'm trying to find someone...");
       user = await this.userRepo.findOne({
         where: { id: property },
         relations,
@@ -224,7 +222,7 @@ export class UserService {
 
     try {
       await this.userRepo.update(user.id, { status });
-      //this.notifyService.emitStatus(user.id, status);
+      this.notifyService.emitStatus(user.id, status);
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }

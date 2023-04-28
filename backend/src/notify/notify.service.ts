@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { WebSocketServer } from '@nestjs/websockets';
 import { Server } from 'socket.io';
-import { Status } from 'src/user/entities/user.entity';
+import { Status } from '../user/entities/user.entity';
 
 @Injectable()
-export class SocketService {
+export class NotifyService {
   @WebSocketServer()
   server: Server;
 

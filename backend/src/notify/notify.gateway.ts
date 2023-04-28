@@ -1,5 +1,6 @@
 import { ConfigService } from '@nestjs/config';
 import {
+  OnGatewayInit,
   SubscribeMessage,
   WebSocketGateway,
   WebSocketServer,
@@ -8,16 +9,17 @@ import { Server, Socket } from 'socket.io';
 import { AuthService } from 'src/auth/services/auth.service';
 import { Status } from 'src/user/entities';
 import { UserService } from 'src/user/services/user.service';
-import { SocketService } from './socket.service';
+import { NotifyService } from './notify.service';
+import { OnModuleInit } from '@nestjs/common';
 
 @WebSocketGateway({
-  cors: { origin: '' },
-  namespace: 'gateway',
+  cors: { origin: '*' },
+  namespace: 'notify',
 })
-export class SocketGateway {
+export class NotifyGateway implements OnGatewayInit {
   constructor(
     private readonly configService: ConfigService,
-    private readonly socketService: SocketService,
+    private readonly notifyService: NotifyService,
     private readonly authService: AuthService,
     private readonly userService: UserService,
   ) {}
@@ -26,7 +28,7 @@ export class SocketGateway {
   server: any;
 
   afterInit(srv: Server): void {
-    this.socketService.server = srv;
+    this.notifyService.server = srv;
 
     const origin = this.configService.get<string>('FRONT_URL');
     Object.assign(this.server, { cors: { origin } });
