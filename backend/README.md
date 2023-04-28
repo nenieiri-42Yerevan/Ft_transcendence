@@ -113,3 +113,23 @@ To be witten...
 | POST       | /transcendence/chat/group/mute/:uid/:gid:/:adminId | To mute a user from a group chat with an admin |
 | POST       | /transcendence/chat/group/unmute                   | To unmute a user given as a Body               |
 | POST       | /transcendence/chat/delete/:uid                    | To delete a user given by id                   |
+
+<br>
+
+### Websocket API Endpoints 🔗
+
+<br>
+
+- Notify WebSocket Routes
+
+```
+ws://loacalhost:7000/transcendence/notify
+```
+
+<br>
+
+- Chat WebSocket Routes
+
+```
+ws://loacalhost:7000/transcendence/chat
+```
