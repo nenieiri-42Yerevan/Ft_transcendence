@@ -6,13 +6,13 @@ const Menu = ({ handleMatchmaking }) => {
       <h1 className="text-2xl font-bold text-center mb-4">Pong Game</h1>
       <button
         className="bg-gray-500 hover:bg-gray-950 text-white font-bold py-2 px-4 rounded w-full mb-4"
-        onClick={handleMatchmaking}
+        onClick={() => handleMatchmaking(3)}
       >
         Online 
       </button>
       <button
         className="bg-gray-500 hover:bg-gray-950 text-white font-bold py-2 px-4 rounded w-full mb-4"
-        onClick={handleMatchmaking}
+        onClick={() => handleMatchmaking(2)}
       >
         Single
       </button>

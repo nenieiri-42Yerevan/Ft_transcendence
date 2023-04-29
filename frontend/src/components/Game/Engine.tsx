@@ -34,7 +34,6 @@ class Engine extends React.Component {
             deltaX:         Math.random() > 0.5 ? 0.005 : -0.005, // change ball in  X AXIS
             ballSpeed:      0.005,
             pause:          true, // pause the game
-
             paddleL :       0.5,
             paddleR :       0.5,
         });
@@ -42,7 +41,7 @@ class Engine extends React.Component {
 
     /* check if we can move the player or opponent board */
     moveOpponent = (opponent) => {
-        if (opponent === 'R' && this.state.deltaX > 0) {
+        if (opponent === 'L' && this.state.deltaX > 0) {
             if (this.state.ballY > this.state.paddleR + this.state.paddleHeight && 
                     this.state.paddleR < 0.95) {
                 this.setState({ paddleR : this.state.paddleR + 0.025 });
@@ -50,7 +49,7 @@ class Engine extends React.Component {
                     this.state.paddleR > 0.05){
                 this.setState({ paddleR : this.state.paddleR - 0.025 });
             }
-        } else if (opponent === 'L' && this.state.deltaX < 0) {
+        } else if (opponent === 'R' && this.state.deltaX < 0) {
             if (this.state.ballY > this.state.paddleL + this.state.paddleHeight && 
                     this.state.paddleL < 0.95) {
                 this.setState({ paddleL : this.state.paddleL + 0.025 });
@@ -163,8 +162,14 @@ class Engine extends React.Component {
         this.bounceBall(ctx, canvas);
         this.touchingPaddle(canvas);
         this.touchingEdge();
-        this.moveOpponent('R');
-        this.moveOpponent('L');
+        if (this.state.mode == 1) { // Auto game 
+            this.moveOpponent('R');
+            this.moveOpponent('L');
+        } else if (this.state.mode == 2) { // Single player
+            this.moveOpponent('L');
+        } else if (this.state.mode == 3) { // Multiplayer
+        
+        }
         this.paddles(ctx, canvas);
     }
     movePaddle = (key) => {
@@ -208,10 +213,12 @@ class Engine extends React.Component {
         }   
     }
 
-    handleMatchmaking = () => {
+    handleMatchmaking = (num:Number) => {
         this.setState({
-            displayMenu: false,
+            mode : num,
+            displayMenu:    false,
         });
+        this.resetGame();
     };
     /* render the jsx */
     render() {
@@ -250,6 +257,7 @@ const InitialState = () => {
         /* menu */
         displayMenu:    true,
         /* Score */
+        mode:           1,
         scoreL:         0,
         scoreR:         0,
     }
