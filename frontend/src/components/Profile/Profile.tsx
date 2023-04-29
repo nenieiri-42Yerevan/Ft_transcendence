@@ -34,7 +34,7 @@ const Profile = () => {
         <div className ="backdrop-blur-md flex flex-col min-h-full min-w-full bg-black/50 z-[668] absolute">
             <Profilmenu />
             <div className="flex md:flex-row flex-col min-h-screen justify-between">
-                <Header loaded = {loaded} userInfo = {userInfo} />
+                {userInfo.user && <Header loaded = {loaded} userInfo = {userInfo} />}
                 <div className="w-full h-fit bg-[#1E1E1E] border-[#393939] border-solid border m-4 p-8 rounded">
                     <h2 className="font-bold text-2xl text-white text-center  flex justify-between"><img className="w-[2em]" src={pong}></img>Played Matches</h2>
                     <hr />
@@ -44,10 +44,10 @@ const Profile = () => {
                 <div className="w-full h-fit m-4 border-[#393939] border-solid border bg-[#1E1E1E] p-8 rounded">
                     <h2 className="font-bold text-2xl text-white text-center  flex justify-between"><img className="w-[2em]" src={pong}></img>Friends <span>more</span></h2>
                     <hr />
-                    {userInfo.user.names && userInfo.user.names.slice(0, 5).map((obj: Friends, index: number) => (
+                    {userInfo && userInfo.user && userInfo.user.names && userInfo.user.names.slice(0, 5).map((obj: Friends, index: number) => (
                        <FriendsList index = {index} obj = {obj} key = {index}/>
                     ))}
-                    <p className = "text-white text-center p-2 flex justify-between hover:bg-[#616161]">{ userInfo.user.names && userInfo.user.names.length === 0 && "No Data"} </p>
+                    <p className = "text-white text-center p-2 flex justify-between hover:bg-[#616161]">{userInfo && userInfo.user &&  userInfo.user.names && userInfo.user.names.length === 0 && "No Data"} </p>
                 </div>
             </div>
             <Footer/>
