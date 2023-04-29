@@ -1,5 +1,5 @@
 import React, {useRef, useEffect, useState, useLayoutEffect} from 'react';
-
+import Menu from './Menu';
 class Engine extends React.Component {
     constructor(props) {
         super(props);
@@ -201,17 +201,29 @@ class Engine extends React.Component {
                 break;
             }
             case PAUSE:
-                this.setState({pause: !this.state.pause});
-                    break;
+              //  if (!this.state.displayMenu) {
+                    this.setState({pause: !this.state.pause});
+              //  }
+                break;
         }   
     }
 
+    handleMatchmaking = () => {
+        this.setState({
+            displayMenu: false,
+        });
+    };
     /* render the jsx */
     render() {
         return (
                 <div className="w-full md:w-4/5 h-screen bg-black" ref={this.divRef}>
-                <canvas ref={this.canvasRef}>
-                </ canvas>
+                {this.state.displayMenu && (
+                        <div className="modal absolute inset-0 flex items-center justify-center z-10">
+                            <Menu handleMatchmaking={this.handleMatchmaking} />
+                        </div>
+                        )}
+                    <canvas ref={this.canvasRef}>
+                    </ canvas>
                 </div>
                );
     }
@@ -234,7 +246,9 @@ const InitialState = () => {
         deltaY:         -0.01 + Math.random() * 0.02, // change ball in  X AXIS
         deltaX:         0.005, // change ball in  X AXIS
         /* pause */
-        pause:          true, // pause the game
+        pause:          false, // pause the game
+        /* menu */
+        displayMenu:    true,
         /* Score */
         scoreL:         0,
         scoreR:         0,
