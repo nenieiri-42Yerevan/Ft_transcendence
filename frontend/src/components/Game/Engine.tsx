@@ -1,6 +1,7 @@
 import React, {useRef, useEffect, useState, useLayoutEffect} from 'react';
 import Menu from './Menu';
 class Engine extends React.Component {
+
     constructor(props) {
         super(props);
 
@@ -22,18 +23,20 @@ class Engine extends React.Component {
             this.animationId = requestAnimationFrame(loop.bind(this));
         }
     }
+
     componentWillUnmount() {
         cancelAnimationFrame(this.animationId);
     }
+
     /* reset the game */
-    resetGame = () => { this.setState({
+    resetGame = (pause) => { this.setState({
             ballX : 0.5,
             ballY : 0.5,
 
             deltaY:         -0.01 + Math.random() * 0.02, // change ball in  X AXIS
             deltaX:         Math.random() > 0.5 ? 0.005 : -0.005, // change ball in  X AXIS
             ballSpeed:      0.005,
-            pause:          true, // pause the game
+            pause:          pause, // pause the game
             paddleL :       0.5,
             paddleR :       0.5,
         });
@@ -96,12 +99,12 @@ class Engine extends React.Component {
                 ballSpeed : this.state.ballSpeed + 0.0001
                 });
         } else if ( this.state.ballX > 1 ) {
-            this.resetGame();
+            this.resetGame(this.state.mode != 1);
             this.setState({
                 scoreL : this.state.scoreL + 1
             });
         } else if ( this.state.ballX < 0 ) {
-            this.resetGame();
+            this.resetGame(this.state.mode != 1);
             this.setState({
                 scoreR : this.state.scoreR + 1
             });
@@ -109,11 +112,6 @@ class Engine extends React.Component {
         
     }
     
-    /* check if ball is touching the botom or top of paddle */
-    touchingPaddleEdge = () => {}
-    
-    /* check if ball made a score */
-
     /* score render */
     drawScore = (ctx, canvas) => {
         var text = `${this.state.scoreL} : ${this.state.scoreR}`;
@@ -172,9 +170,7 @@ class Engine extends React.Component {
         }
         this.paddles(ctx, canvas);
     }
-    movePaddle = (key) => {
-             cancelAnimationFrame(this.current);
-        }
+
     /* handle the keyinput */ 
     keyInput = ({keyCode}) => {
         const PLAYER_UP   = 73;  // i
@@ -206,9 +202,7 @@ class Engine extends React.Component {
                 break;
             }
             case PAUSE:
-              //  if (!this.state.displayMenu) {
-                    this.setState({pause: !this.state.pause});
-              //  }
+                this.setState({pause: !this.state.pause});
                 break;
         }   
     }
@@ -218,8 +212,9 @@ class Engine extends React.Component {
             mode : num,
             displayMenu:    false,
         });
-        this.resetGame();
+        this.resetGame(true);
     };
+
     /* render the jsx */
     render() {
         return (
