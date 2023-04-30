@@ -461,3 +461,30 @@ export const updatePass = async (dispatch, Navigate, data: EditInfo, id:number)=
     throw error;
   }
 }
+
+export const updateUser = async (dispatch, Navigate, sendData, id:number)=>{
+  try {
+    const response = await axios.put(`${process.env.BACK_URL}/transcendence/user/update-user/${id}`, 
+    sendData,
+    {
+        headers: {
+          Authorization: `Bearer ${sessionStorage.getItem('access_token')}`
+        }
+    }
+    ); 
+    console.log(response);
+  } 
+  catch (error) {
+    console.log(error);
+    if (error.response.status == 401)
+    {
+      if ((await refreshToken()) != 200) {
+        Navigate("/transcendence/user/signin");
+      } else {
+        updateUser(dispatch, Navigate, sendData, id);
+      }
+    }
+    else
+      throw error;
+  }
+}

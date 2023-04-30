@@ -7,7 +7,7 @@ import Background from '../Background';
 import axios from 'axios';
 import FormEdit from '../Form/FormEdit';
 import { useDispatch, useSelector } from 'react-redux';
-import {enable2fa, disable2fa, getUserInfo, selectUser, setUserInfo, updatePass} from '../Slices/userSlice';
+import {enable2fa, disable2fa, getUserInfo, selectUser, setUserInfo, updatePass, updateUser} from '../Slices/userSlice';
 import { useState } from "react";
 import Tfa from '../Tfa';
 
@@ -28,19 +28,8 @@ const Edit = () => {
             last_name: data.last_name,
             username: data.username,
         };
-        console.log("sata "  ,data);
         try {
-            const response = await axios.put(
-                `http://localhost:7000/transcendence/user/update-user/${userInfo.user.id}`, 
-                {
-                    sendData
-                },
-                {
-                    headers: {
-                        Authorization: `Bearer ${sessionStorage.getItem('access_token')}`,
-                    },
-                },
-            );
+            await updateUser(dispatch, navigate, sendData, userInfo.user.id);
             if (data.new_password !== undefined && data.cur_password !== undefined) {
                 await updatePass(dispatch, navigate, data, userInfo.user.id);
             }
