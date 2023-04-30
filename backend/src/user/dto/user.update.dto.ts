@@ -18,9 +18,6 @@ export class UserUpdateDto {
   email: string;
 
   @IsOptional()
-  password: string;
-
-  @IsOptional()
   gender: Gender;
 
   @IsOptional()
