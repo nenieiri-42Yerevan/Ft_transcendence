@@ -15,7 +15,7 @@ const Welcome = () => {
             Sign Up
           </Link>
           <Link
-            to="#"
+            to={`${process.env.BACK_URL}/transcendence/auth/signin/42`}
             className="m-3 md:m-5 text-center bg-[#e4e9ff1a] hover:bg-[#7d7d7d] text-white font-bold py-2 rounded min-w-full md:min-w-[15em] md:mt-20 pt-[1em] pb-[1em]"
           >
             Sign in with 42

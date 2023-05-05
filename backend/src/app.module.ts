@@ -7,16 +7,18 @@ import { APP_GUARD } from '@nestjs/core';
 import { AtGuard } from './common/guards';
 import { ChatModule } from './chat/chat.module';
 import { NotifyModule } from './notify/notify.module';
+import { PassportModule } from '@nestjs/passport';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true, envFilePath: '../.env' }),
+    PassportModule.register({ defaultStrategy: '42' }),
     DatabaseModule,
     UserModule,
     AuthModule,
     ChatModule,
     NotifyModule,
   ],
-  providers: [{ provide: APP_GUARD, useClass: AtGuard }],
+  providers: [{ provide: APP_GUARD, useClass: AtGuard}],
 })
 export class AppModule {}

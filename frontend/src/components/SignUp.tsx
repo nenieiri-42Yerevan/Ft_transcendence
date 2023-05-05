@@ -14,7 +14,7 @@ const SignUp = () => {
   const userInfo = useSelector(selectUser); 
     useEffect(() => {
         if (userInfo && userInfo.user != null) {
-            navigate("/transcendence/user/profile");
+           // navigate("/transcendence/user/profile");
         }
     }, [userInfo]);
   const onSubmit = async (data: Data) => {
