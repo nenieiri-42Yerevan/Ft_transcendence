@@ -7,6 +7,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { AtGuard } from './common/guards';
 import { ChatModule } from './chat/chat.module';
 import { NotifyModule } from './notify/notify.module';
+import { GameModule } from './game/game.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { NotifyModule } from './notify/notify.module';
     AuthModule,
     ChatModule,
     NotifyModule,
+    GameModule,
   ],
   providers: [{ provide: APP_GUARD, useClass: AtGuard }],
 })
