@@ -26,8 +26,10 @@ const SignIn = () => {
     const [isError, setIsError] = useState(false);
     const userInfo = useSelector(selectUser); 
     useEffect(() => {
-        if (userInfo && userInfo.user != null) {
-            //navigate("/transcendence/user/profile");
+        if (userInfo && userInfo.user != null && !userInfo.user.isUnAuth) {
+            console.log("hhh ", userInfo.user.isUnAuth);
+            
+            navigate("/transcendence/user/profile");
         }
     }, []);
     const onsubmit = async (data: Data) => {
