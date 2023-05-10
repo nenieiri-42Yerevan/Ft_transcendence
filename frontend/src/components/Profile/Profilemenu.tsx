@@ -41,8 +41,9 @@ const Profilemenu = () => {
           <li>
             <Link to="#">Game</Link>
           </li>
-          
-           
+          <li>
+            <Link to="/transcendence/user/profile">Profile</Link>
+          </li>
         </ul>
         <div className='flex flex-row justify-end'>
         <button

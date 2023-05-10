@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import {enable2fa, disable2fa, getUserInfo, selectUser, setUserInfo, updatePass, updateUser} from '../Slices/userSlice';
 import { useState } from "react";
 import Tfa from '../Tfa';
+import Profilemenu from './Profilemenu';
 
 
 const Edit = () => {
@@ -52,6 +53,7 @@ const Edit = () => {
       }
     return (
         <>
+        <Profilemenu/>
         <div className="  py-0 md:py-6 text-xs xl:text-xl gap-x-0 md:gap-x-4 lg:text-lg md:text-md sm:text-sm backdrop-blur-md p-0 lg:p-2 xl:p-3 bg-black/50 min-w-full min-h-full z-[668] absolute flex justify-center bg-clip-padding">
             <div className="flex flex-col justify-center md:text-lg items-center min-w-full min-h-screen md:min-w-fit md:min-h-fit">
                 {enabled && <Tfa user = {userInfo.user}  enabled={enabled}  onEnableChange={handleEnableChange}/>}
