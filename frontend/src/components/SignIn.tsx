@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { selectUser, setUserInfo, getUserInfo, loginRequest, loginFailure, getUserById, getAvatar } from './Slices/userSlice';
 import { useState } from "react";
 import Form2fa from "./Form/Form2fa";
+import Signmenu from "./Signmenu";
 
 interface Data {
     login: string;
@@ -26,7 +27,9 @@ const SignIn = () => {
     const [isError, setIsError] = useState(false);
     const userInfo = useSelector(selectUser); 
     useEffect(() => {
-        if (userInfo && userInfo.user != null) {
+        if (userInfo && userInfo.user != null && !userInfo.user.isUnAuth) {
+            console.log("hhh ", userInfo.user.isUnAuth);
+            
             navigate("/transcendence/user/profile");
         }
     }, []);
@@ -93,6 +96,7 @@ const SignIn = () => {
     }
     return (
         <>
+            <Signmenu/>
             {isError ? <Login onSub = {submit2fa} rend = {Form2fa}/> : <Login onSub = {onsubmit} rend = {FormLogin}/>}
         </>
     )

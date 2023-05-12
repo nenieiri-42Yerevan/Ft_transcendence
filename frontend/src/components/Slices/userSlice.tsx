@@ -15,6 +15,7 @@ export interface Friends {
 
 interface UserInfo {
   username: string;
+  isUnAuth: boolean;
   names?: Friends[];
   lastName: string;
   email: string;
@@ -95,6 +96,12 @@ export const userSlice = createSlice({
       if (state.user)
         state.user.blocked = action.payload;
     },
+    setIsUnauth: (state, action: PayloadAction<boolean>) => {
+      if (state.user)
+        console.log(action);
+        
+        state.user.isUnAuth = action.payload;
+    },
   },
 });
 
@@ -106,7 +113,8 @@ export const {
   setFriends,
   logout,
   loginFailure,
-  loginRequest
+  loginRequest,
+  setIsUnauth,
 } = userSlice.actions;
 
 export const selectUser = (state: any) => state.user;
@@ -133,6 +141,7 @@ export const fetchFriendsData = async (flag:number, Navigate, dispatch: any, use
       if (error.response.status == 401)
       {
         if ((await refreshToken()) != 200) {
+          dispatch(setIsUnauth(true));
           Navigate("/transcendence/user/signin");
         } else {
           fetchFriendsData(flag, Navigate, dispatch, userInfo);
@@ -162,6 +171,7 @@ export const fetchMatches = async (flag:number, Navigate, dispatch: any, userInf
     if (error.response.status == 401)
       {
         if ((await refreshToken()) != 200) {
+          dispatch(setIsUnauth(true));
           Navigate("/transcendence/user/signin");
         } else {
           fetchMatches(flag, Navigate, dispatch, userInfo);
@@ -189,6 +199,7 @@ export const getUserInfo = async (Navigate) => {
     if (error.response.status == 401)
     {
       if ((await refreshToken()) != 200) {
+        dispatch(setIsUnauth(true));
         Navigate("/transcendence/user/signin");
       } else {
         getUserInfo(Navigate);
@@ -228,6 +239,7 @@ export const getUserById = async (id: any, Navigate) => {
     if (error.response.status == 401)
     {
       if ((await refreshToken()) != 200) {
+        dispatch(setIsUnauth(true));
         Navigate("/transcendence/user/signin");
       } else {
         getUserById(id, Navigate);
@@ -254,6 +266,7 @@ export const follow = async (dispatch: any, Navigate, userInfo: UserInfo, id: nu
     if (error.response.status == 401)
     {
       if ((await refreshToken()) != 200) {
+        dispatch(setIsUnauth(true));
         Navigate("/transcendence/user/signin");
       } else {
         follow(dispatch, Navigate, userInfo, id);
@@ -297,6 +310,7 @@ export const getAvatar = async (flag: number, Navigate, dispatch: any, id: strin
     if (error.response && error.response.status == 401)
     {
       if ((await refreshToken()) != 200) {
+        dispatch(setIsUnauth(true));
         Navigate("/transcendence/user/signin");
       } else {
         getAvatar(flag, Navigate, dispatch, id);
@@ -328,6 +342,7 @@ export const setAvatar = async ( imageFile: any, Navigate, id: any, dispatch: an
     if (error.response.status == 401)
     {
       if ((await refreshToken()) != 200) {
+        dispatch(setIsUnauth(true));
         Navigate("/transcendence/user/signin");
       } else {
         setAvatar(imageFile, Navigate, id, dispatch);
@@ -354,6 +369,7 @@ export const block = async (dispatch, Navigate, userInfo: UserInfo, id: number)=
     if (error.response.status == 401)
     {
       if ((await refreshToken()) != 200) {
+        dispatch(setIsUnauth(true));
         Navigate("/transcendence/user/signin");
       } else {
         block(dispatch, Navigate, userInfo, id);
@@ -387,6 +403,7 @@ export const enable2fa = async (dispatch, Navigate, userInfo: UserInfo)=>{
     if (error.response.status == 401)
     {
       if ((await refreshToken()) != 200) {
+        dispatch(setIsUnauth(true));
         Navigate("/transcendence/user/signin");
       } else {
         enable2fa(dispatch, Navigate, userInfo);
@@ -419,6 +436,7 @@ export const disable2fa = async (dispatch, Navigate, userInfo: UserInfo)=>{
     if (error.response.status == 401)
     {
       if ((await refreshToken()) != 200) {
+        dispatch(setIsUnauth(true));
         Navigate("/transcendence/user/signin");
       } else {
         disable2fa(dispatch, Navigate, userInfo);
@@ -453,6 +471,7 @@ export const updatePass = async (dispatch, Navigate, data: EditInfo, id:number)=
     if (error.response.status == 401)
     {
       if ((await refreshToken()) != 200) {
+        dispatch(setIsUnauth(true));
         Navigate("/transcendence/user/signin");
       } else {
         updatePass(dispatch, Navigate, data, id);
@@ -460,4 +479,36 @@ export const updatePass = async (dispatch, Navigate, data: EditInfo, id:number)=
     }
     throw error;
   }
+}
+
+export const updateUser = async (dispatch, Navigate, sendData, id:number)=>{
+  try {
+    const response = await axios.put(`${process.env.BACK_URL}/transcendence/user/update-user/${id}`, 
+    sendData,
+    {
+        headers: {
+          Authorization: `Bearer ${sessionStorage.getItem('access_token')}`
+        }
+    }
+    ); 
+    console.log(response);
+  } 
+  catch (error) {
+    console.log(error);
+    if (error.response.status == 401)
+    {
+      if ((await refreshToken()) != 200) {
+        dispatch(setIsUnauth(true));
+        Navigate("/transcendence/user/signin");
+      } else {
+        updateUser(dispatch, Navigate, sendData, id);
+      }
+    }
+    else
+      throw error;
+  }
+}
+
+function dispatch(arg0: any) {
+  throw new Error('Function not implemented.');
 }

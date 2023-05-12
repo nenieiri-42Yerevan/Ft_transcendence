@@ -8,10 +8,12 @@ import { AtGuard } from './common/guards';
 import { ChatModule } from './chat/chat.module';
 import { NotifyModule } from './notify/notify.module';
 import { GameModule } from './game/game.module';
+import { PassportModule } from '@nestjs/passport';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true, envFilePath: '../.env' }),
+    PassportModule.register({ defaultStrategy: '42' }),
     DatabaseModule,
     UserModule,
     AuthModule,
@@ -19,6 +21,6 @@ import { GameModule } from './game/game.module';
     NotifyModule,
     GameModule,
   ],
-  providers: [{ provide: APP_GUARD, useClass: AtGuard }],
+  providers: [{ provide: APP_GUARD, useClass: AtGuard}],
 })
 export class AppModule {}

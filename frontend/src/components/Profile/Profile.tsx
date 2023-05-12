@@ -20,7 +20,7 @@ const Profile = () => {
     const navigate = useNavigate();
     const [loaded, setloaded] = useState(false);
     useEffect(() => {
-        if (!userInfo.user)
+        if (userInfo && !userInfo.user)
             navigate("/transcendence/user/signin");
         else {    
             fetchFriendsData(0, navigate, dispatch, userInfo.user);

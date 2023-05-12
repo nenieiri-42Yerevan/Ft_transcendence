@@ -30,8 +30,10 @@ const Navigation: FC<Props> = ({ userName, avatar}) => {
             <Link to="#" className={classNames({"font-bold": activeTab.includes("/game")
               })}>Game</Link>
           </li>
-          
-           
+          <li>
+            <Link to="/transcendence/user/profile" className={classNames({"font-bold": activeTab.includes("/profile")
+              })}>Profile</Link>
+          </li>   
         </ul>
         <div className='flex flex-row h-full justify-end'>
           <img className='h-7 w-7 mr-3 item-center rounded-full' src={avatar}/>

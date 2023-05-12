@@ -1,6 +1,7 @@
 import {
   Controller,
   Post,
+  Get,
   Body,
   HttpCode,
   HttpStatus,
@@ -10,12 +11,28 @@ import {
 import { AtGuard, RtGuard } from '../../common/guards';
 import { AuthService } from '../services/auth.service';
 import { SignInDto, SignInTFADto, TokenDto } from '../dto';
-import { Request } from 'express';
 import { GetUser, GetUserId, Public } from '../../common/decorators';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
+
+  @Public()
+  @Get('signin/42')
+  @UseGuards(AuthGuard('42'))
+  async fortyTwoLogin() {
+    // This route should redirect the user to 42's login page
+  }
+
+  @Public()
+  @Get('signin/42/callback')
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(AuthGuard('42'))
+  async fortyTwoCallback(@Req() req) {
+    // This route handles the callback after the user has logged in
+    // return this.authService.signinfortyTwo(req.user);
+  }
 
   @Public()
   @Post('signin/local')

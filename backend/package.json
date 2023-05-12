@@ -36,6 +36,7 @@
     "class-validator": "^0.14.0",
     "multer": "^1.4.5-lts.1",
     "passport": "^0.6.0",
+    "passport-42": "^1.2.6",
     "passport-jwt": "^4.0.1",
     "pg": "^8.8.0",
     "reflect-metadata": "^0.1.13",
