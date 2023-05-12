@@ -1,9 +1,11 @@
 import { IsNotEmpty } from 'class-validator';
 
-export class SignInTFADto
-{
+export class SignInTFADto {
+  @IsNotEmpty()
+  username: string;
+
 	@IsNotEmpty()
-	username: string;
+	password: string;
 
 	@IsNotEmpty()
 	TFA: string;

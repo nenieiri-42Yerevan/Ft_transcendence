@@ -1,8 +1,10 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import { HttpException, HttpStatus } from '@nestjs/common';
+import { HttpException, HttpStatus, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import {
   OnGatewayConnection,
+  OnGatewayDisconnect,
+  OnGatewayInit,
   SubscribeMessage,
   WebSocketGateway,
   WebSocketServer,
@@ -17,10 +19,12 @@ import { ChatService } from './services/chat.service';
 import { GroupChatService } from './services/group-chat.service';
 
 @WebSocketGateway({
-  cors: { origin: '' },
+  cors: { origin: '*' },
   namespace: 'chat',
 })
-export class ChatGateway implements OnGatewayConnection {
+export class ChatGateway
+  implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
+{
   constructor(
     private readonly authService: AuthService,
     private readonly userService: UserService,

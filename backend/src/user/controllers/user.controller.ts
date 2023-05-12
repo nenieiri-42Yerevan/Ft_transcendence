@@ -11,8 +11,8 @@ import {
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
-import { UserDto } from '../dto';
-import { Match, User } from '../entities';
+import { PasswordDto, UserDto, UserUpdateDto } from '../dto';
+import { Match, Status, User } from '../entities';
 import { AvatarService } from '../services/avatar.service';
 import { UserService } from '../services/user.service';
 import { Response } from 'express';
@@ -45,7 +45,6 @@ export class UserController {
     console.log('bbb');
     return this.userService.findOne(username);
   }
-  
 
   @Get('/by-id/:id')
   findById(@Param('id', ParseIntPipe) id: number): Promise<User> {
@@ -82,14 +81,25 @@ export class UserController {
     return this.userService.findBlocked(id);
   }
 
+  @Get('/:id/status')
+  findStatus(@Param('id', ParseIntPipe) id: number): Promise<Status> {
+    return this.userService.findStatus(id);
+  }
+
   @Put('/update-user/:id')
   async updateUser(
     @Param('id', ParseIntPipe) id: number,
-    @Body() user: User,
+    @Body() user: UserUpdateDto,
   ): Promise<User> {
-    const current = await this.userService.findOne(id);
+    return this.userService.update(id, user as User);
+  }
 
-    return this.userService.update(current.id, user);
+  @Put('/update-password/:id')
+  async updatePassword(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() pass: PasswordDto,
+  ): Promise<User> {
+    return this.userService.updatePassword(id, pass.old, pass.current);
   }
 
   @Put('/update-avatar/:id')

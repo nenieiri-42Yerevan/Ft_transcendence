@@ -5,11 +5,13 @@ import * as argon from 'argon2';
 import { User, Avatar, Status, Match } from '../entities/';
 import { UserDto } from '../dto';
 import { AvatarService } from './avatar.service';
+import { NotifyService } from 'src/notify/notify.service';
 
 @Injectable()
 export class UserService {
   constructor(
     private readonly avatarService: AvatarService,
+    private readonly notifyService: NotifyService,
 
     @InjectRepository(User)
     private readonly userRepo: Repository<User>,
@@ -64,10 +66,8 @@ export class UserService {
 
   async findOne(property, relations = [] as string[]): Promise<User> {
     let user = null;
-    console.log("I'm trying to find someone...");
 
     if (property && typeof property == 'number') {
-      console.log("I'm trying to find someone...");
       user = await this.userRepo.findOne({
         where: { id: property },
         relations,
@@ -130,6 +130,14 @@ export class UserService {
     return blocked;
   }
 
+  async findStatus(id: number): Promise<Status> {
+    const user: User = await this.findOne(id);
+
+    if (!user) throw new HttpException('User not found!', HttpStatus.NOT_FOUND);
+
+    return user.status;
+  }
+
   /* ------------------------- UPDATE ------------------------ */
 
   async update(id: number, newUser: User): Promise<User> {
@@ -138,7 +146,13 @@ export class UserService {
     await this.findOne(id);
 
     // check for modifiable updates
-    const modifiable: Array<string> = ['first_name', 'last_name', 'username'];
+    const modifiable: Array<string> = [
+      'first_name',
+      'last_name',
+      'username',
+      'TFA_enabled',
+      'TFA_secret',
+    ];
 
     for (const key of Object.keys(newUser)) {
       if (modifiable.indexOf(key) == -1)
@@ -170,6 +184,27 @@ export class UserService {
     return newUser;
   }
 
+  async updatePassword(
+    id: number,
+    oldPass: string,
+    newPass: string,
+  ): Promise<User> {
+    let user: User = await this.findOne(id);
+
+    if (!(await argon.verify(user.password, oldPass)))
+      throw new HttpException('Old password mismatch!', HttpStatus.BAD_REQUEST);
+
+    let result;
+    try {
+      let password = await argon.hash(newPass);
+      result = await this.userRepo.update(id, { password });
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
+
+    return result;
+  }
+
   async updateLevel(winner: User, loser: User): Promise<void> {
     try {
       await this.userRepo.update(winner.id, { rank: winner.rank + 1 });
@@ -187,7 +222,7 @@ export class UserService {
 
     try {
       await this.userRepo.update(user.id, { status });
-      // TODO: notify user
+      this.notifyService.emitStatus(user.id, status);
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }

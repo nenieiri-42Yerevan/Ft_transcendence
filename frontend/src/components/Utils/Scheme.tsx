@@ -1,5 +1,7 @@
 import * as Yup from 'yup';
 import { setIn } from 'final-form';
+import argon2 from 'argon2';
+
 
 export const validationScheme = Yup.object().shape({
   first_name: Yup.string()
@@ -53,9 +55,26 @@ export const validationSettings = Yup.object().shape({
   last_name: Yup.string()
     .required('Last name is required.')
     .matches(/^[a-zA-Z]+$/),
-  email: Yup.string()
-    .required('Email is required.')
-    .email('Must be valid email address.'),
+  tfa:  Yup.string().required('TFA is required.'),
+  username: Yup.string()
+  .required('Username is required.')
+  .min(8, 'At least 8 characters long.')
+  .matches(
+    /^[a-zA-Z][a-zA-Z0-9_]{7,}[a-zA-Z0-9]$/,
+    "Contains at least 8 character long.\nShould start with lowercase or uppercase.\nContains lowercase, uppercase, digit or '_'.",
+  ),
+  cur_password: Yup.string()
+  .min(8, 'At least 8 characters long.')
+  .matches(
+    /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
+    'Contains at least one lowercase letter.\nContains at least one uppercase letter.\nContains at least one digit.\nContains at least one special character.',
+  ),
+  new_password: Yup.string()
+  .min(8, 'At least 8 characters long.')
+  .matches(
+    /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
+    'Contains at least one lowercase letter.\nContains at least one uppercase letter.\nContains at least one digit.\nContains at least one special character.',
+  ),
 });
 
 export interface Data {
@@ -74,7 +93,10 @@ export interface Data {
 export interface EditInfo {
   first_name: string;
   last_name: string;
-  email: string;
+  username: string;
+  tfa: string;
+  cur_password: string;
+  new_password: string;
 }
 
 export const days: any[] = Array.from(Array(31).keys()).map((d) => d + 1);
@@ -95,6 +117,7 @@ export const months: any[] = [
 ];
 
 export type Gender = 'male' | 'female';
+export type TFA = 'enable' | 'disable';
 
 export const validate = async (values: Data) => {
   try {
@@ -109,7 +132,7 @@ export const validate = async (values: Data) => {
 };
 
 export const validateSettings = async (values: EditInfo) => {
-  try {
+  try { 
     await validationSettings.validate(values, { abortEarly: false });
   } catch (err: any) {
     const errors = err.inner.reduce((formError: any, innerError: any) => {

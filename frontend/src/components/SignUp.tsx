@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Form } from 'react-final-form';
 import { useNavigate } from 'react-router-dom';
 import { FORM_ERROR } from 'final-form';
@@ -6,9 +6,17 @@ import { Data, validate } from './Utils/Scheme';
 import FormContent from './Form/FormContent';
 import Background from './Background';
 import axios from 'axios';
+import { useSelector } from 'react-redux';
+import { selectUser } from './Slices/userSlice';
 
 const SignUp = () => {
   const navigate = useNavigate();
+  const userInfo = useSelector(selectUser); 
+    useEffect(() => {
+        if (userInfo && userInfo.user != null) {
+            navigate("/transcendence/user/profile");
+        }
+    }, [userInfo]);
   const onSubmit = async (data: Data) => {
     const sendData = {
       first_name: data.first_name,

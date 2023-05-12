@@ -1,1 +1,0 @@
-{"version":3,"file":"GetUserId.js","sourceRoot":"","sources":["../../../src/common/decorators/GetUserId.ts"],"names":[],"mappings":";;;AAAA,2CAAwE;AAE3D,QAAA,SAAS,GAAG,IAAA,6BAAoB,EAC5C,CAAC,IAAe,EAAE,OAAyB,EAAU,EAAE;IACtD,MAAM,OAAO,GAAG,OAAO,CAAC,YAAY,EAAE,CAAC,UAAU,EAAE,CAAC;IACpD,OAAO,OAAO,CAAC,IAAI,CAAC,KAAK,CAAC,CAAC;AAC5B,CAAC,CACD,CAAA"}
