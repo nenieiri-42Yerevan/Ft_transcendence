@@ -17,14 +17,14 @@ const Dashboard = () => {
     
     const userInfo = useSelector(selectUser);
     const navigate = useNavigate();
-    const dispatch = useDispatch();
+   // const dispatch = useDispatch();
     useEffect(() => {
-        if (!userInfo.user)
+        if (!userInfo.IsLoading)
             navigate("/transcendence/user/signin");
         else {
             console.log(userInfo.user);
-            fetchFriendsData(0, dispatch, userInfo.user);
-            fetchMatches(0, dispatch, userInfo.user);
+           // fetchFriendsData(0, dispatch, userInfo.user);
+           // fetchMatches(0, dispatch, userInfo.user);
             console.log("nn");
             console.log(userInfo);     
         }

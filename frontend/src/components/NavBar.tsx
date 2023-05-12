@@ -1,14 +1,20 @@
 import React, { FC } from "react";
 import classNames from "classnames";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { useEffect } from 'react';
 import { selectUser } from "./Slices/userSlice";
 
 
 const Navigation  = () => {
   const location = useLocation();
   const activeTab = location.pathname;
-  const userInfo = useSelector(selectUser).user;
+  const userInfo = useSelector(selectUser);
+  const navigate = useNavigate();
+  useEffect(() => {
+      if (!userInfo)
+          navigate("/transcendence/user/signin");
+  });
   return (
     <>
       <nav className="flex justify-between w-full h-10 py-2 px-4 bg-[#1E1E1E] text-white">
@@ -33,7 +39,7 @@ const Navigation  = () => {
            
         </ul>
         <div className='flex flex-row h-full justify-end'>
-          <img className='h-7 w-7 mr-3 item-center rounded-full' src={userInfo.img}/>
+          <img className='h-7 w-7 mr-3 item-center rounded-full' src={userInfo.user.img}/>
         <Link
               to="/transcendence/user/profile"
               className="text-center font-bold"
