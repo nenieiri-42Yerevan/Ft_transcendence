@@ -301,12 +301,6 @@ export const getAvatar = async (flag: number, Navigate, dispatch: any, id: strin
       return(url);
   } 
   catch (error) {
-    console.log("xxx");
-    console.log(error);
-    if (flag == 0)
-      dispatch(setUserImage(null));
-    else if (flag == 1)
-      return (null);
     if (error.response && error.response.status == 401)
     {
       if ((await refreshToken()) != 200) {
@@ -316,6 +310,12 @@ export const getAvatar = async (flag: number, Navigate, dispatch: any, id: strin
         getAvatar(flag, Navigate, dispatch, id);
       }
     }
+    console.log("xxx");
+    console.log(error);
+    if (flag == 0)
+      dispatch(setUserImage(null));
+    else if (flag == 1)
+      return (null);
 
   }
 }

@@ -22,7 +22,7 @@ const Profile = () => {
     useEffect(() => {
         if (userInfo && !userInfo.user)
             navigate("/transcendence/user/signin");
-        else {    
+        else {
             fetchFriendsData(0, navigate, dispatch, userInfo.user);
             fetchMatches(0, navigate, dispatch, userInfo.user);
             getAvatar(0, navigate, dispatch, userInfo.user.id);
@@ -31,28 +31,28 @@ const Profile = () => {
     }, []);
     return (
         <>
-        <div className ="backdrop-blur-md flex flex-col min-h-full min-w-full bg-black/50 z-[668] absolute">
-            <Profilmenu />
-            <div className="flex md:flex-row flex-col min-h-screen justify-between">
-                {userInfo.user && <Header loaded = {loaded} userInfo = {userInfo} />}
-                <div className="w-full h-fit bg-[#1E1E1E] border-[#393939] border-solid border m-4 p-8 rounded">
-                    <h2 className="font-bold text-2xl text-white text-center  flex justify-between"><img className="w-[2em]" src={pong}></img>Played Matches</h2>
-                    <hr />
-                    <p className = "text-white hover:bg-[#616161] text-center p-2 flex justify-between">No Data </p>
-                    {/* fetchMatches */}
+            <div className="backdrop-blur-md flex flex-col min-h-full min-w-full bg-black/50 z-[668] absolute">
+                <Profilmenu />
+                <div className="flex md:flex-row flex-col min-h-screen justify-between">
+                    {userInfo.user && <Header loaded={loaded} userInfo={userInfo} />}
+                    <div className="w-full h-fit bg-[#1E1E1E] border-[#393939] border-solid border m-4 p-8 rounded">
+                        <h2 className="font-bold text-2xl text-white text-center  flex justify-between"><img className="w-[2em]" src={pong}></img>Played Matches</h2>
+                        <hr />
+                        <p className="text-white hover:bg-[#616161] text-center p-2 flex justify-between">No Data </p>
+                        {/* fetchMatches */}
+                    </div>
+                    <div className="w-full h-fit m-4 border-[#393939] border-solid border bg-[#1E1E1E] p-8 rounded">
+                        <h2 className="font-bold text-2xl text-white text-center  flex justify-between"><img className="w-[2em]" src={pong}></img>Friends <span>more</span></h2>
+                        <hr />
+                        {userInfo && userInfo.user && userInfo.user.names && userInfo.user.names.slice(0, 5).map((obj: Friends, index: number) => (
+                            <FriendsList index={index} obj={obj} key={index} />
+                        ))}
+                        <p className="text-white text-center p-2 flex justify-between hover:bg-[#616161]">{userInfo && userInfo.user && userInfo.user.names && userInfo.user.names.length === 0 && "No Data"} </p>
+                    </div>
                 </div>
-                <div className="w-full h-fit m-4 border-[#393939] border-solid border bg-[#1E1E1E] p-8 rounded">
-                    <h2 className="font-bold text-2xl text-white text-center  flex justify-between"><img className="w-[2em]" src={pong}></img>Friends <span>more</span></h2>
-                    <hr />
-                    {userInfo && userInfo.user && userInfo.user.names && userInfo.user.names.slice(0, 5).map((obj: Friends, index: number) => (
-                       <FriendsList index = {index} obj = {obj} key = {index}/>
-                    ))}
-                    <p className = "text-white text-center p-2 flex justify-between hover:bg-[#616161]">{userInfo && userInfo.user &&  userInfo.user.names && userInfo.user.names.length === 0 && "No Data"} </p>
-                </div>
+                <Footer />
             </div>
-            <Footer/>
-        </div>
-        <Background />
+            <Background />
         </>
     );
 }
