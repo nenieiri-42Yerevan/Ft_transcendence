@@ -1,17 +1,16 @@
 import React from 'react';
 // import Background from '../Background';
 import NavBar from "../NavBar";
-import Engine from './Engine';
+import Pong from './Pong';
+import Menu from './Menu';
+import { useState } from 'react';
+
 const Game = () => {
+    const [isReady, setIsReady] = useState(false); // добавляем новое состояние
   return (
     <>
     <NavBar />
-    <div className="flex flex-wrap">
-            <Engine />
-        <div className="w-full md:w-1/5 bg-gray-900 h-screen text-white">
-            Chat
-        </div>
-    </div>
+    {isReady ? <Pong /> : <Menu setReady={setIsReady} />}
     </>
   );
 };

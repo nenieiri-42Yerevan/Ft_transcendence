@@ -44,7 +44,7 @@ const Navigation  = () => {
               to="/transcendence/user/profile"
               className="text-center font-bold"
             >
-              {userInfo.name}
+              {userInfo.user.username}
             </Link>
         </div>
       </nav>

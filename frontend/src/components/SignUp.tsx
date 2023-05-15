@@ -12,11 +12,6 @@ import { selectUser } from './Slices/userSlice';
 const SignUp = () => {
   const navigate = useNavigate();
   const userInfo = useSelector(selectUser); 
-    useEffect(() => {
-        if (userInfo && userInfo.user != null) {
-            navigate("/transcendence/user/profile");
-        }
-    }, [userInfo]);
   const onSubmit = async (data: Data) => {
     const sendData = {
       first_name: data.first_name,

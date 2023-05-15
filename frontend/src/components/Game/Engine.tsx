@@ -218,12 +218,7 @@ class Engine extends React.Component {
     /* render the jsx */
     render() {
         return (
-                <div className="w-full md:w-4/5 h-screen bg-black" ref={this.divRef}>
-                {this.state.displayMenu && (
-                        <div className="modal absolute inset-0 flex items-center justify-center z-10">
-                            <Menu handleMatchmaking={this.handleMatchmaking} />
-                        </div>
-                        )}
+                <div className="w-full h-screen bg-black" ref={this.divRef}>
                     <canvas ref={this.canvasRef}>
                     </ canvas>
                 </div>

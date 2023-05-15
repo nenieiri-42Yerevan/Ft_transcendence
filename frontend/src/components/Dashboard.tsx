@@ -19,7 +19,7 @@ const Dashboard = () => {
     const navigate = useNavigate();
    // const dispatch = useDispatch();
     useEffect(() => {
-        if (!userInfo.IsLoading)
+        if (!userInfo.user)
             navigate("/transcendence/user/signin");
         else {
             console.log(userInfo.user);

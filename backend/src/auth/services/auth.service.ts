@@ -117,22 +117,26 @@ export class AuthService {
     try {
       return this.jwtService.verify(token);
     } catch {
+        console.log("JWT NOT VERIFIED");
       return null;
     }
   }
 
   // retrieving user from socket
   async retrieveUser(client: Socket): Promise<User> {
+    console.log("Find user block");
     const authorization = client.handshake.headers.authorization;
     const token = authorization && authorization.split(' ')[1];
 
     if (!token) return null;
-
+    console.log("Token found!", token);
     const payload = this.verifyJWT(token);
     if (!payload) return null;
-
+    console.log("Payload found!");
+    
     const user = await this.userService.findOne(payload.sub).catch(() => null);
     if (!user) return null;
+    console.log("User found!");
 
     return user;
   }
