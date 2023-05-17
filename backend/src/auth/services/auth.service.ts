@@ -113,9 +113,10 @@ export class AuthService {
   }
 
   // verifying JWT token
-  verifyJWT(token: string): any {
+  async verifyJWT(token: string): Promise<any> {
     try {
-      return this.jwtService.verify(token);
+	  const secret = this.configService.get<string>('AT_TOKEN');
+      return await this.jwtService.verifyAsync(token, { secret });
     } catch {
         console.log("JWT NOT VERIFIED");
       return null;
@@ -130,9 +131,9 @@ export class AuthService {
 
     if (!token) return null;
     console.log("Token found!", token);
-    const payload = this.verifyJWT(token);
+    const payload = await this.verifyJWT(token);
     if (!payload) return null;
-    console.log("Payload found!");
+    console.log("Payload found!", payload);
     
     const user = await this.userService.findOne(payload.sub).catch(() => null);
     if (!user) return null;

@@ -138,6 +138,7 @@
     "react-router-dom": "^6.8.0",
     "redux-persist": "^6.0.0",
     "sass": "^1.57.1",
+    "socket.io-client": "^4.6.1",
     "styled-components": "^5.3.6",
     "tailwind-styled-components": "^2.2.0",
     "three": "^0.148.0",
