@@ -30,6 +30,7 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @UseGuards(AuthGuard('42'))
   async fortyTwoCallback(@Req() req) {
+	  console.log("aaa", req.user);
     // This route handles the callback after the user has logged in
     // return this.authService.signinfortyTwo(req.user);
   }

@@ -39,7 +39,7 @@ export class User {
   @Column({ nullable: false, select: true })
   password: string;
 
-  @Column({ type: 'enum', nullable: false, enum: ['male', 'female'] })
+  @Column({ type: 'enum', nullable: true, enum: ['male', 'female'] })
   gender: Gender;
 
   @Column({ type: 'timestamptz', nullable: true })

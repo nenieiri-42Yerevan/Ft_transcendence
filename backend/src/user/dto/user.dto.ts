@@ -1,4 +1,4 @@
-import { IsEmail, IsNotEmpty } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsOptional } from 'class-validator';
 
 export type Gender = 'male' | 'female';
 
@@ -19,9 +19,9 @@ export class UserDto {
   @IsNotEmpty()
   password: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   gender: Gender;
 
-  @IsNotEmpty()
+  @IsOptional()
   date_of_birth: Date;
 }
