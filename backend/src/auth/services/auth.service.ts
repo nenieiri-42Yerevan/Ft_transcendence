@@ -36,9 +36,6 @@ export class AuthService {
       throw new HttpException('Wrong password', HttpStatus.NOT_FOUND);
   }
 
-  // async signinfortyTwo(user: SignInDto): Promise<TokenDto> {
-  // }
-
   // creatinhg user session and connection (2FA)
   async signinTFA(dto: SignInTFADto): Promise<TokenDto> {
     const user = await this.userService.findOne(dto.username);
