@@ -15,7 +15,7 @@ const Welcome = () => {
             Sign Up
           </Link>
           <Link
-            to={`${process.env.BACK_URL}/transcendence/auth/signin/42`}
+            to="https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-a3ba0a124d3a4ced3822bc7ff62ee30b17851441280fc280437663500580042c&redirect_uri=http%3A%2F%2Flocalhost%3A7000%2Ftranscendence%2Fauth%2Fsignin%2F42%2Fcallback&response_type=code"
             className="m-3 md:m-5 text-center bg-[#e4e9ff1a] hover:bg-[#7d7d7d] text-white font-bold py-2 rounded min-w-full md:min-w-[15em] md:mt-20 pt-[1em] pb-[1em]"
           >
             Sign in with 42

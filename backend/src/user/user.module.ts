@@ -20,6 +20,6 @@ let entities = [User, Avatar, Session, Match];
     MatchService,
     NotifyService,
   ],
-  exports: [UserService, SessionService],
+  exports: [UserService, SessionService, MatchService],
 })
 export class UserModule {}
