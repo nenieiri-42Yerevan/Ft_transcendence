@@ -29,10 +29,9 @@ export class AuthController {
   @Get('signin/42/callback')
   @HttpCode(HttpStatus.OK)
   @UseGuards(AuthGuard('42'))
-  async fortyTwoCallback(@Req() req) {
-	  console.log("aaa", req.user);
+  fortyTwoCallback(@Req() req): Promise<TokenDto> {
     // This route handles the callback after the user has logged in
-    // return this.authService.signinfortyTwo(req.user);
+    return (req.user.tokens);
   }
 
   @Public()
