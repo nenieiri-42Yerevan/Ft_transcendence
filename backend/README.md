@@ -83,6 +83,7 @@ To be witten...
 | ---------- | -------------------------------- | ---------------------------------- |
 | POST       | /transcendence/auth/signin/local | To login an existing user account  |
 | POST       | /transcendence/auth/signin/2FA   | To continue login through 2FA      |
+| GET        | /transcendence/auth/signin/42    | To login through 42 API            |
 | POST       | /transcendence/auth/TFA_enable   | To enable 2 factor authentication  |
 | POST       | /transcendence/auth/TFA_disable  | To disable 2 factor authentication |
 | POST       | /transcendence/auth/logout       | To logout                          |

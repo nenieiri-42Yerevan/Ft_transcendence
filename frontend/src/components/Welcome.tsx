@@ -60,26 +60,35 @@ const Welcome = () => {
               About the game
             </h1>
             <p className="text-lg">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam a
-              velit a est vulputate vestibulum. Donec malesuada eros mattis
-              neque hendrerit elementum. Morbi id quam ut diam interdum lacinia
-              et ut sem. Donec in lacinia risus, a interdum diam. Cras vitae
-              nisi ex. Ut pulvinar quam erat, id laoreet mi ultrices eget.
-              Praesent eu dignissim mauris, vitae varius purus. Interdum et
-              malesuada fames ac ante ipsum primis in f aucibus. In hac
-              habitasse platea dictumst. Vestibulum ac porta ipsum. Morbi
-              commodo tortor sed ipsum rutrum suscipit. Mauris luctus leo quis
-              dapibus placerat. Duis at egestas arcu. Sed faucibus augue a velit
-              tincidunt faucibus. Nulla quis sapien tempus, lacinia massa sed,
-              sodales est. Maecenas in pulvinar mauris. Nullam eget dui ac magna
-              iaculis pretium sed non ex. Praesent hendrerit convallis justo
-              faucibus imperdiet. In blandit in eros id lacinia. Quisque commodo
-              facilisis varius. Etiam tortor erat, tincidunt id libero tempor,
-              pellentesque malesuada p urus. Etiam fringilla, purus vitae
-              lobortis auctor, ligula ante volutpat est, in euismod lectus risus
-              congue ipsum. Pellentesque blandit interdum magna, non dapibus est
-              bibendum et. Nam vel purus nec lectus cursus scelerisque eget non
-              ligula. Quisque ut tincidunt elit.
+			  Pong is a table tennis–themed twitch arcade sports video game,
+			  featuring simple two-dimensional graphics, manufactured by Atari
+			  and originally released in 1972. It was one of the earliest arcade
+			  video games; it was created by Allan Alcorn as a training exercise
+			  assigned to him by Atari co-founder Nolan Bushnell,
+			  but Bushnell and Atari co-founder Ted Dabney were surprised by
+			  the quality of Alcorn's work and decided to manufacture the game.
+			  Bushnell based the game's concept on an electronic ping-pong game
+			  included in the Magnavox Odyssey, the first home video game console.
+			  In response, Magnavox later sued Atari for patent infringement.
+            </p>
+            <p className="text-lg">
+			  Pong was the first commercially successful video game, and it
+			  helped to establish the video game industry along with the
+			  Magnavox Odyssey. Soon after its release, several companies began
+			  producing games that closely mimicked its gameplay. Eventually,
+			  Atari's competitors released new types of video games that deviated
+			  from Pong's original format to varying degrees, and this, in turn,
+			  led Atari to encourage its staff to move beyond Pong and produce
+			  more innovative games themselves.
+            </p>
+            <p className="text-lg">
+			  Pong is a two-dimensional sports game that simulates table tennis.
+			  The player controls an in-game paddle by moving it vertically
+			  across the left or right side of the screen. They can compete
+			  against another player controlling a second paddle on the opposing
+			  side. Players use the paddles to hit a ball back and forth. The
+			  goal is for each player to reach eleven points before the
+			  opponent; points are earned when one fails to return the ball to the other.
             </p>
           </div>
         </div>

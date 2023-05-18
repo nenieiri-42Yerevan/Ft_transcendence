@@ -24,4 +24,7 @@ export class UserDto {
 
   @IsOptional()
   date_of_birth: Date;
+
+  @IsOptional()
+  user_42: boolean;
 }

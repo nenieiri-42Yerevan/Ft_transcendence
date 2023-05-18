@@ -48,6 +48,7 @@ export class UserService {
     user.password = await argon.hash(dto.password);
     user.gender = dto.gender;
     user.date_of_birth = dto.date_of_birth;
+    user.user_42 = dto.user_42;
 
     try {
       await this.userRepo.save(user);

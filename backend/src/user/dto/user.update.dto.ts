@@ -36,6 +36,9 @@ export class UserUpdateDto {
   TFA_secret: string;
 
   @IsOptional()
+  user_42: boolean;
+
+  @IsOptional()
   created_at: Date;
 
   @IsOptional()
