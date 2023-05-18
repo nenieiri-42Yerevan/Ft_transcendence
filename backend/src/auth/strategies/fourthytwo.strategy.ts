@@ -58,7 +58,7 @@ export class FortyTwoStrategy extends PassportStrategy(Strategy, '42') {
 		userDB,
 	);
 
-    userDB = await this.userService.findOne(userDB.Id, ['sessions']);
+    userDB = await this.userService.findOne(user.username, ['sessions']);
 	if (userDB.TFA_enabled == true)
 		throw new HttpException("Provide your 2fa code", HttpStatus.FORBIDDEN);
 	

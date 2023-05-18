@@ -32,16 +32,10 @@ export class AuthController {
   fortyTwoCallback(@Req() req): Promise<TokenDto> {
     // This route handles the callback after the user has logged in
 
-	console.log(req.user);
     const tokens: TokenDto = {
-      access_token: req.user.accessToken,
-      refresh_token: req.user.refreshToken,
+      access_token: req.user.sessions[req.user.sessions.length - 1].access_token,
+      refresh_token: req.user.sessions[req.user.sessions.length - 1].refresh_token,
     };
-
-	if (req.user.user_42 == true)
-		console.log("it's a true");
-	else
-		console.log("it's a false");
 
     return (Promise.resolve(tokens));
   }
