@@ -7,16 +7,21 @@ import {
   HttpStatus,
   UseGuards,
   Req,
+  Res,
 } from '@nestjs/common';
 import { AtGuard, RtGuard } from '../../common/guards';
 import { AuthService } from '../services/auth.service';
 import { SignInDto, SignInTFADto, TokenDto } from '../dto';
 import { GetUser, GetUserId, Public } from '../../common/decorators';
 import { AuthGuard } from '@nestjs/passport';
+import { ConfigService } from '@nestjs/config';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private authService: AuthService) {}
+  constructor(
+  	  private authService: AuthService,
+  	  private configService: ConfigService,
+  ) {}
 
   @Public()
   @Get('signin/42')
@@ -29,15 +34,11 @@ export class AuthController {
   @Get('signin/42/callback')
   @HttpCode(HttpStatus.OK)
   @UseGuards(AuthGuard('42'))
-  fortyTwoCallback(@Req() req): Promise<TokenDto> {
+  fortyTwoCallback(@Res() res, @Req() req) {
     // This route handles the callback after the user has logged in
-
-    const tokens: TokenDto = {
-      access_token: req.user.sessions[req.user.sessions.length - 1].access_token,
-      refresh_token: req.user.sessions[req.user.sessions.length - 1].refresh_token,
-    };
-
-    return (Promise.resolve(tokens));
+	res.cookie('access_token', req.user.sessions[req.user.sessions.length - 1].access_token);
+    res.cookie('refresh_token', req.user.sessions[req.user.sessions.length - 1].refresh_token);
+    res.redirect(`${this.configService.get<string>('FRONT_URL')}/transcendence/user/profile`);
   }
 
   @Public()
