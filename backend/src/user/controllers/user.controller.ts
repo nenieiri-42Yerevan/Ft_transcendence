@@ -30,19 +30,16 @@ export class UserController {
 
   @Get('/')
   findAll(): Promise<User[]> {
-    console.log('mmm');
     return this.userService.findAll();
   }
 
   @Get('/by-token/:token')
   findBySession(@Param('token') rtoken: string): Promise<User> {
-    console.log('vvv');
     return this.sessionService.findOneBytoken(rtoken);
   }
 
   @Get('/by-name/:username')
   findByUsername(@Param('username') username: string): Promise<User> {
-    console.log('bbb');
     return this.userService.findOne(username);
   }
 
