@@ -52,6 +52,8 @@ export class FortyTwoStrategy extends PassportStrategy(Strategy, '42') {
 	{
 		if (error.status == 404)
 			userDB = this.userService.create(user as UserDto);
+		else
+			throw new HttpException("Unexpected error :(", HttpStatus.FORBIDDEN);
 	}
 
 	const token = await this.authService.generateJWT(userDB.id, user.username);
