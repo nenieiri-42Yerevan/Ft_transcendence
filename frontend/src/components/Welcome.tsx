@@ -2,8 +2,29 @@ import React from 'react';
 import Background from './Background';
 import welphoto from '@SRC_DIR/assets/images/welcomepagephoto.png';
 import { Link } from 'react-router-dom';
+import axios from "axios";
 
 const Welcome = () => {
+
+  const sign = async ()=>{
+    try {
+      const response = await axios.get(`${process.env.BACK_URL}/transcendence/auth/signin/42`, {
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+        },
+      },);
+      window.location.href = "https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-a3ba0a124d3a4ced3822bc7ff62ee30b17851441280fc280437663500580042c&redirect_uri=http%3A%2F%2Flocalhost%3A7000%2Ftranscendence%2Fauth%2Fsignin%2F42%2Fcallback&response_type=code";
+      console.log(response);
+      
+    }
+    catch(error)
+    {
+      console.log(error);
+      
+
+    }
+  }
+
   return (
     <>
       <div className="items-center justify-center bg-black/50 absolute backdrop-blur-md z-[668] min-w-full min-h-full">
@@ -14,12 +35,13 @@ const Welcome = () => {
           >
             Sign Up
           </Link>
-          <Link
-            to="https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-a3ba0a124d3a4ced3822bc7ff62ee30b17851441280fc280437663500580042c&redirect_uri=http%3A%2F%2Flocalhost%3A7000%2Ftranscendence%2Fauth%2Fsignin%2F42%2Fcallback&response_type=code"
+          <button
+            onClick = {sign}
+            // to="https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-a3ba0a124d3a4ced3822bc7ff62ee30b17851441280fc280437663500580042c&redirect_uri=http%3A%2F%2Flocalhost%3A7000%2Ftranscendence%2Fauth%2Fsignin%2F42%2Fcallback&response_type=code"
             className="m-3 md:m-5 text-center bg-[#e4e9ff1a] hover:bg-[#7d7d7d] text-white font-bold py-2 rounded min-w-full md:min-w-[15em] md:mt-20 pt-[1em] pb-[1em]"
           >
             Sign in with 42
-          </Link>
+          </button>
           <Link
             to="./user/SignIn"
             className="m-3 md:m-5 text-center bg-[#e4e9ff1a] hover:bg-[#7d7d7d] text-white font-bold py-2 rounded min-w-full md:min-w-[15em] md:mt-20 pt-[1em] pb-[1em]"
