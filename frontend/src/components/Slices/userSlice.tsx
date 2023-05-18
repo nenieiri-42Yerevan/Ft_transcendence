@@ -27,6 +27,7 @@ interface UserInfo {
   blocked: number[];
   TFA_enabled: boolean;
   TFA_secret: string;
+  user_42: boolean;
 }
 
 interface User {
@@ -60,6 +61,7 @@ export const userSlice = createSlice({
         follows: action.payload.follows,
         blocked: action.payload.blocked,
         TFA_secret: action.payload.TFA_secret,
+        user_42: action.payload.user_42,
       }
       state.user = user;
       state.isLoading = false;

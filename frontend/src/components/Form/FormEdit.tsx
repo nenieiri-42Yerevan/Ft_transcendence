@@ -195,6 +195,8 @@ const FormEdit = (props: any) => {
             </Field>
           </div>
         </div>
+        {!userInfo.user.user_42 && (
+          <>
         <Field<string>
         name="cur_password"
         title={
@@ -275,6 +277,7 @@ const FormEdit = (props: any) => {
           </div>
         )}
       </Field>
+      </>)}
         <hr className="border-1 border-gray-300 "></hr>
         <div className="text-red-900 font-bold flex justify-around">
             <button

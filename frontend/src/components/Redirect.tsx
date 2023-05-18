@@ -20,6 +20,7 @@ const Redirect = () => {
 		console.log(sessionStorage.getItem('access_token'));
 		console.log(sessionStorage.getItem('refresh_token'));
         getUserInfo(navigate).then(userInfo=>{
+            console.log("getuserinfo ", userInfo);
             dispatch(setUserInfo(userInfo));
         })
         .catch(error=>{
