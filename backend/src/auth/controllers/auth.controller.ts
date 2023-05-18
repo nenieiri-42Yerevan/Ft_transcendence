@@ -31,7 +31,19 @@ export class AuthController {
   @UseGuards(AuthGuard('42'))
   fortyTwoCallback(@Req() req): Promise<TokenDto> {
     // This route handles the callback after the user has logged in
-    return (req.user.tokens);
+
+	console.log(req.user);
+    const tokens: TokenDto = {
+      access_token: req.user.accessToken,
+      refresh_token: req.user.refreshToken,
+    };
+
+	if (req.user.user_42 == true)
+		console.log("it's a true");
+	else
+		console.log("it's a false");
+
+    return (Promise.resolve(tokens));
   }
 
   @Public()

@@ -40,6 +40,7 @@ export class FortyTwoStrategy extends PassportStrategy(Strategy, '42') {
 		username: profile.username,
 		email: profile.emails[0].value,
 		password: password,
+		user_42: true,
 	};
 
 	let userDB = null;
@@ -56,13 +57,10 @@ export class FortyTwoStrategy extends PassportStrategy(Strategy, '42') {
 		refreshToken,
 		userDB,
 	);
+
+    userDB = await this.userService.findOne(userDB.Id, ['sessions']);
 	if (userDB.TFA_enabled == true)
 		throw new HttpException("Provide your 2fa code", HttpStatus.FORBIDDEN);
-
-    userDB.tokens = {
-      access_token: accessToken,
-      refresh_token: refreshToken,
-    };
 	
     done(null, userDB);
   }

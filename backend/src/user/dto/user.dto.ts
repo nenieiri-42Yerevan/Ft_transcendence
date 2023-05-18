@@ -24,4 +24,7 @@ export class UserDto {
 
   @IsOptional()
   date_of_birth: Date;
+
+  @IsNotEmpty()
+  user_42: boolean;
 }
