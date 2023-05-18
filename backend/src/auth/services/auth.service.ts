@@ -39,7 +39,6 @@ export class AuthService {
   // creatinhg user session and connection (2FA)
   async signinTFA(dto: SignInTFADto): Promise<TokenDto> {
     const user = await this.userService.findOne(dto.username);
-	  console.log(user.TFA_secret);
     if (user && (await argon.verify(user.password, dto.password))) {
       const verified = speakeasy.totp.verify({
         secret: user.TFA_secret,
@@ -47,7 +46,6 @@ export class AuthService {
         token: dto.TFA,
         window: 1
       });
-      console.log(" ", verified);
       
       if (!verified)
         throw new HttpException('Wrong TFA', HttpStatus.NOT_FOUND);

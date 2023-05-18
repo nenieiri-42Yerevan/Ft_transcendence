@@ -69,7 +69,6 @@ export class SessionService {
 
   async read_RT(refresh_token: string): Promise<Session> {
     let session = null;
-    console.log
     if (refresh_token)
       session = await this.sessionRepo.findOne({ where: { refresh_token } });
 
