@@ -1,5 +1,7 @@
 import React from 'react'
-import { useEffect, useNavigate, useDispatch } from 'react';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import Background from './Background';
 import Cookies from 'js-cookie';
 import { getUserInfo, setUserInfo } from './Slices/userSlice';
@@ -12,9 +14,11 @@ const Redirect = () => {
     useEffect(() => {
         console.log(Cookies.get());
         sessionStorage.setItem('access_token', Cookies.get('access_token'));
-        sessionStorage.setItem('access_token', Cookies.get('refresh_token'));
+        sessionStorage.setItem('refresh_token', Cookies.get('refresh_token'));
         Cookies.remove('access_token');
         Cookies.remove('refresh_token');
+		console.log(sessionStorage.getItem('access_token'));
+		console.log(sessionStorage.getItem('refresh_token'));
         getUserInfo(navigate).then(userInfo=>{
             dispatch(setUserInfo(userInfo));
         })
@@ -38,7 +42,3 @@ const Redirect = () => {
 }
 
 export default Redirect;
-
-function useState(arg0: boolean): [any, any] {
-    throw new Error('Function not implemented.');
-}
