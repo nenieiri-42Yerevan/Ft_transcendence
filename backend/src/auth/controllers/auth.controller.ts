@@ -38,7 +38,7 @@ export class AuthController {
     // This route handles the callback after the user has logged in
 	res.cookie('access_token', req.user.sessions[req.user.sessions.length - 1].access_token);
     res.cookie('refresh_token', req.user.sessions[req.user.sessions.length - 1].refresh_token);
-    res.redirect(`${this.configService.get<string>('FRONT_URL')}/transcendence/user/profile`);
+    res.redirect(`${this.configService.get<string>('FRONT_URL')}/transcendence/redirect`);
   }
 
   @Public()
