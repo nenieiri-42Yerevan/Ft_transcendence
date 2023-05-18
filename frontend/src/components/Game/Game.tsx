@@ -10,7 +10,9 @@ const Game = () => {
   return (
     <>
     <NavBar />
-    {isReady ? <Pong /> : <Menu setReady={setIsReady} />}
+    <div className="flex flex-wrap">
+    {isReady ? <Pong /> : <Menu setIsReady={setIsReady} />}
+    </div>
     </>
   );
 };

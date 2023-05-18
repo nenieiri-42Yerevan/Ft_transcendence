@@ -4,7 +4,6 @@ class Engine extends React.Component {
 
     constructor(props) {
         super(props);
-
         this.divRef = React.createRef();
         this.canvasRef = React.createRef();
         this.state = InitialState();
@@ -14,6 +13,8 @@ class Engine extends React.Component {
         const div = this.divRef.current; 
         const canvas = this.canvasRef.current;
         const ctx = canvas.getContext('2d');
+        this.setState({ mode : this.props.isPreview?1:3 });       
+        if (!this.props.isPreview) this.resetGame(this.state.mode != 1);
         this.animationId = requestAnimationFrame(loop.bind(this));
         window.addEventListener('keydown', this.keyInput);
         function loop() {
@@ -36,7 +37,7 @@ class Engine extends React.Component {
             deltaY:         -0.01 + Math.random() * 0.02, // change ball in  X AXIS
             deltaX:         Math.random() > 0.5 ? 0.005 : -0.005, // change ball in  X AXIS
             ballSpeed:      0.005,
-            pause:          pause, // pause the game
+            pause:          true, // pause the game
             paddleL :       0.5,
             paddleR :       0.5,
         });
