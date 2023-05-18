@@ -7,6 +7,7 @@ import { PassportStrategy } from '@nestjs/passport';
 import { Strategy } from 'passport-42';
 import { ConfigService } from '@nestjs/config';
 import { UserService } from '../../user/services/user.service';
+import { AuthService } from '../services/auth.service';
 import { SessionService } from '../../user/services/session.service';
 import { UserDto } from '../../user/dto';
 import * as crypto from 'crypto';
@@ -17,6 +18,7 @@ export class FortyTwoStrategy extends PassportStrategy(Strategy, '42') {
   	  private configService: ConfigService,
       private userService: UserService,
       private sessionService: SessionService,
+      private authService: AuthService,
 	) {
     super({
       clientID: `${configService.get<string>('API_42_UID')}`,
@@ -52,10 +54,11 @@ export class FortyTwoStrategy extends PassportStrategy(Strategy, '42') {
 			userDB = this.userService.create(user as UserDto);
 	}
 
+	const token = await this.authService.generateJWT(userDB.id, user.username);
 	const new_session = await this.sessionService.create(
-		accessToken,
-		refreshToken,
-		userDB,
+		token.access_token,
+		token.refresh_token,
+		userDB
 	);
 
     userDB = await this.userService.findOne(user.username, ['sessions']);
