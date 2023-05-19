@@ -106,6 +106,7 @@ export class AuthService {
         tokens.refresh_token,
         user,
       );
+	  res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
       res.cookie('access_token', tokens.access_token);
       res.cookie('refresh_token', tokens.refresh_token);
       res.redirect(`${this.configService.get<string>('FRONT_URL')}/transcendence/redirect`);
