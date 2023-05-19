@@ -8,7 +8,6 @@ import { Strategy } from 'passport-42';
 import { ConfigService } from '@nestjs/config';
 import { UserService } from '../../user/services/user.service';
 import { AuthService } from '../services/auth.service';
-import { SessionService } from '../../user/services/session.service';
 import { UserDto } from '../../user/dto';
 import * as crypto from 'crypto';
 
@@ -17,7 +16,6 @@ export class FortyTwoStrategy extends PassportStrategy(Strategy, '42') {
   constructor(
   	  private configService: ConfigService,
       private userService: UserService,
-      private sessionService: SessionService,
       private authService: AuthService,
 	) {
     super({
@@ -55,17 +53,6 @@ export class FortyTwoStrategy extends PassportStrategy(Strategy, '42') {
 		else
 			throw new HttpException("Unexpected error :(", HttpStatus.FORBIDDEN);
 	}
-
-	const token = await this.authService.generateJWT(userDB.id, user.username);
-	const new_session = await this.sessionService.create(
-		token.access_token,
-		token.refresh_token,
-		userDB
-	);
-
-    userDB = await this.userService.findOne(user.username, ['sessions']);
-	if (userDB.TFA_enabled == true)
-		throw new HttpException("Provide your 2fa code", HttpStatus.FORBIDDEN);
 	
     done(null, userDB);
   }

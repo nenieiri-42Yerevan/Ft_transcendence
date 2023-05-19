@@ -1,6 +1,12 @@
-import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
+import {
+  Injectable,
+  HttpException,
+  HttpStatus,
+  Req,
+  Res,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { SignInDto, SignInTFADto, TokenDto } from '../dto';
+import { SignInDto, SignInTFADto, SignInTFAwith42Dto, TokenDto } from '../dto';
 import { UserService } from '../../user/services/user.service';
 import { SessionService } from '../../user/services/session.service';
 import { Session, User } from '../../user/entities';
@@ -36,6 +42,27 @@ export class AuthService {
       throw new HttpException('Wrong password', HttpStatus.NOT_FOUND);
   }
 
+  async fortyTwoCallback(@Res() res, @Req() req) {
+	if (req.user.TFA_enabled == true)
+	{
+		res.cookie('username', req.user.username);
+		res.redirect(`${this.configService.get<string>('FRONT_URL')}/transcendence/tfa_42`);
+	}
+
+	const token = await this.generateJWT(req.user.id, req.user.username);
+	const new_session = await this.sessionService.create(
+		token.access_token,
+		token.refresh_token,
+		req.user
+	);
+
+    const user = await this.userService.findOne(req.user.username, ['sessions']);
+
+	res.cookie('access_token', user.sessions[user.sessions.length - 1].access_token);
+    res.cookie('refresh_token', user.sessions[user.sessions.length - 1].refresh_token);
+    res.redirect(`${this.configService.get<string>('FRONT_URL')}/transcendence/redirect`);
+  }
+
   // creatinhg user session and connection (2FA)
   async signinTFA(dto: SignInTFADto): Promise<TokenDto> {
     const user = await this.userService.findOne(dto.username);
@@ -60,6 +87,29 @@ export class AuthService {
       return tokens;
     } else 
     throw new HttpException('Wrong password', HttpStatus.NOT_FOUND);
+  }
+  
+  async signinTFAwith42(dto: SignInTFAwith42Dto): Promise<TokenDto> {
+    const user = await this.userService.findOne(dto.username);
+    if (user) {
+      const verified = speakeasy.totp.verify({
+        secret: user.TFA_secret,
+        encoding: 'base32',
+        token: dto.TFA,
+        window: 1
+      });
+      
+      if (!verified)
+        throw new HttpException('Wrong TFA', HttpStatus.NOT_FOUND);
+      const tokens = await this.generateJWT(user.id, user.username);
+      const new_session = await this.sessionService.create(
+        tokens.access_token,
+        tokens.refresh_token,
+        user,
+      );
+      return tokens;
+    } else 
+    throw new HttpException('USER NOT FOUND', HttpStatus.NOT_FOUND);
   }
 
   // logout
