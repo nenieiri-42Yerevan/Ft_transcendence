@@ -79,15 +79,16 @@ To be witten...
 
 <br>
 
-| HTTP Verbs | Endpoints                        | Action                             |
-| ---------- | -------------------------------- | ---------------------------------- |
-| POST       | /transcendence/auth/signin/local | To login an existing user account  |
-| POST       | /transcendence/auth/signin/2FA   | To continue login through 2FA      |
-| GET        | /transcendence/auth/signin/42    | To login through 42 API            |
-| POST       | /transcendence/auth/TFA_enable   | To enable 2 factor authentication  |
-| POST       | /transcendence/auth/TFA_disable  | To disable 2 factor authentication |
-| POST       | /transcendence/auth/logout       | To logout                          |
-| POST       | /transcendence/auth/refresh      | To get a new pair of tokens        |
+| HTTP Verbs | Endpoints                         | Action                             |
+| ---------- | --------------------------------- | ---------------------------------- |
+| POST       | /transcendence/auth/signin/local  | To login an existing user account  |
+| POST       | /transcendence/auth/signin/2FA    | To continue login through 2FA      |
+| POST       | /transcendence/auth/signin/2FA_42 | To continue 42 login through 2FA   |
+| GET        | /transcendence/auth/signin/42     | To login through 42 API            |
+| POST       | /transcendence/auth/TFA_enable    | To enable 2 factor authentication  |
+| POST       | /transcendence/auth/TFA_disable   | To disable 2 factor authentication |
+| POST       | /transcendence/auth/logout        | To logout                          |
+| POST       | /transcendence/auth/refresh       | To get a new pair of tokens        |
 
 <br>
 
