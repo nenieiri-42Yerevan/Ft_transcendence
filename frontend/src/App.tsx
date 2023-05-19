@@ -10,6 +10,8 @@ import Settings from './components/Profile/Settings';
 import Welcome from './components/Welcome';
 import Chat from './components/Chat/Chat';
 import Dashboard from "./components/Dashboard";
+import Redirect from './components/Redirect';
+import Tfa_42 from './components/Tfa_42';
 
 const App = (props: any) => {
   return (
@@ -17,6 +19,8 @@ const App = (props: any) => {
       <Router>
         <Routes>
           <Route path="/transcendence" element={<Welcome />} />
+          <Route path="/transcendence/redirect" element={<Redirect />} />
+          <Route path="/transcendence/tfa_42" element={<Tfa_42 />} />
           <Route path="/transcendence/user/signup" element={<SignUp />} />
           <Route path="/transcendence/user/signin" element={<SignIn />} />
           <Route path="/transcendence/user/profile" element={<Profile />} />

@@ -18,10 +18,12 @@ const Edit = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const [enabled, setEnabled] = useState(false);
+    console.log("nnn", userInfo);
+    
     const initialValues = {
-        first_name: userInfo.user.name,
-        last_name: userInfo.user.lastName,
-        username: userInfo.user.username,
+        first_name: userInfo?.user?.name,
+        last_name: userInfo?.user?.lastName,
+        username: userInfo?.user?.username,
       };
     const onSubmit = async (data: EditInfo) => {
         const sendData = {

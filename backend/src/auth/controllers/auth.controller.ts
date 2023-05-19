@@ -11,16 +11,14 @@ import {
 } from '@nestjs/common';
 import { AtGuard, RtGuard } from '../../common/guards';
 import { AuthService } from '../services/auth.service';
-import { SignInDto, SignInTFADto, TokenDto } from '../dto';
+import { SignInDto, SignInTFADto, SignInTFAwith42Dto, TokenDto } from '../dto';
 import { GetUser, GetUserId, Public } from '../../common/decorators';
 import { AuthGuard } from '@nestjs/passport';
-import { ConfigService } from '@nestjs/config';
 
 @Controller('auth')
 export class AuthController {
   constructor(
   	  private authService: AuthService,
-  	  private configService: ConfigService,
   ) {}
 
   @Public()
@@ -36,9 +34,14 @@ export class AuthController {
   @UseGuards(AuthGuard('42'))
   fortyTwoCallback(@Res() res, @Req() req) {
     // This route handles the callback after the user has logged in
-	res.cookie('access_token', req.user.sessions[req.user.sessions.length - 1].access_token);
-    res.cookie('refresh_token', req.user.sessions[req.user.sessions.length - 1].refresh_token);
-    res.redirect(`${this.configService.get<string>('FRONT_URL')}/transcendence/user/profile`);
+    this.authService.fortyTwoCallback(res, req);
+  }
+
+  @Public()
+  @Post('signin/2FA_42')
+  @HttpCode(HttpStatus.OK)
+  signinTFAwith42(@Body() dto: SignInTFAwith42Dto): Promise<TokenDto> {
+    return this.authService.signinTFAwith42(dto);
   }
 
   @Public()

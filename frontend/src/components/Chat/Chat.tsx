@@ -6,93 +6,97 @@ import { selectUser, getUserByName } from '../Slices/userSlice';
 import Modal from "react-modal";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import NewChat from "./NewChat";
+import Background from "../Background";
 
 
 const Chat = () => {
-    const userInfo = useSelector(selectUser);
-    const navigate = useNavigate();
-    useEffect(() => {
-        if (!userInfo.user)
-            navigate("/transcendence/user/signin");
-        else {
-
-        }
-
-    }, []);
-    // const userInfo = useSelector(selectUser);
-    const [isOpen, setIsOpen] = useState(false)
-    const chats = [
-        { user: "user1" },
-        { user: "user2" },
-        { user: "user3" },
-        { user: "user4" },
-        { user: "user4" },
-        { user: "user5" },
-        { user: "user6" },
-        { user: "user7" },
-        { user: "user8" },
-    ];
-    const handleOpenModal = () => {
-        setIsOpen(true);
-    }
-    const handleRequestClose = () => {
-        setIsOpen(false)
-    }
-
-    // const onSubmit = async (data: any) => {
-
-    //     try {
-    //         const response = await axios.post(`${process.env.BACK_URL}/transcendence/user/by-name/${data.name}`, {}, {
-    //             headers: {
-    //                 Authorization: `Bearer ${sessionStorage.getItem('access_token')}`
-    //             }
-    //         });
-    //     } catch (error) {
-    //         return { [FORM_ERROR]: error.response.data.message }
-
-    //     }
-    // };
-
-    // const newChat = async () => {
-    //     axios.post(`/transcendence/chat/create/${userInfo.id}/:tid`)
-    // }
-    //position: fixed; inset: 0px; background-color: rgba(255, 255, 255, 0.75);
     return (
-        <div className="flex flex-col h-screen">
-            <div className="bg-black/90 w-full flex-shrink-0">
-                <nav className="flex flex-row mt-10">
-                    <Link to="#" key={"new_chat"} onClick={handleOpenModal} className="text-gray-400 hover:text-white py-2 px-4 ">New Chat</Link>
-                    <Modal
-                        isOpen={isOpen}
-                        onRequestClose={handleRequestClose}
-                        overlayClassName="fixed inset-0 bg-[#504d4dbf] flex flex-col items-center justify-center "
-                        className="absolute inset-100/2 max-h-[50%] max-w-[50%] w-full h-full  bg-auto overflow-auto rounded-md   outline-none p-0"
+        <>
+        {/* //<!-- This is an example component --> */}
+        <div className="backdrop-blur-md flex flex-col min-h-full min-w-full bg-black/50 z-[668] absolute">
+        <div class="container mx-auto rounded-lg min-h-full">
+            {/* <!-- headaer --> */}
+            <div class="px-5 py-5 flex justify-between items-center bg-[#1E1E1E] border-b-2">
+                <div class="font-semibold text-2xl text-white">GoingChat</div>
+                <div class="w-1/2">
+                    <input
+                        type="text"
+                        name=""
+                        id=""
+                        placeholder="search IRL"
+                        class="rounded-2xl bg-gray-100 py-3 px-5 w-full"
+                    />
+                </div>
+                <div
+                    class="h-12 w-12 p-2 bg-yellow-500 rounded-full text-white font-semibold flex items-center justify-center"
+                >
+                    RA
+                </div>
+            </div>
+            {/* <!-- end header --> */}
+            {/* <!-- Chatting --> */}
+            <div class="flex flex-row justify-between ">
+                {/* <!-- chat list --> */}
+                <div class="flex flex-col w-2/5 border-r-2 overflow-y-auto">
+                    {/* <!-- search compt --> */}
+                    <div class="border-b-2 py-4 px-2 bg-[#1E1E1E]">
+                        <input
+                            type="text"
+                            placeholder="search chatting"
+                            class="py-2 px-2 border-2 border-gray-200 rounded-2xl w-full"
+                        />
+                    </div>
+                    {/* <!-- end search compt --> */}
+                    {/* <!-- user list --> */}
+                    <div
+                        class="flex flex-row py-4 px-2 justify-center items-center border-b-2 bg-[#1E1E1E]"
                     >
-                        <div className="bg-[#201f1fbf] h-full w-full  flex flex-col">
-                            {/* <form action=""></form> */}
-                            <Form
-                                onSubmit={onSubmit}
-                                // validate={validate}
-                                render={NewChat}
+                        <div class="w-1/4">
+                            <img
+                                src="https://source.unsplash.com/_7LbC5J-jw4/600x600"
+                                class="object-cover h-12 w-12 rounded-full"
+                                alt=""
                             />
                         </div>
-                    </Modal>
-                    {
-                        chats && chats.map((elem, index) => (
-                            <a href="#" key={`user_${index}`} className="text-gray-400 hover:text-white py-2 px-4">{elem.user}</a>
-                        ))}
-                </nav>
-            </div>
-            <div className="flex-1 flex flex-col bg-black/90 border border-black">
-                <header className="bg-black shadow py-6 px-4">
-                    <h1 className="text-3xl text-white font-bold">Chat</h1>
-                </header>
-                <main className="flex-1 p-4">
-                </main>
+                        <div class="w-full">
+                            <div class="text-lg font-semibold text-white">Luis1994</div>
+                            <span class="text-gray-500">Pick me at 9:00 Am</span>
+                        </div>
+                    </div>
+                    {/* <!-- end user list --> */}
+                </div>
+                {/* <!-- end chat list --> */}
+                {/* <!-- message --> */}
+                <div class="w-full px-5 flex flex-col justify-between">
+                    <div class="flex flex-col mt-5">
+                        <div class="flex justify-end mb-4">
+                            <div
+                                class="mr-2 py-3 px-4 bg-blue-400 rounded-bl-3xl rounded-tl-3xl rounded-tr-xl text-white"
+                            >
+                                Welcome to group everyone !
+                            </div>
+                            <img
+                                src="https://source.unsplash.com/vpOeXr5wmR4/600x600"
+                                class="object-cover h-8 w-8 rounded-full"
+                                alt=""
+                            />
+                        </div>
+                    </div>
+                    <div class="py-5">
+                        <input
+                            class="w-full bg-gray-300 py-5 px-3 rounded-xl"
+                            type="text"
+                            placeholder="type your message here..."
+                        />
+                    </div>
+                </div>
+                {/* <!-- end message --> */}
             </div>
         </div>
-    );
-};
-Modal.setAppElement('#root');
+    </div>
+    <Background/>
+    </>
+)
+}
 export default Chat;
 

@@ -60,8 +60,8 @@ export const validationSettings = Yup.object().shape({
   .required('Username is required.')
   .min(8, 'At least 8 characters long.')
   .matches(
-    /^[a-zA-Z][a-zA-Z0-9_]{7,}[a-zA-Z0-9]$/,
-    "Contains at least 8 character long.\nShould start with lowercase or uppercase.\nContains lowercase, uppercase, digit or '_'.",
+    /^(?=.{8})[a-zA-Z][a-zA-Z0-9_]{6,}[a-zA-Z0-9]$/,
+    "Contains at least 8 characters.\nShould start with lowercase or uppercase.\nContains lowercase, uppercase, digit, or '_'.",
   ),
   cur_password: Yup.string()
   .min(8, 'At least 8 characters long.')

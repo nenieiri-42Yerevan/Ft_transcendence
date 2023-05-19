@@ -10,6 +10,7 @@ import {TFA} from "../Utils/Scheme";
 
 const getError = (err: any) => {
   if (err.first_name) return err.first_name;
+  if (err.username) return err.username;
   if (err.last_name) return err.last_name;
   if (err.email) return err.email;
   if (err.tfa) return err.tfa;
@@ -134,7 +135,7 @@ const FormEdit = (props: any) => {
         key={'username'}
       >
         {({ input, meta, ...rest }) => (
-          <div className=" flex flex-col gap-y-2 ">
+          <div className={` flex flex-col gap-y-2 ${userInfo && userInfo.user && userInfo.user.user_42 && 'hidden'} `}>
             <label htmlFor="signup-username" className="font-bold">
               Username:
             </label>
@@ -195,6 +196,8 @@ const FormEdit = (props: any) => {
             </Field>
           </div>
         </div>
+        {userInfo && userInfo.user && !userInfo.user.user_42 && (
+          <>
         <Field<string>
         name="cur_password"
         title={
@@ -275,6 +278,7 @@ const FormEdit = (props: any) => {
           </div>
         )}
       </Field>
+      </>)}
         <hr className="border-1 border-gray-300 "></hr>
         <div className="text-red-900 font-bold flex justify-around">
             <button

@@ -27,6 +27,7 @@ interface UserInfo {
   blocked: number[];
   TFA_enabled: boolean;
   TFA_secret: string;
+  user_42: boolean;
 }
 
 interface User {
@@ -60,6 +61,7 @@ export const userSlice = createSlice({
         follows: action.payload.follows,
         blocked: action.payload.blocked,
         TFA_secret: action.payload.TFA_secret,
+        user_42: action.payload.user_42,
       }
       state.user = user;
       state.isLoading = false;
@@ -301,12 +303,6 @@ export const getAvatar = async (flag: number, Navigate, dispatch: any, id: strin
       return(url);
   } 
   catch (error) {
-    console.log("xxx");
-    console.log(error);
-    if (flag == 0)
-      dispatch(setUserImage(null));
-    else if (flag == 1)
-      return (null);
     if (error.response && error.response.status == 401)
     {
       if ((await refreshToken()) != 200) {
@@ -316,6 +312,12 @@ export const getAvatar = async (flag: number, Navigate, dispatch: any, id: strin
         getAvatar(flag, Navigate, dispatch, id);
       }
     }
+    console.log("xxx");
+    console.log(error);
+    if (flag == 0)
+      dispatch(setUserImage(null));
+    else if (flag == 1)
+      return (null);
 
   }
 }
