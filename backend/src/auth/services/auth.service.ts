@@ -47,6 +47,7 @@ export class AuthService {
 	{
 		res.cookie('username', req.user.username);
 		res.redirect(`${this.configService.get<string>('FRONT_URL')}/transcendence/tfa_42`);
+    return ;
 	}
 
 	const token = await this.generateJWT(req.user.id, req.user.username);
