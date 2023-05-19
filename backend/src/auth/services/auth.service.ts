@@ -89,7 +89,7 @@ export class AuthService {
     throw new HttpException('Wrong password', HttpStatus.NOT_FOUND);
   }
   
-  async signinTFAwith42(dto: SignInTFAwith42Dto): Promise<TokenDto> {
+  async signinTFAwith42(dto: SignInTFAwith42Dto, @Res() res) {
     const user = await this.userService.findOne(dto.username);
     if (user) {
       const verified = speakeasy.totp.verify({
@@ -107,7 +107,9 @@ export class AuthService {
         tokens.refresh_token,
         user,
       );
-      return tokens;
+      res.cookie('access_token', user.sessions[user.sessions.length - 1].access_token);
+      res.cookie('refresh_token', user.sessions[user.sessions.length - 1].refresh_token);
+      res.redirect(`${this.configService.get<string>('FRONT_URL')}/transcendence/redirect`);
     } else 
     throw new HttpException('USER NOT FOUND', HttpStatus.NOT_FOUND);
   }
