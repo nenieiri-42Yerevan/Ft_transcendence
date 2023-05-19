@@ -88,7 +88,7 @@ export class AuthService {
     throw new HttpException('Wrong password', HttpStatus.NOT_FOUND);
   }
   
-  async signinTFAwith42(dto: SignInTFAwith42Dto, @Res() res) {
+  async signinTFAwith42(dto: SignInTFAwith42Dto): Promise<TokenDto> {
     const user = await this.userService.findOne(dto.username);
     if (user) {
       const verified = speakeasy.totp.verify({
@@ -99,17 +99,14 @@ export class AuthService {
       });
       
       if (!verified)
-        throw new HttpException('Wrong TFA', HttpStatus.NOT_FOUND);
+        throw new HttpException('Wrong TFA', HttpStatus.UNAUTHORIZED);
       const tokens = await this.generateJWT(user.id, user.username);
       const new_session = await this.sessionService.create(
         tokens.access_token,
         tokens.refresh_token,
         user,
       );
-	  res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
-      res.cookie('access_token', tokens.access_token);
-      res.cookie('refresh_token', tokens.refresh_token);
-      res.redirect(`${this.configService.get<string>('FRONT_URL')}/transcendence/redirect`);
+      return tokens;
     } else 
     throw new HttpException('USER NOT FOUND', HttpStatus.NOT_FOUND);
   }

@@ -40,8 +40,8 @@ export class AuthController {
   @Public()
   @Post('signin/2FA_42')
   @HttpCode(HttpStatus.OK)
-  signinTFAwith42(@Body() dto: SignInTFAwith42Dto, @Res() res) {
-    this.authService.signinTFAwith42(dto, res);
+  signinTFAwith42(@Body() dto: SignInTFAwith42Dto): Promise<TokenDto> {
+    return this.authService.signinTFAwith42(dto);
   }
 
   @Public()
