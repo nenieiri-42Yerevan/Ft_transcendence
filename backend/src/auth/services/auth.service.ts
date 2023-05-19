@@ -50,17 +50,15 @@ export class AuthService {
     return ;
 	}
 
-	const token = await this.generateJWT(req.user.id, req.user.username);
+	const tokens = await this.generateJWT(req.user.id, req.user.username);
 	const new_session = await this.sessionService.create(
-		token.access_token,
-		token.refresh_token,
+		tokens.access_token,
+		tokens.refresh_token,
 		req.user
 	);
 
-    const user = await this.userService.findOne(req.user.username, ['sessions']);
-
-	res.cookie('access_token', user.sessions[user.sessions.length - 1].access_token);
-    res.cookie('refresh_token', user.sessions[user.sessions.length - 1].refresh_token);
+	res.cookie('access_token', tokens.access_token);
+    res.cookie('refresh_token', tokens.refresh_token);
     res.redirect(`${this.configService.get<string>('FRONT_URL')}/transcendence/redirect`);
   }
 
@@ -108,8 +106,8 @@ export class AuthService {
         tokens.refresh_token,
         user,
       );
-      res.cookie('access_token', user.sessions[user.sessions.length - 1].access_token);
-      res.cookie('refresh_token', user.sessions[user.sessions.length - 1].refresh_token);
+      res.cookie('access_token', tokens.access_token);
+      res.cookie('refresh_token', tokens.refresh_token);
       res.redirect(`${this.configService.get<string>('FRONT_URL')}/transcendence/redirect`);
     } else 
     throw new HttpException('USER NOT FOUND', HttpStatus.NOT_FOUND);
