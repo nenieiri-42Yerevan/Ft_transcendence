@@ -196,7 +196,7 @@ const FormEdit = (props: any) => {
             </Field>
           </div>
         </div>
-        {!userInfo.user.user_42 && (
+        {userInfo && userInfo.user && !userInfo.user.user_42 && (
           <>
         <Field<string>
         name="cur_password"
