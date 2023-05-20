@@ -41,7 +41,7 @@ const UserProfile = () => {
     }, [id]);
     if (loaded && userInfo == null)
         return (<h1>User Not Found</h1>);
-    if (id == current.user.id)
+    if (id == current?.user?.id)
         return (
             <Profile/>
         );
