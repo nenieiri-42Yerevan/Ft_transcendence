@@ -31,7 +31,7 @@ const SignUp = () => {
     try {
       await axios.post(
         `${process.env.BACK_URL}/transcendence/user/signup`,
-        sendData,
+        sendData
       );
       navigate('/transcendence/user/signin');
     } catch (error: any) {
