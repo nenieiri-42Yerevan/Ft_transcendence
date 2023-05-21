@@ -107,6 +107,7 @@ export class RoomService {
     if (this.findPlayer(socket.data.user.id)) return;
 
     this.queue.push(socket);
+    socket.emit('add', this.queue.length);
     if (this.queue.length < 2) return;
 
     const room: Room = this.createRoom();

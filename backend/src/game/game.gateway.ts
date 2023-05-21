@@ -29,14 +29,17 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   async handleConnection(client: Socket): Promise<any> {
     try {
+
       const user = await this.authService.retrieveUser(client);
-      if (!user) return client.disconnect();
+      if (!user) { return client.disconnect(); }
 
       await this.userService.setStatus(user.id, Status.GAME);
 
       client.data.user = user;
       client.emit('info', { user });
-    } catch {}
+    } catch (ex){
+      console.log(ex);
+    }
   }
 
   async handleDisconnect(client: Socket): Promise<any> {
@@ -51,10 +54,14 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @SubscribeMessage('add')
   joinQueue(client: Socket): void {
     try {
-      if (!client.data.user) return;
+      if (!client.data.user) {
+          return;
+      }
       this.roomService.addSock(client);
     } catch {}
   }
+ 
+
 
   @SubscribeMessage('join-room')
   joinRoom(client: Socket, code?: string): void {
