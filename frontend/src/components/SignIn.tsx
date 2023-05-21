@@ -26,7 +26,6 @@ const SignIn = () => {
     const navigate = useNavigate();
     const [isError, setIsError] = useState(false);
     const userInfo = useSelector(selectUser); 
-<<<<<<< HEAD
     useEffect(() => {
         if (userInfo && userInfo.user != null && !userInfo.user.isUnAuth) {
             console.log("hhh ", userInfo.user.isUnAuth);
@@ -34,8 +33,6 @@ const SignIn = () => {
             navigate("/transcendence/user/profile");
         }
     }, []);
-=======
->>>>>>> Game
     const onsubmit = async (data: Data) => {
         dispatch(loginRequest());
         const sendData = {
@@ -98,12 +95,8 @@ username: data.login,
         }
     }
     return (
-<<<<<<< HEAD
         <>
             <Signmenu/>
-=======
-            <>
->>>>>>> Game
             {isError ? <Login onSub = {submit2fa} rend = {Form2fa}/> : <Login onSub = {onsubmit} rend = {FormLogin}/>}
             </>
            )

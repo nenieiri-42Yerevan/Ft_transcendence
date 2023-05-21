@@ -39,7 +39,7 @@ const Profilemenu = () => {
             <Link to="/transcendence/user/chat">Chat</Link>
           </li>
           <li>
-            <Link to="#">Game</Link>
+            <Link to="/transcendence/game">Game</Link>
           </li>
           <li>
             <Link to="/transcendence/user/profile">Profile</Link>
