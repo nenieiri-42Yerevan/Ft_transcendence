@@ -3,10 +3,12 @@ import React from 'react';
 import NavBar from "../NavBar";
 import Pong from './Pong';
 import Menu from './Menu';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 const Game = () => {
-    const [isReady, setIsReady] = useState(false); // добавляем новое состояние
+    //const [isReady, setIsReady] = useState(false); // добавляем новое состояние
+    const [isReady, setIsReady] = useState(true); // добавляем новое состояние
+
   return (
     <>
     <NavBar />

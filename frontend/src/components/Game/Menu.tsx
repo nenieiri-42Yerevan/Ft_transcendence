@@ -3,23 +3,14 @@ import { useEffect, useState, useContext } from 'react';
 import { useSelector } from 'react-redux';
 import { Link, useNavigate } from "react-router-dom";
 import { selectUser, getAvatar } from '../Slices/userSlice';
-import { SocketContext } from "../context/SocketContext";
+import { GameContext } from "../context/GameSocket";
 import io from 'socket.io-client';
 import Engine from './Engine';
-
-const wait30Sec = () => {
-    return new Promise(resolve => {
-            setTimeout(() => {
-                    resolve('TimeOut');
-                    }, 30000);
-            });
-};
 
 const searchOpponent = async (player, setLoading, socket) => {
     try {
         setLoading("Searching...");
         socket.emit('add');
-
     } catch (err) {
         setLoading("Error");
         console.error(err);
@@ -28,47 +19,33 @@ const searchOpponent = async (player, setLoading, socket) => {
 
 const Menu = ({setIsReady}) => {
     const userInfo = useSelector(selectUser);
-    const socketOptions = {
-        transportOptions: {
-            polling: {
-                extraHeaders: {
-                    authorization: `Bearer ${sessionStorage.getItem('access_token')}`,
-                },
-            },
-        },
-    };
-    const socket = io('ws://localhost:7000/pong', socketOptions);
     const navigate = useNavigate();
+    const socket = useContext(GameContext);
     const [isLoading, setIsLoading] = useState("Find Game"); // добавляем новое состояние
 
-    socket.on('connect', () => {
-            console.log('Socket connection established!');
-            });
-
-    socket.on('add', (data) => {
-            console.log('Received a message from the backend add:', data);
-            });
-
-    socket.on('ready', (data) => {
-            console.log('Received a message from the backend ready:', data);
-            });
-
-    socket.on('room', (data) => {
-            console.log('Received a message from the backend room code:', data);
-            setIsReady(true);
-            });
-
-    socket.on('error', (error) => {
-            console.error('Socket error:', error);
-            });
-
-    socket.on('disconnect', (data) => {
-            console.log('Socket connection closed.', data);
-            });
 
     useEffect(() => {
-        if (!userInfo) {
+        if (userInfo && !userInfo.user) {
             navigate("/transcendence/user/signin");
+        } else {
+            socket.on('connect', () => {
+                    console.log('Socket connection established!');
+                    });
+
+            socket.on('add', (data) => {
+                    console.log('Received a message from the backend add:', data);
+                    });
+            socket.on('room', (data) => {
+                    console.log('Received a message from the backend room code:', data);
+                    setIsReady(true);
+                    });
+            socket.on('error', (error) => {
+                    console.error('Socket error:', error);
+                    });
+
+            socket.on('disconnect', (data) => {
+                    console.log('Socket connection closed.', data);
+                    });
         }
     },[]);
 

@@ -1,4 +1,5 @@
-import React, {useRef, useEffect, useState, useLayoutEffect} from 'react';
+import React, {useRef, useContext, useEffect, useState, useLayoutEffect} from 'react';
+import { GameContext } from '../context/GameSocket';
 import Menu from './Menu';
 class Engine extends React.Component {
 
@@ -13,9 +14,15 @@ class Engine extends React.Component {
         const div = this.divRef.current; 
         const canvas = this.canvasRef.current;
         const ctx = canvas.getContext('2d');
+        if (!this.props.isPreview) {
+            const socket = useContext(GameContext);
+            this.setState({ gameSocket : socket });
+        }
         this.setState({ mode : this.props.isPreview?1:3 });       
+        
         if (!this.props.isPreview) this.resetGame(this.state.mode != 1);
-        this.animationId = requestAnimationFrame(loop.bind(this));
+       
+       this.animationId = requestAnimationFrame(loop.bind(this));
         window.addEventListener('keydown', this.keyInput);
         function loop() {
             canvas.width = div.offsetWidth;
@@ -27,6 +34,7 @@ class Engine extends React.Component {
 
     componentWillUnmount() {
         cancelAnimationFrame(this.animationId);
+       // this.state.socket.off();
     }
 
     /* reset the game */
