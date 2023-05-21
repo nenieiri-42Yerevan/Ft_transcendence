@@ -1,102 +1,37 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
-import { useSelector } from 'react-redux';
-import { Form } from "react-final-form";
-import { selectUser, getUserByName } from '../Slices/userSlice';
-import Modal from "react-modal";
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import NewChat from "./NewChat";
-import Background from "../Background";
-
+import Header from "./Header";
+import Users from "./Users";
+import Messages from "./Messages";
 
 const Chat = () => {
-    return (
-        <>
-        {/* //<!-- This is an example component --> */}
-        <div className="backdrop-blur-md flex flex-col min-h-full min-w-full bg-black/50 z-[668] absolute">
-        <div class="container mx-auto rounded-lg min-h-full">
-            {/* <!-- headaer --> */}
-            <div class="px-5 py-5 flex justify-between items-center bg-[#1E1E1E] border-b-2">
-                <div class="font-semibold text-2xl text-white">GoingChat</div>
-                <div class="w-1/2">
-                    <input
-                        type="text"
-                        name=""
-                        id=""
-                        placeholder="search IRL"
-                        class="rounded-2xl bg-gray-100 py-3 px-5 w-full"
-                    />
-                </div>
-                <div
-                    class="h-12 w-12 p-2 bg-yellow-500 rounded-full text-white font-semibold flex items-center justify-center"
-                >
-                    RA
-                </div>
-            </div>
-            {/* <!-- end header --> */}
-            {/* <!-- Chatting --> */}
-            <div class="flex flex-row justify-between ">
-                {/* <!-- chat list --> */}
-                <div class="flex flex-col w-2/5 border-r-2 overflow-y-auto">
-                    {/* <!-- search compt --> */}
-                    <div class="border-b-2 py-4 px-2 bg-[#1E1E1E]">
-                        <input
-                            type="text"
-                            placeholder="search chatting"
-                            class="py-2 px-2 border-2 border-gray-200 rounded-2xl w-full"
-                        />
-                    </div>
-                    {/* <!-- end search compt --> */}
-                    {/* <!-- user list --> */}
-                    <div
-                        class="flex flex-row py-4 px-2 justify-center items-center border-b-2 bg-[#1E1E1E]"
-                    >
-                        <div class="w-1/4">
-                            <img
-                                src="https://source.unsplash.com/_7LbC5J-jw4/600x600"
-                                class="object-cover h-12 w-12 rounded-full"
-                                alt=""
-                            />
-                        </div>
-                        <div class="w-full">
-                            <div class="text-lg font-semibold text-white">Luis1994</div>
-                            <span class="text-gray-500">Pick me at 9:00 Am</span>
-                        </div>
-                    </div>
-                    {/* <!-- end user list --> */}
-                </div>
-                {/* <!-- end chat list --> */}
-                {/* <!-- message --> */}
-                <div class="w-full px-5 flex flex-col justify-between">
-                    <div class="flex flex-col mt-5">
-                        <div class="flex justify-end mb-4">
-                            <div
-                                class="mr-2 py-3 px-4 bg-blue-400 rounded-bl-3xl rounded-tl-3xl rounded-tr-xl text-white"
-                            >
-                                Welcome to group everyone !
-                            </div>
-                            <img
-                                src="https://source.unsplash.com/vpOeXr5wmR4/600x600"
-                                class="object-cover h-8 w-8 rounded-full"
-                                alt=""
-                            />
-                        </div>
-                    </div>
-                    <div class="py-5">
-                        <input
-                            class="w-full bg-gray-300 py-5 px-3 rounded-xl"
-                            type="text"
-                            placeholder="type your message here..."
-                        />
-                    </div>
-                </div>
-                {/* <!-- end message --> */}
-            </div>
+  return (
+    <div className="container bg-[#262525]">
+      <div className="min-w-full border rounded lg:grid lg:grid-cols-3">
+        <div className="border-r border-[#393939] lg:col-span-1">
+          <Header/>
+          <Users/>
         </div>
+        <div className="hidden lg:col-span-2 lg:block">
+          <div className="w-full">
+            <Messages/>
+            <div className="flex items-center justify-between w-full p-3 border-t border-[#393939]">
+              <input type="text" placeholder="Message"
+                className="block w-full py-2 pl-4 mx-3 bg-gray-100 rounded-full outline-none focus:text-gray-700"
+                name="message" required />
+              <button type="submit">
+                <svg className="w-5 h-5 text-gray-500 origin-center transform rotate-90" xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20" fill="currentColor">
+                  <path
+                    d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-    <Background/>
-    </>
-)
+  )
 }
 export default Chat;
 
