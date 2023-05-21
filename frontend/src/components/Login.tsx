@@ -6,7 +6,7 @@ import Background from "./Background";
 const Login = (props)=>{ 
     return (
         <>
-            <div className="backdrop-blur-md p-0 flex-row lg:px-4 xl:px-16 bg-black/50 min-w-full min-h-full z-[668] absolute flex justify-between bg-clip-padding">
+            <div className="bg-[#262525] p-0 flex-row lg:px-4 xl:px-16 flex justify-between">
                 <div className="h-screen ml-64 items-center text-lg md:text-2xl pt-10 justify-center hidden sm:hidden lg:flex  lg:justify-center xl:flex xl:justify-center " >
                     <p className="text-3xl md:text-5xl text-center">enjoy the <b className="text-red-900">Game</b></p>
                 </div>
@@ -18,7 +18,6 @@ const Login = (props)=>{
                     </Form>
                 </div>
             </div>
-            <Background />
         </>
     )
 }

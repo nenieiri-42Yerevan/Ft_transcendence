@@ -31,12 +31,11 @@ const Redirect = () => {
     }, []);
     return (
         <>
-            <div className="backdrop-blur-md flex flex-col min-h-full min-w-full bg-black/50 z-[668] absolute">
+            <div className="flex flex-col bg-[#121212] ">
                 <div>
                     
                 </div>
             </div>
-            <Background />
         </>
     );
 

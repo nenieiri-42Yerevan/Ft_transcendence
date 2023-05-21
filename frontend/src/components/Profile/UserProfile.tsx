@@ -47,7 +47,7 @@ const UserProfile = () => {
         );
     return (
         <>
-        <div className="backdrop-blur-md flex flex-col min-h-full min-w-full bg-black/50 z-[668] absolute">
+        <div className="flex flex-col bg-[#262525]">
             <Profilmenu/>
             <div className = "flex md:flex-row flex-col justify-between min-h-screen min-w-full">
                 <UserHeader loaded = {loaded} photo = {photo} userInfo = {userInfo} current = {current} id = {id}/>
@@ -68,7 +68,6 @@ const UserProfile = () => {
             </div>
             <Footer/>
         </div>
-        <Background/>
         </>
     ); 
 }

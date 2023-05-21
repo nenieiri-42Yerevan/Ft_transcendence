@@ -56,13 +56,12 @@ const Edit = () => {
     return (
         <>
         <Profilemenu/>
-        <div className="  py-0 md:py-6 text-xs xl:text-xl gap-x-0 md:gap-x-4 lg:text-lg md:text-md sm:text-sm backdrop-blur-md p-0 lg:p-2 xl:p-3 bg-black/50 min-w-full min-h-full z-[668] absolute flex justify-center bg-clip-padding">
-            <div className="flex flex-col justify-center md:text-lg items-center min-w-full min-h-screen md:min-w-fit md:min-h-fit">
+        <div className=" text-xs xl:text-x lg:text-lg md:text-md sm:text-sm bg-[#262525] flex justify-center">
+            <div className="flex flex-col justify-center md:text-lg items-center min-w-full min-h-screen md:min-w-fit ">
                 {enabled && <Tfa user = {userInfo.user}  enabled={enabled}  onEnableChange={handleEnableChange}/>}
                 <Form onSubmit={onSubmit} validate={validateSettings} render={FormEdit}  initialValues={initialValues}/>
             </div>
         </div>
-        <Background />
         </>
     );
     };

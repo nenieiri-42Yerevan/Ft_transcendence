@@ -19,7 +19,7 @@ const Welcome = () => {
 
   return (
     <>
-      <div className="items-center justify-center bg-black/50 absolute backdrop-blur-md z-[668] min-w-full min-h-full">
+      <div className="items-center justify-center bg-[#262525]">
         <div className="flex justify-center flex-col md:flex-row m-5">
           <Link
             to="./user/SignUp"
@@ -76,7 +76,6 @@ const Welcome = () => {
           </div>
         </div>
       </div>
-      <Background />
     </>
   );
 };
