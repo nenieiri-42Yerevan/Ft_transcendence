@@ -3,8 +3,31 @@ import React, { useState, useEffect } from "react";
 import Header from "./Header";
 import Users from "./Users";
 import Messages from "./Messages";
+import { useSelector } from 'react-redux';
+import { selectUser } from "../Slices/userSlice";
+import { io } from 'socket.io-client';
+
+const socketOptions = {
+  transportOptions: {
+      polling: {
+          extraHeaders: {
+              authorization: `Bearer ${sessionStorage.getItem('access_token')}`,
+              },
+          },
+      }
+  };
+
+  const chatSocket = io(`ws://loacalhost:7000/transcendence/chat`, socketOptions);
 
 const Chat = () => {
+  const userInfo = useSelector(selectUser);
+  const [currentMessage, setCurrentMessage] = useState("");
+  const [messageList, setMessageList] = useState([]);
+  useEffect(()=>{
+    
+
+
+  }, [chatSocket])
   return (
     <div className="container bg-[#262525]">
       <div className="min-w-full border rounded lg:grid lg:grid-cols-3">
