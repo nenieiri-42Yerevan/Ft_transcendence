@@ -45,7 +45,7 @@ class Engine extends React.Component {
             deltaY:         -0.01 + Math.random() * 0.02, // change ball in  X AXIS
             deltaX:         Math.random() > 0.5 ? 0.005 : -0.005, // change ball in  X AXIS
             ballSpeed:      0.005,
-            pause:          true, // pause the game
+            pause:          false, // pause the game
             paddleL :       0.5,
             paddleR :       0.5,
         });
@@ -181,40 +181,6 @@ class Engine extends React.Component {
     }
 
     /* handle the keyinput */ 
-    keyInput = ({keyCode}) => {
-        const PLAYER_UP   = 73;  // i
-        const PLAYER_DOWN = 75;  // k
-        const OPPONENT_UP    = 87; /* w */
-        const OPPONENT_DOWN    = 83; /* s */
-        const PAUSE    = 32; /* space */
-        
-        console.log(keyCode);
-        switch (keyCode) {
-            case PLAYER_UP: {
-                if (this.state.paddleL > 0.05) 
-                    this.setState({ paddleL : this.state.paddleL - 0.025 });
-                break;
-            }
-            case PLAYER_DOWN: {
-                if (this.state.paddleL < 0.95) 
-                    this.setState({ paddleL : this.state.paddleL + 0.025 });
-                break;
-            }
-            case OPPONENT_UP: {
-                if (this.state.paddleR > 0.05) 
-                    this.setState({ paddleR : this.state.paddleR - 0.025 });
-                break;
-            }
-            case OPPONENT_DOWN:{
-                if (this.state.paddleR < 0.95) 
-                    this.setState({ paddleR : this.state.paddleR + 0.025 });
-                break;
-            }
-            case PAUSE:
-                this.setState({pause: !this.state.pause});
-                break;
-        }   
-    }
 
     handleMatchmaking = (num:Number) => {
         this.setState({

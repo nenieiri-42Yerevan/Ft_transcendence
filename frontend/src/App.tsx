@@ -15,6 +15,7 @@ import Tfa_42 from './components/Tfa_42';
 import Game from "./components/Game/Game";
 
 const App = (props: any) => {
+   
   return (
     <>
       <Router>

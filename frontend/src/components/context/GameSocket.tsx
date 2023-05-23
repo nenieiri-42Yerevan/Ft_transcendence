@@ -9,6 +9,8 @@ const socketOptions = {
             },
         },
     },
+    autoConnect: false,
+
 };
 export const socket = io(`${process.env.BACK_URL}/pong`, socketOptions);
 export const GameContext = createContext<Socket>(socket);

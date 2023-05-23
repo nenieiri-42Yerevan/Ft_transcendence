@@ -4,51 +4,29 @@ import { useEffect, useState, useContext, useRef } from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import { GameContext } from '../context/GameSocket';
 import { Modal, Button } from 'react-bootstrap';
-const Multiplayer = () => {
+
+
+
+const Multiplayer = (props) => {
+    const { gameSocket, id } = props;
    const canvasRef = useRef(null);
    const parentRef = useRef(null);
-   const socket = useContext(GameContext);
    const paddleWidth = 20 / 1080;
    const paddleHeight = 200 / 1920;
    var ballPosition = [0.5, 0.5];
    var ballRadius = 20 / 1080;
    var paddlePos = [[0, 0.5], [1 - paddleWidth, 0.5]];
-    var opponentId = -1, myId = -1;
-    var score = [0, 0];
-    const navigate = useNavigate();
-   socket.on('ready', (data) => {
-        console.log("Ready: ", data);
-   });
+   var score = [0, 0];
+   const navigate = useNavigate();
     
-    socket.on('start', (data) => {
-        console.log("Game data: ", data);
-    });
-
-   socket.on('disconnect', (data) => {
-        console.log('Socket closed: ', data);
-   });
-
-    socket.on('add', (data) => {
-       console.log('Received a message from the backend add:', data);
-       myId = data - 1;
-       opponentId = myId == 1 ? 0 : 1;
-   });
-
-   socket.on('connect', () => {
-        console.log('Socket connected');
-   });
-
-   socket.on('room', (data) => {
-       console.log('Received a message from the backend room code:', data);
-   });
-
-   socket.on('tray', (data, pos) => {
-       paddlePos[data - 1][1] = pos; 
-   });
+    gameSocket.on('tray', (data, pos) => {
+            paddlePos[data - 1][1] = pos; 
+        });
 
    useEffect(() => {
     // Initialize Paper JS
     paper.setup(canvasRef.current);
+ 
 
     var pW = view.size.width * paddleWidth;
     var pH = view.size.height * paddleHeight;
@@ -76,7 +54,7 @@ const Multiplayer = () => {
                 fillColor: 'green'
             });
 
-   socket.on('ball', (data) => {
+   gameSocket.on('ball', (data) => {
     ball.position = normalize(data);
    });
     // Create text
@@ -100,13 +78,44 @@ const Multiplayer = () => {
                 justification: 'center' 
             });
 
-    socket.on('score', (data) => {
-        score = data;
+    var readyText = new PointText({
+                point: view.center,
+                content: `Are you Ready?\nPress Space...`,
+                fillColor: 'white',
+                fontFamily: 'Arial',
+                fontWeight: 'bold',
+                fontSize: pH/2,
+                justification: 'center' 
+    });
+
+    async function timer() {
+         let counter = 3;
+
+         const interval = setInterval(() => {
+                 counter--;
+                readyText.content = `Game start in ${counter}...`;
+            }, 1000);
+
+         await new Promise((resolve) => setTimeout(resolve, 3000));
+            gameSocket.emit('start');
+            readyText.remove();
+         clearInterval(interval);
+    }
+
+   gameSocket.on('ready', (data) => {
+        console.log("Ready: ", data);
+        timer();
+
+   });
+
+    gameSocket.on('score', (data) => {
         scoreText.content = `${data[0]} : ${data[1]}`; 
         if (data[0] == 10 || data[1] == 10) {
            navigate("/transcendence/user/dashboard"); 
         }
     });
+
+
     const handleResize = () => {
       paper.view.viewsize.width = parentRef.current.offsetwidth;
       paper.view.viewsize.height = parentRef.current.offsetheight;
@@ -118,38 +127,30 @@ const Multiplayer = () => {
       scoreText.fontSize = pH/2;
       pingpong.position = [view.center.x, pH * 0.75];
       pingpong.fontSize = pH * 0.75;
-      paddleL.position = [pW/2, (paddlePos[0][1] - paddleHeight/2) * view.size.height];
-      paddleR.position = [view.size.width - pW/2, (paddlePos[1][1] - paddleHeight/2) * view.size.height];
+      paddleL.position = [pW/2, (paddlePos[0][1] + paddleHeight/2) * view.size.height];
+      paddleR.position = [view.size.width - pW/2, (paddlePos[1][1] + paddleHeight/2) * view.size.height];
     }
 
      paper.view.onFrame = (event) => {
         ball.fillColor.hue += 1;
-        paddleL.position = [pW/2, (paddlePos[0][1] - paddleHeight / 2) * view.size.height];
-        paddleR.position = [view.size.width - pW/2, (paddlePos[1][1] - paddleHeight / 2) * view.size.height];
+        paddleL.position = [pW/2, (paddlePos[0][1] + paddleHeight / 2) * view.size.height];
+        paddleR.position = [view.size.width - pW/2, (paddlePos[1][1] + paddleHeight / 2) * view.size.height];
 
     }
 
     paper.view.onKeyDown = (event) => {
-        console.log(event.key);
-        if (event.key == 'w' && paddlePos[myId][1] > paddleHeight) {
-            socket.emit('update-tray', (paddlePos[myId][1] - 0.02));
+        console.log(id);
+        if (event.key == 'w' && paddlePos[id][1] > 0) {
+            gameSocket.emit('update-tray', (paddlePos[id][1] - 0.02));
         }
 
-        if (event.key == 's' && paddlePos[myId][1] < 1) {
-            socket.emit('update-tray', (paddlePos[myId][1] + 0.02));
+        if (event.key == 's' && paddlePos[id][1] < 1 - paddleHeight) {
+            gameSocket.emit('update-tray', (paddlePos[id][1] + 0.02));
         }
 
         if (event.key == 'space') {
-            socket.emit('ready', { plan : 0, mode : 0 });
-        }
-
-        if (event.key == '1') {
-            socket.emit('add');
-            socket.emit('update-tray', 0.5);
-        }
-        
-        if (event.key == 'g') {
-            socket.emit('start');
+            gameSocket.emit('ready', { plan : 0, mode : 0 });
+            readyText.content = "Wait another player...";
         }
     }
     const  normalize = (coordinate: [number, number]): number[] => {

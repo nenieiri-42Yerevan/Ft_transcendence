@@ -1,53 +1,23 @@
 import React from 'react';
-import { useEffect, useState, useContext } from 'react';
-import { useSelector } from 'react-redux';
+import { useState } from 'react';
 import { Link, useNavigate } from "react-router-dom";
-import { selectUser, getAvatar } from '../Slices/userSlice';
-import { GameContext } from "../context/GameSocket";
-import io from 'socket.io-client';
 import Engine from './Engine';
 
-const searchOpponent = async (player, setLoading, socket) => {
-    try {
-        setLoading("Searching...");
-        socket.emit('add');
-    } catch (err) {
-        setLoading("Error");
-        console.error(err);
-    }
-}
 
-const Menu = ({setIsReady}) => {
-    const userInfo = useSelector(selectUser);
+const Menu = (props) => {
+    const { gameSocket } = props;
     const navigate = useNavigate();
-    const socket = useContext(GameContext);
     const [isLoading, setIsLoading] = useState("Find Game"); // добавляем новое состояние
 
-
-    useEffect(() => {
-        if (userInfo && !userInfo.user) {
-            navigate("/transcendence/user/signin");
-        } else {
-            socket.on('connect', () => {
-                    console.log('Socket connection established!');
-                    });
-
-            socket.on('add', (data) => {
-                    console.log('Received a message from the backend add:', data);
-                    });
-            socket.on('room', (data) => {
-                    console.log('Received a message from the backend room code:', data);
-                    setIsReady(true);
-                    });
-            socket.on('error', (error) => {
-                    console.error('Socket error:', error);
-                    });
-
-            socket.on('disconnect', (data) => {
-                    console.log('Socket connection closed.', data);
-                    });
+    const searchOpponent = () => {
+        try {
+            setIsLoading("Searching...");
+            gameSocket.emit('add');
+        } catch (err) {
+            setIsLoading("Error");
+            console.error(err);
         }
-    },[]);
+    }
 
   return (
       <div className='w-screen h-screen justify-center relative'> 
@@ -59,7 +29,7 @@ const Menu = ({setIsReady}) => {
             <h1 className="text-2xl font-bold text-center mb-4">Pong Game</h1>
             <button
                 className="bg-gray-700 hover:bg-gray-950 text-white font-bold py-2 px-4 rounded w-1/2 mb-4"
-                onClick={() => searchOpponent(userInfo, setIsLoading, socket)}
+                onClick={() => searchOpponent()}
             >
                 {isLoading}
             </button>
@@ -71,6 +41,6 @@ const Menu = ({setIsReady}) => {
           </div>
           </div>
       </div>
-    );
+    ) ;
 };
 export default Menu;
