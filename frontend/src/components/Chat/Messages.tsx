@@ -14,8 +14,6 @@ const Messages = ()=>{
               </ul>
             </div>
     )
-
-
 };
 
 export default Messages;
