@@ -15,16 +15,16 @@ import ActiveChallenges from './RequestsBoard';
 
 const Dashboard = () => {
     
-    const navigate = useNavigate();
-    const dispatch = useDispatch();
-
     const userInfo = useSelector(selectUser);
+    const navigate = useNavigate();
+   // const dispatch = useDispatch();
     useEffect(() => {
         if (!userInfo.user)
             navigate("/transcendence/user/signin");
         else {
-            fetchFriendsData(0, dispatch, userInfo.user);
-            fetchMatches(0, dispatch, userInfo.user);
+            console.log(userInfo.user);
+           // fetchFriendsData(0, dispatch, userInfo.user);
+           // fetchMatches(0, dispatch, userInfo.user);
             console.log("nn");
             console.log(userInfo);     
         }
@@ -32,7 +32,7 @@ const Dashboard = () => {
       return (
         <>
             <Navigation activeTab={'Dashboard'} userName={userInfo.user.name} avatar={userInfo.user.img}/>
-            <div className="  py-0 md:py-6 text-xs xl:text-xl gap-x-0 md:gap-x-4 lg:text-lg md:text-md sm:text-sm backdrop-blur-md p-0 lg:p-2 xl:p-3 bg-dark-blue min-w-full min-h-full z-[668] absolute flex justify-center space-between bg-clip-padding text-white text-2xl">
+            <div className=" bg-[#262525] py-0 md:py-6 text-xs xl:text-xl gap-x-0 md:gap-x-4 lg:text-lg md:text-md sm:text-sm backdrop-blur-md p-0 lg:p-2 xl:p-3 bg-dark-blue min-w-full min-h-full z-[668] absolute flex justify-center space-between bg-clip-padding text-white text-2xl">
                 <div className='flex w-full'>
                 <div className='flex w-1/6'> 
                     <form className='flex items-start'>
@@ -45,7 +45,6 @@ const Dashboard = () => {
                 <LeaderBoard userInfo={userInfo} />
                 </div>
             </div>
-            <Background/>
         </>
     );
 }

@@ -12,8 +12,10 @@ import Chat from './components/Chat/Chat';
 import Dashboard from "./components/Dashboard";
 import Redirect from './components/Redirect';
 import Tfa_42 from './components/Tfa_42';
+import Game from "./components/Game/Game";
 
 const App = (props: any) => {
+   
   return (
     <>
       <Router>
@@ -28,6 +30,7 @@ const App = (props: any) => {
           <Route path="/transcendence/user/profile/settings" element={<Settings />} />
           <Route path="/transcendence/user/dashboard" element={<Dashboard />} />
           <Route path="/transcendence/user/chat" element={<Chat />} />
+          <Route path="/transcendence/game" element={<Game />} />
         </Routes>
       </Router>
     </>

@@ -8,13 +8,13 @@ RUN mkdir -p /backend
 # Set the working directory to /app
 WORKDIR /backend
 
-COPY --chown=node:node package*.json .
+COPY --chown=node:node package*.json ./
 
 # Install dependencies in the backend folder
 RUN npm install
 
 # Copy the backend folder into the container
-COPY --chown=node:node . .
+COPY --chown=node:node ./ ./
 
 
 

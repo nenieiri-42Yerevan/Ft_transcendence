@@ -37,12 +37,12 @@ const SignIn = () => {
         dispatch(loginRequest());
         const sendData = {
             username: data.login,
-            password: data.password,
+          password: data.password,
         };
         try {
             const response = await axios
                 .post(`${process.env.BACK_URL}/transcendence/auth/signin/local`, sendData)
-            const accessToken = response.data.access_token;
+                const accessToken = response.data.access_token;
             const refreshToken = response.data.refresh_token;
             if (!refreshToken) {
                 return { [FORM_ERROR]: "Something is wrong" }
@@ -62,21 +62,21 @@ const SignIn = () => {
             else
             {
                 dispatch(loginFailure(error.response.data.message))
-                return { [FORM_ERROR]: error.response.data.message }
+                    return { [FORM_ERROR]: error.response.data.message }
             }
         }
     }
     const submit2fa = async (data)=>{
         dispatch(loginRequest());
         const sendData = {
-            username: data.login,
-            password: data.password,
-            TFA: data.tfa,
+username: data.login,
+          password: data.password,
+          TFA: data.tfa,
         };
         try {
             const response = await axios
-            .post(`${process.env.BACK_URL}/transcendence/auth/signin/2FA`, sendData)
-            const accessToken = response.data.access_token;
+                .post(`${process.env.BACK_URL}/transcendence/auth/signin/2FA`, sendData)
+                const accessToken = response.data.access_token;
             const refreshToken = response.data.refresh_token;
             if (!refreshToken) {
                 return { [FORM_ERROR]: "Something is wrong" }
@@ -91,14 +91,14 @@ const SignIn = () => {
         catch(error)
         {
             dispatch(loginFailure(error.response.data.message))
-            return { [FORM_ERROR]: error.response.data.message }
+                return { [FORM_ERROR]: error.response.data.message }
         }
     }
     return (
         <>
             <Signmenu/>
             {isError ? <Login onSub = {submit2fa} rend = {Form2fa}/> : <Login onSub = {onsubmit} rend = {FormLogin}/>}
-        </>
-    )
+            </>
+           )
 }
 export default SignIn;

@@ -15,7 +15,7 @@ COPY --chown=node:node package*.json ./
 RUN npm install
 
 # Copy the frontend folder into the container
-COPY --chown=node:node . .
+COPY --chown=node:node ./ ./
 
 
 # # Build the app for production

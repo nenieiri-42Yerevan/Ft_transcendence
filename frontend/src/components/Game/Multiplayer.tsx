@@ -1,0 +1,177 @@
+import React from 'react';
+import { paper, Path, view, PointText }  from 'paper';
+import { useEffect, useState, useContext, useRef } from 'react';
+import { Link, useNavigate } from "react-router-dom";
+import { GameContext } from '../context/GameSocket';
+import { Modal, Button } from 'react-bootstrap';
+
+
+
+const Multiplayer = (props) => {
+    const { gameSocket, id } = props;
+   const canvasRef = useRef(null);
+   const parentRef = useRef(null);
+   const paddleWidth = 20 / 1080;
+   const paddleHeight = 200 / 1920;
+   var ballPosition = [0.5, 0.5];
+   var ballRadius = 20 / 1080;
+   var paddlePos = [[0, 0.5], [1 - paddleWidth, 0.5]];
+   var score = [0, 0];
+   const navigate = useNavigate();
+    
+    gameSocket.on('tray', (data, pos) => {
+            paddlePos[data - 1][1] = pos; 
+        });
+
+   useEffect(() => {
+    // Initialize Paper JS
+    paper.setup(canvasRef.current);
+ 
+
+    var pW = view.size.width * paddleWidth;
+    var pH = view.size.height * paddleHeight;
+
+ //   console.log(view.center);
+ //   console.log(view.size);
+
+    // Create paddles
+    const paddleL = new paper.Path.Rectangle({
+      point: [0, (paddlePos[0][1] - paddleHeight/2) * view.size.height] ,
+      size: [pW, pH],
+      fillColor: 'white'
+    });
+
+    const paddleR = new paper.Path.Rectangle({
+      point: [view.size.width - pW, (paddlePos[1][1] - paddleHeight/2) * view.size.height] ,
+      size: [pW, pH],
+      fillColor: 'white'
+    });
+
+    // Create ball
+    var ball = new Path.Circle({
+                center: [(ballPosition[0] * view.size.width), (ballPosition[1] * view.size.height) - ballRadius],
+                radius: ballRadius * view.size.height,
+                fillColor: 'green'
+            });
+
+   gameSocket.on('ball', (data) => {
+    ball.position = normalize(data);
+   });
+    // Create text
+    var pingpong = new PointText({
+                point: [view.center.x, pH * 0.75],
+                content: `PING PONG`,
+                fillColor: 'white',
+                fontFamily: 'Arial',
+                fontWeight: 'bold',
+                fontSize: pH * 0.75,
+                justification: 'center' 
+            });
+
+    var scoreText = new PointText({
+                point: [view.center.x, pH * 1.25],
+                content: `0 : 0`,
+                fillColor: 'white',
+                fontFamily: 'Arial',
+                fontWeight: 'bold',
+                fontSize: pH/2,
+                justification: 'center' 
+            });
+
+    var readyText = new PointText({
+                point: view.center,
+                content: `Are you Ready?\nPress Space...`,
+                fillColor: 'white',
+                fontFamily: 'Arial',
+                fontWeight: 'bold',
+                fontSize: pH/2,
+                justification: 'center' 
+    });
+
+    async function timer() {
+         let counter = 3;
+
+         const interval = setInterval(() => {
+                 counter--;
+                readyText.content = `Game start in ${counter}...`;
+            }, 1000);
+
+         await new Promise((resolve) => setTimeout(resolve, 3000));
+            gameSocket.emit('start');
+            readyText.remove();
+         clearInterval(interval);
+    }
+
+   gameSocket.on('ready', (data) => {
+        console.log("Ready: ", data);
+        timer();
+
+   });
+
+    gameSocket.on('score', (data) => {
+        scoreText.content = `${data[0]} : ${data[1]}`; 
+        if (data[0] == 10 || data[1] == 10) {
+           navigate("/transcendence/user/dashboard"); 
+        }
+    });
+
+
+    const handleResize = () => {
+      paper.view.viewsize.width = parentRef.current.offsetwidth;
+      paper.view.viewsize.height = parentRef.current.offsetheight;
+      pW = view.size.width * paddleWidth;
+      pH = view.size.height * paddleHeight;  
+      ball.position =  [(ballPosition[0] * view.size.width) - ballRadius, (ballPosition[1] * view.size.height) - ballRadius];
+      ball.radius = ballRadius * view.size.height;
+      scoreText.position = [view.center.x, pH * 1.25];
+      scoreText.fontSize = pH/2;
+      pingpong.position = [view.center.x, pH * 0.75];
+      pingpong.fontSize = pH * 0.75;
+      paddleL.position = [pW/2, (paddlePos[0][1] + paddleHeight/2) * view.size.height];
+      paddleR.position = [view.size.width - pW/2, (paddlePos[1][1] + paddleHeight/2) * view.size.height];
+    }
+
+     paper.view.onFrame = (event) => {
+        ball.fillColor.hue += 1;
+        paddleL.position = [pW/2, (paddlePos[0][1] + paddleHeight / 2) * view.size.height];
+        paddleR.position = [view.size.width - pW/2, (paddlePos[1][1] + paddleHeight / 2) * view.size.height];
+
+    }
+
+    paper.view.onKeyDown = (event) => {
+        console.log(id);
+        if (event.key == 'w' && paddlePos[id][1] > 0) {
+            gameSocket.emit('update-tray', (paddlePos[id][1] - 0.02));
+        }
+
+        if (event.key == 's' && paddlePos[id][1] < 1 - paddleHeight) {
+            gameSocket.emit('update-tray', (paddlePos[id][1] + 0.02));
+        }
+
+        if (event.key == 'space') {
+            gameSocket.emit('ready', { plan : 0, mode : 0 });
+            readyText.content = "Wait another player...";
+        }
+    }
+    const  normalize = (coordinate: [number, number]): number[] => {
+        var pos = [0, 0];
+        pos[0] = coordinate.x / 1920 * view.size.width;
+        pos[1] = coordinate.y / 1080 * view.size.height;
+        return pos; 
+    }
+
+    window.addEventListener('resize', handleResize);
+    
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+  return (
+        <div className='w-full h-full' ref={parentRef}>
+            <canvas ref={canvasRef} className='w-full h-full' />
+                </div>
+  );
+}
+
+export default Multiplayer;
