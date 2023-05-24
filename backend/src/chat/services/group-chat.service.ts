@@ -119,7 +119,13 @@ export class GroupChatService {
     gchats.forEach((chat) => delete chat.password);
     return gchats;
   }
+
   async findUserGroups(uid: number): Promise<GroupChat[]> {
+    const user = await this.userService.findOne(uid);
+
+    if (!user)
+      throw new HttpException('User not found', HttpStatus.BAD_REQUEST);
+
     const uncompleted: GroupChat[] = await this.groupChatRepo
       .createQueryBuilder('gchat')
       .innerJoin('gchat.users', 'user')

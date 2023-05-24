@@ -219,6 +219,9 @@ export class UserService {
   async setStatus(id: number, status: Status) {
     let user = await this.findOne(id);
 
+    if (!user)
+      throw new HttpException('User not found', HttpStatus.BAD_REQUEST)
+
     if (user.status == status) return;
 
     // try {

@@ -1,13 +1,14 @@
 import React from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import Engine from './Engine';
 
 
 const Menu = (props) => {
-    const { gameSocket } = props;
+    const { gameSocket, setMode } = props;
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState("Find Game"); // добавляем новое состояние
+    const [isHardcore, setIsHardcore] = useState(false); // добавляем новое состояние
 
     const searchOpponent = () => {
         try {
@@ -17,6 +18,13 @@ const Menu = (props) => {
             setIsLoading("Error");
             console.error(err);
         }
+    }
+    const toggleMode = () => {
+        setIsHardcore(!isHardcore);
+        if (isHardcore) 
+            setMode(0);
+        else 
+            setMode(1);
     }
 
   return (
@@ -32,6 +40,13 @@ const Menu = (props) => {
                 onClick={() => searchOpponent()}
             >
                 {isLoading}
+            </button>
+            <button
+                className={isHardcore?"bg-red-700 hover:bg-red-950 text-white font-bold py-2 px-4 rounded w-1/2 mb-4":
+                "bg-gray-700 hover:bg-gray-950 text-white font-bold py-2 px-4 rounded w-1/2 mb-4"}
+                onClick={() => toggleMode()}
+            >
+                {isHardcore?"Hardcore":"Standard"}
             </button>
             <p className="text-center">Instructions:</p>
             <ul className="list-disc list-inside mt-2">

@@ -8,7 +8,7 @@ import { Modal, Button } from 'react-bootstrap';
 
 
 const Multiplayer = (props) => {
-    const { gameSocket, id } = props;
+    const { gameSocket, id, mode } = props;
    const canvasRef = useRef(null);
    const parentRef = useRef(null);
    const paddleWidth = 20 / 1080;
@@ -139,18 +139,17 @@ const Multiplayer = (props) => {
     }
 
     paper.view.onKeyDown = (event) => {
-        console.log(id);
         if (event.key == 'w' && paddlePos[id][1] > 0) {
-            gameSocket.emit('update-tray', (paddlePos[id][1] - 0.02));
+            gameSocket.emit('update-tray', (paddlePos[id][1] - 0.04));
         }
 
         if (event.key == 's' && paddlePos[id][1] < 1 - paddleHeight) {
-            gameSocket.emit('update-tray', (paddlePos[id][1] + 0.02));
+            gameSocket.emit('update-tray', (paddlePos[id][1] + 0.04));
         }
 
         if (event.key == 'space') {
-            gameSocket.emit('ready', { plan : 0, mode : 0 });
-            readyText.content = "Wait another player...";
+            gameSocket.emit('ready', { plan : 0, mode : mode });
+            readyText.content = `Mode: ${mode} Wait another player...`;
         }
     }
     const  normalize = (coordinate: [number, number]): number[] => {
@@ -165,12 +164,10 @@ const Multiplayer = (props) => {
     return () => {
       window.removeEventListener('resize', handleResize);
     };
-  }, []);
+  }, [mode, id, gameSocket]);
 
   return (
-        <div className='w-full h-full' ref={parentRef}>
-            <canvas ref={canvasRef} className='w-full h-full' />
-                </div>
+            <canvas ref={canvasRef} className='w-full h-screen bg-black' />
   );
 }
 
