@@ -29,7 +29,7 @@ const App = (props: any) => {
           <Route path="/transcendence/user/profile/:id" element={<UserProfile />} />
           <Route path="/transcendence/user/profile/settings" element={<Settings />} />
           <Route path="/transcendence/user/dashboard" element={<Dashboard />} />
-          <Route path="/transcendence/user/chat" element={<Chat />} />
+          <Route path="/transcendence/user/chat/:id" element={<Chat />} />
           <Route path="/transcendence/game" element={<Game />} />
         </Routes>
       </Router>

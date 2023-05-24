@@ -6,27 +6,17 @@ import Messages from "./Messages";
 import { useSelector } from 'react-redux';
 import { selectUser } from "../Slices/userSlice";
 import { io } from 'socket.io-client';
-
-const socketOptions = {
-  transportOptions: {
-      polling: {
-          extraHeaders: {
-              authorization: `Bearer ${sessionStorage.getItem('access_token')}`,
-              },
-          },
-      }
-  };
-
-  const chatSocket = io(`ws://loacalhost:7000/transcendence/chat`, socketOptions);
+import { chatSocket } from "../Profile/UserHeader";
 
 const Chat = () => {
   const userInfo = useSelector(selectUser);
   const [currentMessage, setCurrentMessage] = useState("");
   const [messageList, setMessageList] = useState([]);
   useEffect(()=>{
-    
-
-
+    console.log("chat");
+    chatSocket.on('join-chat', (data) =>{
+      console.log("data ", data);
+    })
   }, [chatSocket])
   return (
     <div className="container bg-[#262525]">

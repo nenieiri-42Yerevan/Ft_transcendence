@@ -238,7 +238,7 @@ export const getUserById = async (id: any, Navigate) => {
   } 
   catch (error) {
     console.log(error);
-    if (error.response.statusCode == 401)
+    if (error.response.status == 401)
     {
       if ((await refreshToken()) != 200) {
         dispatch(setIsUnauth(true));
