@@ -2,6 +2,7 @@ import React from 'react';
 // import Background from '../Background';
 import NavBar from "../NavBar";
 import Pong from './Pong';
+import Multiplayer from './Multiplayer';
 import Menu from './Menu';
 import { useState, useEffect } from 'react';
 import { io } from 'socket.io-client';
@@ -9,6 +10,7 @@ import { io } from 'socket.io-client';
 const Game = () => {
     const [isReady, setIsReady] = useState(false); // добавляем новое состояние
     const [id, setId] = useState(0);
+    const [mode, setMode] = useState(0);
     //const [isReady, setIsReady] = useState(true); // добавляем новое состояние
    const [gameSocket, setGameSocket] = useState(null);
     
@@ -24,9 +26,6 @@ const Game = () => {
             };
             const gameSocket = io(`${process.env.BACK_URL}/pong`, socketOptions);
             setGameSocket(gameSocket);
-        gameSocket.on('room', (data) => {
-                console.log(`${data} room number`);
-                });
 
         gameSocket.on('connect', () => {
                 console.log('Socket connection established!');
@@ -46,18 +45,20 @@ const Game = () => {
 
         gameSocket.on('add', (data) => {
                 console.log('Socket add : ', data);
+                console.log(mode);
                 setId(data - 1);
                 });
         return () => gameSocket.close();
 
       
-        }, [setGameSocket, setId, setIsReady]);
+        }, [mode, setGameSocket, setId, setIsReady]);
 
     return (
             <>
             <NavBar />
             <div className="flex flex-wrap">
-                {isReady ? <Pong gameSocket={gameSocket} id={id} /> : <Menu gameSocket={gameSocket} />}
+                {isReady ? <Multiplayer gameSocket={gameSocket} id={id} mode={mode} /> : <Menu gameSocket={gameSocket} setMode={setMode} />}
+        
             </div>
             </>
            );
