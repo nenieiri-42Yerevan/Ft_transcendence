@@ -17,6 +17,9 @@ const Chat = () => {
     chatSocket.on('join-chat', (data) =>{
       console.log("data ", data);
     })
+    chatSocket.on('my-chats', (data) =>{
+      console.log("mychat ", data);
+    })
   }, [chatSocket])
   return (
     <div className="container bg-[#262525]">

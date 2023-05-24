@@ -245,6 +245,7 @@ export class ChatGateway
   @SubscribeMessage('my-chats')
   async GetUserChats(client: Socket): Promise<void> {
     try {
+      console.log("my-chats");
       const chats = await this.chatService.findAll(client.data.user.id);
       client.emit('my-chats', chats);
     } catch {}
@@ -255,7 +256,6 @@ export class ChatGateway
     try {
       const chat = await this.chatService.openChat(client.data.user.id, userId);
       this.emitGroup(chat, 'join-chat', chat.id);
-      console.log("join_chat ", chat);
     } catch(error) {
       console.log(error);
     }
