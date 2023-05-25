@@ -10,6 +10,7 @@ import Background from "../Background";
 
 
 const Chat = () => {
+    // Init
     return (
         <>
         {/* //<!-- This is an example component --> */}
