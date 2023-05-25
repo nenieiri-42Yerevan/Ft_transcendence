@@ -9,6 +9,8 @@ export class NotifyService {
   server: Server;
 
   emitStatus(uid: number, status: Status): void {
-    this.server.emit('status', { uid, status });
+    if (this.server) {
+        this.server.emit('status', { uid, status });
+    }
   }
 }
