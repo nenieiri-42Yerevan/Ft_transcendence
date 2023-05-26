@@ -58,7 +58,9 @@ export class ChatGateway
       client.data.user = user;
 
       client.emit('info', { user, userGroups, groups, userChats });
-    } catch {}
+    } catch(error) {
+      console.log(error);
+    }
   }
 
   handleDisconnect(client: Socket): Promise<any> {

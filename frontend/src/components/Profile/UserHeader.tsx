@@ -5,34 +5,44 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import pong from "@SRC_DIR/assets/images/pong.png";
 import { io } from 'socket.io-client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
+import { ChatContext } from "../context/ChatContext";
+
 
 const socketOptions = {
     transportOptions: {
         polling: {
             extraHeaders: {
                 authorization: `Bearer ${sessionStorage.getItem('access_token')}`,
-                },
             },
-        }
-    };
-  
+        },
+    }
+};
+
 export const chatSocket = io(`http://localhost:7000/chat`, socketOptions);
 
 const UserHeader = (props)=>{
-    const dispatch = useDispatch();
+    const disp = useDispatch();
     const navigate = useNavigate();
+    const { dispatch } = useContext(ChatContext);
 
     useEffect(()=>{
-        chatSocket.on('connect', (data)=>{
-            console.log("socket connected", data);
+        chatSocket.on('connect', (info)=>{
+            console.log("socket connected", info);
+          })
+        chatSocket.on('info', (info)=>{
+            dispatch({ type: "CHANGE_CHATS", payload: info });
+            console.log("info, ", info);
+          })
+          chatSocket.on('join-chat', (data) =>{
+            dispatch({ type: "CHANGE_ID", payload: data });
           })
     }, [chatSocket])
     const message = ()=>{
         try
         {
-            // chatSocket.emit('join-chat', Number(props.id));
-            navigate(`/transcendence/user/chat/${props.id}`);
+            chatSocket.emit('join-chat', Number(props.id));
+            // navigate(`/transcendence/user/chat/${props.id}`);
         }
         catch(error)
         {
@@ -47,8 +57,8 @@ const UserHeader = (props)=>{
             <div className="mt-1">
                 <h1 className="font-bold text-4xl text-white">{props.userInfo && props.userInfo.first_name && props.userInfo.first_name} <span>{props.userInfo && props.userInfo.last_name && props.userInfo.last_name}</span></h1>
                 <p className="text-white">{props.userInfo && props.userInfo.username && props.userInfo.username}</p>
-                <p><button onClick = {()=>follow(dispatch, navigate, props.current.user, props.id)} className="bg-[#1e81b0] p-1 m-2 w-40">{props?.current?.user?.follows.includes(Number(props.id)) ? "Unfollow" : "follow"}</button></p>
-                <p><button onClick = {()=>block(dispatch, navigate, props.current.user, props.id)} className="bg-red-600 p-1 m-2 w-40">{props?.current?.user?.blocked.includes(Number(props.id)) ? "Unblock" : "Block"}</button></p>
+                <p><button onClick = {()=>follow(disp, navigate, props.current.user, props.id)} className="bg-[#1e81b0] p-1 m-2 w-40">{props?.current?.user?.follows.includes(Number(props.id)) ? "Unfollow" : "follow"}</button></p>
+                <p><button onClick = {()=>block(disp, navigate, props.current.user, props.id)} className="bg-red-600 p-1 m-2 w-40">{props?.current?.user?.blocked.includes(Number(props.id)) ? "Unblock" : "Block"}</button></p>
                 <p><button onClick = {message} className="bg-[#1e81b0] p-1 m-2 w-40">Message</button></p>
             </div>
         </div>

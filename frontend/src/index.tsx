@@ -10,6 +10,7 @@ import { PersistGate } from 'redux-persist/integration/react';
 import * as THREE from 'three';
 
 import { ErrorBoundary } from "react-error-boundary";
+import { ChatContext } from './components/context/ChatContext';
 
 let renderer: THREE.WebGLRenderer;
 let scene: THREE.Scene;
@@ -79,21 +80,23 @@ const logError = (error: Error, info: { componentStack: string }) => {
   console.log(error);
   console.log("Error details");
   console.log(info);
-  
+
 };
 
 root.render(
   // <React.StrictMode>
-    <Provider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
-        <ErrorBoundary
-          fallbackRender={ShowError}
-          onError={logError}
-          onReset={() => window.location.reload()}
-        >
+  <Provider store={store}>
+    <PersistGate loading={null} persistor={persistor}>
+      <ErrorBoundary
+        fallbackRender={ShowError}
+        onError={logError}
+        onReset={() => window.location.reload()}
+      >
+        <ChatContext.Provider>
           <App />
-        </ErrorBoundary>
-      </PersistGate>
-    </Provider>
+        </ChatContext.Provider>
+      </ErrorBoundary>
+    </PersistGate>
+  </Provider>
   // </React.StrictMode>,
 );
