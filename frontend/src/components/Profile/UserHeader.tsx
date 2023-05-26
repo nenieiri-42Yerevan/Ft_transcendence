@@ -24,14 +24,14 @@ const UserHeader = (props)=>{
     const navigate = useNavigate();
 
     useEffect(()=>{
-        chatSocket.on('connect', ()=>{
-            console.log("socket connected");
+        chatSocket.on('connect', (data)=>{
+            console.log("socket connected", data);
           })
     }, [chatSocket])
     const message = ()=>{
         try
         {
-            chatSocket.emit('join-chat', Number(props.id));
+            // chatSocket.emit('join-chat', Number(props.id));
             navigate(`/transcendence/user/chat/${props.id}`);
         }
         catch(error)
