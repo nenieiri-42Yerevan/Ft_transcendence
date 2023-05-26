@@ -32,7 +32,6 @@ const UserHeader = (props)=>{
         try
         {
             chatSocket.emit('join-chat', Number(props.id));
-            chatSocket.emit('my-chats');
             navigate(`/transcendence/user/chat/${props.id}`);
         }
         catch(error)
