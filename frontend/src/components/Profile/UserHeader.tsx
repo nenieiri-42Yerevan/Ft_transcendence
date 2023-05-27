@@ -31,12 +31,15 @@ const UserHeader = (props)=>{
         chatSocket.on('connect', (info)=>{
             console.log("socket connected");
           })
+          chatSocket.on('join-chat', (data) =>{
+            console.log("data ", data);
+          })
         chatSocket.on('info', (info)=>{
+            console.log("contttt ", info);
             dispatch({ type: "CHANGE_CHATS", payload: info });
           })
-        console.log("cont ", data);
     }, [chatSocket])
-    const message = async ()=>{
+    const message = ()=>{
         try
         {
             chatSocket.emit('join-chat', Number(props.id));
