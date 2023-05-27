@@ -238,7 +238,7 @@ export const getUserById = async (id: any, Navigate) => {
   } 
   catch (error) {
     console.log(error);
-    if (error.response.statusCode == 401)
+    if (error.response.status == 401)
     {
       if ((await refreshToken()) != 200) {
         dispatch(setIsUnauth(true));
@@ -289,7 +289,7 @@ export const getAvatar = async (flag: number, Navigate, dispatch: any, id: strin
     }
     );
     if (!response.ok) {
-      throw new Error(`HTTP error ${response.status}`);
+      throw response.status;
     }
     const blob = await response.arrayBuffer()
     .then(buf => new Blob([buf], { type: 'image/png' }))
@@ -303,7 +303,7 @@ export const getAvatar = async (flag: number, Navigate, dispatch: any, id: strin
       return(url);
   } 
   catch (error) {
-    if (error.response.status == 401)
+    if (error== 401)
     {
       if ((await refreshToken()) != 200) {
         dispatch(setIsUnauth(true));
@@ -312,8 +312,6 @@ export const getAvatar = async (flag: number, Navigate, dispatch: any, id: strin
         getAvatar(flag, Navigate, dispatch, id);
       }
     }
-    console.log("xxx");
-    console.log(error);
     if (flag == 0)
       dispatch(setUserImage(null));
     else if (flag == 1)

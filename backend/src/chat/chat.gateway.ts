@@ -58,7 +58,9 @@ export class ChatGateway
       client.data.user = user;
 
       client.emit('info', { user, userGroups, groups, userChats });
-    } catch {}
+    } catch(error) {
+      console.log(error);
+    }
   }
 
   handleDisconnect(client: Socket): Promise<any> {
@@ -72,7 +74,6 @@ export class ChatGateway
   emitGroup(gchat: any, event: string, ...args: any): void {
     try {
       if (!gchat.users) return;
-
       const sockets: any[] = Array.from(this.server.sockets.values());
       sockets.forEach((socket) => {
         if (gchat.users.find((user) => user.id == socket.data.user.id))
@@ -246,6 +247,7 @@ export class ChatGateway
   @SubscribeMessage('my-chats')
   async GetUserChats(client: Socket): Promise<void> {
     try {
+      console.log("my-chats");
       const chats = await this.chatService.findAll(client.data.user.id);
       client.emit('my-chats', chats);
     } catch {}
@@ -255,8 +257,10 @@ export class ChatGateway
   async joinChat(client: Socket, userId: number): Promise<void> {
     try {
       const chat = await this.chatService.openChat(client.data.user.id, userId);
-      this.emitGroup(chat, 'join-chat');
-    } catch {}
+      this.emitGroup(chat, 'join-chat', chat.id);
+    } catch(error) {
+      console.log(error);
+    }
   }
 
   @SubscribeMessage('textDM')

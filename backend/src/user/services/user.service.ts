@@ -224,12 +224,12 @@ export class UserService {
 
     if (user.status == status) return;
 
-    try {
-      await this.userRepo.update(user.id, { status });
-      this.notifyService.emitStatus(user.id, status);
-    } catch (error) {
-      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
-    }
+    // try {
+    //   await this.userRepo.update(user.id, { status });
+    //   this.notifyService.emitStatus(user.id, status);
+    // } catch (error) {
+    //   throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    // }
   }
 
   async setAvatar(id: number, file: Express.Multer.File): Promise<void> {
