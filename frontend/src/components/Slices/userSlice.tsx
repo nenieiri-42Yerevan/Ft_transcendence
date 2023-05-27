@@ -247,7 +247,7 @@ export const getUserById = async (id: any, Navigate) => {
         getUserById(id, Navigate);
       }
     }
-    
+    throw (error);
 
   }
 }

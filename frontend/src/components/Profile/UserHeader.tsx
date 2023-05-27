@@ -38,11 +38,16 @@ const UserHeader = (props)=>{
             console.log("contttt ", info);
             dispatch({ type: "CHANGE_CHATS", payload: info });
           })
+          chatSocket.on('chat', (data) =>{
+              console.log("mychat ", data);
+            })
     }, [chatSocket])
     const message = ()=>{
         try
         {
-            chatSocket.emit('join-chat', Number(props.id));
+            // chatSocket.emit('join-chat', Number(props.id));
+            // chatSocket.emit('chat', 1);
+
             // navigate(`/transcendence/user/chat/${props.id}`);
         }
         catch(error)

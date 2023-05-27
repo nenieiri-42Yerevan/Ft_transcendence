@@ -78,7 +78,7 @@ export class ChatService {
 
     const user = await this.userService.findOne(uid);
     const target = await this.userService.findOne(tid);
-
+    
     const uchats = await this.findAll(uid);
     if (uchats) {
       for (let i = 0; i < uchats.length; i++) {

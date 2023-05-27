@@ -36,7 +36,7 @@ const UserProfile = () => {
             {
                 setphoto(photo);
             }
-        }).catch(error=>{});
+        }).catch(error=>{error.response.status == 401 && window.location.reload()});
         setloaded(true);
     }, [id]);
     if (loaded && userInfo == null)
