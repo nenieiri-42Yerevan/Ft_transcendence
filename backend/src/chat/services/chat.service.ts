@@ -82,7 +82,7 @@ export class ChatService {
     const uchats = await this.findAll(uid);
     if (uchats) {
       for (let i = 0; i < uchats.length; i++) {
-        if (uchats[i].users[1] && uchats[i].users[1].id == tid)
+        if (uchats[i].users[0] && uchats[i].users[0].id == tid)
           return uchats[i];
       }
     }
