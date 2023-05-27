@@ -80,9 +80,11 @@ export class ChatService {
     const target = await this.userService.findOne(tid);
 
     const uchats = await this.findAll(uid);
-    for (let i = 0; i < uchats.length; i++) {
-      if (uchats[i].users[0].id == tid || uchats[i].users[1].id == tid)
-        return uchats[i];
+    if (uchats) {
+      for (let i = 0; i < uchats.length; i++) {
+        if (uchats[i].users[0].id == tid || uchats[i].users[1].id == tid)
+          return uchats[i];
+      }
     }
 
     return await this.createChat([user, target]);
