@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import pong from "@SRC_DIR/assets/images/pong.png";
 import { io } from 'socket.io-client';
 import { useState, useEffect, useContext } from 'react';
-import { ChatContext } from "../context/ChatContext";
+import { ChatContext, getChat } from "../context/ChatContext";
 
 
 const socketOptions = {
@@ -25,20 +25,18 @@ const UserHeader = (props)=>{
     const disp = useDispatch();
     const navigate = useNavigate();
     const { dispatch } = useContext(ChatContext);
+    const { data } = useContext(ChatContext);
 
     useEffect(()=>{
         chatSocket.on('connect', (info)=>{
-            console.log("socket connected", info);
+            console.log("socket connected");
           })
         chatSocket.on('info', (info)=>{
             dispatch({ type: "CHANGE_CHATS", payload: info });
-            console.log("info, ", info);
           })
-          chatSocket.on('join-chat', (data) =>{
-            dispatch({ type: "CHANGE_ID", payload: data });
-          })
+        console.log("cont ", data);
     }, [chatSocket])
-    const message = ()=>{
+    const message = async ()=>{
         try
         {
             chatSocket.emit('join-chat', Number(props.id));

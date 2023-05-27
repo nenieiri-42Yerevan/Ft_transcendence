@@ -11,6 +11,7 @@ import * as THREE from 'three';
 
 import { ErrorBoundary } from "react-error-boundary";
 import { ChatContext } from './components/context/ChatContext';
+import {ChatContextProvider} from './components/context/ChatContext';
 
 let renderer: THREE.WebGLRenderer;
 let scene: THREE.Scene;
@@ -92,9 +93,9 @@ root.render(
         onError={logError}
         onReset={() => window.location.reload()}
       >
-        <ChatContext.Provider>
+        <ChatContextProvider children={undefined}>
           <App />
-        </ChatContext.Provider>
+        </ChatContextProvider>
       </ErrorBoundary>
     </PersistGate>
   </Provider>
