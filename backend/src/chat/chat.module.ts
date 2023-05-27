@@ -6,12 +6,13 @@ import { ChatGateway } from './chat.gateway';
 import { Chat, GroupChat, Message, Muted, Banned } from './entities';
 import { ChatService } from './services/chat.service';
 import { GroupChatService } from './services/group-chat.service';
+import { ChatController } from './controllers/chat.controller';
 
 let entities = [Chat, GroupChat, Message, Muted, Banned];
 
 @Module({
   imports: [TypeOrmModule.forFeature(entities), AuthModule, UserModule],
-  controllers: [],
+  controllers: [ChatController],
   providers: [ChatService, GroupChatService, ChatGateway],
 })
 export class ChatModule {}
