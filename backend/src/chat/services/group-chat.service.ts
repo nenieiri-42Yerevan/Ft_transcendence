@@ -344,7 +344,7 @@ export class GroupChatService {
   /* DELETE */
 
   async delete(id: number): Promise<void> {
-    const gchat = await this.findOne(id, ['users', 'muted', 'banned', 'logs']);
+    const gchat = await this.findOne(id, ['users', 'muted', 'banned', 'messages']);
 
     await this.messageRepo.remove(gchat.messages);
     await this.mutedUserRepo.remove(gchat.muted);
@@ -372,7 +372,10 @@ export class GroupChatService {
 
       const index = gchat.admins.indexOf(user.id);
       if (index != -1) gchat.admins.splice(index, 1);
-    } else if (user.id == gchat.owner.id) return await this.delete(gchat.id);
+    } else if (user.id == gchat.owner.id) {
+        console.log("Admin delete own group");
+        return await this.delete(gchat.id);
+    }
 
     {
       const index = gchat.users.findIndex((user1) => user1.id == user.id);

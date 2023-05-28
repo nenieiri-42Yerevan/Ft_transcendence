@@ -1,18 +1,32 @@
 import React from 'react';
 import Modal from "./Modal";
-import axios from "axios";
+import axios, { HttpStatusCode } from "axios";
 import { useState, useEffect } from 'react';
+import Header from './Header';
 import deleteImg from '../../assets/images/delete_button.png';
-const Rooms = ({gchat, user,  groupChatSocket}) => {
+import adminImg from '../../assets/images/admin.png';
+import lockImg from '../../assets/images/lock.png';
+const Rooms = ({gchat, setGChat, user,  groupChatSocket}) => {
     
     const [modal, setModal] = useState(false);
     const [isPasswordEnabled, setIsPasswordEnabled] = useState(false);
     const [password, setPassword] = useState('');
     const [roomName, setRoomName] = useState('');
 
-    const LeaveChat = (item) => {
-        console.log("Leaving chat");
-        groupChatSocket.emit('leave', {userId: user.id ,channelId: item.id})
+
+    const LeaveChat = async (item) => {
+    const groupDelete = await axios.delete(
+            `${process.env.BACK_URL}/transcendence/chat/group/delete/${user.id}/${item.id}`,
+            {
+                headers: {
+                    Authorization: `Bearer ${sessionStorage.getItem('access_token')}`,
+                },
+            }
+        );
+    if (groupDelete.status === HttpStatusCode.Ok) {
+        const updatedGchat = gchat.filter((chat) => chat.id !== item.id);
+        setGChat(updatedGchat);
+    }
     };
 
     const CreateGroupChat = async (close : boolean) => {
@@ -35,28 +49,32 @@ const Rooms = ({gchat, user,  groupChatSocket}) => {
             );
 
                 gchat.push(chatInfo.data);
+                setGChat(gchat);
             }
             setModal(false);
         }
     }
     return ( 
 
-    <div className='flex  overflow-y-auto flex-col w-full md:w-2/5  bg-[#1E1E1E] border-[#393939] border-solid border m-4 p-4 rounded text-center'>
+    <div className='flex flex-col w-full md:w-2/5 h-fit max-h-screen overflow-scroll   bg-[#1E1E1E] border-[#393939] border-solid border m-4 p-4 rounded text-center'>
+    <Header />
     {gchat.length == 0
       ? <p>no rooms.. </p>
-      : gchat.map((item, index) => (
-        <button className='flex items-center px-3 py-2 text-sm transition duration-150 ease-in-out border-b border-[#393939] cursor-pointer hover:bg-[#616161] focus:outline-none' key={index}>
+      : gchat.map((item, index) => ( 
+        <div className='flex items-center px-3 py-2 text-sm transition duration-150 ease-in-out border mb-1 border-[#393939] cursor-pointer hover:bg-[#616161] focus:outline-none' key={index}>
           <div className="w-full pb-2">
             <div className="flex justify-between">
-              <span className="block ml-2 font-bold text-xl text-white">{item.name}</span>
-              <span className="block ml-2 text-sm text-gray-500">owner: {item.owner.username}</span>
+              <span className="block ml-2 truncate font-bold text-xl text-white">{item.name}</span>
             </div>
-            <div className='flex justify-between'>
-              <span className="block ml-2 text-sm text-white">{item.public ? "public" : "private"}</span>
-              <img className='w-7 h-7 cursor-pointer' onClick={() => LeaveChat(item)} src={deleteImg} alt='Delete room' />
+            <div className='flex justify-end'>
+              {item.owner.id==user.id && <img className='w-7 h-7' src={adminImg} alt='You are admin' />}
+              {!item.public && <img className='w-7 h-7' src={lockImg} alt='Private room' />}
+              {<button onClick={() => LeaveChat(item)}>
+                  <img className='w-7 h-7 cursor-pointer' src={deleteImg} alt='Delete room' />
+              </button>}
             </div>
           </div>
-        </button>
+        </div>
       ))}
     <button className="bg-gray-700 hover:bg-gray-950 text-white font-bold py-2 px-4 rounded mt-4 mb-1" onClick={() => CreateGroupChat(true)}>
       Create Room
