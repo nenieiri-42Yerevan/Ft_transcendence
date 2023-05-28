@@ -86,7 +86,7 @@ export class ChatService {
       tchats.some((chat2) => chat2.id === chat1.id),
     );
 
-    if (intersection) return intersection[0];
+    if (intersection.length !== 0) return intersection[0];
 
     return await this.createChat([user, target]);
   }
