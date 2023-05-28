@@ -25,11 +25,12 @@ export class ChatService {
         'Too many users for a chat',
         HttpStatus.NOT_ACCEPTABLE,
       );
-
+      
     const chat = this.chatRepo.create({ users });
-
+    // console.log("chaaaat:", chat);
     try {
       await this.chatRepo.save(chat);
+      // console.log("chasst:", await this.chatRepo.find({where: {users: {id: users[0].id}}, relations:['users']}));
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
@@ -80,6 +81,7 @@ export class ChatService {
     const target = await this.userService.findOne(tid);
     
     const uchats = await this.findAll(uid);
+    // console.log("uchats:", uchats[0].users);
     if (uchats) {
       for (let i = 0; i < uchats.length; i++) {
         if (uchats[i].users[0] && uchats[i].users[0].id == tid)
@@ -105,8 +107,8 @@ export class ChatService {
 
   async findAll(uid: number): Promise<Chat[]> {
     const chats = await this.chatRepo.find({
-      relations: ['users', 'messages'],
       where: { users: { id: uid } },
+      relations: ['users', 'messages'],
     });
 
     return chats;
