@@ -7,25 +7,13 @@ import pong from "@SRC_DIR/assets/images/pong.png";
 import { io } from 'socket.io-client';
 import { useState, useEffect, useContext } from 'react';
 import { ChatContext, getChat } from "../context/ChatContext";
-
-
-const socketOptions = {
-    transportOptions: {
-        polling: {
-            extraHeaders: {
-                authorization: `Bearer ${sessionStorage.getItem('access_token')}`,
-            },
-        },
-    }
-};
-
-export const chatSocket = io(`http://localhost:7000/chat`, socketOptions);
+import { chatSocket } from "../context/ChatContext";
 
 const UserHeader = (props)=>{
     const disp = useDispatch();
     const navigate = useNavigate();
     const { dispatch } = useContext(ChatContext);
-    const { data } = useContext(ChatContext);
+    const { data} = useContext(ChatContext);
     const [chatId, setChatId] = useState(null);
 
     useEffect(()=>{
@@ -33,24 +21,31 @@ const UserHeader = (props)=>{
             console.log("socket connected");
           })
           chatSocket.on('join-chat', (data) =>{
-            console.log(data);
-            setChatId(data);
-          })
+            // setChatId(data);
+            console.log("hhh");
+            chatSocket.emit('chat', data);
+        })
         chatSocket.on('info', (info)=>{
             console.log("contttt ", info);
-            dispatch({ type: "CHANGE_CHATS", payload: info });
-          })
-        chatSocket.on('chat', (data) =>{
-            console.log("mychat ", data);
+            dispatch({ type: "CHANGE_INFO", payload: info });
         })
+        chatSocket.on('chat', (chat) =>{
+            console.log("mychat ", chat );
+            dispatch({ type: "CHANGE_CHAT", payload: chat });
+            navigate(`/transcendence/user/chat/${props.id}`);
+          })
+        // chatSocket.on('chat', (data) =>{
+        //     console.log("mychat ", data);
+        // })
+        return () => {
+            chatSocket.off('join-chat');
+            chatSocket.off('chat');
+          };
     }, [chatSocket])
     const message = ()=>{
         try
         {
             chatSocket.emit('join-chat', Number(props.id));
-            // chatSocket.emit('chat', chatId);
-
-            // navigate(`/transcendence/user/chat/${props.id}`);
         }
         catch(error)
         {

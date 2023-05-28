@@ -2,37 +2,45 @@ import {
   createContext,
   useContext,
   useReducer,
+  useEffect,
 } from "react";
 
 import React from 'react'
 import axios from 'axios';
+import { io } from 'socket.io-client';
 
 export const ChatContext = createContext();
 
-export const getChat = async (id: number) =>{    
-    try {
-      const response = await axios.get(`${process.env.BACK_URL}/transcendence/chat/${id}`, {
-          headers: {
-            Authorization: `Bearer ${sessionStorage.getItem('access_token')}`
-          }
-      });
-      return (response);
-    } catch (error) {
-      console.error(`Error making request for object with id ${id}:`, error.message);
-      return (null);
-    }
+const socketOptions = {
+  transportOptions: {
+      polling: {
+          extraHeaders: {
+              authorization: `Bearer ${sessionStorage.getItem('access_token')}`,
+          },
+      },
   }
+};
+
+export const chatSocket = io(`http://localhost:7000/chat`, socketOptions);
 
   export const ChatContextProvider = ({ children }) => {
-    const INITIAL_STATE = {
-      chats: {},
+    const storedState = localStorage.getItem('chatContextState');
+  const INITIAL_STATE = storedState ? JSON.parse(storedState):{
+      info: {},
+      chat: [],
     };
   
     const chatReducer = (state, action) => {
       switch (action.type) {
-        case "CHANGE_CHATS":
+        case "CHANGE_INFO":
           return {
-            chats: action.payload,
+            ...state,
+            info: action.payload,
+          };
+        case "CHANGE_CHAT":
+          return {
+            ...state,
+            chat: [...state.chat, action.payload],
           };
         default:
           return state;
@@ -41,7 +49,12 @@ export const getChat = async (id: number) =>{
   
     const [state, dispatch] = useReducer(chatReducer, INITIAL_STATE);
     
-    
+    useEffect(() => {
+      localStorage.setItem('chatContextState', JSON.stringify(state));
+      return () => {
+        localStorage.removeItem('chatContextState');
+      };
+    }, [state]);
 
 
     return (

@@ -105,21 +105,22 @@
 //        </div>
 //    </>
 //)
+
 import axios from "axios";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Header from "./Header";
 import Users from "./Users";
 import Messages from "./Messages";
 import { useSelector } from 'react-redux';
 import { selectUser } from "../Slices/userSlice";
 import { io } from 'socket.io-client';
-import { chatSocket } from "../Profile/UserHeader";
-import { getChat } from "../context/ChatContext";
+import { ChatContext, getChat, chatSocket } from "../context/ChatContext";
 
 const Chat = () => {
   const userInfo = useSelector(selectUser);
   const [currentMessage, setCurrentMessage] = useState("");
   const [messageList, setMessageList] = useState([]);
+  const { dispatch, data } = useContext(ChatContext);
   useEffect(()=>{
     console.log("chat");
 
@@ -129,9 +130,7 @@ const Chat = () => {
     // chatSocket.on('my-chats', (data) =>{
     //   console.log("mychat ", data);
     // })
-    // chatSocket.on('chat', (data) =>{
-    //   console.log("mychat ", data);
-    // })
+    console.log("data.chatL:", data);
   }, [chatSocket])
   return (
     <div className="container bg-[#262525]">
