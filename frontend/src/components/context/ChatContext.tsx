@@ -38,10 +38,16 @@ export const chatSocket = io(`http://localhost:7000/chat`, socketOptions);
             info: action.payload,
           };
         case "CHANGE_CHAT":
+          const chatId = action.payload.id;
+          const existingChat = state.chat.find(chat => chat.id === chatId);
+          if (existingChat) {
+            return state;
+          } else {
           return {
             ...state,
             chat: [...state.chat, action.payload],
           };
+        }
         default:
           return state;
       }
