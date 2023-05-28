@@ -81,13 +81,12 @@ export class ChatService {
     const target = await this.userService.findOne(tid);
     
     const uchats = await this.findAll(uid);
-    // console.log("uchats:", uchats[0].users);
-    if (uchats) {
-      for (let i = 0; i < uchats.length; i++) {
-        if (uchats[i].users[0] && uchats[i].users[0].id == tid)
-          return uchats[i];
-      }
-    }
+    const tchats = await this.findAll(tid);
+    const intersection = uchats.filter((chat1) =>
+      tchats.some((chat2) => chat2.id === chat1.id),
+    );
+
+    if (intersection) return intersection[0];
 
     return await this.createChat([user, target]);
   }
