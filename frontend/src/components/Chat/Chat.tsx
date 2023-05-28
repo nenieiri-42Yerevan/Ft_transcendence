@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux';
 import { selectUser } from "../Slices/userSlice";
 import { io } from 'socket.io-client';
 import { chatSocket } from "../Profile/UserHeader";
+import { getChat } from "../context/ChatContext";
 
 const Chat = () => {
   const userInfo = useSelector(selectUser);
@@ -14,9 +15,10 @@ const Chat = () => {
   const [messageList, setMessageList] = useState([]);
   useEffect(()=>{
     console.log("chat");
-    chatSocket.on('join-chat', (data) =>{
-      console.log("data ", data);
-    })
+
+    // chatSocket.on('join-chat', (data) =>{
+    //   console.log("data ", data);
+    // })
     // chatSocket.on('my-chats', (data) =>{
     //   console.log("mychat ", data);
     // })

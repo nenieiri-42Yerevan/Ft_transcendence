@@ -26,27 +26,29 @@ const UserHeader = (props)=>{
     const navigate = useNavigate();
     const { dispatch } = useContext(ChatContext);
     const { data } = useContext(ChatContext);
+    const [chatId, setChatId] = useState(null);
 
     useEffect(()=>{
         chatSocket.on('connect', (info)=>{
             console.log("socket connected");
           })
           chatSocket.on('join-chat', (data) =>{
-            console.log("data ", data);
+            console.log(data);
+            setChatId(data);
           })
         chatSocket.on('info', (info)=>{
             console.log("contttt ", info);
             dispatch({ type: "CHANGE_CHATS", payload: info });
           })
-        //   chatSocket.on('chat', (data) =>{
-        //       console.log("mychat ", data);
-        //     })
+        chatSocket.on('chat', (data) =>{
+            console.log("mychat ", data);
+        })
     }, [chatSocket])
     const message = ()=>{
         try
         {
             chatSocket.emit('join-chat', Number(props.id));
-            // chatSocket.emit('chat', 1);
+            // chatSocket.emit('chat', chatId);
 
             // navigate(`/transcendence/user/chat/${props.id}`);
         }
