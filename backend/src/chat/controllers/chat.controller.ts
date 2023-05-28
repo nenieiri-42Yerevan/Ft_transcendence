@@ -8,6 +8,7 @@ import {
   Post,
 } from '@nestjs/common';
 import { PasswordDto } from '../dto/password.dto';
+import { GroupChatDto } from '../dto/group-chat.dto';
 import { GroupChat, Chat, Message, Banned, Muted } from '../entities';
 import { ChatService } from '../services/chat.service';
 import { GroupChatService } from '../services/group-chat.service';
@@ -50,8 +51,9 @@ export class ChatController {
   @Post('/group/create/:uid')
   createGroupChat(
     @Param('uid', ParseIntPipe) uid: number,
-    @Body() gchat: GroupChat,
+    @Body() gchat: any,
   ): Promise<GroupChat> {
+    console.log(gchat);
     return this.groupChatService.createGroupChat(gchat, uid);
   }
 

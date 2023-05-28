@@ -35,14 +35,15 @@ export class GroupChatService {
     const admin = await this.userService.findOne(uid);
     let hash = null;
 
-    gchat.name = gchat.name.replace(/\s+/g, '');
-
+    if (gchat != null)
+        gchat.name = gchat.name.replace(/\s+/g, '');
     // Chat name validation
     if (gchat.name == undefined)
       throw new HttpException(
         'Group Chat must have a name!',
         HttpStatus.FORBIDDEN,
       );
+    
 
     // Private chat processing
     if (gchat.public == false) {
