@@ -5,11 +5,12 @@ import Users from "./Users";
 import Messages from "./Messages";
 import { useSelector } from 'react-redux';
 import { selectUser } from "../Slices/userSlice";
-import { io } from 'socket.io-client';
-import { ChatContext, getChat, chatSocket } from "../context/ChatContext";
+import { ChatContext, chatSocket } from "../context/ChatContext";
+import {useParams } from "react-router-dom";
 
 const Chat = () => {
   const userInfo = useSelector(selectUser);
+  const {id} = useParams();
   const [currentMessage, setCurrentMessage] = useState("");
   const [messageList, setMessageList] = useState([]);
   const { dispatch, data } = useContext(ChatContext);
@@ -23,13 +24,27 @@ const Chat = () => {
     //   console.log("mychat ", data);
     // })
     console.log("data.chatL:", data);
+    chatSocket.on('textDM', data =>{
+      console.log("msg:", data);
+    })
   }, [chatSocket])
+
+  const sendmsg = ()=>{
+    const curChat = data.chat.find(chat => chat.users[1].id == id);
+    console.log('curchat:', currentMessage);
+    const datas = {
+      channelId: curChat.id,
+      text: currentMessage,
+    }
+    chatSocket.emit('textDM', datas);
+    setCurrentMessage('');
+  }
   return (
     <div className="container bg-[#262525]">
       <div className="min-w-full border rounded lg:grid lg:grid-cols-3">
         <div className="border-r border-[#393939] lg:col-span-1">
           <Header/>
-          <Users/>
+          <Users data = {data.chat}/>
         </div>
         <div className="hidden lg:col-span-2 lg:block">
           <div className="w-full">
@@ -37,8 +52,10 @@ const Chat = () => {
             <div className="flex items-center justify-between w-full p-3 border-t border-[#393939]">
               <input type="text" placeholder="Message"
                 className="block w-full py-2 pl-4 mx-3 bg-gray-100 rounded-full outline-none focus:text-gray-700"
-                name="message" required />
-              <button type="submit">
+                name="message" onChange={(event) => {
+                  setCurrentMessage(event.target.value);
+                }} required />
+              <button type="submit" onClick = {sendmsg}>
                 <svg className="w-5 h-5 text-gray-500 origin-center transform rotate-90" xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 20 20" fill="currentColor">
                   <path

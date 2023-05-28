@@ -266,6 +266,7 @@ export class ChatGateway
   @SubscribeMessage('textDM')
   async sendMessageDM(client: Socket, data: any): Promise<void> {
     try {
+      console.log("textDM", data);
       const chat = await this.chatService.findOne(data.channelId, ['users']);
 
       const other = chat.users.find((user) => user.id != client.data.user.id);
@@ -286,6 +287,6 @@ export class ChatGateway
         text: message.content,
         channelId: chat.id,
       });
-    } catch {}
+    } catch(error) {console.log(error)}
   }
 }
