@@ -43,14 +43,13 @@ export class ChatService {
     text: string,
   ): Promise<Message> {
     const chat = await this.findOne(chatId);
+    if (!chat) throw new HttpException('Chat not found!', HttpStatus.NOT_FOUND);
 
     const sender = await this.userService.findOne(userId);
-
     if (!sender)
       throw new HttpException('Sender not found!', HttpStatus.NOT_FOUND);
 
     const reciever = chat.users.find((user) => user.id != sender.id);
-
     if (!reciever)
       throw new HttpException('Receiver not found!', HttpStatus.NOT_FOUND);
 
