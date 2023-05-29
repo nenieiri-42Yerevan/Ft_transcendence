@@ -10,7 +10,7 @@ import axios from 'axios';
 export const ChatContext = createContext();
 
 export const ChatContextProvider = ({ children }) => {
-  const storedState = localStorage.getItem('chatContextState');
+  const storedState = sessionStorage.getItem('chatContextState');
   const INITIAL_STATE = storedState ? JSON.parse(storedState) : {
     info: {},
     chat: [],
@@ -42,7 +42,7 @@ export const ChatContextProvider = ({ children }) => {
   const [state, dispatch] = useReducer(chatReducer, INITIAL_STATE);
 
   useEffect(() => {
-    localStorage.setItem('chatContextState', JSON.stringify(state));
+    sessionStorage.setItem('chatContextState', JSON.stringify(state));
     return () => {
       localStorage.removeItem('chatContextState');
     };
