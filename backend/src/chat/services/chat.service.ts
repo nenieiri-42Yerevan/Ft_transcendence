@@ -45,10 +45,14 @@ export class ChatService {
     const chat = await this.findOne(chatId);
 
     const sender = await this.userService.findOne(userId);
+
+    if (!sender)
+      throw new HttpException('Sender not found!', HttpStatus.NOT_FOUND);
+
     const reciever = chat.users.find((user) => user.id != sender.id);
 
     if (!reciever)
-      throw new HttpException('User not found!', HttpStatus.NOT_FOUND);
+      throw new HttpException('Receiver not found!', HttpStatus.NOT_FOUND);
 
     if (reciever.blocked.includes(sender.id))
       throw new HttpException('User is blocked!', HttpStatus.CONFLICT);
