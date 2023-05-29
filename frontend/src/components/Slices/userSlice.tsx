@@ -3,7 +3,7 @@ import axios from 'axios';
 import { FORM_ERROR } from 'final-form'
 import refreshToken from '../Utils/refreshToken'
 
-// import { Dispatch } from 'react';
+import { Dispatch } from 'react';
 // import { useDispatch, useSelector } from 'react-redux';
 import { GetUser } from '../../../../backend/src/common/decorators/GetUser';
 import { EditInfo } from '../Utils/Scheme';
@@ -11,6 +11,14 @@ import { EditInfo } from '../Utils/Scheme';
 export interface Friends {
   name: string,
   id: number
+}
+
+export interface Matches {
+  date: string,
+  id: number,
+  loser: UserInfo,
+  winner: UserInfo,
+  score: number[]
 }
 
 interface UserInfo {
@@ -29,6 +37,7 @@ interface UserInfo {
   TFA_secret: string;
   user_42: boolean;
 }
+
 
 interface User {
   user: UserInfo | null;
@@ -101,7 +110,6 @@ export const userSlice = createSlice({
     setIsUnauth: (state, action: PayloadAction<boolean>) => {
       if (state.user)
         console.log(action);
-        
         state.user.isUnAuth = action.payload;
     },
   },
@@ -136,7 +144,6 @@ export const fetchFriendsData = async (flag:number, Navigate, dispatch: any, use
           },
         },
       );
-      console.log("ccc");
       console.log(response);
       friendNames.push({name: response.data.username, id: id});
     } catch (error) {
@@ -159,6 +166,7 @@ export const fetchFriendsData = async (flag:number, Navigate, dispatch: any, use
 };
 
 export const fetchMatches = async (flag:number, Navigate, dispatch: any, userInfo: UserInfo) => {
+    const userMatches: Matches[] = [];
   try {
     const response = await axios.get(
       `${process.env.BACK_URL}/transcendence/user/${userInfo.id}/matches`,
@@ -168,7 +176,11 @@ export const fetchMatches = async (flag:number, Navigate, dispatch: any, userInf
         },
       },
     );
-    //dispatch(setFriends(friendNames));
+    if (response.status == 200) {
+        userMatches.push(...response.data); 
+    } else {
+        console.log("ERROR cant fetch matches");
+    }
   } catch (error) {
     if (error.response.status == 401)
       {
@@ -180,6 +192,11 @@ export const fetchMatches = async (flag:number, Navigate, dispatch: any, userInf
         }
       }
     console.log(error);
+  }
+  if (flag == 0) {
+   // dispatch(setMatches(userMatches));
+  } else {
+    return userMatches;
   }
 };
 
@@ -294,8 +311,6 @@ export const getAvatar = async (flag: number, Navigate, dispatch: any, id: strin
     const blob = await response.arrayBuffer()
     .then(buf => new Blob([buf], { type: 'image/png' }))
     const url = URL.createObjectURL(blob);
-    console.log("zzz");
-    
     console.log(url);
     if (flag == 0)
       dispatch(setUserImage(url));

@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import Navigation from "./NavBar";
 import search_img from "@SRC_DIR/assets/images/search.png";
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchFriendsData, fetchMatches, selectUser, Friends, getAvatar, setAvatar } from './Slices/userSlice';
+import { fetchFriendsData, fetchMatches, selectUser, Matches, Friends, getAvatar, setAvatar } from './Slices/userSlice';
 import axios from "axios";
 import Background from "./Background";
 import { useEffect } from 'react';
@@ -17,16 +17,18 @@ const Dashboard = () => {
     
     const userInfo = useSelector(selectUser);
     const navigate = useNavigate();
-   // const dispatch = useDispatch();
+    const dispatch = useDispatch();
+    const [matches, setMatches] = useState(null);
     useEffect(() => {
-        if (!userInfo.user)
+        if (!userInfo.user) {
             navigate("/transcendence/user/signin");
-        else {
-            console.log(userInfo.user);
-           // fetchFriendsData(0, dispatch, userInfo.user);
-           // fetchMatches(0, dispatch, userInfo.user);
-            console.log("nn");
-            console.log(userInfo);     
+        } else {
+            fetchMatches(1, navigate, dispatch, userInfo.user)
+            .then((data?: Matches[]) => {
+                if (data)
+                    setMatches(data);
+                console.log(matches);})
+            .catch(error => console.log(error));
         }
     }, []);
       return (
@@ -40,7 +42,7 @@ const Dashboard = () => {
                         <button type="submit"><img className="h-7 w-7" src={search_img} /></button>
                     </form>
                 </div>
-                <GameHistoryTable userInfo={userInfo} />
+                <GameHistoryTable matches={matches} />
                 <ActiveChallenges userInfo={userInfo} />
                 <LeaderBoard userInfo={userInfo} />
                 </div>
