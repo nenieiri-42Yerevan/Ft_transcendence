@@ -44,7 +44,7 @@ export const ChatContextProvider = ({ children }) => {
   useEffect(() => {
     sessionStorage.setItem('chatContextState', JSON.stringify(state));
     return () => {
-      localStorage.removeItem('chatContextState');
+      sessionStorage.removeItem('chatContextState');
     };
   }, [state]);
 

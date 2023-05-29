@@ -25,12 +25,18 @@ const Chat = () => {
     })
     chatSocket.on('chat', (chat) => {
       setMessageList((list) => [...list, chat]);
+      console.log("chh:", messageList);
       dispatch({ type: "CHANGE_CHAT", payload: chat });
     })
     chatSocket.on('textDM', info=>{
       chatSocket.emit('chat', info.channelId);
     })
-  }, [chatSocket])
+    return () => {
+      chatSocket.off('info');
+      chatSocket.off('chat');
+      chatSocket.off('textDM');
+    };
+  }, [chatSocket, messageList])
 
   const sendmsg = () => {
     const curChat = data.chat.find(chat => chat.users[1].id == userInfo?.user?.id ? chat.users[0].id == id : chat.users[1].id == id)
@@ -44,7 +50,7 @@ const Chat = () => {
   return (
     <>
     <Navigation />
-    <div className="container bg-[#262525]">
+    <div className="container bg-[#262525] min-w-full min-h-full">
       <div className="min-w-full border rounded lg:grid lg:grid-cols-3">
         <div className="border-r border-[#393939] lg:col-span-1">
           <Header />
