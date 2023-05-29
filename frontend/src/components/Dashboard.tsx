@@ -25,9 +25,7 @@ const Dashboard = () => {
         } else {
             fetchMatches(1, navigate, dispatch, userInfo.user)
             .then((data?: Matches[]) => {
-                if (data)
-                    setMatches(data);
-                console.log(matches);})
+                setMatches(data);})
             .catch(error => console.log(error));
         }
     }, []);
