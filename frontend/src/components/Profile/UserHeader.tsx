@@ -7,7 +7,18 @@ import pong from "@SRC_DIR/assets/images/pong.png";
 import { io } from 'socket.io-client';
 import { useState, useEffect, useContext } from 'react';
 import { ChatContext, getChat } from "../context/ChatContext";
-import { chatSocket } from "../context/ChatContext";
+
+const socketOptions = {
+    transportOptions: {
+      polling: {
+        extraHeaders: {
+          authorization: `Bearer ${sessionStorage.getItem('access_token')}`,
+            },
+          },
+        }
+      };
+      
+export const chatSocket = io(`http://localhost:7000/chat`, socketOptions);
 
 const UserHeader = (props)=>{
     const disp = useDispatch();
@@ -17,6 +28,7 @@ const UserHeader = (props)=>{
     const [chatId, setChatId] = useState(null);
 
     useEffect(()=>{
+        let flag = 0;
         chatSocket.on('connect', (info)=>{
             console.log("socket connected");
           })
@@ -24,19 +36,21 @@ const UserHeader = (props)=>{
             // setChatId(data);
             console.log("hhh");
             chatSocket.emit('chat', data);
+            flag = 1;
         })
         chatSocket.on('info', (info)=>{
             console.log("contttt ", info);
+            info.userChats.map(elem =>{
+                chatSocket.emit('chat', elem.id);
+            })
             dispatch({ type: "CHANGE_INFO", payload: info });
         })
         chatSocket.on('chat', (chat) =>{
-            console.log("mychat ", chat );
+            console.log("hhh ", chat );
             dispatch({ type: "CHANGE_CHAT", payload: chat });
-            navigate(`/transcendence/user/chat/${props.id}`);
+            if (flag == 1)
+                navigate(`/transcendence/user/chat/${props.id}`);
           })
-        // chatSocket.on('chat', (data) =>{
-        //     console.log("mychat ", data);
-        // })
         return () => {
             chatSocket.off('join-chat');
             chatSocket.off('chat');

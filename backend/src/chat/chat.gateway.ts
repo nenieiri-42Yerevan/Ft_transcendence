@@ -256,6 +256,7 @@ export class ChatGateway
   @SubscribeMessage('join-chat')
   async joinChat(client: Socket, userId: number): Promise<void> {
     try {
+      console.log("hh");
       const chat = await this.chatService.openChat(client.data.user.id, userId);
       this.emitGroup(chat, 'join-chat', chat.id);
     } catch(error) {
@@ -268,7 +269,7 @@ export class ChatGateway
     try {
       console.log("textDM", data);
       const chat = await this.chatService.findOne(data.channelId, ['users']);
-
+      console.log("chh:", chat);
       const other = chat.users.find((user) => user.id != client.data.user.id);
 
       if (other && other.blocked.includes(client.data.user.id))

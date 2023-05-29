@@ -5,8 +5,9 @@ import Users from "./Users";
 import Messages from "./Messages";
 import { useSelector } from 'react-redux';
 import { selectUser } from "../Slices/userSlice";
-import { ChatContext, chatSocket } from "../context/ChatContext";
+import { ChatContext } from "../context/ChatContext";
 import {useParams } from "react-router-dom";
+import { chatSocket } from "../Profile/UserHeader";
 
 const Chat = () => {
   const userInfo = useSelector(selectUser);
