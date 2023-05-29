@@ -12,10 +12,10 @@ interface Props {
 
 const LeaderBoard: FC<Props> = ({userInfo}) => {
 
-    return (<div className="w-1/6 rounded-2">
-      <h2 className="flex items-center justify-center text-xl h-12 bg-teal-800 mr-2 ml-2 border-b border-white rounded-md">Leaderboard</h2>
+    return (<div className=" w-full md:w-1/6 h-fit bg-[#1E1E1E] m-1 border-[#393939] border-solid border p-8 rounded text-center">
+      <h2 className="text-2xl mb-2 font-bold">Leaderboard</h2>
        {/* {matches?.length === 0 ? (  */}
-        <p className="flex items-center justify-center text-xl h-12 bg-teal-800 mr-2 ml-2 rounded-md">No data</p>
+        <p className="text-2xl mb-2 font-bold">No data</p>
       {/* //  ) : (
       //   matches?.map(match => (
       //     <div key={match.id} className="flex items-center">

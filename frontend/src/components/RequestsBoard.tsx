@@ -1,19 +1,14 @@
-import React, { FC, useState, useEffect} from "react";
-import { Link } from "react-router-dom";
-import axios from "axios";
+import React, { useState, useEffect} from "react";
+import { getAvatar } from "./Slices/userSlice";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 
-interface Props {
-  userInfo?: object
-};
+const ActiveChallenges = ({userInfo}) => {
 
-
-
-const ActiveChallenges: FC<Props> = ({userInfo}) => {
-
-    return (<div className="w-2/6 rounded-2">
-      <h2 className="flex items-center justify-center text-xl h-12 bg-gray-800 mr-2 ml-2 border-b border-white rounded-md">Active Challenges</h2>
+    return (<div className="w-full md:w-2/6 h-fit bg-[#1E1E1E] border-[#393939] m-1 border-solid border p-8 rounded text-center">
+      <h2 className="text-2xl mb-2 font-bold">Active Challenges</h2>
        {/* {matches?.length === 0 ? (  */}
-        <p className="flex items-center justify-center text-xl h-12 bg-gray-800 mr-2 ml-2 rounded-md">No data</p>
+        <p className="text-2xl mb-2 font-bold">No data</p>
       {/* //  ) : (
       //   matches?.map(match => (
       //     <div key={match.id} className="flex items-center">
