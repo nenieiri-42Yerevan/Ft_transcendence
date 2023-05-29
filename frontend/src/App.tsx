@@ -14,6 +14,7 @@ import Dashboard from "./components/Dashboard";
 import Redirect from './components/Redirect';
 import Tfa_42 from './components/Tfa_42';
 import Game from "./components/Game/Game";
+import DirectChats from './components/Chat/DirectChats';
 
 const App = (props: any) => {
    
@@ -32,6 +33,7 @@ const App = (props: any) => {
           <Route path="/transcendence/user/dashboard" element={<Dashboard />} />
           <Route path="/transcendence/user/chat/:id" element={<Chat />} />
           <Route path="/transcendence/user/chat" element={<GroupChatComponent />} />
+          <Route path="/transcendence/user/directchats" element={<DirectChats />} />
           <Route path="/transcendence/game" element={<Game />} />
         </Routes>
       </Router>

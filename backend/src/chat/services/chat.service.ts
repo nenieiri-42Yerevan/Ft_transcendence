@@ -25,11 +25,12 @@ export class ChatService {
         'Too many users for a chat',
         HttpStatus.NOT_ACCEPTABLE,
       );
-
+      
     const chat = this.chatRepo.create({ users });
-
+    // console.log("chaaaat:", chat);
     try {
       await this.chatRepo.save(chat);
+      // console.log("chasst:", await this.chatRepo.find({where: {users: {id: users[0].id}}, relations:['users']}));
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
@@ -42,13 +43,16 @@ export class ChatService {
     userId: number,
     text: string,
   ): Promise<Message> {
-    const chat = await this.findOne(chatId);
+    const chat = await this.findOne(chatId, ['users']);
+    if (!chat) throw new HttpException('Chat not found!', HttpStatus.NOT_FOUND);
 
     const sender = await this.userService.findOne(userId);
-    const reciever = chat.users.find((user) => user.id != sender.id);
+    if (!sender)
+      throw new HttpException('Sender not found!', HttpStatus.NOT_FOUND);
 
+    const reciever = chat.users.find((user) => user.id != sender.id);
     if (!reciever)
-      throw new HttpException('User not found!', HttpStatus.NOT_FOUND);
+      throw new HttpException('Receiver not found!', HttpStatus.NOT_FOUND);
 
     if (reciever.blocked.includes(sender.id))
       throw new HttpException('User is blocked!', HttpStatus.CONFLICT);
@@ -78,14 +82,14 @@ export class ChatService {
 
     const user = await this.userService.findOne(uid);
     const target = await this.userService.findOne(tid);
-
+    
     const uchats = await this.findAll(uid);
-    if (uchats) {
-      for (let i = 0; i < uchats.length; i++) {
-        if (uchats[i].users[0] && uchats[i].users[0].id == tid)
-          return uchats[i];
-      }
-    }
+    const tchats = await this.findAll(tid);
+    const intersection = uchats.filter((chat1) =>
+      tchats.some((chat2) => chat2.id === chat1.id),
+    );
+
+    if (intersection.length !== 0) return intersection[0];
 
     return await this.createChat([user, target]);
   }
@@ -105,8 +109,8 @@ export class ChatService {
 
   async findAll(uid: number): Promise<Chat[]> {
     const chats = await this.chatRepo.find({
-      relations: ['users', 'messages'],
       where: { users: { id: uid } },
+      relations: ['users', 'messages'],
     });
 
     return chats;

@@ -1,151 +1,71 @@
-//import Navigation from "../NavBar";
-//import Modal from "./Modal";
-//import React, { useState, useEffect } from 'react';
-//import { io } from 'socket.io-client';
-//const Chat = () => {
-//
-//    const [groupChatSocket, setGroupChatSocket] = useState(null);
-//    const [modal, setModal] = useState(false);
-//    const [password, setPassword] = useState('');
-//    const [roomName, setRoomName] = useState('');
-//    const [isPasswordEnabled, setIsPasswordEnabled] = useState(false);
-//    const [gchat, setGChat] = useState(null);
-//    useEffect(() => {
-//            const socketOptions = {
-//            transportOptions: {
-//                polling: {
-//                    extraHeaders: {
-//                        authorization: `Bearer ${sessionStorage.getItem('access_token')}`,
-//                        },
-//                    },
-//                }
-//            };
-//            const groupChatSocket = io(`${process.env.BACK_URL}/chat`, socketOptions);
-//            setGroupChatSocket(groupChatSocket);
-//
-//        groupChatSocket.on('connect', () => {
-//                console.log('Socket connection established!');
-//                });
-//        groupChatSocket.on('info', (data) => {
-//                console.log('Info : ', data);
-//                setGChat(data);
-//        });
-//        groupChatSocket.on('disconnect', (data) => {
-//                console.log('Socket connection closed.', data);
-//                });
-//
-//             return () => groupChatSocket.close();
-//        }, [setGroupChatSocket, setGChat]);
-//
-//    const CreateGroupChat = () => {
-//        if (!modal) {
-//            setModal(true);
-//        } else {
-//            setModal(false);
-//        }
-//    }
-//
-//    return (
-//        <>
-//        <Navigation />
-//        <div className=" bg-[#262525] py-0 md:py-6 text-xs xl:text-xl gap-x-0 md:gap-x-4 lg:text-lg md:text-md sm:text-sm backdrop-blur-md p-0 lg:p-2 xl:p-3 bg-dark-blue min-w-full min-h-full z-[668] absolute flex justify-center space-between bg-clip-padding text-white text-2xl" >
-//        <div className='w-full md:w-2/5 h-fit bg-[#1E1E1E] border-[#393939] border-solid border m-4 p-4 rounded text-center'>
-//           <p className="text-3xl font-bold"> ROOMS</ p>
-//           <button
-//                className="bg-gray-700 hover:bg-gray-950 text-white font-bold py-2 px-4 rounded mt-4 mb-1"
-//                onClick={() => CreateGroupChat()}
-//            >
-//                Create Room
-//            </button>
-//
-//        </div>
-//        <div className="w-full md:w-4/5 h-fit bg-[#1E1E1E] border-[#393939] border-solid border m-4 p-8 rounded text-center">
-//            CHAT
-//        </div>
-//        {modal && <Modal onClose={() => CreateGroupChat()}>
-//        <h2 className="text-3xl font-bold mb-2">Create new room</h2>
-//        <div className="flex flex-col mb-4">
-//          <label htmlFor="roomName" className="text-lg mb-2 font-medium">
-//            Room name:
-//          </label>
-//          <input
-//            type="text"
-//            id="roomName"
-//            value={roomName}
-//            onChange={(e) => setRoomName(e.target.value)}
-//            className="border border-gray-500 p-2 rounded-lg text-black focus:outline-none"
-//          />
-//        </div>
-//        <div className="flex flex-col mb-4">
-//          <label htmlFor="password" className="text-lg mb-2 font-medium">
-//            Password:
-//          </label>
-//          <div className="flex items-center">
-//            <input
-//              type={isPasswordEnabled ? 'text' : 'password'}
-//              id="password"
-//              value={password}
-//              onChange={(e) => setPassword(e.target.value)}
-//              disabled={!isPasswordEnabled}
-//              className="border border-gray-500 p-2 rounded-lg text-black w-full focus:outline-none"
-//            />
-//            <label htmlFor="togglePassword" className="ml-4 cursor-pointer select-none">
-//              <input
-//                type="checkbox"
-//                id="togglePassword"
-//                checked={isPasswordEnabled}
-//                onChange={() => setIsPasswordEnabled(!isPasswordEnabled)}
-//                className="mr-2"
-//              />
-//              <span className="text-gray-300">use password</span>
-//            </label>
-//            </div>
-//            </div>
-//        </Modal>}
-//        </div>
-//    </>
-//)
 import axios from "axios";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Header from "./Header";
 import Users from "./Users";
 import Messages from "./Messages";
 import { useSelector } from 'react-redux';
 import { selectUser } from "../Slices/userSlice";
-import { io } from 'socket.io-client';
+import { ChatContext } from "../context/ChatContext";
+import { useParams } from "react-router-dom";
 import { chatSocket } from "../Profile/UserHeader";
+import Navigation from "../NavBar";
 
 const Chat = () => {
   const userInfo = useSelector(selectUser);
+  const { id } = useParams();
   const [currentMessage, setCurrentMessage] = useState("");
   const [messageList, setMessageList] = useState([]);
-  useEffect(()=>{
-    console.log("chat");
-    chatSocket.on('join-chat', (data) =>{
-      console.log("data ", data);
+  const { dispatch, data } = useContext(ChatContext);
+  useEffect(() => {
+    chatSocket.on('info', (info) => {
+      info.userChats.map(elem => {
+        chatSocket.emit('chat', elem.id);
+      })
+      dispatch({ type: "CHANGE_INFO", payload: info });
     })
-    // chatSocket.on('my-chats', (data) =>{
-    //   console.log("mychat ", data);
-    // })
-    // chatSocket.on('chat', (data) =>{
-    //   console.log("mychat ", data);
-    // })
-  }, [chatSocket])
+    chatSocket.on('chat', (chat) => {
+      setMessageList((list) => [...list, chat]);
+      console.log("chh:", messageList);
+      dispatch({ type: "CHANGE_CHAT", payload: chat });
+    })
+    chatSocket.on('textDM', info=>{
+      chatSocket.emit('chat', info.channelId);
+    })
+    return () => {
+      chatSocket.off('info');
+      chatSocket.off('chat');
+      chatSocket.off('textDM');
+    };
+  }, [chatSocket, messageList])
+
+  const sendmsg = () => {
+    const curChat = data.chat.find(chat => chat.users[1].id == userInfo?.user?.id ? chat.users[0].id == id : chat.users[1].id == id)
+    const datas = {
+      channelId: curChat.id,
+      text: currentMessage,
+    }
+    chatSocket.emit('textDM', datas);
+    setCurrentMessage('');
+  }
   return (
-    <div className="container bg-[#262525]">
+    <>
+    <Navigation />
+    <div className="container bg-[#262525] min-w-full min-h-full">
       <div className="min-w-full border rounded lg:grid lg:grid-cols-3">
         <div className="border-r border-[#393939] lg:col-span-1">
-          <Header/>
-          <Users/>
+          <Header />
+          <Users data={data.chat} />
         </div>
         <div className="hidden lg:col-span-2 lg:block">
           <div className="w-full">
-            <Messages/>
+          <Messages messageList={messageList.find(chat => chat.users[1].id == userInfo?.user?.id ? chat.users[0].id == id : chat.users[1].id == id)?.messages} curId={userInfo?.user?.id} />
             <div className="flex items-center justify-between w-full p-3 border-t border-[#393939]">
               <input type="text" placeholder="Message"
                 className="block w-full py-2 pl-4 mx-3 bg-gray-100 rounded-full outline-none focus:text-gray-700"
-                name="message" required />
-              <button type="submit">
+                name="message" onChange={(event) => {
+                  setCurrentMessage(event.target.value);
+                }} required value={currentMessage} />
+              <button type="submit" onClick={sendmsg}>
                 <svg className="w-5 h-5 text-gray-500 origin-center transform rotate-90" xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 20 20" fill="currentColor">
                   <path
@@ -157,6 +77,7 @@ const Chat = () => {
         </div>
       </div>
     </div>
+    </>
   )
 }
 export default Chat;
