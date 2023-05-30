@@ -18,7 +18,6 @@ const Chat = () => {
   const { dispatch, data } = useContext(ChatContext);
   useEffect(() => {
     chatSocket.on('info', (info) => {
-      console.log("hhhh");
       info.userChats.map(elem => {
         chatSocket.emit('chat', elem.id);
       })
@@ -26,10 +25,8 @@ const Chat = () => {
     })
     chatSocket.on('chat', (chat) => {
       dispatch({ type: "CHANGE_CHAT", payload: chat });
-      console.log("ss:", chat);
       if (chat.users[1].id == userInfo?.user?.id ? chat.users[0].id == id : chat.users[1].id == id)
         setMessageList(chat.messages);
-      console.log("chh:", messageList);
     })
     chatSocket.on('textDM', info=>{
       chatSocket.emit('chat', info.channelId);
