@@ -25,9 +25,10 @@ const Chat = () => {
       dispatch({ type: "CHANGE_INFO", payload: info });
     })
     chatSocket.on('chat', (chat) => {
-      setMessageList((list) => [...list, chat]);
-      console.log("chh:", messageList);
       dispatch({ type: "CHANGE_CHAT", payload: chat });
+      if (chat.users[1].id == userInfo?.user?.id ? chat.users[0].id == id : chat.users[1].id == id)
+        setMessageList(chat.messages);
+      console.log("chh:", messageList);
     })
     chatSocket.on('textDM', info=>{
       chatSocket.emit('chat', info.channelId);
@@ -59,7 +60,7 @@ const Chat = () => {
         </div>
         <div className="hidden lg:col-span-2 lg:block">
           <div className="w-full">
-          <Messages messageList={messageList.find(chat => chat.users[1].id == userInfo?.user?.id ? chat.users[0].id == id : chat.users[1].id == id)?.messages} curId={userInfo?.user?.id} />
+          <Messages messageList={messageList} curId={userInfo?.user?.id} />
             <div className="flex items-center justify-between w-full p-3 border-t border-[#393939]">
               <input type="text" placeholder="Message"
                 className="block w-full py-2 pl-4 mx-3 bg-gray-100 rounded-full outline-none focus:text-gray-700"

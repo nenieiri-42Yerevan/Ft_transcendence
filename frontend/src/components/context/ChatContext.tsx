@@ -10,7 +10,6 @@ import axios from 'axios';
 export const ChatContext = createContext();
 
 export const ChatContextProvider = ({ children }) => {
-  const storedState = sessionStorage.getItem('chatContextState');
   const INITIAL_STATE = {
     info: {},
     chat: [],
