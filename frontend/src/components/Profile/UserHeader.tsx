@@ -18,7 +18,7 @@ const socketOptions = {
         }
       };
       
-export const chatSocket = io(`http://localhost:7000/chat`, socketOptions);
+export const chatSocket = io(`${process.env.BACK_URL}/chat`, socketOptions);
 
 const UserHeader = (props)=>{
     const disp = useDispatch();
@@ -33,20 +33,16 @@ const UserHeader = (props)=>{
             console.log("socket connected");
           })
           chatSocket.on('join-chat', (data) =>{
-            // setChatId(data);
-            console.log("hhh");
             chatSocket.emit('chat', data);
             flag = 1;
         })
         chatSocket.on('info', (info)=>{
-            console.log("contttt ", info);
             info.userChats.map(elem =>{
                 chatSocket.emit('chat', elem.id);
             })
             dispatch({ type: "CHANGE_INFO", payload: info });
         })
         chatSocket.on('chat', (chat) =>{
-            console.log("hhh ", chat );
             dispatch({ type: "CHANGE_CHAT", payload: chat });
             if (flag == 1)
                 navigate(`/transcendence/user/chat/${props.id}`);

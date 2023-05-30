@@ -11,7 +11,7 @@ export const ChatContext = createContext();
 
 export const ChatContextProvider = ({ children }) => {
   const storedState = sessionStorage.getItem('chatContextState');
-  const INITIAL_STATE = storedState ? JSON.parse(storedState) : {
+  const INITIAL_STATE =  storedState ? JSON.parse(storedState) : {
     info: {},
     chat: [],
   };
@@ -47,7 +47,6 @@ export const ChatContextProvider = ({ children }) => {
       sessionStorage.removeItem('chatContextState');
     };
   }, [state]);
-
 
   return (
     <ChatContext.Provider value={{ data: state, dispatch }}>
