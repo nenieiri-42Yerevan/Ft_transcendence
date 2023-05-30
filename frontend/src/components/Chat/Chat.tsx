@@ -16,6 +16,8 @@ const Chat = () => {
   const [currentMessage, setCurrentMessage] = useState("");
   const [messageList, setMessageList] = useState([]);
   const { dispatch, data } = useContext(ChatContext);
+  const [chats, setChats] = useState([]);
+
   useEffect(() => {
     chatSocket.on('info', (info) => {
       info.userChats.map(elem => {
@@ -25,6 +27,10 @@ const Chat = () => {
     })
     chatSocket.on('chat', (chat) => {
       dispatch({ type: "CHANGE_CHAT", payload: chat });
+      const chatId = chat.id;
+      const existingChat = chats.find(chat => chat.id === chatId);
+      if (!existingChat)
+        setChats(list =>[...list, chat]);
       if (chat.users[1].id == userInfo?.user?.id ? chat.users[0].id == id : chat.users[1].id == id)
         setMessageList(chat.messages);
     })
@@ -53,7 +59,7 @@ const Chat = () => {
     <div className="container bg-[#262525] min-w-full min-h-full">
       <div className="min-w-full rounded lg:grid lg:grid-cols-3">
         <div className="border-r border-[#393939] lg:col-span-1">
-          <Users data={data.chat} />
+          <Users data={chats && chats} />
         </div>
         <div className="lg:col-span-2 lg:block">
           <div className="w-full">

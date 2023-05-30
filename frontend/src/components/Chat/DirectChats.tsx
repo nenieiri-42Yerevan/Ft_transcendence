@@ -8,16 +8,23 @@ import { chatSocket } from "../Profile/UserHeader";
 
 const DirectChats = () =>{
     const { data, dispatch } = useContext(ChatContext);
+    const [chats, setChats] = useState([]);
 
      useEffect(()=>{
         chatSocket.on('info', (info)=>{
+          console.log(info);
             info.userChats.map(elem =>{
                 chatSocket.emit('chat', elem.id);
             })
             dispatch({ type: "CHANGE_INFO", payload: info });
+            console.log("inf:", data);
         })
         chatSocket.on('chat', (chat) =>{
-            dispatch({ type: "CHANGE_CHAT", payload: chat });
+          const chatId = chat.id;
+          const existingChat = chats.find(chat => chat.id === chatId);
+          if (!existingChat)
+            setChats(list =>[...list, chat]);
+          dispatch({ type: "CHANGE_CHAT", payload: chat });
           })
         return () => {
             chatSocket.off('join-chat');
@@ -27,11 +34,12 @@ const DirectChats = () =>{
 
     return (
         <>
+        {console.log("chats:", chats)}
         <Navigation />
         <div className="container bg-[#262525] min-w-full min-h-full">
           <div className="min-w-full rounded lg:grid lg:grid-cols-3">
             <div className="border-r border-[#393939] lg:col-span-1">
-              <Users data={data.chat} />
+              <Users data={chats && chats} />
             </div>
             <div className="hidden lg:col-span-2 lg:block">
               <div className="w-full">

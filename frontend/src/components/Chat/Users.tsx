@@ -11,10 +11,10 @@ const Users = (props) => {
   const userInfo = useSelector(selectUser);
   const [query, setQuery] = useState('');
   const [res, setRes] = useState(null);
-  
+
   useEffect(()=>{
     setRes(filterItems(query, data, userInfo));
-  }, [query])
+  }, [query, data])
 
   return (
     <>
