@@ -26,6 +26,7 @@ const Chat = () => {
     })
     chatSocket.on('chat', (chat) => {
       dispatch({ type: "CHANGE_CHAT", payload: chat });
+      console.log("ss:", chat);
       if (chat.users[1].id == userInfo?.user?.id ? chat.users[0].id == id : chat.users[1].id == id)
         setMessageList(chat.messages);
       console.log("chh:", messageList);
@@ -38,7 +39,7 @@ const Chat = () => {
       chatSocket.off('chat');
       chatSocket.off('textDM');
     };
-  }, [chatSocket, messageList])
+  }, [chatSocket, messageList, id])
 
   const sendmsg = () => {
     const curChat = data.chat.find(chat => chat.users[1].id == userInfo?.user?.id ? chat.users[0].id == id : chat.users[1].id == id)
