@@ -20,6 +20,7 @@ const Profilemenu = () => {
       dispatch(logout())
       sessionStorage.removeItem('access_token');
       sessionStorage.removeItem('refresh_token');
+      sessionStorage.removeItem('chatContextState');
       navigate("/transcendence/user/signin")
     } catch (error) {
       console.log(error);
