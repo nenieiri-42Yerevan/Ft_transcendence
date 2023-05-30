@@ -9,6 +9,18 @@ import React from 'react'
 import axios from 'axios';
 export const ChatContext = createContext();
 
+export const filterItems = ((query, data, userInfo) => {
+  let arr:any[] = [];
+  data.map((elem, index) => {
+    const info = elem.users.find(el => ( el.id != userInfo.user.id ));
+    if (info)
+    {
+      arr.push(info);
+    }
+  })
+  return (arr.filter((elem) => elem.username.includes(query)));
+})
+
 export const ChatContextProvider = ({ children }) => {
   const storedState = sessionStorage.getItem('chatContextState');
   const INITIAL_STATE =  storedState ? JSON.parse(storedState) : {

@@ -53,7 +53,7 @@ const Chat = () => {
     <div className="container bg-[#262525] min-w-full min-h-full">
       <div className="min-w-full border rounded lg:grid lg:grid-cols-3">
         <div className="border-r border-[#393939] lg:col-span-1">
-          <Header />
+          {/* <Header /> */}
           <Users data={data.chat} />
         </div>
         <div className="lg:col-span-2 lg:block">
