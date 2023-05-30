@@ -25,7 +25,7 @@ const GameHistoryTable = ({matches}) => {
     return (<div className=" w-full md:w-2/6 h-fit bg-[#1E1E1E] m-1 border-[#393939] border-solid border p-8 rounded text-center">
       <h2 className="text-2xl mb-2 font-bold">Game History</h2>
        {matches == null ? (  
-        <p className="flex items-center justify-center text-xl h-12 bg-gray-800 mr-2 ml-2 rounded-md">No data</p>
+        <p className="text-2xl mb-2 font-bold">No data</p>
          ) : (
          matches.slice(0, 10).map(match => {
           return ( <div key={match.id} className="flex flex-row h-12 justify-between items-center text-2xl mr-2 ml-2 mb-1 border-b border-white ">

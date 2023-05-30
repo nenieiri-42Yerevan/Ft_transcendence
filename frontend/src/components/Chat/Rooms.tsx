@@ -3,10 +3,11 @@ import Modal from "./Modal";
 import axios, { HttpStatusCode } from "axios";
 import { useState, useEffect } from 'react';
 import Header from './Header';
+import { Link } from 'react-router-dom';
 import deleteImg from '../../assets/images/delete_button.png';
 import adminImg from '../../assets/images/admin.png';
 import lockImg from '../../assets/images/lock.png';
-const Rooms = ({gchat, setGChat, user,  groupChatSocket}) => {
+const Rooms = ({gchat, setGChat, user, setCurChat}) => {
     
     const [modal, setModal] = useState(false);
     const [isPasswordEnabled, setIsPasswordEnabled] = useState(false);
@@ -60,22 +61,25 @@ const Rooms = ({gchat, setGChat, user,  groupChatSocket}) => {
     <Header />
     {gchat.length == 0
       ? <p>no rooms.. </p>
-      : gchat.map((item, index) => ( 
-        <div className='flex items-center px-3 py-2 text-sm transition duration-150 ease-in-out border mb-1 border-[#393939] cursor-pointer hover:bg-[#616161] focus:outline-none' key={index}>
+      : gchat.map((item, index) =>  
+        <div onClick={() => {setCurChat(item); console.log(item)}} className='flex items-center px-3 py-2 text-sm transition duration-150 ease-in-out border mb-1 border-[#393939] cursor-pointer hover:bg-[#616161] focus:outline-none' key={index}>
           <div className="w-full pb-2">
             <div className="flex justify-between">
-              <span className="block ml-2 truncate font-bold text-xl text-white">{item.name}</span>
+              <span className="block ml-2 truncate font-bold text-xl text-white">{item.name?item.name:item.users[0].username}</span>
+              {item.owner && <span>Room</span>}
             </div>
             <div className='flex justify-end'>
-              {item.owner.id==user.id && <img className='w-7 h-7' src={adminImg} alt='You are admin' />}
-              {!item.public && <img className='w-7 h-7' src={lockImg} alt='Private room' />}
-              {<button onClick={() => LeaveChat(item)}>
+              {item.owner && item.owner.id==user.id && <img className='w-7 h-7' src={adminImg} alt='You are admin' />}
+              {item.owner && !item.public && <img className='w-7 h-7' src={lockImg} alt='Private room' />}
+              {item.owner &&
+              <button onClick={() => LeaveChat(item)}>
                   <img className='w-7 h-7 cursor-pointer' src={deleteImg} alt='Delete room' />
               </button>}
             </div>
           </div>
         </div>
-      ))}
+        
+      )}
     <button className="bg-gray-700 hover:bg-gray-950 text-white font-bold py-2 px-4 rounded mt-4 mb-1" onClick={() => CreateGroupChat(true)}>
       Create Room
     </button>

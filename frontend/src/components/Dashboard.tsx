@@ -5,10 +5,7 @@ import Navigation from "./NavBar";
 import search_img from "@SRC_DIR/assets/images/search.png";
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchFriendsData, fetchMatches, selectUser, Matches, Friends, getAvatar, setAvatar } from './Slices/userSlice';
-import axios from "axios";
-import Background from "./Background";
 import { useEffect } from 'react';
-import refreshToken from './Utils/refreshToken';
 import GameHistoryTable from './GameHistoryBoard';
 import LeaderBoard from './LeaderBoard';
 import ActiveChallenges from './RequestsBoard';
@@ -23,12 +20,14 @@ const Dashboard = () => {
         if (!userInfo.user) {
             navigate("/transcendence/user/signin");
         } else {
+            if (matches == null) {
             fetchMatches(1, navigate, dispatch, userInfo.user)
             .then((data?: Matches[]) => {
                 setMatches(data);})
             .catch(error => console.log(error));
+            }
         }
-    }, []);
+    }, [setMatches]);
       return (
         <>
             <Navigation />
@@ -37,7 +36,7 @@ const Dashboard = () => {
                 <div className='flex w-1/6'> 
                     <form className='flex items-start'>
                         <input className="w-3/4 mr-2 rounded text-black"type="text" />
-                        <button type="submit"><img className="h-7 w-7" src={search_img} /></button>
+                        <button onClick={(e) => {setMatches(matches.filter(match => match.winner.username.includes(e.target.value) || match.loser.username.includes(e.target.value)))}}><img className="h-7 w-7" src={search_img} /></button>
                     </form>
                 </div>
                 <GameHistoryTable matches={matches} />

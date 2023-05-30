@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { FORM_ERROR } from 'final-form'
 import refreshToken from '../Utils/refreshToken'
-
+import defaultAvatar from '../../assets/images/avatar.png'
 import { Dispatch } from 'react';
 // import { useDispatch, useSelector } from 'react-redux';
 import { GetUser } from '../../../../backend/src/common/decorators/GetUser';
@@ -328,9 +328,9 @@ export const getAvatar = async (flag: number, Navigate, dispatch: any, id: strin
       }
     }
     if (flag == 0)
-      dispatch(setUserImage(null));
+      dispatch(setUserImage(defaultAvatar));
     else if (flag == 1)
-      return (null);
+      return (defaultAvatar);
 
   }
 }
