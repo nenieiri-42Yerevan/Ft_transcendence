@@ -56,7 +56,7 @@ const Chat = () => {
           <Header />
           <Users data={data.chat} />
         </div>
-        <div className="hidden lg:col-span-2 lg:block">
+        <div className="lg:col-span-2 lg:block">
           <div className="w-full">
           <Messages messageList={messageList} curId={userInfo?.user?.id} />
             <div className="flex items-center justify-between w-full p-3 border-t border-[#393939]">

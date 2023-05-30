@@ -20,7 +20,7 @@ const DirectChats = () =>{
             dispatch({ type: "CHANGE_CHAT", payload: chat });
           })
         return () => {
-            chatSocket.off('info');
+            chatSocket.off('join-chat');
             chatSocket.off('chat');
           };
     }, [chatSocket])
