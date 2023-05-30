@@ -18,6 +18,7 @@ const Chat = () => {
   const { dispatch, data } = useContext(ChatContext);
   useEffect(() => {
     chatSocket.on('info', (info) => {
+      console.log("hhhh");
       info.userChats.map(elem => {
         chatSocket.emit('chat', elem.id);
       })

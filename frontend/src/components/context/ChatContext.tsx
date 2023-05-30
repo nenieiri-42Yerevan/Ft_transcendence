@@ -11,7 +11,7 @@ export const ChatContext = createContext();
 
 export const ChatContextProvider = ({ children }) => {
   const storedState = sessionStorage.getItem('chatContextState');
-  const INITIAL_STATE = storedState ? JSON.parse(storedState) : {
+  const INITIAL_STATE = {
     info: {},
     chat: [],
   };
@@ -40,14 +40,6 @@ export const ChatContextProvider = ({ children }) => {
   };
 
   const [state, dispatch] = useReducer(chatReducer, INITIAL_STATE);
-
-  useEffect(() => {
-    sessionStorage.setItem('chatContextState', JSON.stringify(state));
-    return () => {
-      sessionStorage.removeItem('chatContextState');
-    };
-  }, [state]);
-
 
   return (
     <ChatContext.Provider value={{ data: state, dispatch }}>
