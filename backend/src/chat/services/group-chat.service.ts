@@ -100,14 +100,17 @@ export class GroupChatService {
   ): Promise<GroupChat> {
     let gchat = null;
 
+    
     if (groupId)
       gchat = await this.groupChatRepo.findOne({
         where: { id: groupId },
         relations,
       });
 
-    if (!gchat)
-      throw new HttpException('Group Chat not found', HttpStatus.NOT_FOUND);
+    if (!gchat) {
+        console.log("Chat not found!");
+        throw new HttpException('Group Chat not found', HttpStatus.NOT_FOUND);
+    }
 
     if (!needPass) delete gchat.password;
 

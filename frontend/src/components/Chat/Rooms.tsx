@@ -3,7 +3,6 @@ import Modal from "./Modal";
 import axios, { HttpStatusCode } from "axios";
 import { useState, useEffect } from 'react';
 import Header from './Header';
-import { Link } from 'react-router-dom';
 import deleteImg from '../../assets/images/delete_button.png';
 import adminImg from '../../assets/images/admin.png';
 import lockImg from '../../assets/images/lock.png';

@@ -108,14 +108,18 @@ export class ChatGateway
 
   @SubscribeMessage('text')
   async handleMessage(client: Socket, data: any): Promise<void> {
+      console.log(data);
     try {
       const user = client.data.user;
+      console.log(user);
       const gchat = await this.groupChatService.findOne(data.id, ['users']);
 
+      console.log(gchat);
       if (data.value.length >= 1 << 8)
         throw new HttpException('text is too long', HttpStatus.BAD_REQUEST);
 
       await this.groupChatService.addMessage(data.id, data.value, user.id);
+      console.log("Message received!");
       this.emitGroup(gchat, 'text', {
         user: { id: user.id, username: user.username },
         ...data,
@@ -267,9 +271,7 @@ export class ChatGateway
   @SubscribeMessage('textDM')
   async sendMessageDM(client: Socket, data: any): Promise<void> {
     try {
-      console.log("textDM", data);
       const chat = await this.chatService.findOne(data.channelId, ['users']);
-      console.log("chh:", chat);
       const other = chat.users.find((user) => user.id != client.data.user.id);
 
       if (other && other.blocked.includes(client.data.user.id))

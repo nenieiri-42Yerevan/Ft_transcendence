@@ -28,7 +28,7 @@ const GroupChatComponent = () => {
                 console.log('Socket connection established!');
                 });
         groupChatSocket.on('info', (data) => {
-                setGChat(data.groups.concat(data.userChats));
+                setGChat(data.userGroups.concat(data.userChats));
                 console.log("info:", gchat, data);
         });
         groupChatSocket.on('disconnect', (data) => {
@@ -40,17 +40,19 @@ const GroupChatComponent = () => {
         groupChatSocket.on('leave', (data) => {
             console.log("Someone leave chat :", data);
         });
-
+        groupChatSocket.on('text', (data) => {
+            console.log("Receive text:", data);
+        });
              return () => groupChatSocket.close();
-        }, [setGroupChatSocket, setGChat]);
+        }, [setGroupChatSocket, setGChat, curChat]);
 
     return (
         <>
         <Navigation />
         <div className=" bg-[#262525] py-0 md:py-6 text-xs xl:text-xl gap-x-0 md:gap-x-4 lg:text-lg md:text-md sm:text-sm backdrop-blur-md p-0 lg:p-2 xl:p-3 bg-dark-blue min-w-full min-h-full z-[668] absolute flex justify-center space-between bg-clip-padding text-white text-2xl" >
            <Rooms gchat={gchat} setGChat={setGChat} user={userInfo.user} setCurChat={setCurChat} />  
-        <div className="w-full md:w-4/5 h-40vh bg-[#1E1E1E] border-[#393939] border-solid border m-4 p-2 rounded text-center">
-            <ChatSpace curChat={curChat} />
+        <div className="w-full md:w-4/5 h-screen bg-[#1E1E1E] border-[#393939] border-solid border m-4 p-2 rounded text-center">
+            <ChatSpace curChat={curChat} groupSocket={groupChatSocket}/>
         </div>
        </div>
        
