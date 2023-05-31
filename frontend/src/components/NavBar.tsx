@@ -24,10 +24,6 @@ const Navigation  = () => {
               })}>Dashboard</Link>
           </li>
           <li>
-            <Link to="#" className={classNames({"font-bold": activeTab.includes("/friends")
-              })}>Friends</Link>
-          </li>
-          <li>
             <Link to="/transcendence/user/chat" className={classNames({"font-bold": activeTab.includes("/chat")
               })}>Chat</Link>
           </li>

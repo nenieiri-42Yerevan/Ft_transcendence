@@ -15,9 +15,34 @@ import Redirect from './components/Redirect';
 import Tfa_42 from './components/Tfa_42';
 import Game from "./components/Game/Game";
 import DirectChats from './components/Chat/DirectChats';
-
+import { useState, useEffect } from 'react';
+import { io } from 'socket.io-client';
 const App = (props: any) => {
    
+   const [gameSocket, setGameSocket] = useState(null);
+  useEffect(() => {
+    const socketOptions = {
+            transportOptions: {
+                polling: {
+                    extraHeaders: {
+                        authorization: `Bearer ${sessionStorage.getItem('access_token')}`,
+                        },
+                    },
+                }
+            };
+            const gameSocket = io(`${process.env.BACK_URL}/pong`, socketOptions);
+            setGameSocket(gameSocket);
+            gameSocket.on('connect', () => {
+                console.log('Socket connection established!');
+                });
+            gameSocket.on('disconnect', (data) => {
+                console.log('Socket connection closed.', data);
+                });
+            gameSocket.on('info', (data) => {
+                    console.log('Info : ', data);
+            });
+
+    },[]);
   return (
     <>
       <Router>
@@ -34,7 +59,7 @@ const App = (props: any) => {
           <Route path="/transcendence/user/chat/:id" element={<Chat />} />
           <Route path="/transcendence/user/chat" element={<GroupChatComponent />} />
           <Route path="/transcendence/user/directchats" element={<DirectChats />} />
-          <Route path="/transcendence/game" element={<Game />} />
+          <Route path="/transcendence/game" element={<Game gameSocket={gameSocket} />} />
         </Routes>
       </Router>
     </>

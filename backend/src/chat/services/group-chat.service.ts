@@ -98,17 +98,14 @@ export class GroupChatService {
     relations = [] as string[],
     needPass?: boolean,
   ): Promise<GroupChat> {
-    let gchat = null;
 
     
-    if (groupId)
-      gchat = await this.groupChatRepo.findOne({
+    const gchat = await this.groupChatRepo.findOne({
         where: { id: groupId },
         relations,
       });
 
     if (!gchat) {
-        console.log("Chat not found!");
         throw new HttpException('Group Chat not found', HttpStatus.NOT_FOUND);
     }
 
@@ -306,12 +303,12 @@ export class GroupChatService {
 
   async addMessage(id: number, message: string, uid: number): Promise<void> {
     const user = await this.userService.findOne(uid);
+
     const chat = await this.findOne(id, ['users', 'messages', 'muted']);
-
-    if (!chat.users.find((u) => u.id == user.id))
+    if (!chat.users.find((u) => u.id == user.id)) {
       throw new HttpException('User is not in the group', HttpStatus.NOT_FOUND);
+    }
 
-    {
       const muted = chat.muted.find((u) => u.user.id == user.id);
 
       if (muted) {
@@ -325,7 +322,6 @@ export class GroupChatService {
 
         await this.unmuteUser(muted, chat);
       }
-    }
 
     const log = this.logRepository.create({
       content: message,
@@ -334,12 +330,14 @@ export class GroupChatService {
 
     try {
       await this.logRepository.save(log);
+        console.log("log saved");
       await this.groupChatRepo
         .createQueryBuilder()
         .relation(GroupChat, 'messages')
         .of(chat)
         .add(log);
     } catch (error) {
+        console.log(error);
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
   }

@@ -6,7 +6,7 @@ import Header from './Header';
 import deleteImg from '../../assets/images/delete_button.png';
 import adminImg from '../../assets/images/admin.png';
 import lockImg from '../../assets/images/lock.png';
-const Rooms = ({gchat, setGChat, user, setCurChat}) => {
+const Rooms = ({gsocket, gchat, allChat, setGChat, user, setCurChat}) => {
     
     const [modal, setModal] = useState(false);
     const [isPasswordEnabled, setIsPasswordEnabled] = useState(false);
@@ -54,14 +54,22 @@ const Rooms = ({gchat, setGChat, user, setCurChat}) => {
             setModal(false);
         }
     }
+    const JoinChat = (item) => {
+        const ch = allChat.find((chat) => chat.id == item.id);
+        if (ch == null) {
+           gsocket.emit('join', item); 
+        } else {
+            setCurChat(item);
+        }
+    }
     return ( 
 
     <div className='flex flex-col w-full md:w-2/5 h-fit max-h-screen overflow-scroll   bg-[#1E1E1E] border-[#393939] border-solid border m-4 p-4 rounded text-center'>
     <Header />
-    {gchat.length == 0
+    {allChat.length == 0
       ? <p>no rooms.. </p>
-      : gchat.map((item, index) =>  
-        <div onClick={() => {setCurChat(item); console.log(item)}} className='flex items-center px-3 py-2 text-sm transition duration-150 ease-in-out border mb-1 border-[#393939] cursor-pointer hover:bg-[#616161] focus:outline-none' key={index}>
+      : allChat.map((item, index) =>  
+        <div onClick={() => {JoinChat(item)}} className='flex items-center px-3 py-2 text-sm transition duration-150 ease-in-out border mb-1 border-[#393939] cursor-pointer hover:bg-[#616161] focus:outline-none' key={index}>
           <div className="w-full pb-2">
             <div className="flex justify-between">
               <span className="block ml-2 truncate font-bold text-xl text-white">{item.name?item.name:item.users[0].username}</span>

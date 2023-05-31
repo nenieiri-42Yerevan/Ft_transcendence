@@ -6,6 +6,7 @@ import {
   ManyToMany,
   ManyToOne,
   OneToMany,
+  PrimaryGeneratedColumn,
 } from 'typeorm';
 import { User } from 'src/user/entities';
 import { Muted } from './muted.entity';
@@ -15,6 +16,9 @@ import { Message } from './message.entity';
 
 @Entity()
 export class GroupChat extends Chat {
+  @PrimaryGeneratedColumn()
+  id: number;
+
   @Column({ unique: true })
   name: string;
 

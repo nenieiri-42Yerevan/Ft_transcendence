@@ -22,7 +22,7 @@ const GameHistoryTable = ({matches}) => {
             });
         }
     },[setAvatars, matches]);
-    return (<div className=" w-full md:w-2/6 h-fit bg-[#1E1E1E] m-1 border-[#393939] border-solid border p-8 rounded text-center">
+    return (<div className=" w-full md:w-3/6 h-fit bg-[#1E1E1E] m-1 border-[#393939] border-solid border p-8 rounded text-center">
       <h2 className="text-2xl mb-2 font-bold">Game History</h2>
        {matches == null ? (  
         <p className="text-2xl mb-2 font-bold">No data</p>

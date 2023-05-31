@@ -33,16 +33,13 @@ const Profilemenu = () => {
             <Link to="/transcendence/user/dashboard">Dashboard</Link>
           </li>
           <li>
-            <Link to="#">Friends</Link>
-          </li>
-          <li>
             <Link to="/transcendence/user/chat">Chat</Link>
           </li>
           <li>
             <Link to="/transcendence/game">Game</Link>
           </li>
           <li>
-            <Link to="/transcendence/user/profile">Profile</Link>
+            <Link to="/transcendence/user/profile" className="font-bold">Profile</Link>
           </li>
         </ul>
         <div className='flex flex-row justify-end'>

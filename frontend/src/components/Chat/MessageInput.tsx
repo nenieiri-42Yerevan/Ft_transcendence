@@ -5,8 +5,8 @@ const MessageInput = ({groupSocket, curChat}) => {
     
     const sendMsg = () => {
         const msg = {
-            channelId: curChat.id,
-            text: currentMessage,
+            id: curChat.id,
+            value: currentMessage,
         }
         groupSocket.emit('text', msg);
     }
@@ -25,7 +25,6 @@ const MessageInput = ({groupSocket, curChat}) => {
                 </svg>
               </button>
             </div>);
-
 };
 
 export default MessageInput;

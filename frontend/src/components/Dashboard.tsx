@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
 // import Background from "./Background";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Navigation from "./NavBar";
 import search_img from "@SRC_DIR/assets/images/search.png";
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchFriendsData, fetchMatches, selectUser, Matches, Friends, getAvatar, setAvatar } from './Slices/userSlice';
+import { fetchMatches, selectUser, Matches } from './Slices/userSlice';
 import { useEffect } from 'react';
 import GameHistoryTable from './GameHistoryBoard';
-import LeaderBoard from './LeaderBoard';
 import ActiveChallenges from './RequestsBoard';
 
 const Dashboard = () => {
@@ -41,7 +40,6 @@ const Dashboard = () => {
                 </div>
                 <GameHistoryTable matches={matches} />
                 <ActiveChallenges userInfo={userInfo} />
-                <LeaderBoard userInfo={userInfo} />
                 </div>
             </div>
         </>
