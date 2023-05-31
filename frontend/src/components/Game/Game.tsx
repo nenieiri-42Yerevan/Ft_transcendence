@@ -15,6 +15,7 @@ const Game = ({gameSocket}) => {
     
     useEffect(() => {
 
+        if (gameSocket) {
         gameSocket.on('room', (data) => {
                 console.log('Received a message from the backend room code:', data);
                 setIsReady(true);
@@ -24,14 +25,18 @@ const Game = ({gameSocket}) => {
                 console.log('Socket add : ', data);
                 setId(data - 1);
                 });
+
+        }
         return () => {
+            if (gameSocket) {
             gameSocket.off('connect');
             gameSocket.off('info');
             gameSocket.off('room');
             gameSocket.off('add');
             gameSocket.off('disconnect');
             }
-        }, [mode, setId, setIsReady]);
+            }
+        }, [mode, gameSocket]);
 
     return (
             <>
