@@ -61,7 +61,7 @@ const App = (props: any) => {
             });
 
 
-    },[setChatSocket, setGameSocket, setChatInfo]);
+    },[]);
   return (
     <>
       <Router>

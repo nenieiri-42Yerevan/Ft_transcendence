@@ -12,6 +12,7 @@ const GroupChatComponent = ({chatSocket, chatInfo}) => {
     const [allChat, setAllChat] = useState([]);
     const [curChat, setCurChat] = useState(null);
     useEffect(() => {
+        if (chatInfo && chatSocket) {
         console.log(chatInfo);
         setGChat(chatInfo.userGroups);
         setAllChat(chatInfo.groups);
@@ -30,13 +31,16 @@ const GroupChatComponent = ({chatSocket, chatInfo}) => {
             console.log("allchat", allChat);
             setCurChat(gchat.find((chat) => chat.id == data.gchat.id));
         });
+        }
 
         return () => {
+        if (chatInfo && chatSocket) {
             chatSocket.off('info');
             chatSocket.off('my-chats');
             chatSocket.off('leave');
             chatSocket.off('text');
             chatSocket.off('join');
+            }
         };
         }, [chatSocket, chatInfo]);
 
