@@ -1,34 +1,32 @@
 import React, { useState } from 'react';
 // import Background from "./Background";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Navigation from "./NavBar";
 import search_img from "@SRC_DIR/assets/images/search.png";
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchFriendsData, fetchMatches, selectUser, Friends, getAvatar, setAvatar } from './Slices/userSlice';
-import axios from "axios";
-import Background from "./Background";
+import { fetchMatches, selectUser, Matches } from './Slices/userSlice';
 import { useEffect } from 'react';
-import refreshToken from './Utils/refreshToken';
 import GameHistoryTable from './GameHistoryBoard';
-import LeaderBoard from './LeaderBoard';
 import ActiveChallenges from './RequestsBoard';
 
 const Dashboard = () => {
     
     const userInfo = useSelector(selectUser);
     const navigate = useNavigate();
-   // const dispatch = useDispatch();
+    const dispatch = useDispatch();
+    const [matches, setMatches] = useState(null);
     useEffect(() => {
-        if (!userInfo.user)
+        if (!userInfo.user) {
             navigate("/transcendence/user/signin");
-        else {
-            console.log(userInfo.user);
-           // fetchFriendsData(0, dispatch, userInfo.user);
-           // fetchMatches(0, dispatch, userInfo.user);
-            console.log("nn");
-            console.log(userInfo);     
+        } else {
+            if (matches == null) {
+            fetchMatches(1, navigate, dispatch, userInfo.user)
+            .then((data?: Matches[]) => {
+                setMatches(data);})
+            .catch(error => console.log(error));
+            }
         }
-    }, []);
+    }, [setMatches]);
       return (
         <>
             <Navigation />
@@ -37,12 +35,11 @@ const Dashboard = () => {
                 <div className='flex w-1/6'> 
                     <form className='flex items-start'>
                         <input className="w-3/4 mr-2 rounded text-black"type="text" />
-                        <button type="submit"><img className="h-7 w-7" src={search_img} /></button>
+                        <button onClick={(e) => {setMatches(matches.filter(match => match.winner.username.includes(e.target.value) || match.loser.username.includes(e.target.value)))}}><img className="h-7 w-7" src={search_img} /></button>
                     </form>
                 </div>
-                <GameHistoryTable userInfo={userInfo} />
+                <GameHistoryTable matches={matches} />
                 <ActiveChallenges userInfo={userInfo} />
-                <LeaderBoard userInfo={userInfo} />
                 </div>
             </div>
         </>

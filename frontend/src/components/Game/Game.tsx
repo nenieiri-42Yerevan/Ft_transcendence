@@ -7,51 +7,31 @@ import Menu from './Menu';
 import { useState, useEffect } from 'react';
 import { io } from 'socket.io-client';
 
-const Game = () => {
+const Game = ({gameSocket}) => {
     const [isReady, setIsReady] = useState(false); // добавляем новое состояние
     const [id, setId] = useState(0);
     const [mode, setMode] = useState(0);
     //const [isReady, setIsReady] = useState(true); // добавляем новое состояние
-   const [gameSocket, setGameSocket] = useState(null);
     
     useEffect(() => {
-            const socketOptions = {
-            transportOptions: {
-                polling: {
-                    extraHeaders: {
-                        authorization: `Bearer ${sessionStorage.getItem('access_token')}`,
-                        },
-                    },
-                }
-            };
-            const gameSocket = io(`${process.env.BACK_URL}/pong`, socketOptions);
-            setGameSocket(gameSocket);
-
-        gameSocket.on('connect', () => {
-                console.log('Socket connection established!');
-                });
-        gameSocket.on('info', (data) => {
-                console.log('Info : ', data);
-        });
 
         gameSocket.on('room', (data) => {
                 console.log('Received a message from the backend room code:', data);
                 setIsReady(true);
                 });
 
-        gameSocket.on('disconnect', (data) => {
-                console.log('Socket connection closed.', data);
-                });
-
         gameSocket.on('add', (data) => {
                 console.log('Socket add : ', data);
-                console.log(mode);
                 setId(data - 1);
                 });
-        return () => gameSocket.close();
-
-      
-        }, [mode, setGameSocket, setId, setIsReady]);
+        return () => {
+            gameSocket.off('connect');
+            gameSocket.off('info');
+            gameSocket.off('room');
+            gameSocket.off('add');
+            gameSocket.off('disconnect');
+            }
+        }, [mode, setId, setIsReady]);
 
     return (
             <>

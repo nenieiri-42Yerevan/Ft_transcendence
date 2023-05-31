@@ -98,16 +98,16 @@ export class GroupChatService {
     relations = [] as string[],
     needPass?: boolean,
   ): Promise<GroupChat> {
-    let gchat = null;
 
-    if (groupId)
-      gchat = await this.groupChatRepo.findOne({
+    
+    const gchat = await this.groupChatRepo.findOne({
         where: { id: groupId },
         relations,
       });
 
-    if (!gchat)
-      throw new HttpException('Group Chat not found', HttpStatus.NOT_FOUND);
+    if (!gchat) {
+        throw new HttpException('Group Chat not found', HttpStatus.NOT_FOUND);
+    }
 
     if (!needPass) delete gchat.password;
 
@@ -303,12 +303,12 @@ export class GroupChatService {
 
   async addMessage(id: number, message: string, uid: number): Promise<void> {
     const user = await this.userService.findOne(uid);
+
     const chat = await this.findOne(id, ['users', 'messages', 'muted']);
-
-    if (!chat.users.find((u) => u.id == user.id))
+    if (!chat.users.find((u) => u.id == user.id)) {
       throw new HttpException('User is not in the group', HttpStatus.NOT_FOUND);
+    }
 
-    {
       const muted = chat.muted.find((u) => u.user.id == user.id);
 
       if (muted) {
@@ -322,7 +322,6 @@ export class GroupChatService {
 
         await this.unmuteUser(muted, chat);
       }
-    }
 
     const log = this.logRepository.create({
       content: message,
@@ -331,12 +330,14 @@ export class GroupChatService {
 
     try {
       await this.logRepository.save(log);
+        console.log("log saved");
       await this.groupChatRepo
         .createQueryBuilder()
         .relation(GroupChat, 'messages')
         .of(chat)
         .add(log);
     } catch (error) {
+        console.log(error);
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
   }
@@ -344,7 +345,7 @@ export class GroupChatService {
   /* DELETE */
 
   async delete(id: number): Promise<void> {
-    const gchat = await this.findOne(id, ['users', 'muted', 'banned', 'logs']);
+    const gchat = await this.findOne(id, ['users', 'muted', 'banned', 'messages']);
 
     await this.messageRepo.remove(gchat.messages);
     await this.mutedUserRepo.remove(gchat.muted);
@@ -372,7 +373,10 @@ export class GroupChatService {
 
       const index = gchat.admins.indexOf(user.id);
       if (index != -1) gchat.admins.splice(index, 1);
-    } else if (user.id == gchat.owner.id) return await this.delete(gchat.id);
+    } else if (user.id == gchat.owner.id) {
+        console.log("Admin delete own group");
+        return await this.delete(gchat.id);
+    }
 
     {
       const index = gchat.users.findIndex((user1) => user1.id == user.id);

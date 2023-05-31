@@ -119,9 +119,17 @@ export class AuthService {
   async refreshTokens(userId: number, rt: string): Promise<TokenDto> {
     const user = await this.userService.findOne(userId, ['sessions']);
     if (user) {
-      const session = await this.sessionService.read_RT(rt);
+	  let sessionID = null;
+	  for (const session of user.sessions) {
+	    if (session.refresh_token == rt) {
+		  sessionID = session.id;
+		  break;
+		}
+	  }
+	  if (!sessionID)
+    	throw new HttpException('Session not found for this user', HttpStatus.NOT_FOUND);
       const tokens = await this.generateJWT(user.id, user.username);
-      this.sessionService.update(session.id, {
+      this.sessionService.update(sessionID, {
         access_token: tokens.access_token,
         refresh_token: tokens.refresh_token,
       } as Session);

@@ -92,7 +92,7 @@ export class ChatController {
     return this.groupChatService.addUser(gchat, uid);
   }
 
-  @Delete('/group/delete/:uid/:gid/')
+  @Delete('/group/delete/:uid/:gid')
   deleteUserFromGroup(
     @Param('uid', ParseIntPipe) uid: number,
     @Param('gid', ParseIntPipe) gid: number,

@@ -6,7 +6,6 @@ import Engine from './Engine';
 
 const Menu = (props) => {
     const { gameSocket, setMode } = props;
-    const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState("Find Game"); // добавляем новое состояние
     const [isHardcore, setIsHardcore] = useState(false); // добавляем новое состояние
 
@@ -33,14 +32,15 @@ const Menu = (props) => {
               <Engine isPreview={true} /> 
           </div>
         <div className='w-screen h-screen flex justify-center items-center'> 
-          <div className="w-1/2 h-1/3 flex flex-col justify-center items-center bg-gray-400 bg-opacity-70 rounded-lg p-8 relative z-10"> 
+          <div className="w-1/2 h-fit flex flex-col justify-center items-center bg-gray-400 bg-opacity-70 rounded-lg p-8 relative z-10"> 
             <h1 className="text-2xl font-bold text-center mb-4">Pong Game</h1>
             <button
                 className="bg-gray-700 hover:bg-gray-950 text-white font-bold py-2 px-4 rounded w-1/2 mb-4"
                 onClick={() => searchOpponent()}
             >
-                {isLoading}
+           {isLoading}
             </button>
+           
             <button
                 className={isHardcore?"bg-red-700 hover:bg-red-950 text-white font-bold py-2 px-4 rounded w-1/2 mb-4":
                 "bg-gray-700 hover:bg-gray-950 text-white font-bold py-2 px-4 rounded w-1/2 mb-4"}

@@ -19,14 +19,14 @@ const Multiplayer = (props) => {
    var score = [0, 0];
    const navigate = useNavigate();
     
-    gameSocket.on('tray', (data, pos) => {
-            paddlePos[data - 1][1] = pos; 
-        });
 
    useEffect(() => {
     // Initialize Paper JS
     paper.setup(canvasRef.current);
  
+    gameSocket.on('tray', (data, pos) => {
+            paddlePos[data - 1][1] = pos; 
+        });
 
     var pW = view.size.width * paddleWidth;
     var pH = view.size.height * paddleHeight;
@@ -163,6 +163,9 @@ const Multiplayer = (props) => {
     
     return () => {
       window.removeEventListener('resize', handleResize);
+     gameSocket.off('ready');
+     gameSocket.off('score');
+     gameSocket.off('tray');
     };
   }, [mode, id, gameSocket]);
 

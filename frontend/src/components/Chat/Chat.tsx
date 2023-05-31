@@ -10,7 +10,7 @@ import { useParams } from "react-router-dom";
 import { chatSocket } from "../Profile/UserHeader";
 import Navigation from "../NavBar";
 
-const Chat = () => {
+const Chat = ({chatSocket}) => {
   const userInfo = useSelector(selectUser);
   const { id } = useParams();
   const [currentMessage, setCurrentMessage] = useState("");
