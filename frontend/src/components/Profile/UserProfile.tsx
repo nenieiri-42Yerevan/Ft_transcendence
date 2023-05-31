@@ -14,7 +14,7 @@ import Profile from "./Profile";
 import FriendsList from "./FriendsList";
 import UserHeader from "./UserHeader";
 
-const UserProfile = () => {
+const UserProfile = ({chatSocket}) => {
     const {id} = useParams();
     const dispatch = useDispatch();
     const navigate = useNavigate();

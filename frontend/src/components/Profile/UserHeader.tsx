@@ -18,10 +18,9 @@ const UserHeader = (props)=>{
     const [chatId, setChatId] = useState(null);
 
     useEffect(()=>{
+        if (chatSocket)
+        {
         let flag = 0;
-        chatSocket.on('connect', (info)=>{
-            console.log("socket connected");
-          })
           chatSocket.on('join-chat', (data) =>{
             chatSocket.emit('chat', data);
             flag = 1;
@@ -37,6 +36,7 @@ const UserHeader = (props)=>{
             if (flag == 1)
                 navigate(`/transcendence/user/chat/${props.id}`);
           })
+        }
         return () => {
             chatSocket.off('join-chat');
             chatSocket.off('chat');
