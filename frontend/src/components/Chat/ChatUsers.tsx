@@ -3,6 +3,7 @@ import { getAvatar } from '../Slices/userSlice';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import avatar from "@SRC_DIR/assets/images/avatar.png";
+import { Link } from "react-router-dom";
 
 const ChatUsers = (props) => {
     const dispatch = useDispatch();
@@ -29,6 +30,7 @@ const ChatUsers = (props) => {
                     <span className="block ml-2 font-semibold text-white">{info.first_name + " " + info.last_name}</span>
                 </div>
                 <span className="block ml-2 font-semibold text-white">{info.username}</span>
+                <Link to = {`/transcendence/user/profile/${info.id}`} className="block ml-2 font-semibold text-white">Profile</Link>
             </div>
         </a>)
 }
