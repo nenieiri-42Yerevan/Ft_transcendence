@@ -8,19 +8,9 @@ import { io } from 'socket.io-client';
 import { useState, useEffect, useContext } from 'react';
 import { ChatContext, getChat } from "../context/ChatContext";
 
-const socketOptions = {
-    transportOptions: {
-      polling: {
-        extraHeaders: {
-          authorization: `Bearer ${sessionStorage.getItem('access_token')}`,
-            },
-          },
-        }
-      };
-      
-export const chatSocket = io(`${process.env.BACK_URL}/chat`, socketOptions);
 
 const UserHeader = (props)=>{
+    const {chatSocket} = props;
     const disp = useDispatch();
     const navigate = useNavigate();
     const { dispatch } = useContext(ChatContext);

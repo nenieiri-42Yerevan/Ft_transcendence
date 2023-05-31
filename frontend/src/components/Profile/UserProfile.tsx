@@ -50,7 +50,7 @@ const UserProfile = () => {
         <div className="flex flex-col bg-[#262525]">
             <Profilmenu/>
             <div className = "flex md:flex-row flex-col justify-between min-h-screen min-w-full">
-                <UserHeader loaded = {loaded} photo = {photo} userInfo = {userInfo} current = {current} id = {id}/>
+                <UserHeader loaded = {loaded} photo = {photo} userInfo = {userInfo} current = {current} id = {id} chatSocket = {chatSocket}/>
                 <div className="w-full h-fit bg-[#1E1E1E] border-[#393939] border-solid border m-4 p-8 rounded">
                     <h2 className="font-bold text-2xl text-white text-center  flex justify-between"><img className = "w-[2em]" src = {pong}></img>Played Matches</h2>
                     <hr />
