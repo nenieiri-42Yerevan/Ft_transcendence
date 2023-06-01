@@ -12,6 +12,9 @@ export class UserDto {
   @IsNotEmpty()
   username: string;
 
+  @IsOptional()
+  username_42: string;
+
   @IsNotEmpty()
   @IsEmail()
   email: string;

@@ -44,6 +44,7 @@ export class UserService {
     user.first_name = dto.first_name;
     user.last_name = dto.last_name;
     user.username = dto.username;
+    user.username_42 = dto.username_42;
     user.email = dto.email;
     user.password = await argon.hash(dto.password);
     user.gender = dto.gender;
@@ -79,6 +80,19 @@ export class UserService {
         relations,
       });
     }
+
+    if (!user) throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+
+    return user;
+  }
+
+  async findOne_42(property, relations = [] as string[]): Promise<User> {
+    let user = null;
+
+	user = await this.userRepo.findOne({
+	  where: { username_42: property },
+	  relations,
+	});
 
     if (!user) throw new HttpException('User not found', HttpStatus.NOT_FOUND);
 

@@ -33,6 +33,9 @@ export class User {
   @Column({ nullable: false, unique: true, length: 45 })
   username: string;
 
+  @Column({ nullable: true, length: 45, default: null })
+  username_42: string;
+
   @Column({ nullable: false, unique: true, length: 45 })
   email: string;
 
