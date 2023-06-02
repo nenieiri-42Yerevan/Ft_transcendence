@@ -19,9 +19,9 @@ export class ChatController {
     private readonly groupChatService: GroupChatService,
   ) {}
 
-  @Get('/:uid')
-  findAllForUser(@Param('uid', ParseIntPipe) uid: number): Promise<Chat[]> {
-    return this.chatService.findAll(uid);
+  @Get('user/:id')
+  findAllForUser(@Param('id', ParseIntPipe) id: number): Promise<Chat[]> {
+    return this.chatService.findAll(id);
   }
 
   @Get('/:id')
