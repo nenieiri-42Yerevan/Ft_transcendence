@@ -167,7 +167,23 @@ export class ChatGateway
     } catch {}
   }
 
-  /* TODO: Add toggleAdmin functionality  */
+  @SubscribeMessage('admin')
+  async toggleAdmin(client: Socket, data: any): Promise<void> {
+    try {
+      let gchat = await this.groupChatService.findOne(data.gid, ['users']);
+      const owner = client.data.user;
+      const admin = await this.userService.findOne(data.userId);
+
+      await this.groupChatService.toggleAdmin(owner.id, admin.id, gchat.id);
+
+      gchat = await this.groupChatService.findOne(data.gid, ['users']);
+
+      this.emitGroup(gchat, 'admin', {
+        gchat: { id: gchat.id, name: gchat.name, admin: gchat.admins },
+        admin_user: { id: admin.id, username: admin.username },
+      });
+    } catch {}
+  }
 
   @SubscribeMessage('ban')
   async toggleBan(client: Socket, data: any): Promise<void> {

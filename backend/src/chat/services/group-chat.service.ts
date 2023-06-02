@@ -6,6 +6,7 @@ import { GroupChatDto } from '../dto/group-chat.dto';
 import { Banned, GroupChat, Message, Muted } from '../entities';
 import * as argon from 'argon2';
 import { PasswordDto } from '../dto/password.dto';
+import { WsException } from '@nestjs/websockets';
 
 const temporary = 30 * 60 * 1000;
 @Injectable()
@@ -337,6 +338,32 @@ export class GroupChatService {
         .add(log);
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  async toggleAdmin(ownerId: number, uid: number, gid: number): Promise<void> {
+    const owner = await this.userService.findOne(ownerId);
+    const user = await this.userService.findOne(uid);
+    const gchat = await this.findOne(gid, ['users']);
+    if (gchat.owner.id != owner.id)
+      throw new WsException("User isn't the channel's owner");
+
+    if (user.id == gchat.owner.id)
+      throw new WsException('Owner cannot be demoted');
+
+    if (!gchat.users.find((user1) => user1.id == user.id))
+      throw new WsException("User getting promoted isn't part of the channel");
+
+    {
+      const index = gchat.admins.indexOf(user.id);
+      if (index == -1) gchat.admins.push(user.id);
+      else gchat.admins.splice(index, 1);
+    }
+
+    try {
+      await this.groupChatRepo.save(gchat);
+    } catch (error) {
+      throw new WsException(error.message);
     }
   }
 
