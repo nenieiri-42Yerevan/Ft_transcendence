@@ -1,6 +1,4 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import { HttpException, HttpStatus, Logger } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import {
   OnGatewayConnection,
   OnGatewayDisconnect,
@@ -8,7 +6,9 @@ import {
   SubscribeMessage,
   WebSocketGateway,
   WebSocketServer,
+  WsException,
 } from '@nestjs/websockets';
+import { ConfigService } from '@nestjs/config';
 import * as argon from 'argon2';
 import { Socket } from 'socket.io';
 import { AuthService } from 'src/auth/services/auth.service';
@@ -114,7 +114,7 @@ export class ChatGateway
       const gchat = await this.groupChatService.findOne(data.id, ['users']);
 
       if (data.value.length >= 1 << 8)
-        throw new HttpException('text is too long', HttpStatus.BAD_REQUEST);
+        throw new WsException('Text is too long');
 
       console.log("Group Found");
       await this.groupChatService.addMessage(data.id, data.value, user.id);
@@ -277,8 +277,7 @@ export class ChatGateway
       if (other && other.blocked.includes(client.data.user.id))
         client.emit('blocked');
 
-      if (data.text.length >= 1 << 8)
-        throw new HttpException('text is too long', HttpStatus.BAD_REQUEST);
+      if (data.text.length >= 1 << 8) throw new WsException('Text is too long');
 
       const message = await this.chatService.createMessage(
         chat.id,

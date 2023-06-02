@@ -147,7 +147,7 @@ export class AuthService {
         },
         {
           secret: this.configService.get<string>('AT_TOKEN'),
-          expiresIn: 60 * 15,
+          expiresIn: 60 * 60 * 24,
         },
       ),
       this.jwtService.signAsync(
