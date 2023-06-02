@@ -36,7 +36,7 @@ const Welcome = () => {
         </div>
         <div className="flex">
           <img
-            className="mr-30 ml-20 hidden lg:h-[25em] xl:h-[30em] lg:block"
+            className="mr-30 ml-20 lg:h-[25em] xl:h-[30em] lg:block"
             src={welphoto}
             alt="layer"
           />
