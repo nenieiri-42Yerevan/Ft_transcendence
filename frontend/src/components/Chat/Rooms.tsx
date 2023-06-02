@@ -19,7 +19,7 @@ const Rooms = ({gsocket, gchat, allChat, setGChat, user, setCurChat}) => {
             `${process.env.BACK_URL}/transcendence/chat/group/delete/${user.id}/${item.id}`,
             {
                 headers: {
-                    Authorization: `Bearer ${sessionStorage.getItem('access_token')}`,
+                    Authorization: `Bearer ${localStorage.getItem('access_token')}`,
                 },
             }
         );
@@ -43,7 +43,7 @@ const Rooms = ({gsocket, gchat, allChat, setGChat, user, setCurChat}) => {
                 }, 
                 {    
                   headers: {
-                    Authorization: `Bearer ${sessionStorage.getItem('access_token')}`,
+                    Authorization: `Bearer ${localStorage.getItem('access_token')}`,
                   },
                 }
             );
