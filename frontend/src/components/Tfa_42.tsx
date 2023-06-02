@@ -23,8 +23,8 @@ const Tfa_42 = () => {
         try {
             console.log(data);
             const response = await axios.post(`${process.env.BACK_URL}/transcendence/auth/signin/2FA_42`, sendData);
-            sessionStorage.setItem('access_token', response.data.access_token);
-            sessionStorage.setItem('refresh_token', response.data.refresh_token);
+            localStorage.setItem('access_token', response.data.access_token);
+            localStorage.setItem('refresh_token', response.data.refresh_token);
             const userInfo = await getUserInfo(navigate);
             dispatch(setUserInfo(userInfo));
             Cookies.remove('username');
