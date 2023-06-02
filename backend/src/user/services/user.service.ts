@@ -208,9 +208,14 @@ export class UserService {
 
   async updateLevel(winner: User, loser: User): Promise<void> {
     try {
-      await this.userRepo.update(winner.id, { rank: winner.rank + 1 });
-      if (loser.rank > 0)
-        await this.userRepo.update(loser.id, { rank: loser.rank - 1 });
+      await this.userRepo.update(winner.id, {
+        rank: winner.rank + 5 + loser.rank * 0.01,
+      });
+      if (loser.rank - 5 - (winner.rank - loser.rank) * 0.01 > 0)
+        await this.userRepo.update(loser.id, {
+          rank: loser.rank - 5 - (winner.rank - loser.rank) * 0.01,
+        });
+      else await this.userRepo.update(loser.id, { rank: 0 });
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
@@ -220,7 +225,7 @@ export class UserService {
     let user = await this.findOne(id);
 
     if (!user)
-      throw new HttpException('User not found', HttpStatus.BAD_REQUEST)
+      throw new HttpException('User not found', HttpStatus.BAD_REQUEST);
 
     if (user.status == status) return;
 
