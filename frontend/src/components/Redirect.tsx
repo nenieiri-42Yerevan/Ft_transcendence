@@ -13,13 +13,13 @@ const Redirect = () => {
     const [iserror, setIserror] = useState(false);
     useEffect(() => {
         console.log(Cookies.get());
-        sessionStorage.setItem('access_token', Cookies.get('access_token'));
-        sessionStorage.setItem('refresh_token', Cookies.get('refresh_token'));
+        localStorage.setItem('access_token', Cookies.get('access_token'));
+        localStorage.setItem('refresh_token', Cookies.get('refresh_token'));
         Cookies.remove('access_token');
         Cookies.remove('refresh_token');
         Cookies.remove('username');
-		console.log(sessionStorage.getItem('access_token'));
-		console.log(sessionStorage.getItem('refresh_token'));
+		console.log(localStorage.getItem('access_token'));
+		console.log(localStorage.getItem('refresh_token'));
         getUserInfo(navigate).then(userInfo=>{
             console.log("getuserinfo ", userInfo);
             dispatch(setUserInfo(userInfo));

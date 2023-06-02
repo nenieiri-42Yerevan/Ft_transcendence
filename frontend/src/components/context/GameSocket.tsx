@@ -5,7 +5,7 @@ const socketOptions = {
     transportOptions: {
         polling: {
             extraHeaders: {
-                authorization: `Bearer ${sessionStorage.getItem('access_token')}`,
+                authorization: `Bearer ${localStorage.getItem('access_token')}`,
             },
         },
     },

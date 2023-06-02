@@ -47,8 +47,8 @@ const SignIn = () => {
             if (!refreshToken) {
                 return { [FORM_ERROR]: "Something is wrong" }
             }
-            sessionStorage.setItem("access_token", accessToken);
-            sessionStorage.setItem("refresh_token", refreshToken);
+            localStorage.setItem("access_token", accessToken);
+            localStorage.setItem("refresh_token", refreshToken);
             const userInfo = await getUserInfo(navigate);
             dispatch(setUserInfo(userInfo));
             console.log(userInfo);
@@ -81,8 +81,8 @@ username: data.login,
             if (!refreshToken) {
                 return { [FORM_ERROR]: "Something is wrong" }
             }
-            sessionStorage.setItem("access_token", accessToken);
-            sessionStorage.setItem("refresh_token", refreshToken);
+            localStorage.setItem("access_token", accessToken);
+            localStorage.setItem("refresh_token", refreshToken);
             const userInfo = await getUserInfo(navigate);
             dispatch(setUserInfo(userInfo));
             console.log(userInfo);

@@ -132,7 +132,7 @@ export const fetchFriendsData = async (flag:number, Navigate, dispatch: any, use
         `${process.env.BACK_URL}/transcendence/user/by-id/${id}`,
         {
           headers: {
-            Authorization: `Bearer ${sessionStorage.getItem('access_token')}`,
+            Authorization: `Bearer ${localStorage.getItem('access_token')}`,
           },
         },
       );
@@ -164,7 +164,7 @@ export const fetchMatches = async (flag:number, Navigate, dispatch: any, userInf
       `${process.env.BACK_URL}/transcendence/user/${userInfo.id}/matches`,
       {
         headers: {
-          Authorization: `Bearer ${sessionStorage.getItem('access_token')}`,
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`,
         },
       },
     );
@@ -186,12 +186,12 @@ export const fetchMatches = async (flag:number, Navigate, dispatch: any, userInf
 export const getUserInfo = async (Navigate) => {
   try {
     const response = await axios.get(
-      `${process.env.BACK_URL}/transcendence/user/by-token/${sessionStorage.getItem(
+      `${process.env.BACK_URL}/transcendence/user/by-token/${localStorage.getItem(
         'refresh_token',
       )}`,
       {
         headers: {
-          Authorization: `Bearer ${sessionStorage.getItem('access_token')}`,
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`,
         },
       },
     );
@@ -214,7 +214,7 @@ export const getUserInfo = async (Navigate) => {
 //   try {
 //     const response = await axios.get(`${process.env.BACK_URL}/transcendence/user/by-name/${data.name}`
 //       //   headers: {
-//       //     Authorization: `Bearer ${sessionStorage.getItem('access_token')}`
+//       //     Authorization: `Bearer ${localStorage.getItem('access_token')}`
 //       //   }
 
 //     );
@@ -230,7 +230,7 @@ export const getUserById = async (id: any, Navigate) => {
     const response = await axios.get(`${process.env.BACK_URL}/transcendence/user/by-id/${id}`,
     {
         headers: {
-          Authorization: `Bearer ${sessionStorage.getItem('access_token')}`
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`
         }
     }
     );
@@ -257,7 +257,7 @@ export const follow = async (dispatch: any, Navigate, userInfo: UserInfo, id: nu
     const response = await axios.put(`${process.env.BACK_URL}/transcendence/user/follow/${userInfo.id}/${id}`,{},
     {
         headers: {
-          Authorization: `Bearer ${sessionStorage.getItem('access_token')}`
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`
         }
     }
     );
@@ -284,7 +284,7 @@ export const getAvatar = async (flag: number, Navigate, dispatch: any, id: strin
     const response = await fetch(`${process.env.BACK_URL}/transcendence/user/${id}/avatar`,
     {
         headers: {
-          Authorization: `Bearer ${sessionStorage.getItem('access_token')}`
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`
         }
     }
     );
@@ -331,7 +331,7 @@ export const setAvatar = async ( imageFile: any, Navigate, id: any, dispatch: an
     formData,
     {
         headers: {
-          Authorization: `Bearer ${sessionStorage.getItem('access_token')}`,
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`,
           "Content-Type": "multipart/form-data",
         },
     }
@@ -360,7 +360,7 @@ export const block = async (dispatch, Navigate, userInfo: UserInfo, id: number)=
     const response = await axios.put(`${process.env.BACK_URL}/transcendence/user/block/${userInfo.id}/${id}`, {},
     {
         headers: {
-          Authorization: `Bearer ${sessionStorage.getItem('access_token')}`
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`
         }
     }
     );
@@ -387,7 +387,7 @@ export const enable2fa = async (dispatch, Navigate, userInfo: UserInfo)=>{
     const response = await axios.post(`${process.env.BACK_URL}/transcendence/auth/TFA_enable/`, {},
     {
         headers: {
-          Authorization: `Bearer ${sessionStorage.getItem('access_token')}`
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`
         }
     }
     );
@@ -421,7 +421,7 @@ export const disable2fa = async (dispatch, Navigate, userInfo: UserInfo)=>{
     const response = await axios.post(`${process.env.BACK_URL}/transcendence/auth/TFA_disable/`, {},
     {
         headers: {
-          Authorization: `Bearer ${sessionStorage.getItem('access_token')}`
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`
         }
     }
     );
@@ -459,7 +459,7 @@ export const updatePass = async (dispatch, Navigate, data: EditInfo, id:number)=
     },
     {
         headers: {
-          Authorization: `Bearer ${sessionStorage.getItem('access_token')}`
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`
         }
     }
     );
@@ -489,7 +489,7 @@ export const updateUser = async (dispatch, Navigate, sendData, id:number)=>{
     sendData,
     {
         headers: {
-          Authorization: `Bearer ${sessionStorage.getItem('access_token')}`
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`
         }
     }
     ); 
