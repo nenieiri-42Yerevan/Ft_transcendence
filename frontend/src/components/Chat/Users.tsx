@@ -34,12 +34,12 @@ const Users = (props) => {
         <h2 className="my-2 mb-2 ml-2 text-lg text-white">Chats</h2>
         <li>
           {res ? 
-          res.map((info, index)=>{return (<ChatUsers info={info} key = {index}/>)}) : 
+          res.map((info, index)=>{return (<ChatUsers info={info} key = {index} currentId = {userInfo.user.id}/>)}) : 
           data && data.map((elem, index) => {
             const info = elem.users.find(el => (el.id != userInfo.user.id))
             if (info)
             return (
-              <ChatUsers info={info} index={index} key={index} />
+              <ChatUsers info={info} index={index} key={index} currentId = {userInfo.user.id} />
               )
             })
           }

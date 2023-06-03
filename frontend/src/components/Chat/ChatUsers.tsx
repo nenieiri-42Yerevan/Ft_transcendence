@@ -32,6 +32,7 @@ const ChatUsers = (props) => {
                     <span className="block ml-2 font-semibold text-white">{info.first_name + " " + info.last_name}</span>
                 </div>
                 <span className="block ml-2 font-semibold text-white">{info.username}</span>
+                <span className="block ml-2 font-semibold text-red-500">{info.blocked.includes(props.currentId) && "This user blocked you"}</span>
                 <Link to={`/transcendence/user/profile/${info.id}`} className="block ml-2 font-semibold text-white border-b ">Profile</Link>
             </div>
         </>
