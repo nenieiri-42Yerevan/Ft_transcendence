@@ -2,36 +2,20 @@ import React, {useContext, useEffect, useState} from 'react'
 import Navigation from '../NavBar';
 import Header from './Header';
 import Users from './Users';
-import { ChatContext } from '../context/ChatContext';
-
+import { ChatContext, getChat } from '../context/ChatContext';
+import { useSelector } from 'react-redux';
+import { selectUser } from '../Slices/userSlice';
 
 const DirectChats = ({chatSocket}) =>{
     const { data, dispatch } = useContext(ChatContext);
     const [chats, setChats] = useState([]);
+    const userInfo = useSelector(selectUser);
 
      useEffect(()=>{
-      if (chatSocket)
-      {
-        chatSocket.on('info', (info)=>{
-          console.log(info);
-            info.userChats.map(elem =>{
-                chatSocket.emit('chat', elem.id);
-            })
-            dispatch({ type: "CHANGE_INFO", payload: info });
-            console.log("inf:", data);
-        })
-        chatSocket.on('chat', (chat) =>{
-          const chatId = chat.id;
-          const existingChat = chats.find(chat => chat.id === chatId);
-          if (!existingChat)
-            setChats(list =>[...list, chat]);
-          dispatch({ type: "CHANGE_CHAT", payload: chat });
-          })
-        }
-        return () => {
-            chatSocket.off('join-chat');
-            chatSocket.off('chat');
-          };
+      const getData = async()=>{
+        console.log("getchat:",await(getChat(userInfo.user.id)));
+      }
+      getData();
     }, [chatSocket])
 
     return (

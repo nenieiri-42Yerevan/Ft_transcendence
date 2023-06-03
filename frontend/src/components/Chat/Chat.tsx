@@ -40,9 +40,9 @@ const Chat = ({ chatSocket }) => {
       })
     }
     return () => {
-      chatSocket.off('info');
-      chatSocket.off('chat');
-      chatSocket.off('textDM');
+      chatSocket?.off('info');
+      chatSocket?.off('chat');
+      chatSocket?.off('textDM');
     };
   }, [chatSocket, messageList, id])
 

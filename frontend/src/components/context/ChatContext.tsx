@@ -21,6 +21,20 @@ export const filterItems = ((query, data, userInfo) => {
   return (arr.filter((elem) => elem.username.includes(query)));
 })
 
+export const getChat = async (id: number) =>{    
+  try {
+    const response = await axios.get(`${process.env.BACK_URL}/transcendence/chat/user/${id}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`
+        }
+    });
+    return (response);
+  } catch (error) {
+    console.error(`Error making request for object with id ${id}:`, error.message);
+    return (null);
+  }
+}
+
 export const ChatContextProvider = ({ children }) => {
   const INITIAL_STATE = {
     info: {},

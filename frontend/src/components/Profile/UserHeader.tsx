@@ -38,8 +38,8 @@ const UserHeader = (props)=>{
           })
         }
         return () => {
-            chatSocket.off('join-chat');
-            chatSocket.off('chat');
+            chatSocket?.off('join-chat');
+            chatSocket?.off('chat');
           };
     }, [chatSocket])
     const message = ()=>{
