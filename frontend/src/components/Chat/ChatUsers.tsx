@@ -21,18 +21,18 @@ const ChatUsers = (props) => {
     }, [])
     return (
         <>
-            <a
-                href={`/transcendence/user/chat/${info.id}`}
-                className="flex items-center px-3 py-2 text-sm transition duration-150 ease-in-out border-b cursor-pointer hover:bg-[#616161] focus:outline-none">
+            <Link
+                to={`/transcendence/user/chat/${info.id}`}
+                className="flex items-center px-3 py-2 text-sm transition duration-150 ease-in-out cursor-pointer hover:bg-[#616161] focus:outline-none">
                 <img className="object-cover w-10 h-10 rounded-full"
                     src={photo ? photo : avatar} alt="username" />
-            </a>
+            </Link>
             <div className="w-full pb-2 border-[#393939]">
                 <div className="flex justify-between">
                     <span className="block ml-2 font-semibold text-white">{info.first_name + " " + info.last_name}</span>
                 </div>
                 <span className="block ml-2 font-semibold text-white">{info.username}</span>
-                <Link to={`/transcendence/user/profile/${info.id}`} className="block ml-2 font-semibold text-white">Profile</Link>
+                <Link to={`/transcendence/user/profile/${info.id}`} className="block ml-2 font-semibold text-white border-b ">Profile</Link>
             </div>
         </>
     )

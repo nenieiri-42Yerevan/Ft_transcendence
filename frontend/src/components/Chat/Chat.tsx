@@ -5,7 +5,7 @@ import Users from "./Users";
 import Messages from "./Messages";
 import { useSelector } from 'react-redux';
 import { selectUser } from "../Slices/userSlice";
-import { ChatContext } from "../context/ChatContext";
+import { ChatContext, getChat } from "../context/ChatContext";
 import { useParams } from "react-router-dom";
 import Navigation from "../NavBar";
 
@@ -18,36 +18,31 @@ const Chat = ({ chatSocket }) => {
   const [chats, setChats] = useState([]);
 
   useEffect(() => {
-    console.log("chats:", chats);
-    if (chatSocket) {
-      chatSocket.on('info', (info) => {
-        info.userChats.map(elem => {
-          chatSocket.emit('chat', elem.id);
-        })
-        dispatch({ type: "CHANGE_INFO", payload: info });
-      })
-      chatSocket.on('chat', (chat) => {
-        dispatch({ type: "CHANGE_CHAT", payload: chat });
-        const chatId = chat.id;
-        const existingChat = chats.find(chat => chat.id === chatId);
-        if (!existingChat)
-          setChats(list => [...list, chat]);
+    const getData = async()=>{
+      const res = await getChat(userInfo.user.id);
+      res.data.map(chat=>{
         if (chat.users[1].id == userInfo?.user?.id ? chat.users[0].id == id : chat.users[1].id == id)
           setMessageList(chat.messages);
       })
-      chatSocket.on('textDM', info => {
-        chatSocket.emit('chat', info.channelId);
-      })
+      setChats(res.data);
     }
+    getData();
+    chatSocket?.on('chat', (chat) => {
+      console.log("mychat:", chat);
+      if (chat.users[1].id == userInfo?.user?.id ? chat.users[0].id == id : chat.users[1].id == id)
+        setMessageList(chat.messages);
+    })
+    chatSocket?.on('textDM', info => {
+      chatSocket?.emit('chat', info.channelId);
+    })
     return () => {
-      chatSocket?.off('info');
       chatSocket?.off('chat');
       chatSocket?.off('textDM');
     };
   }, [chatSocket, messageList, id])
 
   const sendmsg = () => {
-    const curChat = data.chat.find(chat => chat.users[1].id == userInfo?.user?.id ? chat.users[0].id == id : chat.users[1].id == id)
+    const curChat = chats.find(chat => chat.users[1].id == userInfo?.user?.id ? chat.users[0].id == id : chat.users[1].id == id)
     const datas = {
       channelId: curChat.id,
       text: currentMessage,

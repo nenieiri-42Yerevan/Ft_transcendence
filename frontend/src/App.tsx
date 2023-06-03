@@ -50,7 +50,6 @@ const App = (props: any) => {
                 console.log('Chat Socket connection closed.', data);
                 });
             chatSocket.on('info', (data) => {
-                console.log("Chats info", data);
                 setChatInfo(data)
                 });
             gameSocket.on('info', (data) => {

@@ -13,10 +13,11 @@ const DirectChats = ({chatSocket}) =>{
 
      useEffect(()=>{
       const getData = async()=>{
-        console.log("getchat:",await(getChat(userInfo.user.id)));
+        const res = await getChat(userInfo?.user?.id)
+        setChats(res.data);
       }
       getData();
-    }, [chatSocket])
+    }, [])
 
     return (
         <>
