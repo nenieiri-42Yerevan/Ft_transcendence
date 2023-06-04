@@ -12,7 +12,7 @@ const Welcome = () => {
 
   return (
     <>
-      <div className="bg-[#262525]">
+      <div className="bg-[#262525] min-h-full min-w-full">
         <div className="flex justify-center flex-col md:flex-row">
           <Link
             to="./user/SignUp"

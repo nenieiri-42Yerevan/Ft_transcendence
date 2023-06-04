@@ -27,7 +27,13 @@ const Redirect = () => {
         .catch(error=>{
             setIserror(true);
         })
-        navigate("/transcendence/user/profile");
+        if (Cookies.get('first_login') == 'true')
+        {
+            Cookies.remove('first_login');
+            navigate("/transcendence/user/profile/settings");
+        }
+        else
+            navigate("/transcendence/user/profile");
     }, []);
     return (
         <>
