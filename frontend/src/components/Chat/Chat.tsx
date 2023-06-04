@@ -77,9 +77,9 @@ const Chat = ({ chatSocket }) => {
                   name="message" onChange={(event) => {
                     setCurrentMessage(event.target.value);
                   }}  onKeyPress={(event) => {
-                    event.key === "Enter" && sendmsg();
+                    event.key === "Enter" && currentMessage.length !==0 && sendmsg();
                   }} required value={currentMessage} />
-                <button type="submit" onClick={sendmsg}>
+                <button type="submit" onClick={()=>{currentMessage.length !==0 && sendmsg()}}>
                   <svg className="w-5 h-5 text-gray-500 origin-center transform rotate-90" xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 20 20" fill="currentColor">
                     <path
