@@ -50,9 +50,11 @@ export class FortyTwoStrategy extends PassportStrategy(Strategy, '42') {
 	  userDB.firstLogin = false;
 	} catch (error)
 	{
-	  userDB.firstLogin = true;
-	  if (error.status == 404)
-		userDB = this.userService.create(user as UserDto);
+		if (error.status == 404)
+		{
+			userDB = this.userService.create(user as UserDto);
+			userDB.firstLogin = true;
+		}
 	  else
 		throw new HttpException("Unexpected error :(", HttpStatus.FORBIDDEN);
 	}
