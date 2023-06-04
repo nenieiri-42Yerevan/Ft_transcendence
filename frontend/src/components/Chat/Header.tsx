@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 const Header = () => {
 
     return (
-        <div className=" my-3">
+        <div className="m-1">
             <div className="relative text-white">
               <span className="absolute inset-y-0 left-0 flex items-center pl-2">
                 <svg fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"

@@ -64,8 +64,10 @@ const Rooms = ({gsocket, gchat, allChat, setGChat, user, setCurChat}) => {
     }
     return ( 
 
-    <div className='flex flex-col w-full md:w-2/5 h-fit max-h-screen overflow-scroll   bg-[#1E1E1E] border-[#393939] border-solid border m-4 p-4 rounded text-center'>
+    <div className='flex flex-col w-full h-full max-h-full bg-[#1E1E1E] border-[#393939] border-solid border p-2 rounded text-center'>
     <Header />
+    <div className='flex flex-col h-full'>
+    <div className='h-full overflow-scroll border border-white rounded m-1'>
     {allChat.length == 0
       ? <p>no rooms.. </p>
       : allChat.map((item, index) =>  
@@ -84,12 +86,20 @@ const Rooms = ({gsocket, gchat, allChat, setGChat, user, setCurChat}) => {
               </button>}
             </div>
           </div>
-        </div>
+          </div>
         
       )}
+    </div>
     <button className="bg-gray-700 hover:bg-gray-950 text-white font-bold py-2 px-4 rounded mt-4 mb-1" onClick={() => CreateGroupChat(true)}>
       Create Room
     </button>
+    <button className="bg-gray-700 hover:bg-gray-950 text-white font-bold py-2 px-4 rounded mt-4 mb-1">
+      Join Room
+    </button>
+    <button className="bg-gray-700 hover:bg-gray-950 text-white font-bold py-2 px-4 rounded mt-4 mb-1">
+      Refresh
+    </button>
+      </div>
     {modal && (
       <Modal onClose={(bool) => CreateGroupChat(bool)}>
         <h2 className="text-3xl font-bold mb-2">Create new room</h2>

@@ -46,14 +46,17 @@ const GroupChatComponent = ({chatSocket, chatInfo}) => {
 
     return (
         <>
+        <div className="h-screen flex flex-col min-h-screen max-h-screen bg-[#262525]">
         <Navigation />
-        <div className=" bg-[#262525] py-0 md:py-6 text-xs xl:text-xl gap-x-0 md:gap-x-4 lg:text-lg md:text-md sm:text-sm backdrop-blur-md p-0 lg:p-2 xl:p-3 bg-dark-blue min-w-full min-h-full z-[668] absolute flex justify-center space-between bg-clip-padding text-white text-2xl" >
+        <div className="flex flex-row h-full">
+        <div className="flex flex-col bg-[#262525] w-1/5  justify-center m-1 text-white text-2xl" >
            <Rooms gsocket={chatSocket} gchat={gchat} allChat={allChat} setGChat={setAllChat} user={userInfo.user} setCurChat={setCurChat} />  
-        <div className="w-full md:w-4/5 h-screen bg-[#1E1E1E] border-[#393939] border-solid border m-4 p-2 rounded text-center">
+       </div>
+        <div className="flex flex-row  w-4/5 bg-[#1E1E1E] border-[#393939] border-solid border m-1  rounded">
             <ChatSpace curChat={curChat} groupSocket={chatSocket}/>
         </div>
+        </div>
        </div>
-       
     </>
 )
 }
