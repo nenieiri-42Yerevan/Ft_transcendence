@@ -42,9 +42,9 @@ const Profile = () => {
                         {/* fetchMatches */}
                     </div>
                     <div className="w-full h-fit m-4 border-[#393939] border-solid border bg-[#1E1E1E] p-8 rounded">
-                        <h2 className="font-bold text-2xl text-white text-center  flex justify-between"><img className="w-[2em]" src={pong}></img>Friends <span>more</span></h2>
+                        <h2 className="font-bold text-2xl text-white text-center  flex justify-between"><img className="w-[2em]" src={pong}></img>Friends</h2>
                         <hr />
-                        {userInfo && userInfo.user && userInfo.user.names && userInfo.user.names.slice(0, 5).map((obj: Friends, index: number) => (
+                        {userInfo && userInfo.user && userInfo.user.names && userInfo.user.names.map((obj: Friends, index: number) => (
                             <FriendsList index={index} obj={obj} key={index} />
                         ))}
                         <p className="text-white text-center p-2 flex justify-between hover:bg-[#616161]">{userInfo && userInfo.user && userInfo.user.names && userInfo.user.names.length === 0 && "No Data"} </p>

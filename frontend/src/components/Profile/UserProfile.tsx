@@ -58,7 +58,7 @@ const UserProfile = ({chatSocket}) => {
                     {/* fetchMatches */}
                 </div>
                 <div className="w-full h-fit m-4 bg-[#1E1E1E] border-[#393939] border-solid border p-8 rounded">
-                    <h2 className="font-bold text-2xl text-white text-center  flex justify-between"><img className = "w-[2em]" src = {pong}></img>Friends <span>more</span></h2>
+                    <h2 className="font-bold text-2xl text-white text-center  flex justify-between"><img className = "w-[2em]" src = {pong}></img>Friends</h2>
                     <hr />
                     {friends  && friends.map((obj: Friends, index: number) => (
                         <FriendsList index = {index} obj = {obj} key = {index}/>
