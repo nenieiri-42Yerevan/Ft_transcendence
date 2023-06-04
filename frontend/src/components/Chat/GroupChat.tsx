@@ -5,32 +5,47 @@ import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { selectUser } from "../Slices/userSlice";
 import { io } from 'socket.io-client';
+import axios, { HttpStatusCode } from "axios";
 const GroupChatComponent = ({chatSocket, chatInfo}) => {
 
     const userInfo = useSelector(selectUser);
     const [gchat, setGChat] = useState([]);
     const [allChat, setAllChat] = useState([]);
     const [curChat, setCurChat] = useState(null);
+
+    const refreshChats = async () => {
+        try {
+            const chats = await axios.get(
+            `${process.env.BACK_URL}/transcendence/chat/group/`,
+            {
+                headers: {
+                    Authorization: `Bearer ${sessionStorage.getItem('access_token')}`,
+                },
+            }
+            );
+            console.log(chats);
+        } catch (ex) {
+            console.log(ex);
+        }
+    }
     useEffect(() => {
-        if (chatInfo && chatSocket) {
-        console.log(chatInfo);
-        setGChat(chatInfo.userGroups);
-        setAllChat(chatInfo.groups);
-        chatSocket.on('my-chats', (chats) => {
-            console.log('New chats:', chats);
-        });
-        chatSocket.on('leave', (data) => {
-            console.log("Someone leave chat :", data);
-        });
-        chatSocket.on('text', (data) => {
-            console.log("Receive text:", data);
-        });
-        chatSocket.on('join', (data) => {
-            console.log("Receive text:", data);
-            console.log("gchat", gchat);
-            console.log("allchat", allChat);
-            setCurChat(gchat.find((chat) => chat.id == data.gchat.id));
-        });
+        if (chatSocket) {
+            chatSocket.on('my-chats', (chats) => {
+                console.log('New chats:', chats);
+            });
+            chatSocket.on('leave', (data) => {
+                console.log("Someone leave chat :", data);
+            });
+            chatSocket.on('text', (data) => {
+                console.log("Receive text:", data);
+            });
+            chatSocket.on('join', (data) => {
+                console.log("Receive text:", data);
+                console.log("gchat", gchat);
+                console.log("allchat", allChat);
+                setCurChat(gchat.find((chat) => chat.id == data.gchat.id));
+            });
+            refreshChats();
         }
 
         return () => {
