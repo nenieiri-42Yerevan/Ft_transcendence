@@ -13,7 +13,6 @@ const footer = ()=>{
                     <p className="m-2">Vismaily </p>
                     <p className="m-2">Nathaniel </p>
                     <p className="m-2">arastepa </p>
-                    <p className="m-2">hohayrap </p>
                     <p className="m-2">Rstephan </p>
                 </div>
             </div>
