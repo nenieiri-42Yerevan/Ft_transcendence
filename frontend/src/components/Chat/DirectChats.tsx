@@ -21,8 +21,8 @@ const DirectChats = ({chatSocket}) =>{
 
     return (
         <>
-        <Navigation />
         <div className="container bg-[#262525] min-w-full min-h-full">
+          <Navigation />
           <div className="min-w-full rounded lg:grid lg:grid-cols-3">
             <div className="border-r border-[#393939] lg:col-span-1">
               <Users data={chats && chats} />
