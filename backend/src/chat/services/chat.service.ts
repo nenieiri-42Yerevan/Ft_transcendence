@@ -109,11 +109,17 @@ export class ChatService {
 
   async findAll(uid: number): Promise<Chat[]> {
     const chats = await this.chatRepo.find({
-      where: { users: { id: uid } },
       relations: ['users', 'messages'],
     });
 
-    return chats;
+    const userChats: Chat[] = [];
+
+    chats.forEach((entity: Chat) => {
+      if (entity.users[0].id === uid || entity.users[1].id === uid)
+        userChats.push(entity);
+    });
+
+    return userChats;
   }
 
   /* DELETE */

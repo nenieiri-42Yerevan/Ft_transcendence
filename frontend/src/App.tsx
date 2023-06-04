@@ -28,7 +28,7 @@ const App = (props: any) => {
             transportOptions: { 
                 polling: {
                     extraHeaders: {
-                        authorization: `Bearer ${sessionStorage.getItem('access_token')}`,
+                        authorization: `Bearer ${localStorage.getItem('access_token')}`,
                         },
                     },
                 }
@@ -50,7 +50,6 @@ const App = (props: any) => {
                 console.log('Chat Socket connection closed.', data);
                 });
             chatSocket.on('info', (data) => {
-                console.log("Chats info", data);
                 setChatInfo(data)
                 });
             gameSocket.on('info', (data) => {
@@ -72,13 +71,13 @@ const App = (props: any) => {
           <Route path="/transcendence/user/signup" element={<SignUp />} />
           <Route path="/transcendence/user/signin" element={<SignIn />} />
           <Route path="/transcendence/user/profile" element={<Profile />} />
-          <Route path="/transcendence/user/profile/:id" element={<UserProfile />} />
+          <Route path="/transcendence/user/profile/:id" element={<UserProfile chatSocket = {chatSocket} />} />
           <Route path="/transcendence/user/profile/settings" element={<Settings />} />
           <Route path="/transcendence/user/dashboard" element={<Dashboard />} />
           <Route path="/transcendence/user/chat/:id" element={<Chat chatSocket={chatSocket} />} />
           <Route path="/transcendence/user/chat" element={<GroupChatComponent chatSocket={chatSocket} chatInfo={chatInfo} />} />
-          <Route path="/transcendence/user/directchats" element={<DirectChats />} />
-          <Route path="/transcendence/game" element={<Game gameSocket={gameSocket} />} />
+          <Route path="/transcendence/user/directchats" element={<DirectChats  chatSocket = {chatSocket}/>} />
+          {/* <Route path="/transcendence/game" element={<Game gameSocket={gameSocket} />} /> */}
         </Routes>
       </Router>
     </>

@@ -13,7 +13,7 @@ export class Chat {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToMany(() => User, { onDelete: 'CASCADE' })
+  @ManyToMany(() => User, { onDelete: 'CASCADE', eager: true })
   @JoinTable()
   users: User[];
 

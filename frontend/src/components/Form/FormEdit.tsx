@@ -135,7 +135,7 @@ const FormEdit = (props: any) => {
         key={'username'}
       >
         {({ input, meta, ...rest }) => (
-          <div className={` flex flex-col gap-y-2 ${userInfo && userInfo.user && userInfo.user.user_42 && 'hidden'} `}>
+          <div className={` flex flex-col gap-y-2 `}>
             <label htmlFor="signup-username" className="font-bold">
               Username:
             </label>

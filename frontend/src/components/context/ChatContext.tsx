@@ -9,9 +9,34 @@ import React from 'react'
 import axios from 'axios';
 export const ChatContext = createContext();
 
+export const filterItems = ((query, data, userInfo) => {
+  let arr:any[] = [];
+  data.map((elem, index) => {
+    const info = elem.users.find(el => ( el.id != userInfo.user.id ));
+    if (info)
+    {
+      arr.push(info);
+    }
+  })
+  return (arr.filter((elem) => elem.username.includes(query)));
+})
+
+export const getChat = async (id: number) =>{    
+  try {
+    const response = await axios.get(`${process.env.BACK_URL}/transcendence/chat/user/${id}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`
+        }
+    });
+    return (response);
+  } catch (error) {
+    console.error(`Error making request for object with id ${id}:`, error.message);
+    return (null);
+  }
+}
+
 export const ChatContextProvider = ({ children }) => {
-  const storedState = sessionStorage.getItem('chatContextState');
-  const INITIAL_STATE =  storedState ? JSON.parse(storedState) : {
+  const INITIAL_STATE = {
     info: {},
     chat: [],
   };
@@ -40,13 +65,6 @@ export const ChatContextProvider = ({ children }) => {
   };
 
   const [state, dispatch] = useReducer(chatReducer, INITIAL_STATE);
-
-  useEffect(() => {
-    sessionStorage.setItem('chatContextState', JSON.stringify(state));
-    return () => {
-      sessionStorage.removeItem('chatContextState');
-    };
-  }, [state]);
 
   return (
     <ChatContext.Provider value={{ data: state, dispatch }}>

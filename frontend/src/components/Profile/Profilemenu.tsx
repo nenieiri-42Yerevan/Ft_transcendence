@@ -14,12 +14,12 @@ const Profilemenu = () => {
     try {
       const response = await axios.post(`${process.env.BACK_URL}/transcendence/auth/logout`, {}, {
         headers: {
-          Authorization: `Bearer ${sessionStorage.getItem('access_token')}`
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`
         }
       });
       dispatch(logout())
-      sessionStorage.removeItem('access_token');
-      sessionStorage.removeItem('refresh_token');
+      localStorage.removeItem('access_token');
+      localStorage.removeItem('refresh_token');
       navigate("/transcendence/user/signin")
     } catch (error) {
       console.log(error);

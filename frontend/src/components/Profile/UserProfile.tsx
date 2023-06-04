@@ -13,8 +13,9 @@ import Footer from "./Footer";
 import Profile from "./Profile";
 import FriendsList from "./FriendsList";
 import UserHeader from "./UserHeader";
+import Notfound from "../Notfound";
 
-const UserProfile = () => {
+const UserProfile = ({chatSocket}) => {
     const {id} = useParams();
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -40,7 +41,7 @@ const UserProfile = () => {
         setloaded(true);
     }, [id]);
     if (loaded && userInfo == null)
-        return (<h1>User Not Found</h1>);
+        return (<Notfound/>);;
     if (id == current?.user?.id)
         return (
             <Profile/>
@@ -50,7 +51,7 @@ const UserProfile = () => {
         <div className="flex flex-col bg-[#262525]">
             <Profilmenu/>
             <div className = "flex md:flex-row flex-col justify-between min-h-screen min-w-full">
-                <UserHeader loaded = {loaded} photo = {photo} userInfo = {userInfo} current = {current} id = {id}/>
+                <UserHeader loaded = {loaded} photo = {photo} userInfo = {userInfo} current = {current} id = {id} chatSocket = {chatSocket}/>
                 <div className="w-full h-fit bg-[#1E1E1E] border-[#393939] border-solid border m-4 p-8 rounded">
                     <h2 className="font-bold text-2xl text-white text-center  flex justify-between"><img className = "w-[2em]" src = {pong}></img>Played Matches</h2>
                     <hr />
@@ -58,9 +59,9 @@ const UserProfile = () => {
                     {/* fetchMatches */}
                 </div>
                 <div className="w-full h-fit m-4 bg-[#1E1E1E] border-[#393939] border-solid border p-8 rounded">
-                    <h2 className="font-bold text-2xl text-white text-center  flex justify-between"><img className = "w-[2em]" src = {pong}></img>Friends <span>more</span></h2>
+                    <h2 className="font-bold text-2xl text-white text-center  flex justify-between"><img className = "w-[2em]" src = {pong}></img>Friends</h2>
                     <hr />
-                    {friends  && friends.slice(0, 5).map((obj: Friends, index: number) => (
+                    {friends  && friends.map((obj: Friends, index: number) => (
                         <FriendsList index = {index} obj = {obj} key = {index}/>
                     ))}
                     <p className = "text-white text-center p-2 flex justify-between hover:bg-[#616161]">{ friends && friends.length === 0 && "No Data"} </p>

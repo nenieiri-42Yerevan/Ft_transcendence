@@ -44,6 +44,7 @@ export class UserService {
     user.first_name = dto.first_name;
     user.last_name = dto.last_name;
     user.username = dto.username;
+    user.username_42 = dto.username_42;
     user.email = dto.email;
     user.password = await argon.hash(dto.password);
     user.gender = dto.gender;
@@ -79,6 +80,19 @@ export class UserService {
         relations,
       });
     }
+
+    if (!user) throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+
+    return user;
+  }
+
+  async findOne_42(property, relations = [] as string[]): Promise<User> {
+    let user = null;
+
+	user = await this.userRepo.findOne({
+	  where: { username_42: property },
+	  relations,
+	});
 
     if (!user) throw new HttpException('User not found', HttpStatus.NOT_FOUND);
 
@@ -208,9 +222,14 @@ export class UserService {
 
   async updateLevel(winner: User, loser: User): Promise<void> {
     try {
-      await this.userRepo.update(winner.id, { rank: winner.rank + 1 });
-      if (loser.rank > 0)
-        await this.userRepo.update(loser.id, { rank: loser.rank - 1 });
+      await this.userRepo.update(winner.id, {
+        rank: winner.rank + 5 + loser.rank * 0.01,
+      });
+      if (loser.rank - 5 - (winner.rank - loser.rank) * 0.01 > 0)
+        await this.userRepo.update(loser.id, {
+          rank: loser.rank - 5 - (winner.rank - loser.rank) * 0.01,
+        });
+      else await this.userRepo.update(loser.id, { rank: 0 });
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
@@ -220,7 +239,7 @@ export class UserService {
     let user = await this.findOne(id);
 
     if (!user)
-      throw new HttpException('User not found', HttpStatus.BAD_REQUEST)
+      throw new HttpException('User not found', HttpStatus.BAD_REQUEST);
 
     if (user.status == status) return;
 

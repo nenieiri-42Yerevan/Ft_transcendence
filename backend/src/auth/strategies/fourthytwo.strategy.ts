@@ -38,6 +38,7 @@ export class FortyTwoStrategy extends PassportStrategy(Strategy, '42') {
 		first_name: profile.name.givenName,
 		last_name: profile.name.familyName,
 		username: profile.username,
+		username_42: profile.username,
 		email: profile.emails[0].value,
 		password: password,
 		user_42: true,
@@ -45,7 +46,7 @@ export class FortyTwoStrategy extends PassportStrategy(Strategy, '42') {
 
 	let userDB = null;
 	try {
-      userDB = await this.userService.findOne(user.username);
+      userDB = await this.userService.findOne_42(user.username_42);
 	} catch (error)
 	{
 		if (error.status == 404)

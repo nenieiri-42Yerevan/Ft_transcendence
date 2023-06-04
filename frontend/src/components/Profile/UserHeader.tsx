@@ -8,19 +8,9 @@ import { io } from 'socket.io-client';
 import { useState, useEffect, useContext } from 'react';
 import { ChatContext, getChat } from "../context/ChatContext";
 
-const socketOptions = {
-    transportOptions: {
-      polling: {
-        extraHeaders: {
-          authorization: `Bearer ${sessionStorage.getItem('access_token')}`,
-            },
-          },
-        }
-      };
-      
-export const chatSocket = io(`${process.env.BACK_URL}/chat`, socketOptions);
 
 const UserHeader = (props)=>{
+    const {chatSocket} = props;
     const disp = useDispatch();
     const navigate = useNavigate();
     const { dispatch } = useContext(ChatContext);
@@ -28,28 +18,11 @@ const UserHeader = (props)=>{
     const [chatId, setChatId] = useState(null);
 
     useEffect(()=>{
-        let flag = 0;
-        chatSocket.on('connect', (info)=>{
-            console.log("socket connected");
-          })
-          chatSocket.on('join-chat', (data) =>{
-            chatSocket.emit('chat', data);
-            flag = 1;
+          chatSocket?.on('join-chat', (data) =>{
+            navigate(`/transcendence/user/chat/${props.id}`);
         })
-        chatSocket.on('info', (info)=>{
-            info.userChats.map(elem =>{
-                chatSocket.emit('chat', elem.id);
-            })
-            dispatch({ type: "CHANGE_INFO", payload: info });
-        })
-        chatSocket.on('chat', (chat) =>{
-            dispatch({ type: "CHANGE_CHAT", payload: chat });
-            if (flag == 1)
-                navigate(`/transcendence/user/chat/${props.id}`);
-          })
         return () => {
-            chatSocket.off('join-chat');
-            chatSocket.off('chat');
+            chatSocket?.off('join-chat');
           };
     }, [chatSocket])
     const message = ()=>{

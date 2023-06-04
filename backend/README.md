@@ -98,7 +98,7 @@ To be witten...
 
 | HTTP Verbs | Endpoints                                          | Action                                         |
 | ---------- | -------------------------------------------------- | ---------------------------------------------- |
-| GET        | /transcendence/chat/:uid                           | To get all DM chats for a user                 |
+| GET        | /transcendence/chat/user/:id                       | To get all DM chats for a user                 |
 | GET        | /transcendence/chat/:id                            | To get a chat by id                            |
 | GET        | /transcendence/chat/group                          | To get all the group chats                     |
 | GET        | /transcendence/chat/:gid                           | To get a group chat by id                      |
