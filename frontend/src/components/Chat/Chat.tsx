@@ -66,6 +66,8 @@ const Chat = ({ chatSocket }) => {
                   className="block w-full py-2 pl-4 mx-3 bg-gray-100 rounded-full outline-none focus:text-gray-700"
                   name="message" onChange={(event) => {
                     setCurrentMessage(event.target.value);
+                  }}  onKeyPress={(event) => {
+                    event.key === "Enter" && sendmsg();
                   }} required value={currentMessage} />
                 <button type="submit" onClick={sendmsg}>
                   <svg className="w-5 h-5 text-gray-500 origin-center transform rotate-90" xmlns="http://www.w3.org/2000/svg"
