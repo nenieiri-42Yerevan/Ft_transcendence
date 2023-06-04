@@ -13,6 +13,7 @@ import Footer from "./Footer";
 import Profile from "./Profile";
 import FriendsList from "./FriendsList";
 import UserHeader from "./UserHeader";
+import Notfound from "../Notfound";
 
 const UserProfile = ({chatSocket}) => {
     const {id} = useParams();
@@ -40,7 +41,7 @@ const UserProfile = ({chatSocket}) => {
         setloaded(true);
     }, [id]);
     if (loaded && userInfo == null)
-        return (<h1>User Not Found</h1>);
+        return (<Notfound/>);;
     if (id == current?.user?.id)
         return (
             <Profile/>

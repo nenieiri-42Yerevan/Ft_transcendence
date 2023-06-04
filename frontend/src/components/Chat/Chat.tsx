@@ -8,6 +8,7 @@ import { selectUser } from "../Slices/userSlice";
 import { ChatContext, getChat } from "../context/ChatContext";
 import { useParams } from "react-router-dom";
 import Navigation from "../NavBar";
+import Notfound from "../Notfound";
 
 const Chat = ({ chatSocket }) => {
   const userInfo = useSelector(selectUser);
@@ -16,14 +17,21 @@ const Chat = ({ chatSocket }) => {
   const [messageList, setMessageList] = useState([]);
   const { dispatch, data } = useContext(ChatContext);
   const [chats, setChats] = useState([]);
+  const[found, setFound] = useState(true);
 
   useEffect(() => {
+    let exists:boolean = false;
     const getData = async()=>{
       const res = await getChat(userInfo.user.id);
       res.data.map(chat=>{
         if (chat.users[1].id == userInfo?.user?.id ? chat.users[0].id == id : chat.users[1].id == id)
+        {
+          exists = true;
           setMessageList(chat.messages);
+        }
       })
+      if (!exists)
+        setFound(exists);
       setChats(res.data);
     }
     getData();
@@ -50,6 +58,8 @@ const Chat = ({ chatSocket }) => {
     chatSocket.emit('textDM', datas);
     setCurrentMessage('');
   }
+  if (!found)
+    return (<Notfound/>);
   return (
     <>
       <Navigation />
