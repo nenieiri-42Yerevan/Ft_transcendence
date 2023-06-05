@@ -52,7 +52,7 @@ export class FortyTwoStrategy extends PassportStrategy(Strategy, '42') {
 	{
 		if (error.status == 404)
 		{
-			userDB = this.userService.create(user as UserDto);
+			userDB = await this.userService.create(user as UserDto);
 			userDB.firstLogin = true;
 		}
 	  else
