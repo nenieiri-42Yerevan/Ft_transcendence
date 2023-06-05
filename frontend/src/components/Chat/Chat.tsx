@@ -8,7 +8,9 @@ import { selectUser } from "../Slices/userSlice";
 import { ChatContext, getChat } from "../context/ChatContext";
 import { useParams } from "react-router-dom";
 import Navigation from "../NavBar";
+import { useNavigate } from 'react-router-dom';
 import Notfound from "../Notfound";
+import { useDispatch } from 'react-redux';
 
 const Chat = ({ chatSocket }) => {
   const userInfo = useSelector(selectUser);
@@ -18,11 +20,14 @@ const Chat = ({ chatSocket }) => {
   const { dispatch, data } = useContext(ChatContext);
   const [chats, setChats] = useState([]);
   const[found, setFound] = useState(true);
-
+  const navigate = useNavigate();
+  const disp = useDispatch();
   useEffect(() => {
+    if (userInfo && !userInfo.user)
+            navigate("/transcendence/user/signin");
     let exists:boolean = false;
     const getData = async()=>{
-      const res = await getChat(userInfo.user.id);
+      const res = await getChat(userInfo.user.id, navigate, disp);
       res.data.map(chat=>{
         if (chat.users[1].id == userInfo?.user?.id ? chat.users[0].id == id : chat.users[1].id == id)
         {
