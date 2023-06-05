@@ -11,7 +11,7 @@ const Messages = (props) => {
   return (
     <div className="relative w-full p-6 overflow-y-auto h-[40rem]">
       {messageList && messageList.map((messageContent, index) => (
-        <Message messageContent={ messageContent} index = {index} userInfo = {userInfo} />
+        <Message messageContent={ messageContent} index = {index} key = {index} userInfo = {userInfo} />
       ))}
     </div>
   )

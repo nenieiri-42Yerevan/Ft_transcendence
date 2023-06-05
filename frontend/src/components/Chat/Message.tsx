@@ -1,7 +1,8 @@
 import React, {useState} from 'react';
 
 
-const Message = ({messageContent, index, userInfo}) =>{
+const Message = (props) =>{
+  const {messageContent, index, userInfo} = props;
     const [hidden, setHidden] = useState(true);
     return (
         <ul className="space-y-2" key={index}>
