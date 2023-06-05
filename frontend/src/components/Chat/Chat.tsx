@@ -52,7 +52,7 @@ const Chat = ({ chatSocket }) => {
       chatSocket?.off('chat');
       chatSocket?.off('textDM');
     };
-  }, [chatSocket, messageList, id])
+  }, [chatSocket, id])
 
   const sendmsg = () => {
     const curChat = chats.find(chat => chat.users[1].id == userInfo?.user?.id ? chat.users[0].id == id : chat.users[1].id == id)
