@@ -12,28 +12,28 @@ const Redirect = () => {
     const dispatch = useDispatch();
     const [iserror, setIserror] = useState(false);
     useEffect(() => {
-        console.log(Cookies.get());
-        localStorage.setItem('access_token', Cookies.get('access_token'));
-        localStorage.setItem('refresh_token', Cookies.get('refresh_token'));
-        Cookies.remove('access_token');
-        Cookies.remove('refresh_token');
-        Cookies.remove('username');
-		console.log(localStorage.getItem('access_token'));
-		console.log(localStorage.getItem('refresh_token'));
-        getUserInfo(navigate).then(userInfo=>{
-            console.log("getuserinfo ", userInfo);
-            dispatch(setUserInfo(userInfo));
-        })
-        .catch(error=>{
-            setIserror(true);
-        })
-        if (Cookies.get('first_login') == 'true')
-        {
-            Cookies.remove('first_login');
-            navigate("/transcendence/user/profile/settings");
+        const redir = async()=>{
+            console.log(Cookies.get());
+            localStorage.setItem('access_token', Cookies.get('access_token'));
+            localStorage.setItem('refresh_token', Cookies.get('refresh_token'));
+            Cookies.remove('access_token');
+            Cookies.remove('refresh_token');
+            Cookies.remove('username');
+            console.log(localStorage.getItem('access_token'));
+            console.log(localStorage.getItem('refresh_token'));
+            const info = await getUserInfo(navigate);
+            dispatch(setUserInfo(info));
+            console.log("getuserinfo ", info);
+            if (Cookies.get('first_login') == 'true')
+            {
+                Cookies.remove('first_login');
+                navigate("/transcendence/user/profile/settings");
+            }
+            else
+                navigate("/transcendence/user/profile");
+
         }
-        else
-            navigate("/transcendence/user/profile");
+        redir();
     }, []);
     return (
         <>
