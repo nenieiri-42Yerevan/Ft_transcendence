@@ -290,8 +290,8 @@ export class ChatGateway
       const chat = await this.chatService.findOne(data.channelId, ['users']);
       const other = chat.users.find((user) => user.id != client.data.user.id);
 
-      if (other && other.blocked.includes(client.data.user.id))
-        client.emit('blocked');
+      // if (other && other.blocked.includes(client.data.user.id))
+      //   client.emit('blocked');
 
       if (data.text.length >= 1 << 8) throw new WsException('Text is too long');
 
