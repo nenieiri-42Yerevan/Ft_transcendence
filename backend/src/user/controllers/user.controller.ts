@@ -55,6 +55,8 @@ export class UserController {
   ): Promise<StreamableFile> {
     const avatar = await this.userService.findAvatar(id);
 
+    if (!avatar) return null;
+
     res.set({
       'Content-Disposition': `inline; filename="${avatar.file}"`,
       'Content-Type': 'image/*',
