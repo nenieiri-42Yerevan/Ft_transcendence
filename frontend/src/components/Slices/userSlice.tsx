@@ -93,7 +93,7 @@ export const userSlice = createSlice({
     },
     setUserImage: (state, action: PayloadAction<any>) => {
       if (state.user)
-        state.user.img = action.payload;    
+        state.user.img = action.payload;
     },
     setFriends: (state, action: PayloadAction<Friends[]>) => {
       if (state.user)
@@ -110,7 +110,7 @@ export const userSlice = createSlice({
     setIsUnauth: (state, action: PayloadAction<boolean>) => {
       if (state.user)
         console.log(action);
-        state.user.isUnAuth = action.payload;
+      state.user.isUnAuth = action.payload;
     },
   },
 });
@@ -131,7 +131,7 @@ export const selectUser = (state: any) => state.user;
 
 export default userSlice.reducer;
 
-export const fetchFriendsData = async (flag:number, Navigate, dispatch: any, userInfo: UserInfo) => {
+export const fetchFriendsData = async (flag: number, Navigate, dispatch: any, userInfo: UserInfo) => {
   const friendIds = userInfo.follows;
   const friendNames: Friends[] = [];
   for (const id of friendIds) {
@@ -145,10 +145,9 @@ export const fetchFriendsData = async (flag:number, Navigate, dispatch: any, use
         },
       );
       console.log(response);
-      friendNames.push({name: response.data.username, id: id});
+      friendNames.push({ name: response.data.username, id: id });
     } catch (error) {
-      if (error.response.status == 401)
-      {
+      if (error.response.status == 401) {
         if ((await refreshToken()) != 200) {
           dispatch(setIsUnauth(true));
           Navigate("/transcendence/user/signin");
@@ -165,8 +164,8 @@ export const fetchFriendsData = async (flag:number, Navigate, dispatch: any, use
     return (friendNames);
 };
 
-export const fetchMatches = async (flag:number, Navigate, dispatch: any, userInfo: UserInfo) => {
-    const userMatches: Matches[] = [];
+export const fetchMatches = async (flag: number, Navigate, dispatch: any, userInfo: UserInfo) => {
+  const userMatches: Matches[] = [];
   try {
     const response = await axios.get(
       `${process.env.BACK_URL}/transcendence/user/${userInfo.id}/matches`,
@@ -177,24 +176,23 @@ export const fetchMatches = async (flag:number, Navigate, dispatch: any, userInf
       },
     );
     if (response.status == 200) {
-        userMatches.push(...response.data); 
+      userMatches.push(...response.data);
     } else {
-        console.log("ERROR cant fetch matches");
+      console.log("ERROR cant fetch matches");
     }
   } catch (error) {
-    if (error.response.status == 401)
-      {
-        if ((await refreshToken()) != 200) {
-          dispatch(setIsUnauth(true));
-          Navigate("/transcendence/user/signin");
-        } else {
-          fetchMatches(flag, Navigate, dispatch, userInfo);
-        }
+    if (error.response.status == 401) {
+      if ((await refreshToken()) != 200) {
+        dispatch(setIsUnauth(true));
+        Navigate("/transcendence/user/signin");
+      } else {
+        fetchMatches(flag, Navigate, dispatch, userInfo);
       }
+    }
     console.log(error);
   }
   if (flag == 0) {
-   // dispatch(setMatches(userMatches));
+    // dispatch(setMatches(userMatches));
   } else {
     return userMatches;
   }
@@ -215,8 +213,7 @@ export const getUserInfo = async (Navigate) => {
     return response.data;
   } catch (error) {
     console.log(error);
-    if (error.response.status == 401)
-    {
+    if (error.response.status == 401) {
       if ((await refreshToken()) != 200) {
         dispatch(setIsUnauth(true));
         Navigate("/transcendence/user/signin");
@@ -245,18 +242,17 @@ export const getUserInfo = async (Navigate) => {
 export const getUserById = async (id: any, Navigate) => {
   try {
     const response = await axios.get(`${process.env.BACK_URL}/transcendence/user/by-id/${id}`,
-    {
+      {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('access_token')}`
         }
-    }
+      }
     );
     return (response.data);
-  } 
+  }
   catch (error) {
     console.log(error);
-    if (error.response.status == 401)
-    {
+    if (error.response.status == 401) {
       if ((await refreshToken()) != 200) {
         dispatch(setIsUnauth(true));
         Navigate("/transcendence/user/signin");
@@ -269,21 +265,20 @@ export const getUserById = async (id: any, Navigate) => {
   }
 }
 
-export const follow = async (dispatch: any, Navigate, userInfo: UserInfo, id: number)=>{
+export const follow = async (dispatch: any, Navigate, userInfo: UserInfo, id: number) => {
   try {
-    const response = await axios.put(`${process.env.BACK_URL}/transcendence/user/follow/${userInfo.id}/${id}`,{},
-    {
+    const response = await axios.put(`${process.env.BACK_URL}/transcendence/user/follow/${userInfo.id}/${id}`, {},
+      {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('access_token')}`
         }
-    }
+      }
     );
     dispatch(setFollows(response.data));
   }
   catch (error) {
     console.log(error);
-    if (error.response.status == 401)
-    {
+    if (error.response.status == 401) {
       if ((await refreshToken()) != 200) {
         dispatch(setIsUnauth(true));
         Navigate("/transcendence/user/signin");
@@ -291,7 +286,7 @@ export const follow = async (dispatch: any, Navigate, userInfo: UserInfo, id: nu
         follow(dispatch, Navigate, userInfo, id);
       }
     }
-    
+
 
   }
 }
@@ -299,27 +294,33 @@ export const follow = async (dispatch: any, Navigate, userInfo: UserInfo, id: nu
 export const getAvatar = async (flag: number, Navigate, dispatch: any, id: string | undefined) => {
   try {
     const response = await fetch(`${process.env.BACK_URL}/transcendence/user/${id}/avatar`,
-    {
+      {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('access_token')}`
         }
-    }
+      }
     );
     if (!response.ok) {
       throw response.status;
     }
-    const blob = await response.arrayBuffer()
-    .then(buf => new Blob([buf], { type: 'image/png' }))
-    const url = URL.createObjectURL(blob);
-    console.log(url);
-    if (flag == 0)
-      dispatch(setUserImage(url));
-    else if (flag == 1)
-      return(url);
-  } 
+    const buf = await response.arrayBuffer()
+    const blob = new Blob([buf], { type: 'image/png' });
+    if (blob.size !== 0) {
+      const url = URL.createObjectURL(blob);
+      if (flag == 0)
+        dispatch(setUserImage(url));
+      else if (flag == 1)
+        return (url);
+    }
+    else {
+      if (flag == 0)
+        dispatch(setUserImage(defaultAvatar));
+      else if (flag == 1)
+        return (defaultAvatar);
+    }
+  }
   catch (error) {
-    if (error== 401)
-    {
+    if (error == 401) {
       if ((await refreshToken()) != 200) {
         dispatch(setIsUnauth(true));
         Navigate("/transcendence/user/signin");
@@ -327,35 +328,30 @@ export const getAvatar = async (flag: number, Navigate, dispatch: any, id: strin
         getAvatar(flag, Navigate, dispatch, id);
       }
     }
-    if (flag == 0)
-      dispatch(setUserImage(defaultAvatar));
-    else if (flag == 1)
-      return (defaultAvatar);
 
   }
 }
 
-export const setAvatar = async ( imageFile: any, Navigate, id: any, dispatch: any) => {
+export const setAvatar = async (imageFile: any, Navigate, id: any, dispatch: any) => {
   const formData = new FormData();
   console.log(imageFile);
   formData.append("file", imageFile);
   try {
     const response = await axios.put(`${process.env.BACK_URL}/transcendence/user/update-avatar/${id}`,
-    formData,
-    {
+      formData,
+      {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('access_token')}`,
           "Content-Type": "multipart/form-data",
         },
-    }
+      }
     );
     console.log(response);
     return (response.status);
-  } 
+  }
   catch (error) {
     console.log(error);
-    if (error.response.status == 401)
-    {
+    if (error.response.status == 401) {
       if ((await refreshToken()) != 200) {
         dispatch(setIsUnauth(true));
         Navigate("/transcendence/user/signin");
@@ -368,21 +364,20 @@ export const setAvatar = async ( imageFile: any, Navigate, id: any, dispatch: an
   }
 }
 
-export const block = async (dispatch, Navigate, userInfo: UserInfo, id: number)=>{
+export const block = async (dispatch, Navigate, userInfo: UserInfo, id: number) => {
   try {
     const response = await axios.put(`${process.env.BACK_URL}/transcendence/user/block/${userInfo.id}/${id}`, {},
-    {
+      {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('access_token')}`
         }
-    }
+      }
     );
     dispatch(setBlocked(response.data));
-  } 
+  }
   catch (error) {
     console.log(error);
-    if (error.response.status == 401)
-    {
+    if (error.response.status == 401) {
       if ((await refreshToken()) != 200) {
         dispatch(setIsUnauth(true));
         Navigate("/transcendence/user/signin");
@@ -393,30 +388,29 @@ export const block = async (dispatch, Navigate, userInfo: UserInfo, id: number)=
   }
 }
 
-export const enable2fa = async (dispatch, Navigate, userInfo: UserInfo)=>{
+export const enable2fa = async (dispatch, Navigate, userInfo: UserInfo) => {
   try {
     console.log("before");
     console.log(userInfo);
     const response = await axios.post(`${process.env.BACK_URL}/transcendence/auth/TFA_enable/`, {},
-    {
+      {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('access_token')}`
         }
-    }
+      }
     );
     console.log("after");
     console.log(await getUserInfo(Navigate));
     dispatch(setUserInfo(await getUserInfo(Navigate)));
-    
-    
+
+
     console.log(response);
 
 
-  } 
+  }
   catch (error) {
     console.log(error);
-    if (error.response.status == 401)
-    {
+    if (error.response.status == 401) {
       if ((await refreshToken()) != 200) {
         dispatch(setIsUnauth(true));
         Navigate("/transcendence/user/signin");
@@ -427,29 +421,28 @@ export const enable2fa = async (dispatch, Navigate, userInfo: UserInfo)=>{
   }
 }
 
-export const disable2fa = async (dispatch, Navigate, userInfo: UserInfo)=>{
+export const disable2fa = async (dispatch, Navigate, userInfo: UserInfo) => {
   try {
     console.log("before");
     console.log(userInfo);
     const response = await axios.post(`${process.env.BACK_URL}/transcendence/auth/TFA_disable/`, {},
-    {
+      {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('access_token')}`
         }
-    }
+      }
     );
     console.log("zzz");
     console.log(await getUserInfo(Navigate));
     dispatch(setUserInfo(await getUserInfo(Navigate)));
-    
+
     console.log(response);
 
 
-  } 
+  }
   catch (error) {
     console.log(error);
-    if (error.response.status == 401)
-    {
+    if (error.response.status == 401) {
       if ((await refreshToken()) != 200) {
         dispatch(setIsUnauth(true));
         Navigate("/transcendence/user/signin");
@@ -461,30 +454,29 @@ export const disable2fa = async (dispatch, Navigate, userInfo: UserInfo)=>{
 }
 
 
-export const updatePass = async (dispatch, Navigate, data: EditInfo, id:number)=>{
+export const updatePass = async (dispatch, Navigate, data: EditInfo, id: number) => {
   try {
     console.log("psw ", data);
-    
-    const response = await axios.put(`${process.env.BACK_URL}/transcendence/user/update-password/${id}`, 
-    {
-      old: data.cur_password,
-      current: data.new_password,
-    },
-    {
+
+    const response = await axios.put(`${process.env.BACK_URL}/transcendence/user/update-password/${id}`,
+      {
+        old: data.cur_password,
+        current: data.new_password,
+      },
+      {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('access_token')}`
         }
-    }
+      }
     );
-    console.log("zzz");    
+    console.log("zzz");
     console.log(response);
 
 
-  } 
+  }
   catch (error) {
     console.log(error);
-    if (error.response.status == 401)
-    {
+    if (error.response.status == 401) {
       if ((await refreshToken()) != 200) {
         dispatch(setIsUnauth(true));
         Navigate("/transcendence/user/signin");
@@ -496,22 +488,21 @@ export const updatePass = async (dispatch, Navigate, data: EditInfo, id:number)=
   }
 }
 
-export const updateUser = async (dispatch, Navigate, sendData, id:number)=>{
+export const updateUser = async (dispatch, Navigate, sendData, id: number) => {
   try {
-    const response = await axios.put(`${process.env.BACK_URL}/transcendence/user/update-user/${id}`, 
-    sendData,
-    {
+    const response = await axios.put(`${process.env.BACK_URL}/transcendence/user/update-user/${id}`,
+      sendData,
+      {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('access_token')}`
         }
-    }
-    ); 
+      }
+    );
     console.log(response);
-  } 
+  }
   catch (error) {
     console.log(error);
-    if (error.response.status == 401)
-    {
+    if (error.response.status == 401) {
       if ((await refreshToken()) != 200) {
         dispatch(setIsUnauth(true));
         Navigate("/transcendence/user/signin");
