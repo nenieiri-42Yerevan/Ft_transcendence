@@ -3,7 +3,7 @@ import Rooms from "./Rooms";
 import ChatSpace from "./ChatSpace";
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { selectUser } from "../Slices/userSlice";
+import { selectUser, setAvatar } from "../Slices/userSlice";
 import { io } from 'socket.io-client';
 import axios, { HttpStatusCode } from "axios";
 const GroupChatComponent = ({chatSocket, chatInfo}) => {
@@ -16,14 +16,17 @@ const GroupChatComponent = ({chatSocket, chatInfo}) => {
     const refreshChats = async () => {
         try {
             const chats = await axios.get(
-            `${process.env.BACK_URL}/transcendence/chat/group/`,
+            `${process.env.BACK_URL}/transcendence/chat/group`,
             {
                 headers: {
-                    Authorization: `Bearer ${sessionStorage.getItem('access_token')}`,
+                    Authorization: `Bearer ${localStorage.getItem('access_token')}`,
                 },
             }
             );
-            console.log(chats);
+            setAllChat(chats.data);
+            if (curChat) {
+                setCurChat(allChat.find((item) => item.id == curChat.id));
+            }
         } catch (ex) {
             console.log(ex);
         }
@@ -45,7 +48,6 @@ const GroupChatComponent = ({chatSocket, chatInfo}) => {
                 console.log("allchat", allChat);
                 setCurChat(gchat.find((chat) => chat.id == data.gchat.id));
             });
-            refreshChats();
         }
 
         return () => {
@@ -57,7 +59,7 @@ const GroupChatComponent = ({chatSocket, chatInfo}) => {
             chatSocket.off('join');
             }
         };
-        }, [chatSocket, chatInfo]);
+        }, [chatSocket, chatInfo, allChat, curChat]);
 
     return (
         <>
@@ -65,10 +67,10 @@ const GroupChatComponent = ({chatSocket, chatInfo}) => {
         <Navigation />
         <div className="flex flex-row h-full">
         <div className="flex flex-col bg-[#262525] w-1/5  justify-center m-1 text-white text-2xl" >
-           <Rooms gsocket={chatSocket} gchat={gchat} allChat={allChat} setGChat={setAllChat} user={userInfo.user} setCurChat={setCurChat} />  
+           <Rooms allChat={allChat} user={userInfo.user} refresh={refreshChats} setCurChat={setCurChat} curChat={curChat}/>  
        </div>
         <div className="flex flex-row  w-4/5 bg-[#1E1E1E] border-[#393939] border-solid border m-1  rounded">
-            <ChatSpace curChat={curChat} groupSocket={chatSocket}/>
+            {curChat?<ChatSpace curChat={curChat} setCurChat={setCurChat} refresh={refreshChats} groupSocket={chatSocket}/>:<div className='flex flex-row w-full justify-center items-center text-center text-white text-3xl font-bold'>Choose Room</div>}
         </div>
         </div>
        </div>

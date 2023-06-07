@@ -115,7 +115,7 @@ export class ChatService {
     const userChats: Chat[] = [];
 
     chats.forEach((entity: Chat) => {
-      if (entity.users[0].id === uid || entity.users[1].id === uid)
+      if (entity.users[0].id == uid || entity.users[1].id == uid)
         userChats.push(entity);
     });
 

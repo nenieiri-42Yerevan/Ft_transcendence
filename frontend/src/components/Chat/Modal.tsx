@@ -19,7 +19,7 @@ const Modal = ({ children, onClose }) => {
           Close
         </button>
         <button type="button" className="mt-4 bg-blue-600 text-white rounded m-2 px-4 py-2 hover:bg-blue-700" onClick={createRoom}>
-          Create
+          Submit
         </button>
       </div>
     </div>

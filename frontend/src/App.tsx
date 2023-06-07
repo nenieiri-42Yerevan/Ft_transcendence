@@ -31,12 +31,19 @@ const App = (props: any) => {
                         authorization: `Bearer ${localStorage.getItem('access_token')}`,
                         },
                     },
-                }
+                },
+                autoConnect: false,
+                reconnection: true,
+                timeout: 3000,
             };
             const gameSocket = io(`${process.env.BACK_URL}/pong`, socketOptions);
             const chatSocket = io(`${process.env.BACK_URL}/chat`, socketOptions);
             setGameSocket(gameSocket);
             setChatSocket(chatSocket);
+            setTimeout(() => {
+                gameSocket.connect();
+                chatSocket.connect();
+            }, 1000); 
             gameSocket.on('connect', () => {
                 console.log('Game Socket connection established!');
                 });
@@ -77,7 +84,7 @@ const App = (props: any) => {
           <Route path="/transcendence/user/chat/:id" element={<Chat chatSocket={chatSocket} />} />
           <Route path="/transcendence/user/chat" element={<GroupChatComponent chatSocket={chatSocket} chatInfo={chatInfo} />} />
           <Route path="/transcendence/user/directchats" element={<DirectChats  chatSocket = {chatSocket}/>} />
-          {/* <Route path="/transcendence/game" element={<Game gameSocket={gameSocket} />} /> */}
+          <Route path="/transcendence/game" element={<Game gameSocket={gameSocket} />} />
         </Routes>
       </Router>
     </>

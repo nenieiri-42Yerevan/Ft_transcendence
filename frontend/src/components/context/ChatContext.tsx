@@ -35,6 +35,20 @@ export const getChat = async (id: number) =>{
   }
 }
 
+
+export const getGroupChats = async () => {
+  try {
+    const response = await axios.get(`${process.env.BACK_URL}/transcendence/chat/group`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`
+        }
+    });
+    return (response.data);
+      } catch (error) {
+        console.error(`Error making request for object with id ${id}:`, error.message);
+        return (null);
+      }
+    }
 export const ChatContextProvider = ({ children }) => {
   const INITIAL_STATE = {
     info: {},
