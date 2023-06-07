@@ -54,8 +54,8 @@ export class ChatService {
     if (!reciever)
       throw new HttpException('Receiver not found!', HttpStatus.NOT_FOUND);
 
-    if (reciever.blocked.includes(sender.id))
-      throw new HttpException('User is blocked!', HttpStatus.CONFLICT);
+    // if (reciever.blocked.includes(sender.id))
+    //   throw new HttpException('User is blocked!', HttpStatus.CONFLICT);
 
     const message = this.messageRepo.create({ content: text, author: sender });
 
@@ -115,7 +115,7 @@ export class ChatService {
     const userChats: Chat[] = [];
 
     chats.forEach((entity: Chat) => {
-      if (entity.users[0].id == uid || entity.users[1].id == uid)
+      if (entity.users[0].id === uid || entity.users[1].id === uid)
         userChats.push(entity);
     });
 

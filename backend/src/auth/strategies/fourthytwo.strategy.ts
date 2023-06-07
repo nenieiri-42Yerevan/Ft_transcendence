@@ -47,12 +47,16 @@ export class FortyTwoStrategy extends PassportStrategy(Strategy, '42') {
 	let userDB = null;
 	try {
       userDB = await this.userService.findOne_42(user.username_42);
+	  userDB.firstLogin = false;
 	} catch (error)
 	{
 		if (error.status == 404)
-			userDB = this.userService.create(user as UserDto);
-		else
-			throw new HttpException("Unexpected error :(", HttpStatus.FORBIDDEN);
+		{
+			userDB = await this.userService.create(user as UserDto);
+			userDB.firstLogin = true;
+		}
+	  else
+		throw new HttpException("Unexpected error :(", HttpStatus.FORBIDDEN);
 	}
 	
     done(null, userDB);

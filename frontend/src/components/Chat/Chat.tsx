@@ -8,7 +8,9 @@ import { selectUser } from "../Slices/userSlice";
 import { ChatContext, getChat } from "../context/ChatContext";
 import { useParams } from "react-router-dom";
 import Navigation from "../NavBar";
+import { useNavigate } from 'react-router-dom';
 import Notfound from "../Notfound";
+import { useDispatch } from 'react-redux';
 
 const Chat = ({ chatSocket }) => {
   const userInfo = useSelector(selectUser);
@@ -18,11 +20,14 @@ const Chat = ({ chatSocket }) => {
   const { dispatch, data } = useContext(ChatContext);
   const [chats, setChats] = useState([]);
   const[found, setFound] = useState(true);
-
+  const navigate = useNavigate();
+  const disp = useDispatch();
   useEffect(() => {
+    if (userInfo && !userInfo.user)
+            navigate("/transcendence/user/signin");
     let exists:boolean = false;
     const getData = async()=>{
-      const res = await getChat(userInfo.user.id);
+      const res = await getChat(userInfo.user.id, navigate, disp);
       res.data.map(chat=>{
         if (chat.users[1].id == userInfo?.user?.id ? chat.users[0].id == id : chat.users[1].id == id)
         {
@@ -47,7 +52,7 @@ const Chat = ({ chatSocket }) => {
       chatSocket?.off('chat');
       chatSocket?.off('textDM');
     };
-  }, [chatSocket, messageList, id])
+  }, [chatSocket, id])
 
   const sendmsg = () => {
     const curChat = chats.find(chat => chat.users[1].id == userInfo?.user?.id ? chat.users[0].id == id : chat.users[1].id == id)
@@ -62,8 +67,8 @@ const Chat = ({ chatSocket }) => {
     return (<Notfound/>);
   return (
     <>
-      <Navigation />
       <div className="container bg-[#262525] min-w-full min-h-full">
+      <Navigation />
         <div className="min-w-full rounded lg:grid lg:grid-cols-3">
           <div className="border-r border-[#393939] lg:col-span-1">
             <Users data={chats && chats} />
@@ -77,9 +82,9 @@ const Chat = ({ chatSocket }) => {
                   name="message" onChange={(event) => {
                     setCurrentMessage(event.target.value);
                   }}  onKeyPress={(event) => {
-                    event.key === "Enter" && sendmsg();
+                    event.key === "Enter" && currentMessage.length !==0 && sendmsg();
                   }} required value={currentMessage} />
-                <button type="submit" onClick={sendmsg}>
+                <button type="submit" onClick={()=>{currentMessage.length !==0 && sendmsg()}}>
                   <svg className="w-5 h-5 text-gray-500 origin-center transform rotate-90" xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 20 20" fill="currentColor">
                     <path

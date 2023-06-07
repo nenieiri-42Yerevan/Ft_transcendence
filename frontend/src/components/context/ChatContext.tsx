@@ -7,6 +7,8 @@ import {
 
 import React from 'react'
 import axios from 'axios';
+import refreshToken from "../Utils/refreshToken";
+import { setIsUnauth } from "../Slices/userSlice";
 export const ChatContext = createContext();
 
 export const filterItems = ((query, data, userInfo) => {
@@ -21,7 +23,7 @@ export const filterItems = ((query, data, userInfo) => {
   return (arr.filter((elem) => elem.username.includes(query)));
 })
 
-export const getChat = async (id: number) =>{    
+export const getChat = async (id: number, navigate, dispatch) =>{    
   try {
     const response = await axios.get(`${process.env.BACK_URL}/transcendence/chat/user/${id}`, {
         headers: {
@@ -30,6 +32,15 @@ export const getChat = async (id: number) =>{
     });
     return (response);
   } catch (error) {
+    if (error.response.status == 401)
+    {
+      if ((await refreshToken()) != 200) {
+        dispatch(setIsUnauth(true));
+        navigate("/transcendence/user/signin");
+      } else {
+        getChat(id, navigate, dispatch);
+      }
+    }
     console.error(`Error making request for object with id ${id}:`, error.message);
     return (null);
   }

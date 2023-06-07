@@ -57,6 +57,7 @@ export class AuthService {
 		req.user
 	);
 
+	res.cookie('first_login', req.user.firstLogin);
 	res.cookie('access_token', tokens.access_token);
     res.cookie('refresh_token', tokens.refresh_token);
     res.redirect(`${this.configService.get<string>('FRONT_URL')}/transcendence/redirect`);
