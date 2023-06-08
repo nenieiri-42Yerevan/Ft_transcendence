@@ -25,15 +25,16 @@ export class ChatController {
     return this.chatService.findAll(id);
   }
 
+  @Get('/group')
+  findAllGroups(): Promise<GroupChat[]> {
+    return this.groupChatService.findAll();
+  }
+
   @Get('/:id')
   findChatById(@Param('id', ParseIntPipe) id: number): Promise<Chat> {
     return this.chatService.findOne(id);
   }
 
-  @Get('/group/')
-  findAllGroups(): Promise<GroupChat[]> {
-    return this.groupChatService.findAll();
-  }
 
   @Get('/group/:gid')
   findGroupById(@Param('gid', ParseIntPipe) gid: number): Promise<GroupChat> {

@@ -6,16 +6,21 @@ import Header from './Header';
 import deleteImg from '../../assets/images/delete_button.png';
 import adminImg from '../../assets/images/admin.png';
 import lockImg from '../../assets/images/lock.png';
-const Rooms = ({gsocket, gchat, allChat, setGChat, user, setCurChat}) => {
+const Rooms = ({allChat, user, refresh, setCurChat, curChat}) => {
     
     const [modal, setModal] = useState(false);
+    const [join, setJoin] = useState(false);
     const [isPasswordEnabled, setIsPasswordEnabled] = useState(false);
     const [password, setPassword] = useState('');
     const [roomName, setRoomName] = useState('');
 
 
-    const LeaveChat = async (item) => {
-    const groupDelete = await axios.delete(
+    useEffect(() => {},[]);
+
+    const DeleteChat = async (item) => {
+        setCurChat(null);
+        try {
+        const groupDelete = await axios.delete(
             `${process.env.BACK_URL}/transcendence/chat/group/delete/${user.id}/${item.id}`,
             {
                 headers: {
@@ -23,17 +28,19 @@ const Rooms = ({gsocket, gchat, allChat, setGChat, user, setCurChat}) => {
                 },
             }
         );
-    if (groupDelete.status === HttpStatusCode.Ok) {
-        const updatedGchat = gchat.filter((chat) => chat.id !== item.id);
-        setGChat(updatedGchat);
-    }
+        refresh();
+        } catch (ex) {
+            console.log("Can't delete chat:", ex);
+        }
     };
 
     const CreateGroupChat = async (close : boolean) => {
         if (!modal) {
             setModal(true);
         } else {
+            try {
             if (!close) {
+            setCurChat(null);
             const chatInfo = await axios.post(
                 `${process.env.BACK_URL}/transcendence/chat/group/create/${user.id}`,
                 {
@@ -47,31 +54,56 @@ const Rooms = ({gsocket, gchat, allChat, setGChat, user, setCurChat}) => {
                   },
                 }
             );
-
-                gchat.push(chatInfo.data);
-                setGChat(gchat);
+            refresh();
             }
-            setModal(false);
+            } catch (ex) {
+                console.log("Can't create chat:", ex);
+            } finally {
+                setModal(false);
+            }
         }
     }
-    const JoinChat = (item) => {
-        const ch = allChat.find((chat) => chat.id == item.id);
-        if (ch == null) {
-           gsocket.emit('join', item); 
-        } else {
-            setCurChat(item);
-        }
-    }
-    return ( 
 
-    <div className='flex flex-col w-full h-full max-h-full bg-[#1E1E1E] border-[#393939] border-solid border p-2 rounded text-center'>
+    const JoinRoom = async (join) => {
+        if (!join && !curChat.public) {
+           setJoin(true); 
+        } else {
+            try {
+                const response = await axios.post(
+                    `${process.env.BACK_URL}/transcendence/chat/group/add/${user.id}`,
+                    {
+                        name : roomName,
+                        password : isPasswordEnabled?password:"",
+                    }, 
+                    {    
+                      headers: {
+                        Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+                      },
+                    }
+                );
+                if (response.status == 200) {
+                    refresh();
+                } else {
+                }
+                
+            } catch (ex) {
+                console.log("Can't Join:", ex);
+            } finally {
+                setJoin(false);
+            }
+        }
+    }
+    
+
+    return ( 
+    <div className='flex flex-col w-full h-full max-h-full bg-[#1E1E1E] border-[#393939] border-solid border  rounded text-center'>
     <Header />
     <div className='flex flex-col h-full'>
-    <div className='h-full overflow-scroll border border-white rounded m-1'>
+    <div className='h-full overflow-y-auto border border-[#393939] rounded m-1'>
     {allChat.length == 0
       ? <p>no rooms.. </p>
       : allChat.map((item, index) =>  
-        <div onClick={() => {JoinChat(item)}} className='flex items-center px-3 py-2 text-sm transition duration-150 ease-in-out border mb-1 border-[#393939] cursor-pointer hover:bg-[#616161] focus:outline-none' key={index}>
+        <div onClick={() => setCurChat(item)} className={`flex items-center text-sm border m-1 border-[#393939] hover:bg-[#616161] ${item == curChat && "bg-[#616161]"}`} key={index}>
           <div className="w-full pb-2">
             <div className="flex justify-between">
               <span className="block ml-2 truncate font-bold text-xl text-white">{item.name?item.name:item.users[0].username}</span>
@@ -80,8 +112,8 @@ const Rooms = ({gsocket, gchat, allChat, setGChat, user, setCurChat}) => {
             <div className='flex justify-end'>
               {item.owner && item.owner.id==user.id && <img className='w-7 h-7' src={adminImg} alt='You are admin' />}
               {item.owner && !item.public && <img className='w-7 h-7' src={lockImg} alt='Private room' />}
-              {item.owner &&
-              <button onClick={() => LeaveChat(item)}>
+              {item.owner && item.owner.id==user.id &&
+              <button onClick={() => DeleteChat(item)}>
                   <img className='w-7 h-7 cursor-pointer' src={deleteImg} alt='Delete room' />
               </button>}
             </div>
@@ -90,13 +122,13 @@ const Rooms = ({gsocket, gchat, allChat, setGChat, user, setCurChat}) => {
         
       )}
     </div>
-    <button className="bg-gray-700 hover:bg-gray-950 text-white font-bold py-2 px-4 rounded mt-4 mb-1" onClick={() => CreateGroupChat(true)}>
+    <button className="bg-gray-700 hover:bg-gray-950 text-white font-bold py-2 px-4 rounded m-2" onClick={() => CreateGroupChat(true)}>
       Create Room
     </button>
-    <button className="bg-gray-700 hover:bg-gray-950 text-white font-bold py-2 px-4 rounded mt-4 mb-1">
+    <button className={`${(curChat!=null && !curChat.users.some(u => u.id == user.id))?"bg-gray-700 hover:bg-gray-950":"bg-gray-200"}  text-white font-bold py-2 px-4 rounded m-2`} onClick={() => (curChat && !curChat.users.some((u) => u.id == user.id) && JoinRoom())}>
       Join Room
     </button>
-    <button className="bg-gray-700 hover:bg-gray-950 text-white font-bold py-2 px-4 rounded mt-4 mb-1">
+    <button className="bg-gray-700 hover:bg-gray-950 text-white font-bold py-2 px-4 rounded m-2" onClick={() => {setCurChat(null); refresh();}}>
       Refresh
     </button>
       </div>
@@ -122,6 +154,19 @@ const Rooms = ({gsocket, gchat, allChat, setGChat, user, setCurChat}) => {
           </div>
         </div>
       </Modal>
+    )}
+    {join && (
+        <Modal onClose={(bool) => JoinRoom(bool)}>
+        { curChat.public &&
+         <div className="flex flex-col mb-4">
+          <label htmlFor="pass" className="text-lg mb-2 font-medium">
+            Password:
+          </label>
+          <input type="text" id="pass" value={password} onChange={(e) => setPassword(e.target.value)} className="border border-gray-500 p-2 rounded-lg text-black focus:outline-none" />
+        </div> 
+        }
+
+        </Modal>
     )}
   </div>
 );    
