@@ -8,17 +8,20 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchFriendsData, fetchMatches, selectUser, Friends, getAvatar, setAvatar, enable2fa } from '../Slices/userSlice';
+import { fetchFriendsData, fetchMatches, selectUser, Friends, getAvatar, setAvatar, enable2fa, Matches } from '../Slices/userSlice';
 import refreshToken from "../Utils/refreshToken";
 import Footer from "./Footer";
 import FriendsList from "./FriendsList";
 import Header from './Header';
+import MatchList from "./MatchList";
+import GameHistoryTable from "../GameHistoryBoard";
 
 const Profile = () => {
     const userInfo = useSelector(selectUser);
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [loaded, setloaded] = useState(false);
+    const [matches, setMatches] = useState(null);
     useEffect(() => {
         if (userInfo && !userInfo.user)
             navigate("/transcendence/user/signin");
@@ -26,6 +29,12 @@ const Profile = () => {
             fetchFriendsData(0, navigate, dispatch, userInfo.user);
             fetchMatches(0, navigate, dispatch, userInfo.user);
             getAvatar(0, navigate, dispatch, userInfo.user.id);
+            if (matches == null) {
+                fetchMatches(1, navigate, dispatch, userInfo.user)
+                .then((data?: Matches[]) => {
+                    setMatches(data);})
+                .catch(error => console.log(error));
+                }
             setloaded(true);
         }
     }, []);
@@ -35,19 +44,14 @@ const Profile = () => {
                 <Profilmenu />
                 <div className="flex md:flex-row flex-col min-h-screen justify-between">
                     {userInfo.user && <Header loaded={loaded} userInfo={userInfo} />}
-                    <div className="w-full h-fit bg-[#1E1E1E] border-[#393939] border-solid border m-4 p-8 rounded">
-                        <h2 className="font-bold text-2xl text-white text-center  flex justify-between"><img className="w-[2em]" src={pong}></img>Played Matches</h2>
-                        <hr />
-                        <p className="text-white hover:bg-[#616161] text-center p-2 flex justify-between">No Data </p>
-                        {/* fetchMatches */}
-                    </div>
-                    <div className="w-full h-fit m-4 border-[#393939] border-solid border bg-[#1E1E1E] p-8 rounded">
+                    <GameHistoryTable matches={matches} />
+                    <div className="w-full  mx-4 md:w-1/4 h-fit m-1 border-[#393939] border-solid border bg-[#1E1E1E] p-8 rounded">
                         <h2 className="font-bold text-2xl text-white text-center  flex justify-between"><img className="w-[2em]" src={pong}></img>Friends</h2>
                         <hr />
                         {userInfo && userInfo.user && userInfo.user.names && userInfo.user.names.map((obj: Friends, index: number) => (
                             <FriendsList index={index} obj={obj} key={index} />
                         ))}
-                        <p className="text-white text-center p-2 flex justify-between hover:bg-[#616161]">{userInfo && userInfo.user && userInfo.user.names && userInfo.user.names.length === 0 && "No Data"} </p>
+                        <p className="text-white text-center p-5 font-bold hover:bg-[#616161]">{userInfo && userInfo.user && userInfo.user.names && userInfo.user.names.length === 0 && "No Data"} </p>
                     </div>
                 </div>
                 <Footer />

@@ -12,8 +12,8 @@ const Header = (props)=>{
     const dispatch = useDispatch();
     const [imageFile, setImageFile] = useState<File | null>(null);
     
-    return (<div className="w-full m-4 rounded">
-    <div className="bg-[#1E1E1E] w-full border-[#393939] border-solid border flex flex-col p-5 items-center">
+    return (<div className="w-full  md:w-1/4 my-1 rounded mx-4 ">
+    <div className="bg-[#1E1E1E] w-full border-[#393939] border-solid border flex flex-col p-5  justify-center items-center text-center">
         <img src={props.loaded ? (props.userInfo.user.img ? props.userInfo.user.img : avatar) : null } className="rounded-full w-32 h-32" />
         <div className="mt-1">
             <h1 className="font-bold text-4xl text-white">{props.userInfo.user.name && props.userInfo.user.name} <span>{props.userInfo.user.lastName && props.userInfo.user.lastName}</span></h1>
