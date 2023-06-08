@@ -119,6 +119,7 @@ export class GroupChatService {
     const gchats = await this.groupChatRepo.find();
 
     gchats.forEach((chat) => delete chat.password);
+    console.log("Chats wo pass", gchats);
     return gchats;
   }
 
