@@ -87,7 +87,7 @@ export class ChatController {
   @Post('/group/add/:uid')
   addUser(
     @Param('uid', ParseIntPipe) uid: number,
-    @Body() gchat: GroupChat,
+    @Body() gchat: any,
   ): Promise<void> {
     return this.groupChatService.addUser(gchat, uid);
   }

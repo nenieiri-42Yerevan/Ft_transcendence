@@ -1,12 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { selectUser } from "../Slices/userSlice";
 import { useSelector } from 'react-redux';
 import axios, { HttpStatusCode } from "axios";
+import { GroupChatContext, getGroupChats } from '../context/ChatContext';
 
-const AdminWindow = ({curChat, setCurChat, refresh}) => {
+const AdminWindow = () => {
     const userInfo = useSelector(selectUser);
+    const { curChat, setCurChat, setAllChats } = useContext(GroupChatContext);
 
-    useEffect((curChat) => {}, [curChat]);
+    useEffect(() => {}, []);
     const leaveRoom = async () => {
         try {
             const groupLeave = await axios.delete(
@@ -17,8 +19,8 @@ const AdminWindow = ({curChat, setCurChat, refresh}) => {
                     },
                 }
             );
-            refresh();
             setCurChat(null);
+            getGroupChats().then(chats => setAllChats(chats)).catch(err => setAllChats(null));;
         } catch (ex) {
             console.log("Can't delete chat:", ex);
         }

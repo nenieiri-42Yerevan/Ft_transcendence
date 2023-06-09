@@ -15,8 +15,7 @@ const Rooms = ({ user }) => {
     const [isPasswordEnabled, setIsPasswordEnabled] = useState(false);
     const [password, setPassword] = useState('');
     const [roomName, setRoomName] = useState('');
-    const [allChat, setAllChats] = useState(null);
-    const {curChat, setCurChat} = useContext(GroupChatContext);
+    const {curChat, setCurChat, allChat, setAllChats} = useContext(GroupChatContext);
 
     useEffect(() => {
         if(!allChat) {
@@ -27,8 +26,8 @@ const Rooms = ({ user }) => {
 
     const updateChats = () => {
             getGroupChats()
-                .then(chats => {console.log(chats); setAllChats(chats);})
-                .catch(err => { setAllChats(null); console.log(err); });
+                .then(chats => {setAllChats(chats);})
+                .catch(err => {console.log(err); });
     }
 
     const DeleteChat = async (item) => {
@@ -94,11 +93,7 @@ const Rooms = ({ user }) => {
                       },
                     }
                 );
-                if (response.status == 200) {
-                    updateChats();
-                } else {
-                }
-                
+                updateChats();
             } catch (ex) {
                 console.log("Can't Join:", ex);
             } finally {
