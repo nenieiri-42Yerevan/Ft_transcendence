@@ -54,7 +54,6 @@ export class ChatController {
     @Param('uid', ParseIntPipe) uid: number,
     @Body() gchat: any,
   ): Promise<GroupChat> {
-    console.log(gchat);
     return this.groupChatService.createGroupChat(gchat, uid);
   }
 

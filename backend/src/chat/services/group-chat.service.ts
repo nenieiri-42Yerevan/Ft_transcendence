@@ -119,7 +119,6 @@ export class GroupChatService {
     const gchats = await this.groupChatRepo.find();
 
     gchats.forEach((chat) => delete chat.password);
-    console.log("Chats wo pass", gchats);
     return gchats;
   }
 
@@ -186,6 +185,7 @@ export class GroupChatService {
   async addUser(gchat: GroupChat, uid: number): Promise<void> {
     const user = await this.userService.findOne(uid);
     const chat = await this.findOne(gchat.id, ['users', 'banned'], true);
+    console.log(chat);
 
     if (!chat.public) {
       let valid = true;
@@ -207,6 +207,7 @@ export class GroupChatService {
       }
     }
 
+    console.log(chat);
     if (chat.users.find((user1) => user1.id == user.id))
       throw new HttpException('User is already in group!', HttpStatus.CONFLICT);
 

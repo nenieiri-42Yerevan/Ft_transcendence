@@ -9,7 +9,7 @@ import UserProfile from './components/Profile/UserProfile';
 import Settings from './components/Profile/Settings';
 import Welcome from './components/Welcome';
 import Chat from './components/Chat/Chat';
-import GroupChatComponent from './components/Chat/GroupChat';
+import Chanels from './components/Chat/Chanels';
 import Dashboard from "./components/Dashboard";
 import Redirect from './components/Redirect';
 import Tfa_42 from './components/Tfa_42';
@@ -22,7 +22,6 @@ const App = (props: any) => {
    const [gameSocket, setGameSocket] = useState(null);
    const [chatSocket, setChatSocket] = useState(null);
    const [chatInfo, setChatInfo] = useState(null);
-   const [invite, setInvite] = useState(null);
   useEffect(() => {
     const socketOptions = {
             transportOptions: { 
@@ -82,7 +81,7 @@ const App = (props: any) => {
           <Route path="/transcendence/user/profile/settings" element={<Settings />} />
           <Route path="/transcendence/user/dashboard" element={<Dashboard />} />
           <Route path="/transcendence/user/chat/:id" element={<Chat chatSocket={chatSocket} />} />
-          <Route path="/transcendence/user/chat" element={<GroupChatComponent chatSocket={chatSocket} chatInfo={chatInfo} />} />
+          <Route path="/transcendence/user/chat" element={<Chanels chatSocket={chatSocket} />} />
           <Route path="/transcendence/user/directchats" element={<DirectChats  chatSocket = {chatSocket}/>} />
           <Route path="/transcendence/game" element={<Game gameSocket={gameSocket} />} />
         </Routes>

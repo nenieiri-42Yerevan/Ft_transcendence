@@ -1,37 +1,23 @@
 import Navigation from "../NavBar";
 import Rooms from "./Rooms";
 import ChatSpace from "./ChatSpace";
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useSelector } from 'react-redux';
 import { selectUser, setAvatar } from "../Slices/userSlice";
 import { io } from 'socket.io-client';
 import axios, { HttpStatusCode } from "axios";
+import { ChatContext, getGroupChats } from "../context/ChatContext";
 const GroupChatComponent = ({chatSocket, chatInfo}) => {
 
     const userInfo = useSelector(selectUser);
+    const { dispatch, data } = useContext(ChatContext);
     const [gchat, setGChat] = useState([]);
     const [allChat, setAllChat] = useState([]);
     const [curChat, setCurChat] = useState(null);
 
-    const refreshChats = async () => {
-        try {
-            const chats = await axios.get(
-            `${process.env.BACK_URL}/transcendence/chat/group`,
-            {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('access_token')}`,
-                },
-            }
-            );
-            setAllChat(chats.data);
-            if (curChat) {
-                setCurChat(allChat.find((item) => item.id == curChat.id));
-            }
-        } catch (ex) {
-            console.log(ex);
-        }
-    }
     useEffect(() => {
+        setAllChat(data);
+        console.log(data);
         if (chatSocket) {
             chatSocket.on('my-chats', (chats) => {
                 console.log('New chats:', chats);

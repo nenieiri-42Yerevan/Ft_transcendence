@@ -10,6 +10,8 @@ import axios from 'axios';
 import refreshToken from "../Utils/refreshToken";
 import { setIsUnauth } from "../Slices/userSlice";
 export const ChatContext = createContext();
+export const GroupChatContext = createContext();
+
 
 export const filterItems = ((query, data, userInfo) => {
   let arr:any[] = [];
@@ -55,11 +57,12 @@ export const getGroupChats = async () => {
         }
     });
     return (response.data);
-      } catch (error) {
-        console.error(`Error making request for object with id ${id}:`, error.message);
-        return (null);
-      }
-    }
+  } catch (error) {
+    console.error(`Error making request for group`, error.message);
+    return (null);
+  }
+}
+
 export const ChatContextProvider = ({ children }) => {
   const INITIAL_STATE = {
     info: {},
