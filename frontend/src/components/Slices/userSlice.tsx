@@ -191,11 +191,7 @@ export const fetchMatches = async (flag: number, Navigate, dispatch: any, userIn
     }
     console.log(error);
   }
-  if (flag == 0) {
-    // dispatch(setMatches(userMatches));
-  } else {
     return userMatches;
-  }
 };
 
 export const getUserInfo = async (Navigate) => {

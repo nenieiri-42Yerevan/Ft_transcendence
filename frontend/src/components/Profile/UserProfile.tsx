@@ -8,12 +8,13 @@ import { useState, useEffect } from 'react';
 import {useLocation, useNavigate} from 'react-router-dom';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
-import {fetchFriendsData , getUserById, Friends, selectUser, getAvatar} from '../Slices/userSlice';
+import {fetchFriendsData , getUserById, Friends, selectUser, getAvatar, fetchMatches, Matches} from '../Slices/userSlice';
 import Footer from "./Footer";
 import Profile from "./Profile";
 import FriendsList from "./FriendsList";
 import UserHeader from "./UserHeader";
 import Notfound from "../Notfound";
+import GameHistoryTable from "../GameHistoryBoard";
 
 const UserProfile = ({chatSocket}) => {
     const {id} = useParams();
@@ -24,6 +25,7 @@ const UserProfile = ({chatSocket}) => {
     const current = useSelector(selectUser);
     const [photo, setphoto] = useState<string>('');
     const [loaded, setloaded] = useState(false);
+    const [matches, setMatches] = useState(null);
     useEffect(() => {
         console.log(id);
         getUserById(id, navigate).then(async userInfo => {
@@ -36,6 +38,12 @@ const UserProfile = ({chatSocket}) => {
             if (photo)
             {
                 setphoto(photo);
+            }
+            if (matches == null) {
+                fetchMatches(1, navigate, dispatch, userInfo)
+                .then((data?: Matches[]) => {
+                    setMatches(data);})
+                .catch(error => console.log(error));
             }
         }).catch(error=>{error.response.status == 401 && window.location.reload()});
         setloaded(true);
@@ -52,19 +60,14 @@ const UserProfile = ({chatSocket}) => {
             <Profilmenu/>
             <div className = "flex md:flex-row flex-col justify-between min-h-screen min-w-full">
                 <UserHeader loaded = {loaded} photo = {photo} userInfo = {userInfo} current = {current} id = {id} chatSocket = {chatSocket}/>
-                <div className="w-full h-fit bg-[#1E1E1E] border-[#393939] border-solid border m-4 p-8 rounded">
-                    <h2 className="font-bold text-2xl text-white text-center  flex justify-between"><img className = "w-[2em]" src = {pong}></img>Played Matches</h2>
-                    <hr />
-                    <p className = "text-white hover:bg-[#616161] text-center p-2 flex justify-between">No Data </p>
-                    {/* fetchMatches */}
-                </div>
-                <div className="w-full h-fit m-4 bg-[#1E1E1E] border-[#393939] border-solid border p-8 rounded">
+                <GameHistoryTable matches={matches} />
+                <div className="w-full md:w-1/4 h-fit m-1 mx-4 bg-[#1E1E1E] border-[#393939] border-solid border p-8 rounded">
                     <h2 className="font-bold text-2xl text-white text-center  flex justify-between"><img className = "w-[2em]" src = {pong}></img>Friends</h2>
                     <hr />
                     {friends  && friends.map((obj: Friends, index: number) => (
                         <FriendsList index = {index} obj = {obj} key = {index}/>
                     ))}
-                    <p className = "text-white text-center p-2 flex justify-between hover:bg-[#616161]">{ friends && friends.length === 0 && "No Data"} </p>
+                    <p className = "text-white text-center p-5   font-bold  hover:bg-[#616161]">{ friends && friends.length === 0 && "No Data"} </p>
                 </div>
             </div>
             <Footer/>

@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { getAvatar } from "./Slices/userSlice";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
+import pong from "@SRC_DIR/assets/images/pong.png";
+
 const GameHistoryTable = ({matches}) => {
     const [winner, setWinner] = useState(null);
     const [loser, setLoser] = useState(null);
@@ -23,9 +25,11 @@ const GameHistoryTable = ({matches}) => {
         }
     },[setAvatars, matches]);
     return (<div className=" w-full md:w-3/6 h-fit bg-[#1E1E1E] m-1 border-[#393939] border-solid border p-8 rounded text-center">
-      <h2 className="text-2xl mb-2 font-bold">Game History</h2>
-       {matches == null ? (  
-        <p className="text-2xl mb-2 font-bold">No data</p>
+      <h2 className="font-bold text-2xl text-white text-center  flex justify-between"><img className="w-[2em]" src={pong}></img>Played Matches</h2>
+      <hr />
+      <br />
+       {matches == null || matches.length == 0 ? (  
+        <p className="text-xl mb-2 font-bold text-white">No data</p>
          ) : (
          matches.slice(0, 10).map(match => {
           return ( <div key={match.id} className="flex flex-row h-12 justify-between items-center text-2xl mr-2 ml-2 mb-1 border-b border-white ">

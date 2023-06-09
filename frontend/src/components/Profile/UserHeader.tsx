@@ -37,7 +37,7 @@ const UserHeader = (props)=>{
     }
 
     return (
-    <div className="w-full m-4 rounded">
+    <div className="w-full md:w-1/4 mx-4 m-1 rounded">
         <div className="bg-[#1E1E1E] border-[#393939] border-solid border w-full flex flex-col p-5 items-center">
             <img src={props.loaded ? (props.photo ? props.photo : avatar) : null} className="rounded-full w-32 h-32 object-cover" />
             <div className="mt-1">
