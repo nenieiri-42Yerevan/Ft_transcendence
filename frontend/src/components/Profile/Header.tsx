@@ -18,7 +18,7 @@ const Header = (props)=>{
         <div className="mt-1">
             <h1 className="font-bold text-4xl text-white">{props.userInfo.user.name && props.userInfo.user.name} <span>{props.userInfo.user.lastName && props.userInfo.user.lastName}</span></h1>
             <p className="text-white mb-8">{props.userInfo.user.username && props.userInfo.user.username} {<span >&#127760;</span>}</p>
-            <input className="text-white p-1 my-2 " id="profile-image" type="file" accept="image/*" onChange={(e) => setImageFile(e.target.files && e.target.files[0])} />
+            <input className="text-white p-1 my-2 w-40 " id="profile-image" type="file" accept="image/*" onChange={(e) => setImageFile(e.target.files && e.target.files[0])} />
             <p><button className="bg-[#1e81b0] p-1 my-2 w-40 flex justify-around text-white" onClick={async ()=>{imageFile && await setAvatar(imageFile, navigate, props.userInfo.user.id, dispatch); imageFile &&  getAvatar(0, navigate, dispatch, props.userInfo.user.id);}}>Upload  <img src={iupload} alt="" className = "w-7"/></button></p>
             <Link to="/transcendence/user/profile/settings" className="bg-[#1e81b0] p-1 my-2 w-40 text-center text-white flex justify-around">Settings <img src={isettings} alt="" className = "w-7"/></Link>
         </div>
