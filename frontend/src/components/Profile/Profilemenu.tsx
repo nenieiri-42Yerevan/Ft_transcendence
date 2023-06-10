@@ -20,7 +20,7 @@ const Profilemenu = ({notify}) => {
       dispatch(logout())
       localStorage.removeItem('access_token');
       localStorage.removeItem('refresh_token');
-      notify.disconnect();
+      await notify.disconnect();
       navigate("/transcendence/user/signin")
     } catch (error) {
       console.log(error);

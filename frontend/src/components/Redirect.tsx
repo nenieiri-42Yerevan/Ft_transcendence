@@ -24,7 +24,6 @@ const Redirect = ({notify}) => {
             const info = await getUserInfo(navigate);
             dispatch(setUserInfo(info));
             console.log("getuserinfo ", info);
-            notify.connect();
             if (Cookies.get('first_login') == 'true')
             {
                 Cookies.remove('first_login');

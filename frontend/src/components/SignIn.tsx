@@ -51,7 +51,6 @@ const SignIn = ({notify}) => {
             localStorage.setItem("refresh_token", refreshToken);
             const userInfo = await getUserInfo(navigate);
             dispatch(setUserInfo(userInfo));
-            notify.connect();
             navigate("/transcendence/user/profile");
         }
         catch (error: any) {
@@ -85,7 +84,6 @@ username: data.login,
             localStorage.setItem("refresh_token", refreshToken);
             const userInfo = await getUserInfo(navigate);
             dispatch(setUserInfo(userInfo));
-            notify.connect();
             navigate("/transcendence/user/profile");
         }
         catch(error)
