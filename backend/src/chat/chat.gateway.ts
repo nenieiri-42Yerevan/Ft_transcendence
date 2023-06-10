@@ -48,7 +48,7 @@ export class ChatGateway
       const user = await this.authService.retrieveUser(client);
       if (!user) return client.disconnect();
 
-      await this.userService.setStatus(user.id, Status.CHAT);
+      // await this.userService.setStatus(user.id, Status.CHAT);
 
       const userGroups = await this.groupChatService.findUserGroups(user.id);
       const userChats = await this.chatService.findAll(user.id);
@@ -67,7 +67,7 @@ export class ChatGateway
     try {
       if (!client.data.user) return;
 
-      return this.userService.setStatus(client.data.user.id, Status.ONLINE);
+      // return this.userService.setStatus(client.data.user.id, Status.ONLINE);
     } catch {}
   }
 

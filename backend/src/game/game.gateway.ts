@@ -33,7 +33,7 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
       const user = await this.authService.retrieveUser(client);
       if (!user) { return client.disconnect(); }
 
-      await this.userService.setStatus(user.id, Status.GAME);
+      // await this.userService.setStatus(user.id, Status.GAME);
 
       client.data.user = user;
       client.emit('info', { user });
@@ -47,7 +47,7 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
       if (!client.data.user) return;
 
       await this.roomService.deleteSock(client);
-      await this.userService.setStatus(client.data.user.id, Status.ONLINE);
+      // await this.userService.setStatus(client.data.user.id, Status.ONLINE);
     } catch {}
   }
 
