@@ -27,7 +27,7 @@ const Tfa_42 = ({notify}) => {
             localStorage.setItem('refresh_token', response.data.refresh_token);
             const userInfo = await getUserInfo(navigate);
             dispatch(setUserInfo(userInfo));
-            Cookies.remove('username');ss
+            Cookies.remove('username');
             navigate("/transcendence/user/profile");
             // console.log("TFA42 ", response);
         }
