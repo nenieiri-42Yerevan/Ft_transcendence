@@ -7,17 +7,8 @@ import { GroupChatContext, getGroupChats } from "../context/ChatContext";
 
 const ChatSpace = ({groupSocket}) => {
 
-//    const [messages, setMessages] = useState([]);
-//    const [users, setUsers] = useState([]);
 
     useEffect(() => {
-      //  if (curChat) {
-         //   setMessages(curChat.messages);
-         //   setUsers(curChat.users);
-         //   console.log(curChat);
-         //   console.log("users", users);
-         //   console.log("messages", messages);
-       // }
     },[]);
 
     return ( 
@@ -28,7 +19,7 @@ const ChatSpace = ({groupSocket}) => {
             <div className='flex flex-col h-fit w-full text-white text-center text-md font-bold'><AdminWindow /></div>
         </div>
         <div className='flex flex-col w-4/5  m-2'>
-            <div className='h-full rounded-md border border-[#393939]'><ChatWindow/></div>
+            <div className='h-full rounded-md border border-[#393939]'><ChatWindow groupSocket={groupSocket}/></div>
             <div><MessageInput groupSocket={groupSocket} /></div>
         </div>
     </>

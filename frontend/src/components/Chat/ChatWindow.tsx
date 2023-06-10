@@ -1,13 +1,22 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { selectUser } from "../Slices/userSlice";
 import { useSelector } from 'react-redux';
-import { GroupChatContext } from '../context/ChatContext';
+import { GroupChatContext, getGroupChats } from '../context/ChatContext';
 
-const ChatWindow = () => {
+const ChatWindow = ({groupSocket}) => {
     const userInfo = useSelector(selectUser);
-    const {curChat} = useContext(GroupChatContext);
+    const {curChat, setCurChat, allChat, setAllChats} = useContext(GroupChatContext);
     const [messages, setMessages] = useState([]);
     useEffect(() => {
+        groupSocket.on('text', (data) => {
+                getGroupChats()
+                    .then(chats => {setAllChats(chats);
+                    if (curChat) {
+                        setCurChat(chats.find(chat => chat.id == curChat.id));
+                        setMessages(chats.find(chat => chat.id == curChat.id).messages);
+                    }
+                })
+            });
         if (curChat)
             setMessages(curChat.messages);
         else

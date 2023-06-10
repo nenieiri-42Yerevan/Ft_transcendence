@@ -15,7 +15,6 @@ const Chanels = ({chatSocket}) => {
 
 
     useEffect(() => {
-        console.log(userInfo);
         },[]);
     return (
         <>
@@ -27,7 +26,8 @@ const Chanels = ({chatSocket}) => {
            <Rooms user={userInfo.user} />  
         </div>
         <div className="flex flex-row  w-4/5 bg-[#1E1E1E] border-[#393939] border-solid border m-2  rounded">
-           <ChatSpace groupSocket={chatSocket}/>
+          {curChat && curChat.users.some(user => user.id == userInfo.user.id)? <ChatSpace groupSocket={chatSocket}/> : 
+          <div className='flex flex-row w-full justify-center items-center text-center text-white text-3xl font-bold'>Choose Room</div>}
         </div>
         </ GroupChatContext.Provider>
         </div>

@@ -7,6 +7,7 @@ import deleteImg from '../../assets/images/delete_button.png';
 import adminImg from '../../assets/images/admin.png';
 import lockImg from '../../assets/images/lock.png';
 import { GroupChatContext, getGroupChats } from "../context/ChatContext";
+import { toast } from 'react-toastify';
 
 const Rooms = ({ user }) => {
     
@@ -22,12 +23,15 @@ const Rooms = ({ user }) => {
             updateChats();
         }
 
-        },[allChat]);
+    },[allChat]);
 
     const updateChats = () => {
-            getGroupChats()
-                .then(chats => {setAllChats(chats);})
-                .catch(err => {console.log(err); });
+        getGroupChats()
+            .then(chats => {setAllChats(chats);
+            if (curChat) {
+                setCurChat(chats.find(chat => chat.id == curChat.id));
+            }
+        })
     }
 
     const DeleteChat = async (item) => {
@@ -40,9 +44,10 @@ const Rooms = ({ user }) => {
                 },
             }
         );
+        setCurChat(null);
         updateChats();
         } catch (ex) {
-            console.log("Can't delete chat:", ex);
+            toast.error(`Can't create chat: ${ex}`, { autoClose: 3000 });
         }
     };
 
@@ -68,24 +73,24 @@ const Rooms = ({ user }) => {
             updateChats();
             }
             } catch (ex) {
-                console.log("Can't create chat:", ex);
+                toast.error(`Can't create chat: ${ex}`, { autoClose: 3000 });
             } finally {
                 setModal(false);
             }
         }
     }
 
-    const JoinRoom = async () => {
+    const JoinRoom = async (isSub) => {
         if (!join && !curChat.public) {
            setJoin(true); 
-        } else {
+        } else if (!isSub) {
             try {
                 const response = await axios.post(
                     `${process.env.BACK_URL}/transcendence/chat/group/add/${user.id}`,
                     {
                         id : curChat.id,
                         public : curChat.public,
-                        password : isPasswordEnabled?password:"",
+                        password : password,
                     }, 
                     {    
                       headers: {
@@ -94,12 +99,23 @@ const Rooms = ({ user }) => {
                     }
                 );
                 updateChats();
-            } catch (ex) {
-                console.log("Can't Join:", ex);
+                } catch (ex) {
+                    toast.error(ex.response.data.message, {
+                        position: "bottom-center",
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        theme: "colored",
+                    });
             } finally {
                 setJoin(false);
             }
+        } else {
+            setJoin(false);
         }
+
     }
     
 
@@ -111,11 +127,10 @@ const Rooms = ({ user }) => {
     {allChat && (allChat.length == 0
       ? <p>no rooms.. </p>
       : allChat.map((item, index) =>  
-        <div onClick={() => {setCurChat(item)}} className={`flex items-center text-sm border m-1 border-[#393939] hover:bg-[#616161] ${item == curChat && "bg-[#616161]"}`} key={index}>
+        <div onClick={() => {setCurChat(item);}} className={`flex items-center text-sm border m-3 rounded-md  border-[#393939] hover:bg-[#616161] ${item == curChat && "bg-[#616161]"}`} key={index}>
           <div className="w-full pb-2">
             <div className="flex justify-between">
               <span className="block ml-2 truncate font-bold text-xl text-white">{item.name?item.name:item.users[0].username}</span>
-              {item.owner && <span>Room</span>}
             </div>
             <div className='flex justify-end'>
               {item.owner && item.owner.id==user.id && <img className='w-7 h-7' src={adminImg} alt='You are admin' />}
@@ -165,14 +180,14 @@ const Rooms = ({ user }) => {
     )}
     {join && (
         <Modal onClose={(bool) => JoinRoom(bool)}>
-        { curChat.public &&
+        
          <div className="flex flex-col mb-4">
           <label htmlFor="pass" className="text-lg mb-2 font-medium">
             Password:
           </label>
           <input type="text" id="pass" value={password} onChange={(e) => setPassword(e.target.value)} className="border border-gray-500 p-2 rounded-lg text-black focus:outline-none" />
         </div> 
-        }
+        
 
         </Modal>
     )}

@@ -1,8 +1,13 @@
-import React, {useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 
-const MessageInput = ({groupSocket, curChat}) => {
-    const [currentMessage, setCurrentMessage] = useState("");
-    
+import { GroupChatContext} from "../context/ChatContext";
+const MessageInput = ({groupSocket}) => {
+    const [currentMessage, setCurrentMessage] = useState(""); 
+    const {curChat} = useContext(GroupChatContext);
+
+    useEffect(() => {
+            
+        },[curChat]);
     const sendMsg = () => {
         if (curChat != null) {
             const msg = {
@@ -10,6 +15,7 @@ const MessageInput = ({groupSocket, curChat}) => {
                 value: currentMessage,
             }
             groupSocket.emit('text', msg);
+            setCurrentMessage('');
         }
     }
 

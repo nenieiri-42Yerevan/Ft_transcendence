@@ -7,6 +7,10 @@ const UserList = () => {
     const {curChat} = useContext(GroupChatContext);
     const userInfo = useSelector(selectUser);
     const [users, setUsers] = useState(null);
+    const Status = {
+        0: "OFFLINE",
+        1: "ONLINE",
+    };
 
     useEffect(() => {
         if (curChat && curChat.users.some(user => user.id == userInfo.user.id))
@@ -16,7 +20,14 @@ const UserList = () => {
         }, [curChat, userInfo]);
     return ( 
        <div >
-      {users && users.map((user, index) =><div key={index} className='bg-gray-700 m-1 text-center rounded-md hover:bg-gray-500'> <Link to={`/transcendence/user/profile/${user.id}`} key={user.id}>{user.username} {user.status==1?"Offline":"Online"}</Link> </div>)}
+      {users && users.map((user, index) => 
+          <div key={index} className='bg-gray-700 m-1 text-center text-white text-xl rounded-md hover:bg-gray-500'> 
+          <Link className='flex flex-row justify-between m-2' to={`/transcendence/user/profile/${user.id}`} key={user.id}>
+          <p className="truncate">{(userInfo.user.username == user.username) ? "You" : user.username}</p>
+          <p>{Status[user.status]}</p>
+          </Link> 
+          </div>)}
+
         </div>);
 };
 

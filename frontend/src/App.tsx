@@ -2,6 +2,8 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import './App.css';
 import './Skybox.scss';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import SignUp from './components/SignUp';
 import SignIn from './components/SignIn';
 import Profile from './components/Profile/Profile';
@@ -69,6 +71,7 @@ const App = (props: any) => {
     },[]);
   return (
     <>
+      <ToastContainer />
       <Router>
         <Routes>
           <Route path="/transcendence" element={<Welcome />} />
