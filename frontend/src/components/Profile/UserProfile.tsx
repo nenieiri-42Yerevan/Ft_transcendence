@@ -45,6 +45,7 @@ const UserProfile = ({chatSocket}) => {
                     setMatches(data);})
                 .catch(error => console.log(error));
             }
+            console.log("userprofile:", userInfo);
         }).catch(error=>{error.response.status == 401 && window.location.reload()});
         setloaded(true);
     }, [id]);

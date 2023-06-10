@@ -16,8 +16,7 @@ import { OnModuleInit } from '@nestjs/common';
   cors: { origin: '*' },
   namespace: 'notify',
 })
-export class NotifyGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
- {
+export class NotifyGateway implements OnGatewayInit {
   constructor(
     private readonly configService: ConfigService,
     private readonly notifyService: NotifyService,
