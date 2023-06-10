@@ -10,7 +10,8 @@ import { EditInfo } from '../Utils/Scheme';
 
 export interface Friends {
   name: string,
-  id: number
+  id: number,
+  status: number
 }
 
 export interface Matches {
@@ -145,7 +146,7 @@ export const fetchFriendsData = async (flag: number, Navigate, dispatch: any, us
         },
       );
       console.log(response);
-      friendNames.push({ name: response.data.username, id: id });
+      friendNames.push({ name: response.data.username,status:response.data.status, id: id });
     } catch (error) {
       if (error.response.status == 401) {
         if ((await refreshToken()) != 200) {

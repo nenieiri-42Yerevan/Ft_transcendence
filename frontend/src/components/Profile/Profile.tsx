@@ -38,7 +38,7 @@ const Profile = ({notify}) => {
                 }
             setloaded(true);
         }
-    }, []);
+    }, [notify]);
     return (
         <>
             <div className="flex flex-col bg-[#262525]">

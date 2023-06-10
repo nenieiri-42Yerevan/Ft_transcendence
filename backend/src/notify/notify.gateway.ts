@@ -64,9 +64,9 @@ export class NotifyGateway
 
         const user = await this.userService.findOne(uid);
         if (!user) return;
-
-        if (user.status == Status.ONLINE)
-          await this.userService.setStatus(uid, Status.OFFLINE);
+        
+        
+        await this.userService.setStatus(uid, Status.OFFLINE);
       }, 5 * 1000);
     } catch {}
   }
