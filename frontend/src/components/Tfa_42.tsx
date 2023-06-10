@@ -11,7 +11,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
 
-const Tfa_42 = () => {
+const Tfa_42 = ({notify}) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
@@ -28,6 +28,7 @@ const Tfa_42 = () => {
             const userInfo = await getUserInfo(navigate);
             dispatch(setUserInfo(userInfo));
             Cookies.remove('username');
+            notify.connect();
             navigate("/transcendence/user/profile");
             // console.log("TFA42 ", response);
         }

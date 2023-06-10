@@ -7,7 +7,7 @@ import Cookies from 'js-cookie';
 import { getUserInfo, setUserInfo } from './Slices/userSlice';
 
 
-const Redirect = () => {
+const Redirect = ({notify}) => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const [iserror, setIserror] = useState(false);
@@ -24,6 +24,7 @@ const Redirect = () => {
             const info = await getUserInfo(navigate);
             dispatch(setUserInfo(info));
             console.log("getuserinfo ", info);
+            notify.connect();
             if (Cookies.get('first_login') == 'true')
             {
                 Cookies.remove('first_login');

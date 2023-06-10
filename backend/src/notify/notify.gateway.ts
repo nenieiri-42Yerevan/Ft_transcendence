@@ -33,7 +33,7 @@ export class NotifyGateway
 
   afterInit(srv: Server): void {
     this.notifyService.server = srv;
-
+    
     const origin = this.configService.get<string>('FRONT_URL');
     Object.assign(this.server, { cors: { origin } });
   }
@@ -42,7 +42,7 @@ export class NotifyGateway
     try {
       const user = await this.authService.retrieveUser(client);
       if (!user) client.disconnect();
-
+      
       await this.userService.setStatus(user.id, Status.ONLINE);
 
       client.data.user = user;
@@ -54,7 +54,7 @@ export class NotifyGateway
       if (!client.data.user) return;
 
       const uid = client.data.user.id;
-
+     
       setTimeout(async () => {
         const socket: any = Array.from(this.server.sockets.values()).find(
           (socket: Socket) => socket.data.user.id == uid,

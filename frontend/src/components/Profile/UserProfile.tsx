@@ -16,7 +16,7 @@ import UserHeader from "./UserHeader";
 import Notfound from "../Notfound";
 import GameHistoryTable from "../GameHistoryBoard";
 
-const UserProfile = ({chatSocket}) => {
+const UserProfile = ({chatSocket, notify}) => {
     const {id} = useParams();
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -53,12 +53,12 @@ const UserProfile = ({chatSocket}) => {
         return (<Notfound/>);;
     if (id == current?.user?.id)
         return (
-            <Profile/>
+            <Profile notify = {notify}/>
         );
     return (
         <>
         <div className="flex flex-col bg-[#262525]">
-            <Profilmenu/>
+            <Profilmenu notify = {notify}/>
             <div className = "flex md:flex-row flex-col justify-between min-h-screen min-w-full">
                 <UserHeader loaded = {loaded} photo = {photo} userInfo = {userInfo} current = {current} id = {id} chatSocket = {chatSocket}/>
                 <GameHistoryTable matches={matches} />

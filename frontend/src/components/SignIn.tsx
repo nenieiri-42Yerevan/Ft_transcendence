@@ -21,7 +21,7 @@ interface tfa {
     password: string;
     tfa: string;
 }
-const SignIn = () => {
+const SignIn = ({notify}) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [isError, setIsError] = useState(false);
@@ -51,7 +51,7 @@ const SignIn = () => {
             localStorage.setItem("refresh_token", refreshToken);
             const userInfo = await getUserInfo(navigate);
             dispatch(setUserInfo(userInfo));
-            console.log(userInfo);
+            notify.connect();
             navigate("/transcendence/user/profile");
         }
         catch (error: any) {
@@ -85,7 +85,7 @@ username: data.login,
             localStorage.setItem("refresh_token", refreshToken);
             const userInfo = await getUserInfo(navigate);
             dispatch(setUserInfo(userInfo));
-            console.log(userInfo);
+            notify.connect();
             navigate("/transcendence/user/profile");
         }
         catch(error)
