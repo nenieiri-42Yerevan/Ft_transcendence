@@ -44,6 +44,8 @@ export class NotifyGateway
       if (!user) client.disconnect();
 
       await this.userService.setStatus(user.id, Status.ONLINE);
+
+      client.data.user = user;
     } catch {}
   }
 
