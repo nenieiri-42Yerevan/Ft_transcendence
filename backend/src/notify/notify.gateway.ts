@@ -54,18 +54,18 @@ export class NotifyGateway
       if (!client.data.user) return;
 
       const uid = client.data.user.id;
-     
+      console.log("uid:", uid);
+      
       setTimeout(async () => {
         const socket: any = Array.from(this.server.sockets.values()).find(
           (socket: Socket) => socket.data.user.id == uid,
-        );
-
-        if (socket) return;
-
-        const user = await this.userService.findOne(uid);
-        if (!user) return;
-        
-        
+          );
+          
+          if (socket) return;
+          
+          const user = await this.userService.findOne(uid);
+          if (!user) return;
+          
         await this.userService.setStatus(uid, Status.OFFLINE);
       }, 5 * 1000);
     } catch {}
