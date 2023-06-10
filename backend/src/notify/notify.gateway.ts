@@ -49,25 +49,23 @@ export class NotifyGateway
     } catch {}
   }
 
-  handleDisconnect(client: Socket): void {
+  async handleDisconnect(client: Socket): void {
     try {
       if (!client.data.user) return;
 
-      const uid = client.data.user.id;
-      console.log("uid:", uid);
-     
-      setTimeout(async () => {
-        const socket: any = Array.from(this.server.sockets.values()).find(
-          (socket: Socket) => socket.data.user.id == uid,
-        );
+    const uid = client.data.user.id;
+    console.log("uid:", uid);
 
-        if (socket) return;
+      const socket: any = Array.from(this.server.sockets.values()).find(
+        (socket: Socket) => socket.data.user.id == uid,
+      );
 
-        const user = await this.userService.findOne(uid);
-        if (!user) return;
-        
-        await this.userService.setStatus(uid, Status.OFFLINE);
-      }, 5 * 1000);
+      if (socket) return;
+
+      const user = await this.userService.findOne(uid);
+      if (!user) return;
+      
+      await this.userService.setStatus(uid, Status.OFFLINE);
     } catch {}
   }
 
