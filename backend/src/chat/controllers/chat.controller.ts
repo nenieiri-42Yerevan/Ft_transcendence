@@ -70,7 +70,7 @@ export class ChatController {
   updatePassword(
     @Param('gid', ParseIntPipe) gid: number,
     @Param('uid', ParseIntPipe) uid: number,
-    @Body() pass: PasswordDto,
+    @Body() pass: any,
   ): Promise<void> {
     return this.groupChatService.updatePassword(pass, gid, uid);
   }
