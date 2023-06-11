@@ -154,7 +154,7 @@ const App = (props: any) => {
           <Route path="/transcendence/user/signin" element={<SignIn notify = {notify}/>} />
           <Route path="/transcendence/user/profile" element={<Profile notify = {notify}/>} />
           <Route path="/transcendence/user/profile/:id" element={<UserProfile notify={notify} chatSocket = {chatSocket} />} />
-          <Route path="/transcendence/user/profile/settings" element={<Settings />} />
+          <Route path="/transcendence/user/profile/settings" element={<Settings notify = {notify}/>} />
           <Route path="/transcendence/user/dashboard" element={<Dashboard />} />
           <Route path="/transcendence/user/chat/:id" element={<Chat chatSocket={chatSocket} />} />
           <Route path="/transcendence/user/chat" element={<Chanels notify={notify} chatSocket={chatSocket} gameSocket={gameSocket} />} />

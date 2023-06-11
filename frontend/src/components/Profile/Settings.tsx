@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { Form } from 'react-final-form';
 import { Link, useNavigate } from 'react-router-dom';
 import { FORM_ERROR } from 'final-form';
@@ -13,12 +13,17 @@ import Tfa from '../Tfa';
 import Profilemenu from './Profilemenu';
 
 
-const Edit = () => {
+const Edit = ({notify}) => {
     const userInfo = useSelector(selectUser);
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const [enabled, setEnabled] = useState(false);
     
+
+    useEffect(() => {
+        if (userInfo && !userInfo.user)
+            navigate("/transcendence/user/signin");
+    }, [])
     const initialValues = {
         first_name: userInfo?.user?.name,
         last_name: userInfo?.user?.lastName,
@@ -54,7 +59,7 @@ const Edit = () => {
       }
     return (
         <>
-        <Profilemenu/>
+        <Profilemenu notify = {notify}/>
         <div className=" text-xs xl:text-x lg:text-lg md:text-md sm:text-sm bg-[#262525] flex justify-center">
             <div className="flex flex-col justify-center md:text-lg items-center min-w-full min-h-screen md:min-w-fit ">
                 {enabled && <Tfa user = {userInfo.user}  enabled={enabled}  onEnableChange={handleEnableChange}/>}
