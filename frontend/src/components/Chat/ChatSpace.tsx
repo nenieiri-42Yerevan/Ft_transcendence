@@ -5,7 +5,7 @@ import ChatWindow from './ChatWindow';
 import AdminWindow from './AdminWindow';
 import { GroupChatContext, getGroupChats } from "../context/ChatContext";
 
-const ChatSpace = ({groupSocket}) => {
+const ChatSpace = () => {
 
 
     useEffect(() => {
@@ -19,8 +19,8 @@ const ChatSpace = ({groupSocket}) => {
             <div className='flex flex-col h-fit w-full text-white text-center text-md font-bold'><AdminWindow /></div>
         </div>
         <div className='flex flex-col w-4/5  m-2'>
-            <div className='h-full rounded-md border border-[#393939]'><ChatWindow groupSocket={groupSocket}/></div>
-            <div><MessageInput groupSocket={groupSocket} /></div>
+            <div className='h-full rounded-md border border-[#393939]'><ChatWindow/></div>
+            <div><MessageInput/></div>
         </div>
     </>
     );
