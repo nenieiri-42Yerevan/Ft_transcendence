@@ -26,7 +26,7 @@ const Dashboard = () => {
             .catch(error => console.log(error));
             }
         }
-    }, [setMatches]);
+    }, []);
       return (
         <>
             <Navigation />

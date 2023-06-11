@@ -4,16 +4,19 @@ import NavBar from "../NavBar";
 import Pong from './Pong';
 import Multiplayer from './Multiplayer';
 import Menu from './Menu';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { io } from 'socket.io-client';
+import { useLocation } from "react-router-dom";
+import { GameContext } from '../context/GameSocket';
 
 const Game = ({gameSocket, isInvite}) => {
     const [isReady, setIsReady] = useState(isInvite);
     const [id, setId] = useState(0);
     const [mode, setMode] = useState(0);
-
+    const {invite, setPlayerId} = useContext(GameContext);
     
     useEffect(() => {
+        setIsReady(invite);
 
         if (gameSocket) {
         gameSocket.on('room', (data) => {
@@ -23,7 +26,7 @@ const Game = ({gameSocket, isInvite}) => {
 
         gameSocket.on('add', (data) => {
                 console.log('Socket add : ', data);
-                setId(data - 1);
+                setPlayerId(data - 1);
                 });
 
         }
@@ -36,13 +39,13 @@ const Game = ({gameSocket, isInvite}) => {
             gameSocket.off('disconnect');
             }
             }
-        }, [mode, gameSocket]);
+        }, [mode, gameSocket, invite]);
 
     return (
             <>
             <NavBar />
             <div className="flex flex-wrap">
-                {isReady ? <Multiplayer gameSocket={gameSocket} id={id} mode={mode} /> : <Menu gameSocket={gameSocket} setMode={setMode} />}
+                {isReady ? <Multiplayer gameSocket={gameSocket} id={id} setId={setId} mode={mode} /> : <Menu gameSocket={gameSocket} setMode={setMode} />}
         
             </div>
             </>

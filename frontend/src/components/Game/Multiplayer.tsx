@@ -5,10 +5,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { GameContext } from '../context/GameSocket';
 import { Modal, Button } from 'react-bootstrap';
 
-
-
 const Multiplayer = (props) => {
-    const { gameSocket, id, mode } = props;
+    const { gameSocket,mode } = props;
    const canvasRef = useRef(null);
    const parentRef = useRef(null);
    const paddleWidth = 20 / 1080;
@@ -19,13 +17,14 @@ const Multiplayer = (props) => {
    var score = [0, 0];
    const navigate = useNavigate();
     
+    const {setInvite, playerId} = useContext(GameContext);
 
    useEffect(() => {
     // Initialize Paper JS
     paper.setup(canvasRef.current);
  
     gameSocket.on('tray', (data, pos) => {
-            paddlePos[data - 1][1] = pos; 
+            paddlePos[data][1] = pos; 
         });
 
     var pW = view.size.width * paddleWidth;
@@ -111,6 +110,7 @@ const Multiplayer = (props) => {
     gameSocket.on('score', (data) => {
         scoreText.content = `${data[0]} : ${data[1]}`; 
         if (data[0] == 10 || data[1] == 10) {
+            setInvite(false);
            navigate("/transcendence/user/dashboard"); 
         }
     });
@@ -139,17 +139,17 @@ const Multiplayer = (props) => {
     }
 
     paper.view.onKeyDown = (event) => {
-        if (event.key == 'w' && paddlePos[id][1] > 0) {
-            gameSocket.emit('update-tray', (paddlePos[id][1] - 0.04));
+        if (event.key == 'w' && paddlePos[playerId][1] > 0) {
+            gameSocket.emit('update-tray', (paddlePos[playerId][1] - 0.04));
         }
 
-        if (event.key == 's' && paddlePos[id][1] < 1 - paddleHeight) {
-            gameSocket.emit('update-tray', (paddlePos[id][1] + 0.04));
+        if (event.key == 's' && paddlePos[playerId][1] < 1 - paddleHeight) {
+            gameSocket.emit('update-tray', (paddlePos[playerId][1] + 0.04));
         }
 
         if (event.key == 'space') {
             gameSocket.emit('ready', { plan : 0, mode : mode });
-            readyText.content = `Mode: ${mode} Wait another player...`;
+            readyText.content = `Wait another player...`;
         }
     }
     const  normalize = (coordinate: [number, number]): number[] => {
@@ -167,7 +167,7 @@ const Multiplayer = (props) => {
      gameSocket.off('score');
      gameSocket.off('tray');
     };
-  }, [mode, id, gameSocket]);
+  }, [mode, playerId, gameSocket]);
 
   return (
             <canvas ref={canvasRef} className='w-full h-screen bg-black' />

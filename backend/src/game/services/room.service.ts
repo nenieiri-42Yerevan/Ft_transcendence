@@ -82,7 +82,6 @@ export class RoomService {
         tray: RoomService.options.display.height / 2,
         score: 0,
       };
-
       room.players.push(player);
 
       if (room.players.length == 2) room.state = State.STARTING;
@@ -179,6 +178,7 @@ export class RoomService {
       const winner = player.user;
       const score = room.players.map((player) => player.score);
 
+      room.players.forEach(player => this.deleteSock(player.socket));
       await this.userService.updateLevel(winner, loser);
       await this.matchService.create({
         score,

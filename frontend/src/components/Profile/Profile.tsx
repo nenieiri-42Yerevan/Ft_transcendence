@@ -26,7 +26,7 @@ const Profile = ({notify}) => {
         if (userInfo && !userInfo.user)
             navigate("/transcendence/user/signin");
         else {
-            notify?.connect();
+            //notify?.connect();
             fetchFriendsData(0, navigate, dispatch, userInfo.user);
             fetchMatches(0, navigate, dispatch, userInfo.user);
             getAvatar(0, navigate, dispatch, userInfo.user.id);

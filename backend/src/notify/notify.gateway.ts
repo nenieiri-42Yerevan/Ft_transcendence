@@ -57,8 +57,8 @@ export class NotifyGateway
       console.log("uid:", uid);
      
       setTimeout(async () => {
-        const socket: any = Array.from(this.server.sockets.values()).find(
-          (socket: Socket) => socket.data.user.id == uid,
+        const socket: any = Array.from(this.server.sockets.values())?.find(
+          (socket: Socket) => socket?.data?.user?.id == uid,
         );
 
         if (socket) return;
@@ -75,13 +75,14 @@ export class NotifyGateway
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   onMessage(client: Socket, data: any): void {
     try {
+        console.log(data);
       const user = client.data.user;
       if (!user) return;
 
-      const socket: any = Array.from(this.server.sockets.values()).find(
+      const socket: any = Array.from(this.server.sockets.values())?.find(
         (socket: Socket) => socket.data.user.id == data.id,
       );
-      if (!socket) client.emit('error', 'User not found!');
+      if (!socket) client.emit('error', 'User offline!');
       else {
         data.id = user.id;
         socket.emit('message', data);

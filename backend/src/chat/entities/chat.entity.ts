@@ -4,13 +4,11 @@ import {
   ManyToMany,
   OneToMany,
   PrimaryGeneratedColumn,
-  TableInheritance,
 } from 'typeorm';
 import { Message } from './message.entity';
 import { User } from 'src/user/entities';
 
 @Entity()
-@TableInheritance()
 export class Chat {
   @PrimaryGeneratedColumn()
   id: number;

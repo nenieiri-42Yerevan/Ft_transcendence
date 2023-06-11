@@ -22,14 +22,17 @@ import { io } from 'socket.io-client';
 import { selectUser } from './components/Slices/userSlice';
 import { useSelector } from 'react-redux';
 import AllUsers from './components/AllUsers';
+import { useNavigate } from "react-router-dom";
+import { GameContext } from './components/context/GameSocket';
 
 const App = (props: any) => {
-  const userInfo = useSelector(selectUser);
+    const userInfo = useSelector(selectUser);
    const [gameSocket, setGameSocket] = useState(null);
    const [chatSocket, setChatSocket] = useState(null);
    const [chatInfo, setChatInfo] = useState(null);
    const [notify, setnotify] = useState(null);
-   const [invite, setInvite] = useState(null);
+   const [invite, setInvite] = useState(false);
+   const [playerId, setPlayerId] = useState(0);
   useEffect(() => {
     const socketOptions = {
             transportOptions: { 
@@ -40,6 +43,7 @@ const App = (props: any) => {
                     },
                 },
                 reconnection: true,
+                reconnectionAttempts: 5,
                 timeout: 3000,
             };
             const gameSocket = io(`${process.env.BACK_URL}/pong`, socketOptions);
@@ -65,13 +69,45 @@ const App = (props: any) => {
 
             notify.on('error', (data)=>{
               console.log("notify error:", data);
-            })
-            notify.on('message', (data) => {
-                console.log("notification: ", data); 
-                toast.info("HELLO"+data, {
+                toast.error(data, {
                         autoClose: 5000,
                         hideProgressBar: false,
-                        closeOnClick: true,
+                        closeOnClick: false,
+                        pauseOnHover: true,
+                        draggable: true,
+                        theme: "colored",
+                    });
+            })
+            notify.on('message', (data) => {
+                toast.info(<div className="flex flex-col">
+                        <div className="pb-2">{`Invite to the game from ${data.opponent}`}</div>
+                        <div className="flex flex-row justify-end">
+                        <button
+                        className="px-4 py-1 mr-2 bg-red-500 text-white rounded hover:bg-red-600"
+                        onClick={() => {
+                        toast.dismiss();
+                        }}
+                        >
+                        Decline
+                        </button>
+                        <button
+                        className="px-4 py-1 bg-green-500 text-white rounded hover:bg-green-600"
+                        onClick={() => {
+                            console.log(data);
+                            gameSocket.emit('join-room', data.message);
+                            setInvite(true);
+                            setPlayerId(1);
+                            //useNavigate("/transcendence/game", { state: {notify: true}});
+                            toast.dismiss();
+                        }}
+                        >
+                        Submit
+                        </button>
+                        </div>
+                        </div>, {
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: false,
                         pauseOnHover: true,
                         draggable: true,
                         theme: "colored",
@@ -93,6 +129,9 @@ const App = (props: any) => {
             gameSocket.on('info', (data) => {
                 console.log('Info : ', data);
             });
+            gameSocket.on('room', (data) => {
+                console.log('Room : ', data);
+            });
 
             return () => { 
                 gameSocket.close();
@@ -103,6 +142,7 @@ const App = (props: any) => {
     },[userInfo?.user?.id]);
   return (
     <>
+        <GameContext.Provider value={{setInvite, invite, playerId, setPlayerId}}>
     <ToastContainer />
       <Router>
         <Routes>
@@ -118,10 +158,11 @@ const App = (props: any) => {
           <Route path="/transcendence/user/dashboard" element={<Dashboard />} />
           <Route path="/transcendence/user/chat/:id" element={<Chat chatSocket={chatSocket} />} />
           <Route path="/transcendence/user/chat" element={<Chanels notify={notify} chatSocket={chatSocket} gameSocket={gameSocket} />} />
-          <Route path="/transcendence/user/directchats" element={<DirectChats  chatSocket = {chatSocket}/>} />
-          <Route path="/transcendence/game" element={<Game gameSocket={gameSocket} isInvite={false} />} />
+          <Route path="/transcendence/user/directchats" element={<DirectChats  chatSocket={chatSocket}/>} />
+          <Route path="/transcendence/game" element={<Game gameSocket={gameSocket} isInvite={invite} />} />
         </Routes>
       </Router>
+      </GameContext.Provider>
     </>
   );
 };

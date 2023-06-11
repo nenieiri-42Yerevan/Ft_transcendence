@@ -7,22 +7,24 @@ import { block, follow } from "../Slices/userSlice";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { io } from 'socket.io-client';
+import { GameContext } from '../context/GameSocket';
 
 const UserList = ({notify, gameSocket, chatSocket}) => {
     const {curChat} = useContext(GroupChatContext);
+    const {setInvite, setPlayerId} = useContext(GameContext);
     const userInfo = useSelector(selectUser);
     const [users, setUsers] = useState(null);
     const disp = useDispatch();
     const navigate = useNavigate();
-    const [clicked, setClicked] = useState(false);
+    const [clicked, setClicked] = useState(null);
     const [selectedUser, setSelectedUser] = useState(false);
     const [points, setPoints] = useState({
                                             x: 0,
                                             y: 0,
                                           });
     const Status = {
-        0: "OFFLINE",
-        1: "ONLINE",
+        0: "green-700",
+        1: "red-700",
     };
 
     useEffect(() => {
@@ -33,8 +35,9 @@ const UserList = ({notify, gameSocket, chatSocket}) => {
         const handleClick = () => setClicked(false);
         gameSocket.on('room', (data) => {
             console.log('Invite to room : ', data);
-            notify.emit('message', { id: selectedUser.id, message: data}); 
-
+            setPlayerId(0);
+            setInvite(true);
+            notify.emit('message', { id: selectedUser.id, message: data, opponent: userInfo.user.username}); 
         });
         window.addEventListener("click", handleClick);
     
@@ -42,15 +45,14 @@ const UserList = ({notify, gameSocket, chatSocket}) => {
         window.removeEventListener("click", handleClick);
         gameSocket.off('room');
         };
-        }, [notify, curChat, userInfo, gameSocket]);
+        }, [notify, curChat, userInfo, gameSocket, selectedUser]);
 
     const followUser = () => {
         follow(disp, navigate, userInfo.user, selectedUser.id);
     }
 
     const sendInvite = () => {
-        gameSocket.emit("join-room", 1000);
-         
+        gameSocket.emit("join-room");
     }
 
     return ( 
@@ -71,8 +73,8 @@ const UserList = ({notify, gameSocket, chatSocket}) => {
           }}>
           <div key={index} className='bg-gray-700 m-1 text-center text-white text-xl rounded-md hover:bg-gray-500'> 
           <Link className='flex flex-row items-center justify-between m-2' to={`/transcendence/user/profile/${user.id}`} key={user.id}>
-          <p className="truncate">{(userInfo.user.username == user.username) ? "You" : user.username}</p>
-          <div className={`h-3 w-3 rounded-full bg-${userInfo.status==1?"green-700":"red-700"}`}/>
+          <p className="truncate">{user.username}</p>
+          <div className={`h-3 w-3 rounded-full bg-${Status[userInfo.status]}`}/>
           </Link> 
           </div>
           </div>)})}
