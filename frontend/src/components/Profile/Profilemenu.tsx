@@ -39,7 +39,10 @@ const Profilemenu = ({notify}) => {
             <Link to="/transcendence/game">Game</Link>
           </li>
           <li>
-            <Link to="/transcendence/user/profile" className="font-bold">Profile</Link>
+            <Link to="/transcendence/user/profile">Profile</Link>
+          </li>
+          <li>
+            <Link to="/transcendence/user/all">Users</Link>
           </li>
         </ul>
         <div className='flex flex-row justify-end'>
