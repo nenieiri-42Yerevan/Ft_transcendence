@@ -49,7 +49,7 @@ const SignIn = ({notify}) => {
             }
             localStorage.setItem("access_token", accessToken);
             localStorage.setItem("refresh_token", refreshToken);
-            const userInfo = await getUserInfo(navigate);
+            const userInfo = await getUserInfo(navigate, dispatch);
             dispatch(setUserInfo(userInfo));
             navigate("/transcendence/user/profile");
         }
@@ -82,7 +82,7 @@ username: data.login,
             }
             localStorage.setItem("access_token", accessToken);
             localStorage.setItem("refresh_token", refreshToken);
-            const userInfo = await getUserInfo(navigate);
+            const userInfo = await getUserInfo(navigate, dispatch);
             dispatch(setUserInfo(userInfo));
             navigate("/transcendence/user/profile");
         }

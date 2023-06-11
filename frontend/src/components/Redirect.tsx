@@ -21,7 +21,7 @@ const Redirect = ({notify}) => {
             Cookies.remove('username');
             console.log(localStorage.getItem('access_token'));
             console.log(localStorage.getItem('refresh_token'));
-            const info = await getUserInfo(navigate);
+            const info = await getUserInfo(navigate, dispatch);
             dispatch(setUserInfo(info));
             console.log("getuserinfo ", info);
             if (Cookies.get('first_login') == 'true')

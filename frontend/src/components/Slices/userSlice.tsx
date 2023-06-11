@@ -195,7 +195,7 @@ export const fetchMatches = async (flag: number, Navigate, dispatch: any, userIn
     return userMatches;
 };
 
-export const getUserInfo = async (Navigate) => {
+export const getUserInfo = async (Navigate, dispatch) => {
   try {
     const response = await axios.get(
       `${process.env.BACK_URL}/transcendence/user/by-token/${localStorage.getItem(
@@ -215,7 +215,7 @@ export const getUserInfo = async (Navigate) => {
         dispatch(setIsUnauth(true));
         Navigate("/transcendence/user/signin");
       } else {
-        getUserInfo(Navigate);
+        getUserInfo(Navigate, dispatch);
       }
     }
   }
@@ -236,7 +236,7 @@ export const getUserInfo = async (Navigate) => {
 //   }
 // }
 
-export const getUserById = async (id: any, Navigate) => {
+export const getUserById = async (id: any, Navigate, dispatch) => {
   try {
     const response = await axios.get(`${process.env.BACK_URL}/transcendence/user/by-id/${id}`,
       {
@@ -254,7 +254,7 @@ export const getUserById = async (id: any, Navigate) => {
         dispatch(setIsUnauth(true));
         Navigate("/transcendence/user/signin");
       } else {
-        getUserById(id, Navigate);
+        getUserById(id, Navigate, dispatch);
       }
     }
     throw (error);
@@ -397,8 +397,8 @@ export const enable2fa = async (dispatch, Navigate, userInfo: UserInfo) => {
       }
     );
     console.log("after");
-    console.log(await getUserInfo(Navigate));
-    dispatch(setUserInfo(await getUserInfo(Navigate)));
+    console.log(await getUserInfo(Navigate, dispatch));
+    dispatch(setUserInfo(await getUserInfo(Navigate, dispatch)));
 
 
     console.log(response);
@@ -430,8 +430,8 @@ export const disable2fa = async (dispatch, Navigate, userInfo: UserInfo) => {
       }
     );
     console.log("zzz");
-    console.log(await getUserInfo(Navigate));
-    dispatch(setUserInfo(await getUserInfo(Navigate)));
+    console.log(await getUserInfo(Navigate, dispatch));
+    dispatch(setUserInfo(await getUserInfo(Navigate, dispatch)));
 
     console.log(response);
 
@@ -510,8 +510,4 @@ export const updateUser = async (dispatch, Navigate, sendData, id: number) => {
     else
       throw error;
   }
-}
-
-function dispatch(arg0: any) {
-  throw new Error('Function not implemented.');
 }

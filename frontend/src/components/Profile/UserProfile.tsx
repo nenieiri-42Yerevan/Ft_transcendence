@@ -28,7 +28,7 @@ const UserProfile = ({chatSocket, notify}) => {
     const [matches, setMatches] = useState(null);
     useEffect(() => {
         console.log(id);
-        getUserById(id, navigate).then(async userInfo => {
+        getUserById(id, navigate, dispatch).then(async userInfo => {
             setUserInfo(userInfo);
             const friends = await fetchFriendsData(1, navigate, dispatch, userInfo);
             if (friends)

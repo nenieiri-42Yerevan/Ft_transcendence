@@ -5,15 +5,21 @@ import Users from './Users';
 import { ChatContext, getChat } from '../context/ChatContext';
 import { useSelector } from 'react-redux';
 import { selectUser } from '../Slices/userSlice';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 
 const DirectChats = ({chatSocket}) =>{
     const { data, dispatch } = useContext(ChatContext);
     const [chats, setChats] = useState([]);
     const userInfo = useSelector(selectUser);
+    const navigate = useNavigate();
+    const disp = useDispatch();
 
      useEffect(()=>{
+      if (userInfo && !userInfo.user)
+            navigate("/transcendence/user/signin");
       const getData = async()=>{
-        const res = await getChat(userInfo?.user?.id)
+        const res = await getChat(userInfo?.user?.id, navigate, dispatch);
         setChats(res.data);
       }
       getData();
