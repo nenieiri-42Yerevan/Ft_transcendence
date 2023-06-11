@@ -181,6 +181,7 @@ export class GroupChatService {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
   }
+
   async addUser(gchat: GroupChat, uid: number): Promise<void> {
     const user = await this.userService.findOne(uid);
     const chat = await this.findOne(gchat.id, ['users', 'banned'], true);
