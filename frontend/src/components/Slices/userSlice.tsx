@@ -234,6 +234,37 @@ export const getUserInfo = async (Navigate, dispatch) => {
 //   }
 // }
 
+
+export const filterItems = ((query, users) => {
+  return (users.filter((elem) => elem.username.includes(query)));
+})
+
+export const getUsers = async (Navigate, dispatch) => {
+  try {
+    const response = await axios.get(`${process.env.BACK_URL}/transcendence/user/`,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`
+        }
+      }
+    );
+    return (response.data);
+  }
+  catch (error) {
+    console.log(error);
+    if (error.response.status == 401) {
+      if ((await refreshToken()) != 200) {
+        dispatch(setIsUnauth(true));
+        Navigate("/transcendence/user/signin");
+      } else {
+        getUsers(Navigate, dispatch);
+      }
+    }
+    throw (error);
+
+  }
+}
+
 export const getUserById = async (id: any, Navigate, dispatch) => {
   try {
     const response = await axios.get(`${process.env.BACK_URL}/transcendence/user/by-id/${id}`,

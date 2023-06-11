@@ -34,7 +34,11 @@ const Navigation  = () => {
           <li>
             <Link to="/transcendence/user/profile" className={classNames({"font-bold": activeTab.includes("/profile")
               })}>Profile</Link>
-          </li>   
+          </li>
+          <li>
+            <Link to="/transcendence/user/all" className={classNames({"font-bold": activeTab.includes("/all")
+              })}>users</Link>
+          </li>
         </ul>
         <div className='flex flex-row h-full justify-end'>
           <img className='h-7 w-7 mr-3 item-center rounded-full' src={userInfo.user.img}/>

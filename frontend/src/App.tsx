@@ -21,6 +21,7 @@ import { useState, useEffect, useContext } from 'react';
 import { io } from 'socket.io-client';
 import { selectUser } from './components/Slices/userSlice';
 import { useSelector } from 'react-redux';
+import AllUsers from './components/AllUsers';
 
 const App = (props: any) => {
   const userInfo = useSelector(selectUser);
@@ -106,6 +107,7 @@ const App = (props: any) => {
       <Router>
         <Routes>
           <Route path="/transcendence" element={<Welcome />} />
+          <Route path="/transcendence/user/all" element={<AllUsers />} />
           <Route path="/transcendence/redirect" element={<Redirect notify = {notify}/>} />
           <Route path="/transcendence/tfa_42" element={<Tfa_42 notify = {notify}/>} />
           <Route path="/transcendence/user/signup" element={<SignUp />} />
