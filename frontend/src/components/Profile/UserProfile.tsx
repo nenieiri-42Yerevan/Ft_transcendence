@@ -15,8 +15,9 @@ import FriendsList from "./FriendsList";
 import UserHeader from "./UserHeader";
 import Notfound from "../Notfound";
 import GameHistoryTable from "../GameHistoryBoard";
+import { io } from 'socket.io-client';
 
-const UserProfile = ({chatSocket, notify}) => {
+const UserProfile = ({chatSocket, gameSocket, notify}) => {
     const {id} = useParams();
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -58,7 +59,7 @@ const UserProfile = ({chatSocket, notify}) => {
         <div className="flex flex-col bg-[#262525]">
             <Profilmenu notify = {notify}/>
             <div className = "flex md:flex-row flex-col justify-between min-h-screen min-w-full">
-                <UserHeader loaded = {loaded} photo = {photo} userInfo = {userInfo} current = {current} id = {id} chatSocket = {chatSocket}/>
+                <UserHeader loaded = {loaded} photo = {photo} userInfo = {userInfo} current = {current} id = {id} chatSocket = {chatSocket} gameSocket={gameSocket} notify={notify} />
                 <GameHistoryTable matches={matches} />
                 <div className="w-full md:w-1/4 h-fit m-1 mx-4 bg-[#1E1E1E] border-[#393939] border-solid border p-8 rounded">
                     <h2 className="font-bold text-2xl text-white text-center  flex justify-between"><img className = "w-[2em]" src = {pong}></img>Friends</h2>
