@@ -42,6 +42,9 @@ const UserList = ({chatSocket, gameSocket}) => {
         follow(disp, navigate, userInfo.user, selectedUser.id);
     }
 
+    const sendInvite = () => {
+        
+    }
 
     return ( 
      <div>
@@ -79,8 +82,8 @@ const UserList = ({chatSocket, gameSocket}) => {
             { curChat.owner.id == userInfo.user.id &&
             <button className='rounded-md p-2 hover:bg-gray-500'>Give admin rights</button>
             }
-            <button className='rounded-md p-2 hover:bg-gray-500'>Let's Play</button>
             <button onClick={followUser} className='rounded-md p-2 hover:bg-gray-500'>{userInfo?.user?.follows.includes(Number(selectedUser.id)) ? "Unfollow" : "Follow"}</button>
+            <button className='rounded-md p-2 hover:bg-gray-500'>Let's Play</button>
         </div>
       )}
     </div>);
