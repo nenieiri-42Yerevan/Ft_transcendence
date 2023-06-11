@@ -16,21 +16,21 @@ const Chanels = ({chatSocket, gameSocket}) => {
         },[]);
     return (
         <>
-        <div className="h-screen flex flex-col min-h-screen max-h-screen bg-[#262525]">
+        <GroupChatContext.Provider value={{curChat, setCurChat, allChat, setAllChats, gameSocket, chatSocket}}>
+        <div className="h-screen overflow-hidden min-h-screen max-h-screen bg-[#262525]">
         <Navigation />
-        <div className="flex flex-row h-full">
-        <GroupChatContext.Provider value={{curChat, setCurChat, allChat, setAllChats}}>
-        <div className="flex flex-col bg-[#1E1E1E] w-1/5 border border-solid border-[#393939] justify-center m-2 text-white text-2xl" >
+        <section className="flex h-full ">
+        <div className="flex w-1/5 max-h-full mb-11 m-1">
            <Rooms user={userInfo.user} />  
         </div>
-        <div className="flex flex-row  w-4/5 bg-[#1E1E1E] border-[#393939] border-solid border m-2  rounded">
-          {curChat && curChat.users.some(user => user.id == userInfo.user.id)? <ChatSpace groupSocket={chatSocket}/> : 
-          <div className='flex flex-row w-full justify-center items-center text-center text-white text-3xl font-bold'>Choose Room</div>}
+        <div className="flex w-4/5 max-h-full mb-11 m-1 rounded-md bg-[#1E1E1E] border-[#393939]">
+          {curChat && curChat.users.some(user => user.id == userInfo.user.id)? <ChatSpace/>: 
+          <div className='flex flex-col h-full w-full justify-center text-center text-white text-3xl font-bold'>Choose Room</div>}
         </div>
-        </ GroupChatContext.Provider>
-        </div>
+        </section>
 
         </div>
+        </ GroupChatContext.Provider>
         </>
     );
 }

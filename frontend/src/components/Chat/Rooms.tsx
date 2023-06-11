@@ -127,14 +127,14 @@ const Rooms = ({ user }) => {
     
 
     return ( 
-    <div className='flex flex-col w-full h-full max-h-full bg-[#1E1E1E] border-[#393939] border-solid border  rounded text-center'>
+    <div className='flex flex-col w-full bg-[#1E1E1E] border-[#393939] border-solid border  rounded text-center'>
     <div className='flex flex-col h-full'>
     <Header />
     <div className='flex flex-col h-full overflow-y-scroll border border-[#393939] rounded m-1'>
     {allChat && (allChat.length == 0
       ? <p>no rooms.. </p>
       : allChat.map((item, index) =>  
-        <div onClick={() => {setCurChat(item);}} className={`flex items-center text-sm border m-3 rounded-md  border-[#393939] hover:bg-[#616161] ${item == curChat && "bg-[#616161]"}`} key={index}>
+        <div onClick={() => {setCurChat(item);}} className={`flex items-center text-sm border m-1 rounded-md  border-[#393939] hover:bg-[#616161] ${item == curChat && "bg-[#616161]"}`} key={index}>
           <div className="w-full pb-2">
             <div className="flex justify-between">
               <span className="block ml-2 truncate font-bold text-xl text-white">{item.name?item.name:item.users[0].username}</span>
