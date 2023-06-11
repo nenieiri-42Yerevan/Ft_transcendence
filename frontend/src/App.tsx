@@ -35,7 +35,6 @@ const App = (props: any) => {
                         },
                     },
                 },
-                autoConnect: false,
                 reconnection: true,
                 timeout: 3000,
             };
@@ -43,10 +42,6 @@ const App = (props: any) => {
             const chatSocket = io(`${process.env.BACK_URL}/chat`, socketOptions);
             setGameSocket(gameSocket);
             setChatSocket(chatSocket);
-            setTimeout(() => {
-                gameSocket.connect();
-                chatSocket.connect();
-            }, 1000); 
             gameSocket.on('connect', () => {
                 console.log('Game Socket connection established!');
                 });
@@ -63,9 +58,6 @@ const App = (props: any) => {
                 setChatInfo(data)
                 });
             gameSocket.on('info', (data) => {
-                console.log('Info : ', data);
-            });
-            gameSocket.on('', (data) => {
                 console.log('Info : ', data);
             });
 
@@ -86,9 +78,9 @@ const App = (props: any) => {
           <Route path="/transcendence/user/profile/settings" element={<Settings />} />
           <Route path="/transcendence/user/dashboard" element={<Dashboard />} />
           <Route path="/transcendence/user/chat/:id" element={<Chat chatSocket={chatSocket} />} />
-          <Route path="/transcendence/user/chat" element={<Chanels chatSocket={chatSocket} />} />
+          <Route path="/transcendence/user/chat" element={<Chanels chatSocket={chatSocket} gameSocket={gameSocket} />} />
           <Route path="/transcendence/user/directchats" element={<DirectChats  chatSocket = {chatSocket}/>} />
-          <Route path="/transcendence/game" element={<Game gameSocket={gameSocket} />} />
+          <Route path="/transcendence/game" element={<Game gameSocket={gameSocket} isInvite={false} />} />
         </Routes>
       </Router>
     </>

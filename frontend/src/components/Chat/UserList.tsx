@@ -6,8 +6,9 @@ import { selectUser } from "../Slices/userSlice";
 import { block, follow } from "../Slices/userSlice";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import io from 'socket.io-client';
 
-const UserList = ({chatSocket, gameSocket}) => {
+const UserList = ({gameSocket}) => {
     const {curChat} = useContext(GroupChatContext);
     const userInfo = useSelector(selectUser);
     const [users, setUsers] = useState(null);
@@ -26,23 +27,28 @@ const UserList = ({chatSocket, gameSocket}) => {
 
     useEffect(() => {
         if (curChat && curChat.users.some(user => user.id == userInfo.user.id))
-            {console.log(curChat);
-            setUsers(curChat.users);}
+            setUsers(curChat.users);
         else 
             setUsers([]);
         const handleClick = () => setClicked(false);
+        gameSocket.on('room', (data) => {
+            console.log('Invite to room : ', data);
+
+        });
         window.addEventListener("click", handleClick);
     
     return () => {
         window.removeEventListener("click", handleClick);
+        gameSocket.off('room');
         };
-        }, [curChat, userInfo]);
+        }, [curChat, userInfo, gameSocket]);
 
     const followUser = () => {
         follow(disp, navigate, userInfo.user, selectedUser.id);
     }
 
     const sendInvite = () => {
+        gameSocket.emit("join-room", { id: selectedUser.id });
         
     }
 
@@ -83,7 +89,7 @@ const UserList = ({chatSocket, gameSocket}) => {
             <button className='rounded-md p-2 hover:bg-gray-500'>Give admin rights</button>
             }
             <button onClick={followUser} className='rounded-md p-2 hover:bg-gray-500'>{userInfo?.user?.follows.includes(Number(selectedUser.id)) ? "Unfollow" : "Follow"}</button>
-            <button className='rounded-md p-2 hover:bg-gray-500'>Let's Play</button>
+            <button onClick={sendInvite} className='rounded-md p-2 hover:bg-gray-500'>Let's Play</button>
         </div>
       )}
     </div>);

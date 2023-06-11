@@ -7,11 +7,11 @@ import Menu from './Menu';
 import { useState, useEffect } from 'react';
 import { io } from 'socket.io-client';
 
-const Game = ({gameSocket}) => {
-    const [isReady, setIsReady] = useState(false); // добавляем новое состояние
+const Game = ({gameSocket, isInvite}) => {
+    const [isReady, setIsReady] = useState(isInvite);
     const [id, setId] = useState(0);
     const [mode, setMode] = useState(0);
-    //const [isReady, setIsReady] = useState(true); // добавляем новое состояние
+
     
     useEffect(() => {
 

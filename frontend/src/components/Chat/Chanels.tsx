@@ -16,7 +16,7 @@ const Chanels = ({chatSocket, gameSocket}) => {
         },[]);
     return (
         <>
-        <GroupChatContext.Provider value={{curChat, setCurChat, allChat, setAllChats, gameSocket, chatSocket}}>
+        <GroupChatContext.Provider value={{curChat, setCurChat, allChat, setAllChats}}>
         <div className="h-screen overflow-hidden min-h-screen max-h-screen bg-[#262525]">
         <Navigation />
         <section className="flex h-full ">
@@ -24,7 +24,7 @@ const Chanels = ({chatSocket, gameSocket}) => {
            <Rooms user={userInfo.user} />  
         </div>
         <div className="flex w-4/5 max-h-full mb-11 m-1 rounded-md bg-[#1E1E1E] border-[#393939]">
-          {curChat && curChat.users.some(user => user.id == userInfo.user.id)? <ChatSpace/>: 
+          {curChat && curChat.users.some(user => user.id == userInfo.user.id)? <ChatSpace groupSocket={chatSocket} gameSocket={gameSocket}/>: 
           <div className='flex flex-col h-full w-full justify-center text-center text-white text-3xl font-bold'>Choose Room</div>}
         </div>
         </section>
