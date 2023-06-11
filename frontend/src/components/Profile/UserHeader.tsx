@@ -22,7 +22,7 @@ const UserHeader = (props)=>{
 
     useEffect(()=>{
           chatSocket?.on('join-chat', (data) =>{
-            navigate(`/transcendence/user/chat/${props.id}`, state: {gameSocket: gameSocket, notify: notify});
+            navigate(`/transcendence/user/chat/${props.id}`);
         });
 
         gameSocket?.on('room', (data) => {
