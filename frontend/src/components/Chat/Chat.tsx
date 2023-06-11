@@ -11,8 +11,9 @@ import Navigation from "../NavBar";
 import { useNavigate } from 'react-router-dom';
 import Notfound from "../Notfound";
 import { useDispatch } from 'react-redux';
+import { io } from 'socket.io-client';
 
-const Chat = ({ chatSocket }) => {
+const Chat = ({ chatSocket, gameSocket, notify }) => {
   const userInfo = useSelector(selectUser);
   const { id } = useParams();
   const [currentMessage, setCurrentMessage] = useState("");
@@ -70,7 +71,7 @@ const Chat = ({ chatSocket }) => {
       <Navigation />
         <div className="min-w-full rounded lg:grid lg:grid-cols-3">
           <div className="border-r border-[#393939] lg:col-span-1">
-            <Users data={chats && chats} />
+            <Users gameSocket={gameSocket} notify={notify} data={chats && chats} />
           </div>
           <div className="lg:col-span-2 lg:block">
             <div className="w-full">

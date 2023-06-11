@@ -22,7 +22,7 @@ const UserHeader = (props)=>{
 
     useEffect(()=>{
           chatSocket?.on('join-chat', (data) =>{
-            navigate(`/transcendence/user/chat/${props.id}`);
+            navigate(`/transcendence/user/chat/${props.id}`, state: {gameSocket: gameSocket, notify: notify});
         });
 
         gameSocket?.on('room', (data) => {
@@ -34,7 +34,7 @@ const UserHeader = (props)=>{
         return () => {
             chatSocket?.off('join-chat');
           };
-    }, [chatSocket, gameSocket, props.userInfo])
+    }, [chatSocket, gameSocket, userInfo])
     const message = ()=>{
         try
         {

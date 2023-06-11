@@ -7,7 +7,7 @@ import ChatUsers from "./ChatUsers";
 import { filterItems } from "../context/ChatContext";
 
 const Users = (props) => {
-  const { data } = props;
+  const { data, gameSocket, notify } = props;
   const userInfo = useSelector(selectUser);
   const [query, setQuery] = useState('');
   const [res, setRes] = useState(null);
@@ -39,7 +39,7 @@ const Users = (props) => {
             const info = elem.users.find(el => (el.id != userInfo.user.id))
             if (info)
             return (
-              <ChatUsers info={info} index={index} key={index} currentId = {userInfo?.user?.id} />
+              <ChatUsers gameSocket={gameSocket} notify={notify} info={info} index={index} key={index} currentId = {userInfo?.user?.id} />
               )
             })
           }

@@ -7,8 +7,9 @@ import { useSelector } from 'react-redux';
 import { selectUser } from '../Slices/userSlice';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
+import { io } from 'socket.io-client';
 
-const DirectChats = ({chatSocket}) =>{
+const DirectChats = ({chatSocket, gameSocket, notify}) =>{
     const { data, dispatch } = useContext(ChatContext);
     const [chats, setChats] = useState([]);
     const userInfo = useSelector(selectUser);
@@ -31,7 +32,7 @@ const DirectChats = ({chatSocket}) =>{
           <Navigation />
           <div className="min-w-full rounded lg:grid lg:grid-cols-3">
             <div className="border-r border-[#393939] lg:col-span-1">
-              <Users data={chats && chats} />
+              <Users data={chats && chats} gameSocket={gameSocket} notify={notify} />
             </div>
             <div className="hidden lg:col-span-2 lg:block">
               <div className="w-full">

@@ -156,9 +156,9 @@ const App = (props: any) => {
           <Route path="/transcendence/user/profile/:id" element={<UserProfile gameSocket={gameSocket} notify={notify} chatSocket = {chatSocket} />} />
           <Route path="/transcendence/user/profile/settings" element={<Settings notify = {notify}/>} />
           <Route path="/transcendence/user/dashboard" element={<Dashboard />} />
-          <Route path="/transcendence/user/chat/:id" element={<Chat chatSocket={chatSocket} />} />
+          <Route path="/transcendence/user/chat/:id" element={<Chat notify={notify} gameSocket={gameSocket} chatSocket={chatSocket} />} />
           <Route path="/transcendence/user/chat" element={<Chanels notify={notify} chatSocket={chatSocket} gameSocket={gameSocket} />} />
-          <Route path="/transcendence/user/directchats" element={<DirectChats  chatSocket={chatSocket}/>} />
+          <Route path="/transcendence/user/directchats" element={<DirectChats  gameSocket={gameSocket} notify={notify} chatSocket={chatSocket}/>} />
           <Route path="/transcendence/game" element={<Game gameSocket={gameSocket} isInvite={invite} />} />
         </Routes>
       </Router>

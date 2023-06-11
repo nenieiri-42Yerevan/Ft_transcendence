@@ -1,16 +1,21 @@
-import React, { useEffect, useState } from 'react'
-import { getAvatar } from '../Slices/userSlice';
-import { useDispatch } from 'react-redux';
+import React, { useEffect, useState, useContext } from 'react'
+import { getAvatar, selectUser } from '../Slices/userSlice';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import avatar from "@SRC_DIR/assets/images/avatar.png";
 import { Link } from "react-router-dom";
+import { GameContext } from "../context/GameSocket";
+import { io } from 'socket.io-client';
 
 const ChatUsers = (props) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const useInfo = useSelector(selectUser);
     const [photo, setphoto] = useState<string>('');
-    const { info } = props;
+    const { info, gameSocket, notify } = props;
+    const { setPlayerId, setInvite } = useContext(GameContext);
     useEffect(() => {
+        console.log(gameSocket);
         const getPhoto = async () => {
             const photo = await getAvatar(1, navigate, dispatch, info.id);
             if (photo) {
@@ -18,7 +23,18 @@ const ChatUsers = (props) => {
             }
         }
         getPhoto();
-    }, [])
+        gameSocket?.on('room', (data) => {
+            console.log('Invite to room : ', data);
+            setPlayerId(0);
+            setInvite(true);
+            notify?.emit('message', { id: props.info.id, message: data, opponent: userInfo.user.username}); 
+        });
+    }, [notify, gameSocket])
+
+    const sendInvite = () => {
+        gameSocket?.emit("join-room");
+    }
+    
     return (
         <>
             <Link
@@ -34,7 +50,7 @@ const ChatUsers = (props) => {
                 <span className="block ml-2 font-semibold text-white">{info.username}</span>
                 <span className="block ml-2 font-semibold text-red-500">{info.blocked.includes(props.currentId) && "This user blocked you"}</span>
                 <Link to={`/transcendence/user/profile/${info.id}`} className="block ml-2 font-semibold text-white border-b ">Profile</Link>
-            </div>
+                <button onClick={sendInvite} className="bg-[#1e81b0] p-1 m-2 w-40">Game Invite</button>            </div>
         </>
     )
 }
