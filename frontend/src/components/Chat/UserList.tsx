@@ -48,7 +48,7 @@ const UserList = ({gameSocket}) => {
     }
 
     const sendInvite = () => {
-        gameSocket.emit("join-room", { id: selectedUser.id });
+        gameSocket.emit("join-room", 1000);
         
     }
 
