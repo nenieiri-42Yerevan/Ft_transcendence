@@ -1,24 +1,40 @@
 import React from 'react';
 import Modal from "./Modal";
 import axios, { HttpStatusCode } from "axios";
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import Header from './Header';
 import deleteImg from '../../assets/images/delete_button.png';
 import adminImg from '../../assets/images/admin.png';
 import lockImg from '../../assets/images/lock.png';
-const Rooms = ({allChat, user, refresh, setCurChat, curChat}) => {
+import { GroupChatContext, getGroupChats } from "../context/ChatContext";
+import { toast } from 'react-toastify';
+
+const Rooms = ({ user }) => {
     
     const [modal, setModal] = useState(false);
     const [join, setJoin] = useState(false);
     const [isPasswordEnabled, setIsPasswordEnabled] = useState(false);
     const [password, setPassword] = useState('');
     const [roomName, setRoomName] = useState('');
+    const {curChat, setCurChat, allChat, setAllChats} = useContext(GroupChatContext);
 
+    useEffect(() => {
+        if(!allChat) {
+            updateChats();
+        }
 
-    useEffect(() => {},[]);
+    },[allChat]);
+
+    const updateChats = () => {
+        getGroupChats()
+            .then(chats => {setAllChats(chats);
+            if (curChat) {
+                setCurChat(chats.find(chat => chat.id == curChat.id));
+            }
+        })
+    }
 
     const DeleteChat = async (item) => {
-        setCurChat(null);
         try {
         const groupDelete = await axios.delete(
             `${process.env.BACK_URL}/transcendence/chat/group/delete/${user.id}/${item.id}`,
@@ -28,9 +44,10 @@ const Rooms = ({allChat, user, refresh, setCurChat, curChat}) => {
                 },
             }
         );
-        refresh();
+        setCurChat(null);
+        updateChats();
         } catch (ex) {
-            console.log("Can't delete chat:", ex);
+            toast.error(`Can't create chat: ${ex}`, { autoClose: 3000 });
         }
     };
 
@@ -40,7 +57,6 @@ const Rooms = ({allChat, user, refresh, setCurChat, curChat}) => {
         } else {
             try {
             if (!close) {
-            setCurChat(null);
             const chatInfo = await axios.post(
                 `${process.env.BACK_URL}/transcendence/chat/group/create/${user.id}`,
                 {
@@ -54,26 +70,27 @@ const Rooms = ({allChat, user, refresh, setCurChat, curChat}) => {
                   },
                 }
             );
-            refresh();
+            updateChats();
             }
             } catch (ex) {
-                console.log("Can't create chat:", ex);
+                toast.error(`Can't create chat: ${ex}`, { autoClose: 3000 });
             } finally {
                 setModal(false);
             }
         }
     }
 
-    const JoinRoom = async (join) => {
+    const JoinRoom = async (isSub) => {
         if (!join && !curChat.public) {
            setJoin(true); 
-        } else {
+        } else if (!isSub) {
             try {
                 const response = await axios.post(
                     `${process.env.BACK_URL}/transcendence/chat/group/add/${user.id}`,
                     {
-                        name : roomName,
-                        password : isPasswordEnabled?password:"",
+                        id : curChat.id,
+                        public : curChat.public,
+                        password : password,
                     }, 
                     {    
                       headers: {
@@ -81,33 +98,46 @@ const Rooms = ({allChat, user, refresh, setCurChat, curChat}) => {
                       },
                     }
                 );
-                if (response.status == 200) {
-                    refresh();
-                } else {
-                }
-                
-            } catch (ex) {
-                console.log("Can't Join:", ex);
+                updateChats();
+                toast.info(`You joined to ${curChat.name}!`, {
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        theme: "colored",
+                    });
+                } catch (ex) {
+                    toast.error(ex.response.data.message, {
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        theme: "colored",
+                    });
             } finally {
                 setJoin(false);
             }
+        } else {
+            setJoin(false);
         }
+
     }
     
 
     return ( 
     <div className='flex flex-col w-full h-full max-h-full bg-[#1E1E1E] border-[#393939] border-solid border  rounded text-center'>
-    <Header />
     <div className='flex flex-col h-full'>
-    <div className='h-full overflow-y-auto border border-[#393939] rounded m-1'>
-    {allChat.length == 0
+    <Header />
+    <div className='flex flex-col h-full overflow-y-scroll border border-[#393939] rounded m-1'>
+    {allChat && (allChat.length == 0
       ? <p>no rooms.. </p>
       : allChat.map((item, index) =>  
-        <div onClick={() => setCurChat(item)} className={`flex items-center text-sm border m-1 border-[#393939] hover:bg-[#616161] ${item == curChat && "bg-[#616161]"}`} key={index}>
+        <div onClick={() => {setCurChat(item);}} className={`flex items-center text-sm border m-3 rounded-md  border-[#393939] hover:bg-[#616161] ${item == curChat && "bg-[#616161]"}`} key={index}>
           <div className="w-full pb-2">
             <div className="flex justify-between">
               <span className="block ml-2 truncate font-bold text-xl text-white">{item.name?item.name:item.users[0].username}</span>
-              {item.owner && <span>Room</span>}
             </div>
             <div className='flex justify-end'>
               {item.owner && item.owner.id==user.id && <img className='w-7 h-7' src={adminImg} alt='You are admin' />}
@@ -120,15 +150,15 @@ const Rooms = ({allChat, user, refresh, setCurChat, curChat}) => {
           </div>
           </div>
         
-      )}
+      ))}
     </div>
     <button className="bg-gray-700 hover:bg-gray-950 text-white font-bold py-2 px-4 rounded m-2" onClick={() => CreateGroupChat(true)}>
       Create Room
     </button>
-    <button className={`${(curChat!=null && !curChat.users.some(u => u.id == user.id))?"bg-gray-700 hover:bg-gray-950":"bg-gray-200"}  text-white font-bold py-2 px-4 rounded m-2`} onClick={() => (curChat && !curChat.users.some((u) => u.id == user.id) && JoinRoom())}>
+    <button className={`${(curChat!=null && !curChat.users.some(u => u.id == user.id))?"bg-gray-700 hover:bg-gray-950":"bg-gray-200"}  text-white font-bold py-2 px-4 rounded m-2`} onClick={() => (curChat && !curChat.users.some((u) => u.id == user.id) && JoinRoom() )}>
       Join Room
     </button>
-    <button className="bg-gray-700 hover:bg-gray-950 text-white font-bold py-2 px-4 rounded m-2" onClick={() => {setCurChat(null); refresh();}}>
+    <button className="bg-gray-700 hover:bg-gray-950 text-white font-bold py-2 px-4 rounded m-2" onClick={() => {updateChats(); setCurChat(null);}}>
       Refresh
     </button>
       </div>
@@ -157,14 +187,14 @@ const Rooms = ({allChat, user, refresh, setCurChat, curChat}) => {
     )}
     {join && (
         <Modal onClose={(bool) => JoinRoom(bool)}>
-        { curChat.public &&
+        
          <div className="flex flex-col mb-4">
           <label htmlFor="pass" className="text-lg mb-2 font-medium">
             Password:
           </label>
           <input type="text" id="pass" value={password} onChange={(e) => setPassword(e.target.value)} className="border border-gray-500 p-2 rounded-lg text-black focus:outline-none" />
         </div> 
-        }
+        
 
         </Modal>
     )}

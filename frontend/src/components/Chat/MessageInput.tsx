@@ -1,21 +1,27 @@
-import React, {useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 
-const MessageInput = ({groupSocket, curChat}) => {
-    const [currentMessage, setCurrentMessage] = useState("");
-    
+import { GroupChatContext} from "../context/ChatContext";
+const MessageInput = ({groupSocket}) => {
+    const [currentMessage, setCurrentMessage] = useState(""); 
+    const {curChat, chatSocket} = useContext(GroupChatContext);
+
+    useEffect(() => {
+            
+        },[curChat]);
     const sendMsg = () => {
         if (curChat != null) {
             const msg = {
                 id: curChat.id,
                 value: currentMessage,
             }
-            groupSocket.emit('text', msg);
+            chatSocket.emit('text', msg);
+            setCurrentMessage('');
         }
     }
 
     return( <div className="flex flex-row w-full m-1"> 
               <input type="text" placeholder="Message"
-                className="block w-full h-10 bg-gray-100 rounded-full outline-none focus:text-gray-700 m-1"
+                className="block w-full h-10 bg-gray-100 rounded-full outline-none focus:text-gray-700 p-2 m-1"
                 name="message" onChange={(event) => {
                   setCurrentMessage(event.target.value);
                 }} required value={currentMessage} />

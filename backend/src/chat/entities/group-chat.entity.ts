@@ -41,10 +41,10 @@ export class GroupChat extends Chat {
   @OneToMany(() => Banned, (banned) => banned.group, { eager: true })
   banned: Banned[];
 
-  @ManyToMany(() => User, { onDelete: 'CASCADE' })
-  @JoinTable()
-  users: User[];
+  // @ManyToMany(() => User, { onDelete: 'CASCADE' })
+  // @JoinTable()
+  // users: User[];
 
-  @OneToMany(() => Message, (message) => message.chat, { eager: true })
-  messages: Message[];
+  // @OneToMany(() => Message, (message) => message.chat, { eager: true })
+  // messages: Message[];
 }

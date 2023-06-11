@@ -45,7 +45,6 @@ export class GroupChatService {
         HttpStatus.FORBIDDEN,
       );
     
-
     // Private chat processing
     if (gchat.public == false) {
       if (!gchat.password)
@@ -55,7 +54,7 @@ export class GroupChatService {
         throw new HttpException('Password is too long!', HttpStatus.FORBIDDEN);
 
       try {
-        hash = argon.hash(gchat.password);
+        hash = await argon.hash(gchat.password);
       } catch (error) {
         throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
       }
@@ -119,7 +118,6 @@ export class GroupChatService {
     const gchats = await this.groupChatRepo.find();
 
     gchats.forEach((chat) => delete chat.password);
-    console.log("Chats wo pass", gchats);
     return gchats;
   }
 
@@ -172,7 +170,7 @@ export class GroupChatService {
 
     if (!(await this.checkPassword(gchat.id, pass.oldPassword)))
       throw new HttpException(
-        'Wrong credentials provided',
+        'Wrong old password',
         HttpStatus.FORBIDDEN,
       );
 
@@ -183,6 +181,7 @@ export class GroupChatService {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
   }
+
   async addUser(gchat: GroupChat, uid: number): Promise<void> {
     const user = await this.userService.findOne(uid);
     const chat = await this.findOne(gchat.id, ['users', 'banned'], true);
@@ -190,8 +189,10 @@ export class GroupChatService {
     if (!chat.public) {
       let valid = true;
 
+
+    console.log("CHAT :", chat);
       if (chat.password)
-        valid = await argon.verify(gchat.password, chat.password);
+        valid = await argon.verify(chat.password, gchat.password);
       if (!valid)
         throw new HttpException('Incorrect password', HttpStatus.FORBIDDEN);
     }
@@ -207,6 +208,7 @@ export class GroupChatService {
       }
     }
 
+    console.log(chat);
     if (chat.users.find((user1) => user1.id == user.id))
       throw new HttpException('User is already in group!', HttpStatus.CONFLICT);
 
@@ -307,6 +309,7 @@ export class GroupChatService {
     const user = await this.userService.findOne(uid);
 
     const chat = await this.findOne(id, ['users', 'messages', 'muted']);
+    console.log("CHAT MSG ADD:", chat);
     if (!chat.users.find((u) => u.id == user.id)) {
       throw new HttpException('User is not in the group', HttpStatus.NOT_FOUND);
     }

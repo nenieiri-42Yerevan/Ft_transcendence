@@ -54,7 +54,6 @@ export class ChatController {
     @Param('uid', ParseIntPipe) uid: number,
     @Body() gchat: any,
   ): Promise<GroupChat> {
-    console.log(gchat);
     return this.groupChatService.createGroupChat(gchat, uid);
   }
 
@@ -71,7 +70,7 @@ export class ChatController {
   updatePassword(
     @Param('gid', ParseIntPipe) gid: number,
     @Param('uid', ParseIntPipe) uid: number,
-    @Body() pass: PasswordDto,
+    @Body() pass: any,
   ): Promise<void> {
     return this.groupChatService.updatePassword(pass, gid, uid);
   }
@@ -88,7 +87,7 @@ export class ChatController {
   @Post('/group/add/:uid')
   addUser(
     @Param('uid', ParseIntPipe) uid: number,
-    @Body() gchat: GroupChat,
+    @Body() gchat: any,
   ): Promise<void> {
     return this.groupChatService.addUser(gchat, uid);
   }

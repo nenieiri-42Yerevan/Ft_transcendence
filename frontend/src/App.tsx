@@ -2,6 +2,8 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import './App.css';
 import './Skybox.scss';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import SignUp from './components/SignUp';
 import SignIn from './components/SignIn';
 import Profile from './components/Profile/Profile';
@@ -9,13 +11,13 @@ import UserProfile from './components/Profile/UserProfile';
 import Settings from './components/Profile/Settings';
 import Welcome from './components/Welcome';
 import Chat from './components/Chat/Chat';
-import GroupChatComponent from './components/Chat/GroupChat';
+import Chanels from './components/Chat/Chanels';
 import Dashboard from "./components/Dashboard";
 import Redirect from './components/Redirect';
 import Tfa_42 from './components/Tfa_42';
 import Game from "./components/Game/Game";
 import DirectChats from './components/Chat/DirectChats';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { io } from 'socket.io-client';
 import { selectUser } from './components/Slices/userSlice';
 import { useSelector } from 'react-redux';
@@ -82,6 +84,7 @@ const App = (props: any) => {
     },[userInfo?.user?.id]);
   return (
     <>
+    <ToastContainer />
       <Router>
         <Routes>
           <Route path="/transcendence" element={<Welcome />} />
@@ -94,7 +97,7 @@ const App = (props: any) => {
           <Route path="/transcendence/user/profile/settings" element={<Settings />} />
           <Route path="/transcendence/user/dashboard" element={<Dashboard />} />
           <Route path="/transcendence/user/chat/:id" element={<Chat chatSocket={chatSocket} />} />
-          <Route path="/transcendence/user/chat" element={<GroupChatComponent chatSocket={chatSocket} chatInfo={chatInfo} />} />
+          <Route path="/transcendence/user/chat" element={<Chanels chatSocket={chatSocket} />} />
           <Route path="/transcendence/user/directchats" element={<DirectChats  chatSocket = {chatSocket}/>} />
           <Route path="/transcendence/game" element={<Game gameSocket={gameSocket} />} />
         </Routes>
