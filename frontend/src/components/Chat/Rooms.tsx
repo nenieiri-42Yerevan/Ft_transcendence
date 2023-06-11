@@ -99,9 +99,16 @@ const Rooms = ({ user }) => {
                     }
                 );
                 updateChats();
+                toast.info(`You joined to ${curChat.name}!`, {
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        theme: "colored",
+                    });
                 } catch (ex) {
                     toast.error(ex.response.data.message, {
-                        position: "bottom-center",
                         autoClose: 5000,
                         hideProgressBar: false,
                         closeOnClick: true,
@@ -121,8 +128,8 @@ const Rooms = ({ user }) => {
 
     return ( 
     <div className='flex flex-col w-full h-full max-h-full bg-[#1E1E1E] border-[#393939] border-solid border  rounded text-center'>
-    <Header />
     <div className='flex flex-col h-full'>
+    <Header />
     <div className='h-full overflow-y-auto border border-[#393939] rounded m-1'>
     {allChat && (allChat.length == 0
       ? <p>no rooms.. </p>

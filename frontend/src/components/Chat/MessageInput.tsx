@@ -21,7 +21,7 @@ const MessageInput = ({groupSocket}) => {
 
     return( <div className="flex flex-row w-full m-1"> 
               <input type="text" placeholder="Message"
-                className="block w-full h-10 bg-gray-100 rounded-full outline-none focus:text-gray-700 m-1"
+                className="block w-full h-10 bg-gray-100 rounded-full outline-none focus:text-gray-700 p-2 m-1"
                 name="message" onChange={(event) => {
                   setCurrentMessage(event.target.value);
                 }} required value={currentMessage} />

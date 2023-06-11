@@ -6,13 +6,11 @@ import Rooms from "./Rooms";
 import ChatSpace from "./ChatSpace";
 import { GroupChatContext, getGroupChats } from "../context/ChatContext";
 
-const Chanels = ({chatSocket}) => {
+const Chanels = ({chatSocket, gameSocket}) => {
 
     const userInfo = useSelector(selectUser);
     const [curChat, setCurChat] = useState(null);
     const [allChat, setAllChats] = useState(null);
-
-
 
     useEffect(() => {
         },[]);

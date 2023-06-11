@@ -17,10 +17,12 @@ import Redirect from './components/Redirect';
 import Tfa_42 from './components/Tfa_42';
 import Game from "./components/Game/Game";
 import DirectChats from './components/Chat/DirectChats';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { io } from 'socket.io-client';
+import { selectUser } from './components/Slices/userSlice';
 const App = (props: any) => {
    
+   const userInfo = useContext(selectUser);
    const [gameSocket, setGameSocket] = useState(null);
    const [chatSocket, setChatSocket] = useState(null);
    const [chatInfo, setChatInfo] = useState(null);
@@ -68,10 +70,10 @@ const App = (props: any) => {
             });
 
 
-    },[]);
+    },[userInfo?.user?.id]);
   return (
     <>
-      <ToastContainer />
+    <ToastContainer />
       <Router>
         <Routes>
           <Route path="/transcendence" element={<Welcome />} />

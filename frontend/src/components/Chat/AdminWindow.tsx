@@ -14,7 +14,6 @@ const AdminWindow = () => {
     const { curChat, setCurChat, setAllChats } = useContext(GroupChatContext);
 
     useEffect(() => {
-        console.log(modal);
     }, []);
     const leaveRoom = async () => {
         try {
@@ -26,9 +25,17 @@ const AdminWindow = () => {
                     },
                 }
             );
+            toast.info(`You leave ${curChat.name}`, {
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        theme: "colored",
+                });
             setCurChat(null);
             getGroupChats()
-                .then(chats => setAllChats(chats))
+                .then(chats => setAllChats(chats));
         } catch (ex) {
             console.log("Can't delete chat:", ex);
         }
@@ -53,10 +60,16 @@ const AdminWindow = () => {
                 getGroupChats()
                     .then(chats => setAllChats(chats));
                 setModal(false);
+                toast.info("Password changed!", {
+                            autoClose: 5000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            theme: "colored",
+                    });
             } catch (ex) {
-                console.log(ex);
                 toast.error(ex.response.data.message, {
-                            position: "bottom-center",
                             autoClose: 5000,
                             hideProgressBar: false,
                             closeOnClick: true,
@@ -72,7 +85,7 @@ const AdminWindow = () => {
 
     return (
     <>
-        {curChat.admins.some(id => id == userInfo.user.id) && <button onClick={() => changePass(true)} className='text-xl font-bold bg-yellow-500 m-1 rounded-md'>Change Password</button>}
+        {!curChat.public && curChat.admins.some(id => id == userInfo.user.id) && <button onClick={() => changePass(true)} className='text-xl font-bold bg-yellow-500 m-1 rounded-md'>Change Password</button>}
         <button onClick={leaveRoom} className='text-xl font-bold bg-red-500 m-1 rounded-md'>Leave Room </button>
         {modal && <Modal onClose={(bool) => changePass(bool)}> 
 
