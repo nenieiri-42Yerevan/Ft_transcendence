@@ -23,7 +23,6 @@ const Profilemenu = ({notify}) => {
       await notify.disconnect();
       navigate("/transcendence/user/signin")
     } catch (error) {
-      console.log(error);
     }
    }
   return (

@@ -19,7 +19,6 @@ const FriendsList = (props)=>{
             setphoto(image);
         }
         fetchimage();
-        console.log("friendslist:",props.obj);
         setloaded(true);
     }, [props.obj.id]);
     return (

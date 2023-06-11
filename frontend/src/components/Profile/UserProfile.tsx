@@ -27,7 +27,6 @@ const UserProfile = ({chatSocket, notify}) => {
     const [loaded, setloaded] = useState(false);
     const [matches, setMatches] = useState(null);
     useEffect(() => {
-        console.log(id);
         getUserById(id, navigate, dispatch).then(async userInfo => {
             setUserInfo(userInfo);
             const friends = await fetchFriendsData(1, navigate, dispatch, userInfo);
@@ -45,7 +44,6 @@ const UserProfile = ({chatSocket, notify}) => {
                     setMatches(data);})
                 .catch(error => console.log(error));
             }
-            console.log("userprofile:", userInfo);
         }).catch(error=>{error.response.status == 401 && window.location.reload()});
         setloaded(true);
     }, [id]);

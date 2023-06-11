@@ -110,8 +110,7 @@ export const userSlice = createSlice({
     },
     setIsUnauth: (state, action: PayloadAction<boolean>) => {
       if (state.user)
-        console.log(action);
-      state.user.isUnAuth = action.payload;
+        state.user.isUnAuth = action.payload;
     },
   },
 });
@@ -145,7 +144,6 @@ export const fetchFriendsData = async (flag: number, Navigate, dispatch: any, us
           },
         },
       );
-      console.log(response);
       friendNames.push({ name: response.data.username,status:response.data.status, id: id });
     } catch (error) {
       if (error.response.status == 401) {
@@ -331,7 +329,6 @@ export const getAvatar = async (flag: number, Navigate, dispatch: any, id: strin
 
 export const setAvatar = async (imageFile: any, Navigate, id: any, dispatch: any) => {
   const formData = new FormData();
-  console.log(imageFile);
   formData.append("file", imageFile);
   try {
     const response = await axios.put(`${process.env.BACK_URL}/transcendence/user/update-avatar/${id}`,
@@ -343,7 +340,6 @@ export const setAvatar = async (imageFile: any, Navigate, id: any, dispatch: any
         },
       }
     );
-    console.log(response);
     return (response.status);
   }
   catch (error) {
@@ -387,8 +383,6 @@ export const block = async (dispatch, Navigate, userInfo: UserInfo, id: number) 
 
 export const enable2fa = async (dispatch, Navigate, userInfo: UserInfo) => {
   try {
-    console.log("before");
-    console.log(userInfo);
     const response = await axios.post(`${process.env.BACK_URL}/transcendence/auth/TFA_enable/`, {},
       {
         headers: {
@@ -396,14 +390,8 @@ export const enable2fa = async (dispatch, Navigate, userInfo: UserInfo) => {
         }
       }
     );
-    console.log("after");
     console.log(await getUserInfo(Navigate, dispatch));
     dispatch(setUserInfo(await getUserInfo(Navigate, dispatch)));
-
-
-    console.log(response);
-
-
   }
   catch (error) {
     console.log(error);
@@ -420,8 +408,6 @@ export const enable2fa = async (dispatch, Navigate, userInfo: UserInfo) => {
 
 export const disable2fa = async (dispatch, Navigate, userInfo: UserInfo) => {
   try {
-    console.log("before");
-    console.log(userInfo);
     const response = await axios.post(`${process.env.BACK_URL}/transcendence/auth/TFA_disable/`, {},
       {
         headers: {
@@ -429,13 +415,8 @@ export const disable2fa = async (dispatch, Navigate, userInfo: UserInfo) => {
         }
       }
     );
-    console.log("zzz");
     console.log(await getUserInfo(Navigate, dispatch));
     dispatch(setUserInfo(await getUserInfo(Navigate, dispatch)));
-
-    console.log(response);
-
-
   }
   catch (error) {
     console.log(error);
@@ -453,7 +434,6 @@ export const disable2fa = async (dispatch, Navigate, userInfo: UserInfo) => {
 
 export const updatePass = async (dispatch, Navigate, data: EditInfo, id: number) => {
   try {
-    console.log("psw ", data);
 
     const response = await axios.put(`${process.env.BACK_URL}/transcendence/user/update-password/${id}`,
       {
@@ -466,8 +446,6 @@ export const updatePass = async (dispatch, Navigate, data: EditInfo, id: number)
         }
       }
     );
-    console.log("zzz");
-    console.log(response);
 
 
   }
@@ -495,7 +473,6 @@ export const updateUser = async (dispatch, Navigate, sendData, id: number) => {
         }
       }
     );
-    console.log(response);
   }
   catch (error) {
     console.log(error);

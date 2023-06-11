@@ -28,7 +28,6 @@ const SignIn = ({notify}) => {
     const userInfo = useSelector(selectUser); 
     useEffect(() => {
         if (userInfo && userInfo.user != null && !userInfo.user.isUnAuth) {
-            console.log("hhh ", userInfo.user.isUnAuth);
             
             navigate("/transcendence/user/profile");
         }

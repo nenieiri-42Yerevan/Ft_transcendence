@@ -21,7 +21,6 @@ const UserHeader = (props)=>{
           chatSocket?.on('join-chat', (data) =>{
             navigate(`/transcendence/user/chat/${props.id}`);
         })
-        console.log('status:', props?.userInfo);
         return () => {
             chatSocket?.off('join-chat');
           };
