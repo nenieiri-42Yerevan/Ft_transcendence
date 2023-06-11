@@ -6,9 +6,9 @@ import { selectUser } from "../Slices/userSlice";
 import { block, follow } from "../Slices/userSlice";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import io from 'socket.io-client';
+import { io } from 'socket.io-client';
 
-const UserList = ({gameSocket}) => {
+const UserList = ({notify, gameSocket, chatSocket}) => {
     const {curChat} = useContext(GroupChatContext);
     const userInfo = useSelector(selectUser);
     const [users, setUsers] = useState(null);
@@ -33,6 +33,7 @@ const UserList = ({gameSocket}) => {
         const handleClick = () => setClicked(false);
         gameSocket.on('room', (data) => {
             console.log('Invite to room : ', data);
+            notify.emit('message', { id: selectedUser.id, message: data}); 
 
         });
         window.addEventListener("click", handleClick);
@@ -41,7 +42,7 @@ const UserList = ({gameSocket}) => {
         window.removeEventListener("click", handleClick);
         gameSocket.off('room');
         };
-        }, [curChat, userInfo, gameSocket]);
+        }, [notify, curChat, userInfo, gameSocket]);
 
     const followUser = () => {
         follow(disp, navigate, userInfo.user, selectedUser.id);
@@ -49,7 +50,7 @@ const UserList = ({gameSocket}) => {
 
     const sendInvite = () => {
         gameSocket.emit("join-room", 1000);
-        
+         
     }
 
     return ( 

@@ -42,7 +42,7 @@ const UserHeader = (props)=>{
             <img src={props.loaded ? (props.photo ? props.photo : avatar) : null} className="rounded-full w-32 h-32 object-cover" />
             <div className="mt-1">
                 <h1 className="font-bold text-4xl text-white">{props.userInfo && props.userInfo.first_name && props.userInfo.first_name} <span>{props.userInfo && props.userInfo.last_name && props.userInfo.last_name}</span></h1>
-                <p className="text-white">{props.userInfo && props.userInfo.username && props.userInfo.username}</p>
+                <p className="text-white">{props.userInfo && props.userInfo.username && props.userInfo.username} {props?.userInfo?.status != 0 && <span >&#127760;</span>}</p>
                 <p><button onClick = {()=>follow(disp, navigate, props.current.user, props.id)} className="bg-[#1e81b0] p-1 m-2 w-40">{props?.current?.user?.follows.includes(Number(props.id)) ? "Unfollow" : "follow"}</button></p>
                 <p><button onClick = {()=>block(disp, navigate, props.current.user, props.id)} className="bg-red-600 p-1 m-2 w-40">{props?.current?.user?.blocked.includes(Number(props.id)) ? "Unblock" : "Block"}</button></p>
                 <p><button onClick = {message} className="bg-[#1e81b0] p-1 m-2 w-40">Message</button></p>

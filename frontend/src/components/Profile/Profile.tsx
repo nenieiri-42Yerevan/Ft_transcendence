@@ -16,7 +16,7 @@ import Header from './Header';
 import MatchList from "./MatchList";
 import GameHistoryTable from "../GameHistoryBoard";
 
-const Profile = () => {
+const Profile = ({notify}) => {
     const userInfo = useSelector(selectUser);
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -26,6 +26,7 @@ const Profile = () => {
         if (userInfo && !userInfo.user)
             navigate("/transcendence/user/signin");
         else {
+            notify?.connect();
             fetchFriendsData(0, navigate, dispatch, userInfo.user);
             fetchMatches(0, navigate, dispatch, userInfo.user);
             getAvatar(0, navigate, dispatch, userInfo.user.id);
@@ -37,11 +38,11 @@ const Profile = () => {
                 }
             setloaded(true);
         }
-    }, []);
+    }, [notify]);
     return (
         <>
             <div className="flex flex-col bg-[#262525]">
-                <Profilmenu />
+                <Profilmenu notify = {notify}/>
                 <div className="flex md:flex-row flex-col min-h-screen justify-between">
                     {userInfo.user && <Header loaded={loaded} userInfo={userInfo} />}
                     <GameHistoryTable matches={matches} />

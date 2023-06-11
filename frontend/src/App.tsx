@@ -20,12 +20,15 @@ import DirectChats from './components/Chat/DirectChats';
 import { useState, useEffect, useContext } from 'react';
 import { io } from 'socket.io-client';
 import { selectUser } from './components/Slices/userSlice';
+import { useSelector } from 'react-redux';
+
 const App = (props: any) => {
-   
-   const userInfo = useContext(selectUser);
+  const userInfo = useSelector(selectUser);
    const [gameSocket, setGameSocket] = useState(null);
    const [chatSocket, setChatSocket] = useState(null);
    const [chatInfo, setChatInfo] = useState(null);
+   const [notify, setnotify] = useState(null);
+   const [invite, setInvite] = useState(null);
   useEffect(() => {
     const socketOptions = {
             transportOptions: { 
@@ -40,11 +43,40 @@ const App = (props: any) => {
             };
             const gameSocket = io(`${process.env.BACK_URL}/pong`, socketOptions);
             const chatSocket = io(`${process.env.BACK_URL}/chat`, socketOptions);
+            const notify = io(`${process.env.BACK_URL}/notify`, socketOptions);
             setGameSocket(gameSocket);
             setChatSocket(chatSocket);
+            setnotify(notify);
+            setTimeout(() => {
+                gameSocket.connect();
+                chatSocket.connect();
+                notify.connect();
+                }, 1000);
             gameSocket.on('connect', () => {
                 console.log('Game Socket connection established!');
                 });
+            notify.on('connect', ()=>{
+              console.log("notify connected");
+            })
+            notify.on('disconnect', (data)=>{
+              console.log("notify disconnected");
+            })
+
+            notify.on('error', (data)=>{
+              console.log("notify error:", data);
+            })
+            notify.on('message', (data) => {
+                console.log("notification: ", data); 
+                toast.info("HELLO"+data, {
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        theme: "colored",
+                    });
+                });
+
             gameSocket.on('disconnect', (data) => {
                 console.log('Game Socket connection closed.', data);
                 });
@@ -55,12 +87,17 @@ const App = (props: any) => {
                 console.log('Chat Socket connection closed.', data);
                 });
             chatSocket.on('info', (data) => {
-                setChatInfo(data)
+                setChatInfo(data.message);
                 });
             gameSocket.on('info', (data) => {
                 console.log('Info : ', data);
             });
 
+            return () => { 
+                gameSocket.close();
+                chatSocket.close();
+                notify.close();
+                };
 
     },[userInfo?.user?.id]);
   return (
@@ -69,16 +106,16 @@ const App = (props: any) => {
       <Router>
         <Routes>
           <Route path="/transcendence" element={<Welcome />} />
-          <Route path="/transcendence/redirect" element={<Redirect />} />
-          <Route path="/transcendence/tfa_42" element={<Tfa_42 />} />
+          <Route path="/transcendence/redirect" element={<Redirect notify = {notify}/>} />
+          <Route path="/transcendence/tfa_42" element={<Tfa_42 notify = {notify}/>} />
           <Route path="/transcendence/user/signup" element={<SignUp />} />
-          <Route path="/transcendence/user/signin" element={<SignIn />} />
-          <Route path="/transcendence/user/profile" element={<Profile />} />
-          <Route path="/transcendence/user/profile/:id" element={<UserProfile chatSocket = {chatSocket} />} />
+          <Route path="/transcendence/user/signin" element={<SignIn notify = {notify}/>} />
+          <Route path="/transcendence/user/profile" element={<Profile notify = {notify}/>} />
+          <Route path="/transcendence/user/profile/:id" element={<UserProfile notify={notify} chatSocket = {chatSocket} />} />
           <Route path="/transcendence/user/profile/settings" element={<Settings />} />
           <Route path="/transcendence/user/dashboard" element={<Dashboard />} />
           <Route path="/transcendence/user/chat/:id" element={<Chat chatSocket={chatSocket} />} />
-          <Route path="/transcendence/user/chat" element={<Chanels chatSocket={chatSocket} gameSocket={gameSocket} />} />
+          <Route path="/transcendence/user/chat" element={<Chanels notify={notify} chatSocket={chatSocket} gameSocket={gameSocket} />} />
           <Route path="/transcendence/user/directchats" element={<DirectChats  chatSocket = {chatSocket}/>} />
           <Route path="/transcendence/game" element={<Game gameSocket={gameSocket} isInvite={false} />} />
         </Routes>

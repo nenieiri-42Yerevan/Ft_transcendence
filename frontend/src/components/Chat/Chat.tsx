@@ -41,7 +41,6 @@ const Chat = ({ chatSocket }) => {
     }
     getData();
     chatSocket?.on('chat', (chat) => {
-      console.log("mychat:", chat);
       if (chat.users[1].id == userInfo?.user?.id ? chat.users[0].id == id : chat.users[1].id == id)
         setMessageList(chat.messages);
     })

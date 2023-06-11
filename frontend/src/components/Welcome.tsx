@@ -1,11 +1,22 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import Background from './Background';
 import welphoto from '@SRC_DIR/assets/images/welcomepagephoto.png';
 import { Link } from 'react-router-dom';
 import axios from "axios";
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
+import { selectUser } from './Slices/userSlice';
 
 const Welcome = () => {
+  const navigate = useNavigate();
+  const disp = useDispatch();
 
+  const userInfo = useSelector(selectUser);
+  useEffect(() => {
+    if (userInfo && userInfo.user)
+            navigate("/transcendence/user/profile");
+  });
   const sign = async ()=>{
       window.location.href = "https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-a3ba0a124d3a4ced3822bc7ff62ee30b17851441280fc280437663500580042c&redirect_uri=http%3A%2F%2Flocalhost%3A7000%2Ftranscendence%2Fauth%2Fsignin%2F42%2Fcallback&response_type=code";
   }

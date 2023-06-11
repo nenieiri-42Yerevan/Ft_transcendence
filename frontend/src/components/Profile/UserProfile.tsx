@@ -16,7 +16,7 @@ import UserHeader from "./UserHeader";
 import Notfound from "../Notfound";
 import GameHistoryTable from "../GameHistoryBoard";
 
-const UserProfile = ({chatSocket}) => {
+const UserProfile = ({chatSocket, notify}) => {
     const {id} = useParams();
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -27,8 +27,7 @@ const UserProfile = ({chatSocket}) => {
     const [loaded, setloaded] = useState(false);
     const [matches, setMatches] = useState(null);
     useEffect(() => {
-        console.log(id);
-        getUserById(id, navigate).then(async userInfo => {
+        getUserById(id, navigate, dispatch).then(async userInfo => {
             setUserInfo(userInfo);
             const friends = await fetchFriendsData(1, navigate, dispatch, userInfo);
             if (friends)
@@ -52,12 +51,12 @@ const UserProfile = ({chatSocket}) => {
         return (<Notfound/>);;
     if (id == current?.user?.id)
         return (
-            <Profile/>
+            <Profile notify = {notify}/>
         );
     return (
         <>
         <div className="flex flex-col bg-[#262525]">
-            <Profilmenu/>
+            <Profilmenu notify = {notify}/>
             <div className = "flex md:flex-row flex-col justify-between min-h-screen min-w-full">
                 <UserHeader loaded = {loaded} photo = {photo} userInfo = {userInfo} current = {current} id = {id} chatSocket = {chatSocket}/>
                 <GameHistoryTable matches={matches} />

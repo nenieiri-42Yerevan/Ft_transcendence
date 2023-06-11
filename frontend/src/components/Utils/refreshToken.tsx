@@ -10,7 +10,6 @@ const refreshToken = async ():Promise<number> => {
         }});
         localStorage.setItem("access_token", response.data.access_token);
         localStorage.setItem("refresh_token", response.data.refresh_token);
-        console.log(response);
         return response.status;
     } catch (error:any) {
         console.log(error);

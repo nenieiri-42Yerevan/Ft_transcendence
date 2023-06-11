@@ -11,7 +11,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
 
-const Tfa_42 = () => {
+const Tfa_42 = ({notify}) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
@@ -25,7 +25,7 @@ const Tfa_42 = () => {
             const response = await axios.post(`${process.env.BACK_URL}/transcendence/auth/signin/2FA_42`, sendData);
             localStorage.setItem('access_token', response.data.access_token);
             localStorage.setItem('refresh_token', response.data.refresh_token);
-            const userInfo = await getUserInfo(navigate);
+            const userInfo = await getUserInfo(navigate, dispatch);
             dispatch(setUserInfo(userInfo));
             Cookies.remove('username');
             navigate("/transcendence/user/profile");

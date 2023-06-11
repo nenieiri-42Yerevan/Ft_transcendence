@@ -21,14 +21,13 @@ interface tfa {
     password: string;
     tfa: string;
 }
-const SignIn = () => {
+const SignIn = ({notify}) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [isError, setIsError] = useState(false);
     const userInfo = useSelector(selectUser); 
     useEffect(() => {
         if (userInfo && userInfo.user != null && !userInfo.user.isUnAuth) {
-            console.log("hhh ", userInfo.user.isUnAuth);
             
             navigate("/transcendence/user/profile");
         }
@@ -49,9 +48,8 @@ const SignIn = () => {
             }
             localStorage.setItem("access_token", accessToken);
             localStorage.setItem("refresh_token", refreshToken);
-            const userInfo = await getUserInfo(navigate);
+            const userInfo = await getUserInfo(navigate, dispatch);
             dispatch(setUserInfo(userInfo));
-            console.log(userInfo);
             navigate("/transcendence/user/profile");
         }
         catch (error: any) {
@@ -83,9 +81,8 @@ username: data.login,
             }
             localStorage.setItem("access_token", accessToken);
             localStorage.setItem("refresh_token", refreshToken);
-            const userInfo = await getUserInfo(navigate);
+            const userInfo = await getUserInfo(navigate, dispatch);
             dispatch(setUserInfo(userInfo));
-            console.log(userInfo);
             navigate("/transcendence/user/profile");
         }
         catch(error)

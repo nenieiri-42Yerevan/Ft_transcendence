@@ -22,7 +22,7 @@ const FriendsList = (props)=>{
         setloaded(true);
     }, [props.obj.id]);
     return (
-        <p key={props.index} className="text-white hover:bg-[#616161] text-center p-2 flex justify-between"><img className="w-[2em]" src={loaded ? (photo ? photo : avatar) : null}></img> <Link className="hover:bg-[#1E81B0] p-2" to= {`/transcendence/user/profile/${props.obj.id}`}>{props.obj.name}</Link></p>
+        <p key={props.index} className="text-white hover:bg-[#616161] text-center p-2 flex justify-between"><img className="w-[2em]" src={loaded ? (photo ? photo : avatar) : null}></img> <Link className="hover:bg-[#1E81B0] p-2" to= {`/transcendence/user/profile/${props.obj.id}`}>{props.obj.name}{props.obj.status !==0 && <span >&#127760;</span>}</Link></p>
     )
 
 

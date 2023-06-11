@@ -18,7 +18,6 @@ const Edit = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const [enabled, setEnabled] = useState(false);
-    console.log("nnn", userInfo);
     
     const initialValues = {
         first_name: userInfo?.user?.name,
@@ -45,7 +44,7 @@ const Edit = () => {
                 await disable2fa(dispatch, navigate, userInfo.user);
             }
             setEnabled(true);
-            dispatch(setUserInfo(await getUserInfo(navigate)));
+            dispatch(setUserInfo(await getUserInfo(navigate, dispatch)));
         } catch (error: any) {
         return { [FORM_ERROR]: error.response.data.message };
         }

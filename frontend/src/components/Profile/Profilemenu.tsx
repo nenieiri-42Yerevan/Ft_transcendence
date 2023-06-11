@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 // import { logOut } from './Slices/userSlice';
 
-const Profilemenu = () => {
+const Profilemenu = ({notify}) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const userInfo = useSelector(selectUser); 
@@ -20,9 +20,9 @@ const Profilemenu = () => {
       dispatch(logout())
       localStorage.removeItem('access_token');
       localStorage.removeItem('refresh_token');
+      await notify.disconnect();
       navigate("/transcendence/user/signin")
     } catch (error) {
-      console.log(error);
     }
    }
   return (
