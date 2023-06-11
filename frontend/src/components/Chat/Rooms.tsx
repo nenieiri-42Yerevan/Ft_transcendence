@@ -130,7 +130,7 @@ const Rooms = ({ user }) => {
     <div className='flex flex-col w-full h-full max-h-full bg-[#1E1E1E] border-[#393939] border-solid border  rounded text-center'>
     <div className='flex flex-col h-full'>
     <Header />
-    <div className='h-full overflow-y-auto border border-[#393939] rounded m-1'>
+    <div className='flex flex-col h-full overflow-y-scroll border border-[#393939] rounded m-1'>
     {allChat && (allChat.length == 0
       ? <p>no rooms.. </p>
       : allChat.map((item, index) =>  

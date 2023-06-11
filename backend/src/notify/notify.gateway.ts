@@ -1,5 +1,7 @@
 import { ConfigService } from '@nestjs/config';
 import {
+  OnGatewayConnection,
+  OnGatewayDisconnect,
   OnGatewayInit,
   SubscribeMessage,
   WebSocketGateway,
@@ -16,7 +18,9 @@ import { OnModuleInit } from '@nestjs/common';
   cors: { origin: '*' },
   namespace: 'notify',
 })
-export class NotifyGateway implements OnGatewayInit {
+export class NotifyGateway
+  implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
+{
   constructor(
     private readonly configService: ConfigService,
     private readonly notifyService: NotifyService,
@@ -34,16 +38,18 @@ export class NotifyGateway implements OnGatewayInit {
     Object.assign(this.server, { cors: { origin } });
   }
 
-  async onConnect(client: Socket): Promise<any> {
+  async handleConnection(client: Socket): Promise<any> {
     try {
       const user = await this.authService.retrieveUser(client);
       if (!user) client.disconnect();
 
       await this.userService.setStatus(user.id, Status.ONLINE);
+
+      client.data.user = user;
     } catch {}
   }
 
-  onDisconnect(client: Socket): void {
+  handleDisconnect(client: Socket): void {
     try {
       if (!client.data.user) return;
 
