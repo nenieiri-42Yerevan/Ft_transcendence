@@ -7,6 +7,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Chat } from './chat.entity';
+import { GroupChat } from './group-chat.entity';
 
 @Entity()
 export class Message {
@@ -22,4 +23,8 @@ export class Message {
   @ManyToOne(() => Chat, (chat) => chat.messages)
   @JoinColumn()
   chat: Chat;
+
+  @ManyToOne(() => GroupChat, (gchat) => gchat.messages)
+  @JoinColumn()
+  gchat: GroupChat;
 }

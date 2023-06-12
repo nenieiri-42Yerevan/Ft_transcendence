@@ -11,11 +11,10 @@ import {
 import { User } from 'src/user/entities';
 import { Muted } from './muted.entity';
 import { Banned } from './banned.entity';
-import { Chat } from './chat.entity';
 import { Message } from './message.entity';
 
 @Entity()
-export class GroupChat extends Chat {
+export class GroupChat {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -41,10 +40,10 @@ export class GroupChat extends Chat {
   @OneToMany(() => Banned, (banned) => banned.group, { eager: true })
   banned: Banned[];
 
-  // @ManyToMany(() => User, { onDelete: 'CASCADE' })
-  // @JoinTable()
-  // users: User[];
+  @ManyToMany(() => User, { onDelete: 'CASCADE', eager: true })
+  @JoinTable()
+  users: User[];
 
-  // @OneToMany(() => Message, (message) => message.chat, { eager: true })
-  // messages: Message[];
+  @OneToMany(() => Message, (message) => message.gchat, { eager: true })
+  messages: Message[];
 }

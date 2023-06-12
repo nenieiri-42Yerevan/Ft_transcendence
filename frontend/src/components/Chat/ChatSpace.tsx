@@ -19,9 +19,9 @@ const ChatSpace = ({notify, groupSocket, gameSocket}) => {
             <div className='h-full flex flex-col justify-start overflow-y-auto '><UserList notify={notify} gameSocket={gameSocket} chatSocket={groupSocket}/></div>
             <div className='flex flex-col h-fit w-full text-white text-center text-md font-bold'><AdminWindow /></div>
         </div>
-        <div className='flex flex-col w-4/5  m-2'>
-            <div className='h-full rounded-md border border-[#393939]'><ChatWindow groupSocket={groupSocket}/></div>
-            <div><MessageInput groupSocket={groupSocket}/></div>
+        <div className='flex flex-col max-h-full w-4/5  m-2'>
+            <div className='flex h-5/6 rounded-md border border-[#393939]'><ChatWindow groupSocket={groupSocket}/></div>
+            <div className='flex '><MessageInput groupSocket={groupSocket}/></div>
         </div>
     </>
     );
