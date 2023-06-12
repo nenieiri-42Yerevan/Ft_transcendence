@@ -45,6 +45,12 @@ const UserList = ({notify, gameSocket, chatSocket}) => {
             setCurChat(gchat);
             });
         window.addEventListener("click", handleClick);
+        
+        chatSocket.on('admin', (data) => {
+            curChat.admins = data.admins;
+            setCurChat(curChat);
+            console.log(data);
+            });
     
     return () => {
         window.removeEventListener("click", handleClick);
@@ -61,10 +67,14 @@ const UserList = ({notify, gameSocket, chatSocket}) => {
         gameSocket.emit("join-room");
     }
 
+    const addAdmin = () => {
+        chatSocket.emit('admin', {gid:curChat.id, userId:selectedUser.id});
+    }
+
     const kickUser = async () => {
         try {
         const groupDelete = await axios.delete(
-            `${process.env.BACK_URL}/transcendence/chat/group/delete/${userInfo.user.id}/${selectedUser.id}`,
+            `${process.env.BACK_URL}/transcendence/chat/group/delete/${selectedUser.id}/${curChat.id}`,
             {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('access_token')}`,
@@ -112,7 +122,7 @@ const UserList = ({notify, gameSocket, chatSocket}) => {
             </>)
             }
             { curChat.owner.id == userInfo.user.id &&
-            <button className='rounded-md p-2 hover:bg-gray-500'>Give admin rights</button>
+            <button onClick={addAdmin} className='rounded-md p-2 hover:bg-gray-500'>Give admin rights</button>
             }
             <button onClick={followUser} className='rounded-md p-2 hover:bg-gray-500'>{userInfo?.user?.follows.includes(Number(selectedUser.id)) ? "Unfollow" : "Follow"}</button>
             <button onClick={sendInvite} className='rounded-md p-2 hover:bg-gray-500'>Let's Play</button>

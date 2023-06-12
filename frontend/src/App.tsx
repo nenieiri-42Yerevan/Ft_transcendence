@@ -120,7 +120,7 @@ const App = (props: any) => {
                         pauseOnHover: true,
                         draggable: true,
                         theme: "colored",
-                    });} else {
+                    });} else if (data.submit != undefined){
                         
                         toast.info(`User  ${(data.submit == true)?"Accepted":"Declined"}`, {autoClose: 5000,
                         hideProgressBar: false,
