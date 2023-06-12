@@ -371,7 +371,12 @@ export class GroupChatService {
   /* DELETE */
 
   async delete(id: number): Promise<void> {
-    const gchat = await this.findOne(id, ['users', 'muted', 'banned', 'logs']);
+    const gchat = await this.findOne(id, [
+      'users',
+      'muted',
+      'banned',
+      'messages',
+    ]);
 
     await this.messageRepo.remove(gchat.messages);
     await this.mutedUserRepo.remove(gchat.muted);
