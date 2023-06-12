@@ -90,6 +90,8 @@ const App = (props: any) => {
                         <button
                         className="px-4 py-1 mr-2 bg-red-500 text-white rounded hover:bg-red-600"
                         onClick={() => {
+                            setInvite(false);
+                            setPlayerId(0);
                         notify.emit('message', { id: data.opponent.id, submit:false }); 
                         toast.dismiss();
                         }}
@@ -103,6 +105,7 @@ const App = (props: any) => {
                             gameSocket.emit('join-room', data.message);
                             setInvite(true);
                             setPlayerId(1);
+                        notify.emit('message', { id: data.opponent.id, submit:true }); 
                             //useNavigate("/transcendence/game", { state: {notify: true}});
                             toast.dismiss();
                         }}
@@ -118,7 +121,8 @@ const App = (props: any) => {
                         draggable: true,
                         theme: "colored",
                     });} else {
-                        toast.info("User Declined", {autoClose: 5000,
+                        
+                        toast.info(`User  ${(data.submit == true)?"Accepted":"Declined"}`, {autoClose: 5000,
                         hideProgressBar: false,
                         closeOnClick: false,
                         pauseOnHover: true,
@@ -126,7 +130,7 @@ const App = (props: any) => {
                         theme: "colored",
 });
                         setInvite(data.submit);
-                        setPlayerId(0);
+                        setPlayerId(data.submit?1:0);
                     }
                 });
 

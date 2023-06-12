@@ -38,7 +38,6 @@ const UserList = ({notify, gameSocket, chatSocket}) => {
         gameSocket.on('room', (data) => {
             console.log('Invite to room : ', data);
             setPlayerId(0);
-            setInvite(true);
             notify.emit('message', { id: selectedUser.id, message: data, opponent: userInfo.user}); 
         });
 
