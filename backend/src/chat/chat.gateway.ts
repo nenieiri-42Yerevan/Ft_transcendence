@@ -202,6 +202,7 @@ export class ChatGateway
 
       const banned = gchat.banned.find(
         (banned) => banned.user.id == data.user.id,
+
       );
 
       if (banned) await this.groupChatService.unbannUser(banned, gchat);

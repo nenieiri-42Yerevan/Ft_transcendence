@@ -33,7 +33,7 @@ const ChatUsers = (props) => {
                 console.log('Invite to roo : ', data);
                 setPlayerId(0);
                 setInvite(true);
-                notify?.emit('message', { id: props.info.id, message: data, opponent: userInfo.user.username}); 
+                notify?.emit('message', { id: props.info.id, message: data, opponent: userInfo.user}); 
             });
         }
         return(()=>{

@@ -29,7 +29,7 @@ const UserHeader = (props)=>{
             console.log('Invite to room : ', data);
             setPlayerId(0);
             setInvite(true);
-            notify.emit('message', { id: props.id, message: data, opponent: userInfo.user.username}); 
+            notify.emit('message', { id: props.id, message: data, opponent: userInfo.user}); 
         });
         return () => {
             chatSocket?.off('join-chat');
