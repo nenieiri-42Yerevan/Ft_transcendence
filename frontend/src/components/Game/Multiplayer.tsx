@@ -147,7 +147,10 @@ const Multiplayer = (props) => {
         }
 
         if (event.key == 'space') {
-            gameSocket.emit('ready', { plan : 0, mode : mode });
+            if (!mode)
+                gameSocket.emit('ready', {plan: 0, mode: 0});
+            else
+                gameSocket.emit('ready', { plan : 0, mode : mode });
             readyText.content = `Wait another player...`;
         }
     }

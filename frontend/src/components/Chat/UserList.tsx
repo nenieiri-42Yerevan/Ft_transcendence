@@ -8,9 +8,10 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { io } from 'socket.io-client';
 import { GameContext } from '../context/GameSocket';
-
+import axios, { HttpStatusCode } from "axios";
+import { toast } from 'react-toastify';
 const UserList = ({notify, gameSocket, chatSocket}) => {
-    const {curChat} = useContext(GroupChatContext);
+    const {curChat, setCurChat} = useContext(GroupChatContext);
     const {setInvite, setPlayerId} = useContext(GameContext);
     const userInfo = useSelector(selectUser);
     const [users, setUsers] = useState(null);
@@ -33,17 +34,23 @@ const UserList = ({notify, gameSocket, chatSocket}) => {
         else 
             setUsers([]);
         const handleClick = () => setClicked(false);
+        
         gameSocket.on('room', (data) => {
             console.log('Invite to room : ', data);
             setPlayerId(0);
             setInvite(true);
             notify.emit('message', { id: selectedUser.id, message: data, opponent: userInfo.user}); 
         });
+
+        chatSocket.on('group-chat', (gchat) => {
+            setCurChat(gchat);
+            });
         window.addEventListener("click", handleClick);
     
     return () => {
         window.removeEventListener("click", handleClick);
         gameSocket.off('room');
+     chatSocket.off('group-chat');
         };
         }, [notify, curChat, userInfo, gameSocket, selectedUser]);
 
@@ -55,7 +62,20 @@ const UserList = ({notify, gameSocket, chatSocket}) => {
         gameSocket.emit("join-room");
     }
 
-    const kickUser = () => {
+    const kickUser = async () => {
+        try {
+        const groupDelete = await axios.delete(
+            `${process.env.BACK_URL}/transcendence/chat/group/delete/${userInfo.user.id}/${selectedUser.id}`,
+            {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+                },
+            }
+        );
+        chatSocket.emit('group-chat', curChat.id);
+        } catch (ex) {
+            toast.error(`Can't create chat: ${ex}`, { autoClose: 3000 });
+        }
     
     }
 

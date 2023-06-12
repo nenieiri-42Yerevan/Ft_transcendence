@@ -111,8 +111,7 @@ const App = (props: any) => {
                         </button>
                         </div>
                         </div>, {
-                        onClose: () => {notify.emit('message', { id: data.opponent.id, submit:false })}, 
-                        autoClose: 5000,
+                        autoClose: false,
                         hideProgressBar: false,
                         closeOnClick: false,
                         pauseOnHover: true,
