@@ -9,25 +9,17 @@ const ChatWindow = ({groupSocket}) => {
     const [messages, setMessages] = useState([]);
     useEffect(() => {
         groupSocket.on('text', (data) => {
-                getGroupChats()
-                    .then(chats => {setAllChats(chats);
-                    if (curChat) {
-                        setCurChat(chats.find(chat => chat.id == curChat.id));
-                        setMessages(chats.find(chat => chat.id == curChat.id).messages);
-                    }
-                })
-            });
-        if (curChat)
+                    setMessages(messages => [...messages, {id:data.id, content:data.value, author:data.user}]);});
+        if (messages.length == 0)
             setMessages(curChat.messages);
-        else
-            setMessages([]);
-    },[curChat]);
+        return () => { groupSocket.off('text')}
+    },[messages, curChat]);
    return (
-    <div>
-      {messages.map((msg) => {
+    <div className="flex flex-col overflow-y-auto w-full h-full">
+      {messages.map((msg, index) => {
         return (
-          <div key={msg.id} className={`w-1/3 p-4 rounded-md bg-gray-500 ${msg.author.id === userInfo.user.id ? 'text-right' : 'text-left'}`}>
-            {msg.content}
+          <div key={index} className={`flex flex-row ${userInfo.user.id == msg.author.id?"justify-end":"justify-start"} ` }>
+            <div className="bg-gray-500  rounded-md p-2 m-2"><p className="text-xs text-gray-100">{msg.author.username}</p><p>{msg.content}</p></div>
           </div>
         )
       })}

@@ -126,6 +126,9 @@ const App = (props: any) => {
             chatSocket.on('disconnect', (data) => {
                 console.log('Chat Socket connection closed.', data);
                 });
+            chatSocket.on('error', (data) => {
+                console.log('Chat Socket error:', data);
+                });
             chatSocket.on('info', (data) => {
                 setChatInfo(data.message);
                 });

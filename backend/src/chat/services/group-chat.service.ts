@@ -190,7 +190,6 @@ export class GroupChatService {
       let valid = true;
 
 
-    console.log("CHAT :", chat);
       if (chat.password)
         valid = await argon.verify(chat.password, gchat.password);
       if (!valid)
@@ -308,8 +307,7 @@ export class GroupChatService {
   async addMessage(id: number, message: string, uid: number): Promise<void> {
     const user = await this.userService.findOne(uid);
 
-    const chat = await this.findOne(id, ['users', 'messages', 'muted']);
-    console.log("CHAT MSG ADD:", chat);
+    const chat: GroupChat = await this.findOne(id, ['users', 'messages', 'muted']);
     if (!chat.users.find((u) => u.id == user.id)) {
       throw new HttpException('User is not in the group', HttpStatus.NOT_FOUND);
     }
@@ -335,7 +333,6 @@ export class GroupChatService {
 
     try {
       await this.logRepository.save(log);
-        console.log("log saved");
       await this.groupChatRepo
         .createQueryBuilder()
         .relation(GroupChat, 'messages')

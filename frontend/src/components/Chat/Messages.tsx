@@ -8,6 +8,9 @@ const Messages = (props) => {
   const userInfo = useSelector(selectUser);
   const [hidden, setHidden] = useState(true);
   const { messageList } = props;
+  useEffect(() => {
+      console.log(messageList);
+      },[messageList]);
   return (
     <div className="relative w-full p-6 overflow-y-auto h-[40rem]">
       {messageList && messageList.map((messageContent, index) => (
