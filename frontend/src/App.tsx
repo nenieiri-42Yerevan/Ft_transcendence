@@ -34,6 +34,9 @@ const App = (props: any) => {
    const [invite, setInvite] = useState(false);
    const [playerId, setPlayerId] = useState(0);
   useEffect(() => {
+      if (!userInfo.user) {
+        return; 
+    }
     const socketOptions = {
             transportOptions: { 
                 polling: {
