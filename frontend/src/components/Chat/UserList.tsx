@@ -53,6 +53,15 @@ const UserList = ({notify, gameSocket, chatSocket}) => {
             setCurChat(curChat);
             setUsers(curChat.users);
             });
+        chatSocket.on('mute', (gchat) => {
+            if (curChat.id == gchat.channel.id) {
+                if (curChat.muted.some(id => id == gchat.muted_user.id))
+                    curChat.muted = curChat.muted.filter((id) => id != gchat.muted_user.id);
+                else
+                    curChat.muted.push(gchat.muted_user.id);
+            }
+            setCurChat(curChat);
+            });
         window.addEventListener("click", handleClick);
         
         chatSocket.on('admin', (data) => {
@@ -101,7 +110,7 @@ const UserList = ({notify, gameSocket, chatSocket}) => {
     }
 
     const mute = () => {
-    
+        chatSocket.emit('mute', {channelId:curChat.id, userId:selectedUser.id}); 
     }
 
     return ( 
@@ -132,7 +141,7 @@ const UserList = ({notify, gameSocket, chatSocket}) => {
               style={{ top: `${points.y}px`, left: `${points.x}px` }}>
             { curChat.admins?.some(id => id == userInfo.user.id) &&
             (<>
-            <button className='rounded-md p-2 hover:bg-gray-500'>Mute</button>
+            <button onClick={mute} className='rounded-md p-2 hover:bg-gray-500'>{`${curChat.muted.some(id => selectedUser.id == id)?"UnMute":"Mute"}`}</button>
             <button onClick={ban} className='rounded-md p-2 hover:bg-gray-500'>Ban</button>
             <button onClick={kickUser} className='rounded-md p-2 hover:bg-gray-500'>Kick</button>
             </>)
