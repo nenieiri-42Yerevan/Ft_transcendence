@@ -47,9 +47,8 @@ const UserList = ({notify, gameSocket, chatSocket}) => {
         window.addEventListener("click", handleClick);
         
         chatSocket.on('admin', (data) => {
-            curChat.admins = data.admins;
+            curChat.admins.push(data.admin_user.id);
             setCurChat(curChat);
-            console.log(data);
             });
     
     return () => {
@@ -107,14 +106,14 @@ const UserList = ({notify, gameSocket, chatSocket}) => {
           <div key={index} className='bg-gray-700 m-1 text-center text-white text-xl rounded-md hover:bg-gray-500'> 
           <Link className='flex flex-row items-center justify-between m-2' to={`/transcendence/user/profile/${user.id}`} key={user.id}>
           <p className="truncate">{user.username}</p>
-          <div className={`h-3 w-3 rounded-full bg-${Status[userInfo.status]}`}/>
+          <p className="truncate">{curChat.admins.some(id => id == user.id) && "adm"}</p>
           </Link> 
           </div>
           </div>)})}
           {clicked && (
         <div className="absolute flex flex-col w-400 text-white text-xl bg-gray-800 rounded-lg box-border p-2"
               style={{ top: `${points.y}px`, left: `${points.x}px` }}>
-            { curChat.admins.some(id => id == userInfo.user.id) &&
+            { curChat.admins?.some(id => id == userInfo.user.id) &&
             (<>
             <button className='rounded-md p-2 hover:bg-gray-500'>Mute</button>
             <button className='rounded-md p-2 hover:bg-gray-500'>Ban </button>
