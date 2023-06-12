@@ -33,6 +33,7 @@ const UserHeader = (props)=>{
         });
         return () => {
             chatSocket?.off('join-chat');
+            gameSocket?.off('room');
           };
     }, [chatSocket, gameSocket, userInfo])
     const message = ()=>{
