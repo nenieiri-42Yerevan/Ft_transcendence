@@ -224,11 +224,11 @@ export class UserService {
   async updateLevel(winner: User, loser: User): Promise<void> {
     try {
       await this.userRepo.update(winner.id, {
-        rank: Math.floor(winner.rank + 5 + loser.rank * 0.01),
+        rank: (winner.rank + 5 + Math.floor(loser.rank * 0.01)),
       });
       if (loser.rank - 5 - (winner.rank - loser.rank) * 0.01 > 0)
         await this.userRepo.update(loser.id, {
-          rank: Math.floor(loser.rank - 5 - (winner.rank - loser.rank) * 0.01),
+          rank: (loser.rank - 5 - Math.floor((winner.rank - loser.rank) * 0.01)),
         });
       else await this.userRepo.update(loser.id, { rank: 0 });
     } catch (error) {
