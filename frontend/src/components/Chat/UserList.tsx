@@ -37,7 +37,7 @@ const UserList = ({notify, gameSocket, chatSocket}) => {
             console.log('Invite to room : ', data);
             setPlayerId(0);
             setInvite(true);
-            notify.emit('message', { id: selectedUser.id, message: data, opponent: userInfo.user.username}); 
+            notify.emit('message', { id: selectedUser.id, message: data, opponent: userInfo.user}); 
         });
         window.addEventListener("click", handleClick);
     
@@ -53,6 +53,10 @@ const UserList = ({notify, gameSocket, chatSocket}) => {
 
     const sendInvite = () => {
         gameSocket.emit("join-room");
+    }
+
+    const kickUser = () => {
+    
     }
 
     return ( 
@@ -85,7 +89,7 @@ const UserList = ({notify, gameSocket, chatSocket}) => {
             (<>
             <button className='rounded-md p-2 hover:bg-gray-500'>Mute</button>
             <button className='rounded-md p-2 hover:bg-gray-500'>Ban </button>
-            <button className='rounded-md p-2 hover:bg-gray-500'>Kick</button>
+            <button onClick={kickUser} className='rounded-md p-2 hover:bg-gray-500'>Kick</button>
             </>)
             }
             { curChat.owner.id == userInfo.user.id &&

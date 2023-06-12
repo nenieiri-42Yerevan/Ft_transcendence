@@ -117,7 +117,6 @@ const Multiplayer = (props) => {
 
 
     const handleResize = () => {
-       console.log(paper.view);
       view.viewSize = [window.innerWidth, window.innerHeight];
       pW = view.size.width * paddleWidth;
       pH = view.size.height * paddleHeight;  
