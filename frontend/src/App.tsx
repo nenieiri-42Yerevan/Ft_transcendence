@@ -132,9 +132,9 @@ const App = (props: any) => {
             gameSocket.on('info', (data) => {
                 console.log('Info : ', data);
             });
-            gameSocket.on('room', (data) => {
-                console.log('Room : ', data);
-            });
+            // gameSocket.on('room', (data) => {
+            //     console.log('Room : ', data);
+            // });
 
             return () => { 
                 gameSocket.close();

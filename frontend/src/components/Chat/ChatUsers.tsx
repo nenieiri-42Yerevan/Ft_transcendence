@@ -14,6 +14,7 @@ const ChatUsers = (props) => {
     const [photo, setphoto] = useState<string>('');
     const { info, gameSocket, notify } = props;
     const { setPlayerId, setInvite } = useContext(GameContext);
+    const [userId, setUserId] = useState(null);
     useEffect(() => {
         console.log(notify);
         const getPhoto = async () => {
@@ -23,20 +24,27 @@ const ChatUsers = (props) => {
             }
         }
         getPhoto();
-        gameSocket?.on('room', (data) => {
-            console.log('Invite to room : ', data);
-            setPlayerId(0);
-            setInvite(true);
-            notify?.emit('message', { id: props.info.id, message: data, opponent: userInfo.user.username}); 
-        });
-        return () => {
-            console.log("hii");
-            gameSocket?.off('room');
-          };
-    }, [notify, gameSocket])
+    }, [])
 
-    const sendInvite = () => {
-        gameSocket?.emit("join-room");
+    useEffect(() => {
+        if (props.info.id == userId)
+        {
+            gameSocket?.on('room', (data) => {
+                console.log('Invite to roo : ', data);
+                setPlayerId(0);
+                setInvite(true);
+                notify?.emit('message', { id: props.info.id, message: data, opponent: userInfo.user.username}); 
+            });
+        }
+        return(()=>{
+            gameSocket?.off('room');
+        })
+    }, [notify, gameSocket, userId])
+
+    const sendInvite = (id) => {
+        setUserId(id);
+        if (props.info.id == id)
+            gameSocket?.emit("join-room");
     }
     
     return (
@@ -54,7 +62,7 @@ const ChatUsers = (props) => {
                 <span className="block ml-2 font-semibold text-white">{info.username}</span>
                 <span className="block ml-2 font-semibold text-red-500">{info.blocked.includes(props.currentId) && "This user blocked you"}</span>
                 <Link to={`/transcendence/user/profile/${info.id}`} className="block ml-2 font-semibold text-white ">Profile</Link>
-                <button onClick={sendInvite} className="bg-[#1e81b0] p-1 m-2 w-40">Game Invite</button>
+                <button onClick={()=>{sendInvite(info.id)}} className="bg-[#1e81b0] p-1 m-2 w-40">Game Invite</button>
                 <hr />           
             </div>
         </>
