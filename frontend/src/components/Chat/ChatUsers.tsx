@@ -10,12 +10,13 @@ import { io } from 'socket.io-client';
 const ChatUsers = (props) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const useInfo = useSelector(selectUser);
+    const userInfo = useSelector(selectUser);
     const [photo, setphoto] = useState<string>('');
     const { info, gameSocket, notify } = props;
     const { setPlayerId, setInvite } = useContext(GameContext);
+    const [userId, setUserId] = useState(null);
     useEffect(() => {
-        console.log(gameSocket);
+        console.log(notify);
         const getPhoto = async () => {
             const photo = await getAvatar(1, navigate, dispatch, info.id);
             if (photo) {
@@ -23,16 +24,27 @@ const ChatUsers = (props) => {
             }
         }
         getPhoto();
-        gameSocket?.on('room', (data) => {
-            console.log('Invite to room : ', data);
-            setPlayerId(0);
-            setInvite(true);
-            notify?.emit('message', { id: props.info.id, message: data, opponent: userInfo.user.username}); 
-        });
-    }, [notify, gameSocket])
+    }, [])
 
-    const sendInvite = () => {
-        gameSocket?.emit("join-room");
+    useEffect(() => {
+        if (props.info.id == userId)
+        {
+            gameSocket?.on('room', (data) => {
+                console.log('Invite to roo : ', data);
+                setPlayerId(0);
+                setInvite(true);
+                notify?.emit('message', { id: props.info.id, message: data, opponent: userInfo.user.username}); 
+            });
+        }
+        return(()=>{
+            gameSocket?.off('room');
+        })
+    }, [notify, gameSocket, userId])
+
+    const sendInvite = (id) => {
+        setUserId(id);
+        if (props.info.id == id)
+            gameSocket?.emit("join-room");
     }
     
     return (
@@ -49,8 +61,10 @@ const ChatUsers = (props) => {
                 </div>
                 <span className="block ml-2 font-semibold text-white">{info.username}</span>
                 <span className="block ml-2 font-semibold text-red-500">{info.blocked.includes(props.currentId) && "This user blocked you"}</span>
-                <Link to={`/transcendence/user/profile/${info.id}`} className="block ml-2 font-semibold text-white border-b ">Profile</Link>
-                <button onClick={sendInvite} className="bg-[#1e81b0] p-1 m-2 w-40">Game Invite</button>            </div>
+                <Link to={`/transcendence/user/profile/${info.id}`} className="block ml-2 font-semibold text-white ">Profile</Link>
+                <button onClick={()=>{sendInvite(info.id)}} className="bg-[#1e81b0] p-1 m-2 w-40">Game Invite</button>
+                <hr />           
+            </div>
         </>
     )
 }
