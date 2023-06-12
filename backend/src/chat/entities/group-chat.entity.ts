@@ -11,7 +11,7 @@ import {
 import { User } from 'src/user/entities';
 import { Muted } from './muted.entity';
 import { Banned } from './banned.entity';
-import { Message } from './message.entity';
+import { GroupMessage } from './group-message.entity';
 
 @Entity()
 export class GroupChat {
@@ -34,16 +34,25 @@ export class GroupChat {
   @Column('int', { array: true, default: [] })
   admins: number[];
 
-  @OneToMany(() => Muted, (muted) => muted.group, { eager: true })
+  @OneToMany(() => Muted, (muted) => muted.group, {
+    onDelete: 'CASCADE',
+    eager: true,
+  })
   muted: Muted[];
 
-  @OneToMany(() => Banned, (banned) => banned.group, { eager: true })
+  @OneToMany(() => Banned, (banned) => banned.group, {
+    onDelete: 'CASCADE',
+    eager: true,
+  })
   banned: Banned[];
 
   @ManyToMany(() => User, { onDelete: 'CASCADE', eager: true })
   @JoinTable()
   users: User[];
 
-  @OneToMany(() => Message, (message) => message.gchat, { eager: true })
-  messages: Message[];
+  @OneToMany(() => GroupMessage, (message) => message.gchat, {
+    onDelete: 'CASCADE',
+    eager: true,
+  })
+  messages: GroupMessage[];
 }

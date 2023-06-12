@@ -6,11 +6,10 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Chat } from './chat.entity';
 import { GroupChat } from './group-chat.entity';
 
 @Entity()
-export class Message {
+export class GroupMessage {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -20,7 +19,7 @@ export class Message {
   @ManyToOne(() => User, { eager: true, onDelete: 'CASCADE' })
   author: User;
 
-  @ManyToOne(() => Chat, (chat) => chat.messages)
+  @ManyToOne(() => GroupChat, (gchat) => gchat.messages)
   @JoinColumn()
-  chat: Chat;
+  gchat: GroupChat;
 }

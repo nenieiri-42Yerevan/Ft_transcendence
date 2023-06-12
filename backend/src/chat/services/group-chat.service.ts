@@ -3,10 +3,11 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { UserService } from 'src/user/services/user.service';
 import { Repository } from 'typeorm';
 import { GroupChatDto } from '../dto/group-chat.dto';
-import { Banned, GroupChat, Message, Muted } from '../entities';
+import { Banned, GroupChat, Muted } from '../entities';
 import * as argon from 'argon2';
 import { PasswordDto } from '../dto/password.dto';
 import { WsException } from '@nestjs/websockets';
+import { GroupMessage } from '../entities/group-message.entity';
 
 const temporary = 30 * 60 * 1000;
 @Injectable()
@@ -17,8 +18,8 @@ export class GroupChatService {
     @InjectRepository(GroupChat)
     private readonly groupChatRepo: Repository<GroupChat>,
 
-    @InjectRepository(GroupChat)
-    private readonly messageRepo: Repository<Message>,
+    @InjectRepository(GroupMessage)
+    private readonly messageRepo: Repository<GroupMessage>,
 
     @InjectRepository(Muted)
     private readonly mutedUserRepo: Repository<Muted>,
@@ -26,8 +27,8 @@ export class GroupChatService {
     @InjectRepository(Banned)
     private readonly bannedUserRepo: Repository<Banned>,
 
-    @InjectRepository(Message)
-    private readonly logRepository: Repository<Message>,
+    @InjectRepository(GroupMessage)
+    private readonly logRepository: Repository<GroupMessage>,
   ) {}
 
   /* CREATE */
@@ -377,6 +378,12 @@ export class GroupChatService {
       'banned',
       'messages',
     ]);
+
+    if (!gchat)
+      throw new HttpException(
+        'The group chat does not exist',
+        HttpStatus.BAD_REQUEST,
+      );
 
     await this.messageRepo.remove(gchat.messages);
     await this.mutedUserRepo.remove(gchat.muted);
