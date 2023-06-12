@@ -78,7 +78,7 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @SubscribeMessage('ready')
   onReady(client: Socket, input: Input): void {
     try {
-        console.log(client.data.user);
+
       if (!client.data.user) return;
 
       const player: Player = this.roomService.findPlayer(client.data.user.id);

@@ -130,7 +130,6 @@ const App = (props: any) => {
                         theme: "colored",
 });
                         setInvite(data.submit);
-                        setPlayerId(data.submit?1:0);
                     }
                 });
 
