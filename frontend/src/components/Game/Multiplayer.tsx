@@ -117,8 +117,8 @@ const Multiplayer = (props) => {
 
 
     const handleResize = () => {
-      paper.view.viewsize.width = parentRef.current.offsetwidth;
-      paper.view.viewsize.height = parentRef.current.offsetheight;
+       console.log(paper.view);
+      view.viewSize = [window.innerWidth, window.innerHeight];
       pW = view.size.width * paddleWidth;
       pH = view.size.height * paddleHeight;  
       ball.position =  [(ballPosition[0] * view.size.width) - ballRadius, (ballPosition[1] * view.size.height) - ballRadius];
