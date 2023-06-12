@@ -82,12 +82,15 @@ const App = (props: any) => {
                     });
             })
             notify.on('message', (data) => {
+                console.log(data);
+                if (data.opponent && data.message) {
                 toast.info(<div className="flex flex-col">
-                        <div className="pb-2">{`Invite to the game from ${data.opponent}`}</div>
+                        <div className="pb-2">{`Invite to the game from ${data.opponent.username}`}</div>
                         <div className="flex flex-row justify-end">
                         <button
                         className="px-4 py-1 mr-2 bg-red-500 text-white rounded hover:bg-red-600"
                         onClick={() => {
+                        notify.emit('message', { id: data.opponent.id, submit:false }); 
                         toast.dismiss();
                         }}
                         >
@@ -108,13 +111,24 @@ const App = (props: any) => {
                         </button>
                         </div>
                         </div>, {
+                        onClose: () => {notify.emit('message', { id: data.opponent.id, submit:false })}, 
                         autoClose: 5000,
                         hideProgressBar: false,
                         closeOnClick: false,
                         pauseOnHover: true,
                         draggable: true,
                         theme: "colored",
-                    });
+                    });} else {
+                        toast.info("User Declined", {autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: false,
+                        pauseOnHover: true,
+                        draggable: true,
+                        theme: "colored",
+});
+                        setInvite(data.submit);
+                        setPlayerId(0);
+                    }
                 });
 
             gameSocket.on('disconnect', (data) => {
@@ -137,6 +151,9 @@ const App = (props: any) => {
             });
             gameSocket.on('room', (data) => {
                 console.log('Room : ', data);
+            });
+            gameSocket.on('error', (data) => {
+                console.log('Error : ', data);
             });
 
             return () => { 
