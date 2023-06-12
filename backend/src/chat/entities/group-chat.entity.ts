@@ -44,6 +44,6 @@ export class GroupChat {
   @JoinTable()
   users: User[];
 
-  @OneToMany(() => Message, (message) => message.chat, { eager: true })
+  @OneToMany(() => Message, (message) => message.gchat, { eager: true })
   messages: Message[];
 }
