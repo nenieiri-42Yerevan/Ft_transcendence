@@ -29,6 +29,7 @@ const UserList = ({notify, gameSocket, chatSocket}) => {
     };
 
     useEffect(() => {
+        console.log(curChat);
         if (curChat && curChat.users.some(user => user.id == userInfo.user.id))
             setUsers(curChat.users);
         else 
@@ -43,6 +44,14 @@ const UserList = ({notify, gameSocket, chatSocket}) => {
 
         chatSocket.on('group-chat', (gchat) => {
             setCurChat(gchat);
+            });
+        chatSocket.on('ban', (gchat) => {
+            if (curChat.id == gchat.channel.id) {
+                curChat.banned.push(gchat.banned_user.id);
+                curChat.users = curChat.users.filter(user => user.id != gchat.banned_user.id);
+            }
+            setCurChat(curChat);
+            setUsers(curChat.users);
             });
         window.addEventListener("click", handleClick);
         
@@ -87,6 +96,14 @@ const UserList = ({notify, gameSocket, chatSocket}) => {
     
     }
 
+    const ban = () => {
+        chatSocket.emit('ban', {channelId:curChat.id, userId:selectedUser.id});
+    }
+
+    const mute = () => {
+    
+    }
+
     return ( 
      <div>
           {users && users.map((user, index) => {
@@ -106,7 +123,7 @@ const UserList = ({notify, gameSocket, chatSocket}) => {
           <div key={index} className='bg-gray-700 m-1 text-center text-white text-xl rounded-md hover:bg-gray-500'> 
           <Link className='flex flex-row items-center justify-between m-2' to={`/transcendence/user/profile/${user.id}`} key={user.id}>
           <p className="truncate">{user.username}</p>
-          <p className="truncate">{curChat.admins.some(id => id == user.id) && "adm"}</p>
+          <p className="text-xs truncate">{curChat.admins.some(id => id == user.id) && "adm"}</p>
           </Link> 
           </div>
           </div>)})}
@@ -116,7 +133,7 @@ const UserList = ({notify, gameSocket, chatSocket}) => {
             { curChat.admins?.some(id => id == userInfo.user.id) &&
             (<>
             <button className='rounded-md p-2 hover:bg-gray-500'>Mute</button>
-            <button className='rounded-md p-2 hover:bg-gray-500'>Ban </button>
+            <button onClick={ban} className='rounded-md p-2 hover:bg-gray-500'>Ban</button>
             <button onClick={kickUser} className='rounded-md p-2 hover:bg-gray-500'>Kick</button>
             </>)
             }
