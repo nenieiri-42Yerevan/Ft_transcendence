@@ -8,10 +8,9 @@ const ActiveChallenges = ({userInfo}) => {
 
     return (
     <div className="w-full md:w-2/6 h-fit bg-[#1E1E1E] border-[#393939] m-1 border-solid border p-8 rounded text-center">
-      <h2 className="font-bold text-2xl text-white text-center  flex justify-between"><img className="w-[2em]" src={pong}></img>Played Matches</h2>
+      <h2 className="font-bold text-2xl text-white text-center  flex justify-between"><img className="w-[2em]" src={pong}></img>Active Challenges</h2>
       <hr />
       <br />
-      <h2 className="text-2xl mb-2 font-bold">Active Challenges</h2>
        {/* {matches?.length === 0 ? (  */}
         <p className="text-2xl mb-2 font-bold">No data</p>
       {/* //  ) : (
