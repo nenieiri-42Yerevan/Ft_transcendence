@@ -205,6 +205,7 @@ export const getUserInfo = async (Navigate, dispatch) => {
         },
       },
     );
+    console.log(response.data);
     return response.data;
   } catch (error) {
     console.log(error);
@@ -274,6 +275,7 @@ export const getUserById = async (id: any, Navigate, dispatch) => {
         }
       }
     );
+    console.log(response);
     return (response.data);
   }
   catch (error) {

@@ -5,10 +5,15 @@ import { useDispatch } from "react-redux";
 import pong from "@SRC_DIR/assets/images/pong.png";
 
 const ActiveChallenges = ({userInfo}) => {
+    const [leaders, setLeaders] = useState([]);
 
+    useEffect(() => {
+        
+        },[leaders]);
+    
     return (
-    <div className="w-full md:w-2/6 h-fit bg-[#1E1E1E] border-[#393939] m-1 border-solid border p-8 rounded text-center">
-      <h2 className="font-bold text-2xl text-white text-center  flex justify-between"><img className="w-[2em]" src={pong}></img>Active Challenges</h2>
+    <div className="w-full md:w-3/6 h-fit bg-[#1E1E1E] border-[#393939] m-1 border-solid border p-8 rounded text-center">
+      <h2 className="font-bold text-2xl text-white text-center  flex justify-between"><img className="w-[2em]" src={pong}></img>Leader Board</h2>
       <hr />
       <br />
        {/* {matches?.length === 0 ? (  */}
