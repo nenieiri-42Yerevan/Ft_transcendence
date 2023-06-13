@@ -29,7 +29,6 @@ const UserList = ({notify, gameSocket, chatSocket}) => {
     };
 
     useEffect(() => {
-        console.log(curChat);
         if (curChat && curChat.users.some(user => user.id == userInfo.user.id))
             setUsers(curChat.users);
         else 

@@ -14,7 +14,7 @@ const Chanels = ({notify, chatSocket, gameSocket}) => {
     const [allChat, setAllChats] = useState(null);
 
     useEffect(() => {
-        },[]);
+        },[curChat]);
     return (
         <>
         <GroupChatContext.Provider value={{curChat, setCurChat, allChat, setAllChats}}>

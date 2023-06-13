@@ -14,9 +14,14 @@ const ChatWindow = ({groupSocket}) => {
         const container = messagesContainer.current;
         container.scrollTop = container.scrollHeight;
 
-        if (prev !== curChat) {
-            setMessages(curChat.messages);
-            setPrev(curChat);
+        if (prev != curChat) {
+            getGroupChats()
+                .then(chats => {
+                    setAllChats(chats);
+                    setCurChat(chats.find(chat => chat.id == curChat.id));
+                    setMessages(chats.find(chat => chat.id == curChat.id).messages.sort((a,b) => a.id - b.id));
+                    setPrev(chats.find(chat => chat.id == curChat.id));
+            })
         }
         if (messages.length == 0) {
             setMessages(curChat.messages.sort((a,b) => a.id - b.id));
@@ -34,7 +39,6 @@ const ChatWindow = ({groupSocket}) => {
     return (
         <div className="flex flex-col overflow-y-auto w-full h-full" ref={messagesContainer}>
             {messages.map((msg, index) => {
-                console.log(msg);
                 return (
                     <div key={index} className={`flex flex-row ${userInfo.user.id === msg.author.id ? 'justify-end' : 'justify-start'}`}>
                         <div className="bg-gray-500 rounded-md p-2 m-2">
