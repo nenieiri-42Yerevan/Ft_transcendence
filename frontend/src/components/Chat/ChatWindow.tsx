@@ -9,31 +9,43 @@ const ChatWindow = ({groupSocket}) => {
     const {curChat, setCurChat, allChat, setAllChats} = useContext(GroupChatContext);
     const [messages, setMessages] = useState([]);
     const [prev, setPrev] = useState(curChat);
+
     useEffect(() => {
         const container = messagesContainer.current;
-    container.scrollTop = container.scrollHeight;
-        if (prev != curChat) {
+        container.scrollTop = container.scrollHeight;
+
+        if (prev !== curChat) {
             setMessages(curChat.messages);
             setPrev(curChat);
         }
+        if (messages.length == 0) {
+            setMessages(curChat.messages.sort((a,b) => a.id - b.id));
+        }
 
-        if (messages.length == 0)
-            setMessages(curChat.messages);
         groupSocket.on('text', (data) => {
-                    setMessages(messages => [...messages, {id:data.id, content:data.value, author:data.user}]);});
-        return () => { groupSocket.off('text')}
-    },[messages, curChat]);
-   return (
-    <div className="flex flex-col overflow-y-auto w-full h-full" ref={messagesContainer}>
-      {messages.map((msg, index) => {
-        return (
-          <div key={index} className={`flex flex-row ${userInfo.user.id == msg.author.id?"justify-end":"justify-start"} ` }>
-            <div className="bg-gray-500  rounded-md p-2 m-2"><p className="text-xs text-gray-100">{msg.author.username}</p><p>{msg.content}</p></div>
-          </div>
-        )
-      })}
-    </div>
-  );
-   };
+            setMessages(messages => [...messages, {id:data.id, content:data.value, author:data.user}]);
+        });
 
-export default ChatWindow; 
+        return () => {
+            groupSocket.off('text');
+        };
+    }, [curChat, messages]);
+
+    return (
+        <div className="flex flex-col overflow-y-auto w-full h-full" ref={messagesContainer}>
+            {messages.map((msg, index) => {
+                console.log(msg);
+                return (
+                    <div key={index} className={`flex flex-row ${userInfo.user.id === msg.author.id ? 'justify-end' : 'justify-start'}`}>
+                        <div className="bg-gray-500 rounded-md p-2 m-2">
+                            <p className="text-xs text-gray-100">{msg.author.username}</p>
+                            <p>{msg.content}</p>
+                        </div>
+                    </div>
+                );
+            })}
+        </div>
+    );
+};
+
+export default ChatWindow;
