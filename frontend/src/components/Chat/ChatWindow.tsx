@@ -8,7 +8,7 @@ const ChatWindow = ({groupSocket}) => {
     const userInfo = useSelector(selectUser);
     const {curChat, setCurChat, allChat, setAllChats} = useContext(GroupChatContext);
     const [messages, setMessages] = useState([]);
-    const [prev, setPrev] = useState(curChat);
+    const [prev, setPrev] = useState(null);
 
     useEffect(() => {
         const container = messagesContainer.current;
@@ -23,7 +23,7 @@ const ChatWindow = ({groupSocket}) => {
                     setPrev(chats.find(chat => chat.id == curChat.id));
             })
         }
-        if (messages.length == 0) {
+        if (prev == null) {
             setMessages(curChat.messages.sort((a,b) => a.id - b.id));
         }
 
@@ -34,7 +34,7 @@ const ChatWindow = ({groupSocket}) => {
         return () => {
             groupSocket.off('text');
         };
-    }, [curChat, messages]);
+    }, [allChat, curChat, messages]);
 
     return (
         <div className="flex flex-col overflow-y-auto w-full h-full" ref={messagesContainer}>
