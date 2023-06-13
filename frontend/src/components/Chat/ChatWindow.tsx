@@ -8,13 +8,19 @@ const ChatWindow = ({groupSocket}) => {
     const userInfo = useSelector(selectUser);
     const {curChat, setCurChat, allChat, setAllChats} = useContext(GroupChatContext);
     const [messages, setMessages] = useState([]);
+    const [prev, setPrev] = useState(curChat);
     useEffect(() => {
         const container = messagesContainer.current;
     container.scrollTop = container.scrollHeight;
-        groupSocket.on('text', (data) => {
-                    setMessages(messages => [...messages, {id:data.id, content:data.value, author:data.user}]);});
+        if (prev != curChat) {
+            setMessages(curChat.messages);
+            setPrev(curChat);
+        }
+
         if (messages.length == 0)
             setMessages(curChat.messages);
+        groupSocket.on('text', (data) => {
+                    setMessages(messages => [...messages, {id:data.id, content:data.value, author:data.user}]);});
         return () => { groupSocket.off('text')}
     },[messages, curChat]);
    return (
