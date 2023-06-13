@@ -16,7 +16,6 @@ const ActiveChallenges = ({userInfo}) => {
       }
     ).then(
     users => { 
-        console.log(users);
         setLeaders(users.data
     .map(user=> ({score:user.rank, username:user.username}))
     .sort((b, a) => a.score - b.score)

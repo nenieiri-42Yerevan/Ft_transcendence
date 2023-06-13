@@ -33,6 +33,7 @@ const App = (props: any) => {
    const [notify, setnotify] = useState(null);
    const [invite, setInvite] = useState(false);
    const [playerId, setPlayerId] = useState(0);
+    const [start, setStart] = useState(false);
   useEffect(() => {
       if (!userInfo.user) {
         return; 
@@ -167,7 +168,7 @@ const App = (props: any) => {
     },[userInfo?.user?.id]);
   return (
     <>
-        <GameContext.Provider value={{setInvite, invite, playerId, setPlayerId}}>
+        <GameContext.Provider value={{setInvite, invite, start, setStart, playerId, setPlayerId}}>
     <ToastContainer />
       <Router>
         <Routes>

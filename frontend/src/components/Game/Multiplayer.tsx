@@ -17,7 +17,7 @@ const Multiplayer = (props) => {
    var score = [0, 0];
    const navigate = useNavigate();
     
-    const {setInvite, playerId} = useContext(GameContext);
+    const {setInvite, playerId, start, setStart} = useContext(GameContext);
 
    useEffect(() => {
     // Initialize Paper JS
@@ -79,7 +79,7 @@ const Multiplayer = (props) => {
 
     var readyText = new PointText({
                 point: view.center,
-                content: `Are you Ready?\nPress Space...`,
+                content: start?"":`Are you Ready?\nPress Space...`,
                 fillColor: 'white',
                 fontFamily: 'Arial',
                 fontWeight: 'bold',
@@ -103,7 +103,9 @@ const Multiplayer = (props) => {
 
    gameSocket.on('ready', (data) => {
         console.log("Ready: ", data);
+        setInvite(true);
         timer();
+        setStart(true);
 
    });
 
@@ -111,6 +113,7 @@ const Multiplayer = (props) => {
         scoreText.content = `${data[0]} : ${data[1]}`; 
         if (data[0] == 10 || data[1] == 10) {
             setInvite(false);
+            setStart(false);
            navigate("/transcendence/user/dashboard"); 
         }
     });
@@ -146,12 +149,12 @@ const Multiplayer = (props) => {
             gameSocket.emit('update-tray', (paddlePos[playerId][1] + 0.04));
         }
 
-        if (event.key == 'space') {
+        if (event.key == 'space' && !start) {
             if (!mode)
                 gameSocket.emit('ready', {plan: 0, mode: 0});
             else
                 gameSocket.emit('ready', { plan : 0, mode : mode });
-            readyText.content = `Wait another player...`;
+            readyText.content = start?"":`Wait another player...`;
         }
     }
     const  normalize = (coordinate: [number, number]): number[] => {
@@ -164,12 +167,13 @@ const Multiplayer = (props) => {
     window.addEventListener('resize', handleResize);
     
     return () => {
+    
       window.removeEventListener('resize', handleResize);
      gameSocket.off('ready');
      gameSocket.off('score');
      gameSocket.off('tray');
     };
-  }, [mode, playerId, gameSocket]);
+  }, [mode, playerId]);
 
   return (
             <canvas ref={canvasRef} className='w-full h-screen bg-black' />
