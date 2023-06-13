@@ -12,7 +12,7 @@ const Multiplayer = (props) => {
    const paddleWidth = 20 / 1080;
    const paddleHeight = 200 / 1920;
    var ballPosition = [0.5, 0.5];
-   var ballRadius = 20 / 1080;
+   var ballRadius = 20 / 1920;
    var paddlePos = [[0, 0.5], [1 - paddleWidth, 0.5]];
    var score = [0, 0];
    const navigate = useNavigate();
@@ -129,23 +129,23 @@ const Multiplayer = (props) => {
       scoreText.fontSize = pH/2;
       pingpong.position = [view.center.x, pH * 0.75];
       pingpong.fontSize = pH * 0.75;
-      paddleL.position = [pW/2, (paddlePos[0][1] + paddleHeight/2) * view.size.height];
-      paddleR.position = [view.size.width - pW/2, (paddlePos[1][1] + paddleHeight/2) * view.size.height];
+      paddleL.position = [pW/2, (paddlePos[0][1] ) * view.size.height];
+      paddleR.position = [view.size.width - pW/2, (paddlePos[1][1] ) * view.size.height];
     }
 
      paper.view.onFrame = (event) => {
         ball.fillColor.hue += 1;
-        paddleL.position = [pW/2, (paddlePos[0][1] + paddleHeight / 2) * view.size.height];
-        paddleR.position = [view.size.width - pW/2, (paddlePos[1][1] + paddleHeight / 2) * view.size.height];
+        paddleL.position = [pW, (paddlePos[0][1]) * view.size.height];
+        paddleR.position = [view.size.width - pW, (paddlePos[1][1] ) * view.size.height];
 
     }
 
     paper.view.onKeyDown = (event) => {
-        if (event.key == 'w' && paddlePos[playerId][1] > 0) {
+        if (event.key == 'w' && paddlePos[playerId][1] - paddleHeight/2 > 0) {
             gameSocket.emit('update-tray', (paddlePos[playerId][1] - 0.04));
         }
 
-        if (event.key == 's' && paddlePos[playerId][1] < 1 - paddleHeight) {
+        if (event.key == 's' && paddlePos[playerId][1] + paddleHeight/2  < 1) {
             gameSocket.emit('update-tray', (paddlePos[playerId][1] + 0.04));
         }
 
