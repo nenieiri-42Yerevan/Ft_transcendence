@@ -18,7 +18,7 @@ const Welcome = () => {
             navigate("/transcendence/user/profile");
   });
   const sign = async ()=>{
-      window.location.href = "https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-a3ba0a124d3a4ced3822bc7ff62ee30b17851441280fc280437663500580042c&redirect_uri=http%3A%2F%2Flocalhost%3A7000%2Ftranscendence%2Fauth%2Fsignin%2F42%2Fcallback&response_type=code";
+      window.location.href = "https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-0fd469f756e17ffc7ae3958754537fb2b200a5f1c49abe83ca40d7274ed46b70&redirect_uri=http%3A%2F%2Flocalhost%3A7000%2Ftranscendence%2Fauth%2Fsignin%2F42%2Fcallback&response_type=code";
   }
 
   return (
